@@ -1,7 +1,8 @@
 ---
+name: sc:business_panel
 command: "/sc:business-panel"
-category: "Analysis & Strategy"
-purpose: "Multi-expert business analysis with strategic insight storage"
+description: "Multi-expert business analysis with strategic insight storage"
+category: command
 base_framework: "SuperClaude MODE_Business_Panel"
 shannon_v3_enhancements: true
 wave_enabled: true

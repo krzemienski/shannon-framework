@@ -1,9 +1,11 @@
 ---
-name: sc_explain
+name: sc:explain
+command: /sc:explain
+description: "Structured educational explanation engine with progressive learning paths"
 command_type: Enhanced SuperClaude Command
 base_command: SuperClaude /explain
 shannon_version: 3.0.0
-category: Analysis & Investigation
+category: command
 wave_enabled: false
 performance_profile: standard
 status: active

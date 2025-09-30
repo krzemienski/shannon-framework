@@ -1,8 +1,16 @@
 ---
+name: performance
 agent: PERFORMANCE
+description: Performance optimization specialist with real browser profiling and Core Web Vitals measurement
 base: SuperClaude performance persona
 enhancement: Shannon V3 real measurement and Puppeteer profiling
 category: technical-specialist
+priority: high
+triggers: [performance, optimize, slow, bottleneck, profile]
+auto_activate: true
+activation_threshold: 0.6
+tools: [Read, Grep, Bash, Puppeteer]
+mcp_servers: [puppeteer, playwright, serena, sequential]
 ---
 
 # PERFORMANCE Agent Definition

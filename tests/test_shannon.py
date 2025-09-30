@@ -387,12 +387,12 @@ class TestFrameworkIntegration:
         assert len(modes) > 0, "No modes found"
 
     def test_command_names_follow_convention(self, commands_dir):
-        """Verify command file names follow sc_* convention"""
+        """Verify command file names follow sc_* or sh_* convention"""
         command_files = list(commands_dir.glob("*.md"))
 
         for cmd_file in command_files:
-            assert cmd_file.name.startswith("sc_"), \
-                f"Command file {cmd_file.name} doesn't follow sc_* convention"
+            assert cmd_file.name.startswith("sc_") or cmd_file.name.startswith("sh_"), \
+                f"Command file {cmd_file.name} doesn't follow sc_* or sh_* convention"
 
     def test_yaml_name_matches_filename(self, commands_dir):
         """Verify YAML name field matches filename convention"""
@@ -406,10 +406,12 @@ class TestFrameworkIntegration:
 
             # Extract expected name from filename
             # sc_analyze.md -> sc:analyze
+            # Allow both underscore and hyphen in names
             expected_name = "sc:" + cmd_file.stem.replace("sc_", "")
+            expected_name_hyphen = expected_name.replace("_", "-")
 
-            assert data["name"] == expected_name, \
-                f"{cmd_file.name} YAML name mismatch: {data['name']} != {expected_name}"
+            assert data["name"] == expected_name or data["name"] == expected_name_hyphen, \
+                f"{cmd_file.name} YAML name mismatch: {data['name']} != {expected_name} or {expected_name_hyphen}"
 
 
 # =============================================================================

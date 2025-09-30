@@ -1,7 +1,8 @@
 ---
-name: help
+name: sc:help
+command: /sc:help
 description: "Enhanced help system with Shannon documentation access and intelligent command discovery"
-category: meta
+category: command
 complexity: simple
 mcp-servers: [context7]
 personas: [mentor, analyzer]

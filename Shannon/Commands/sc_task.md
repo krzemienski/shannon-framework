@@ -1,7 +1,8 @@
 ---
-name: sc_task
+name: sc:task
 command: /sc:task
-category: Planning & Project Management
+description: "Long-term project management with wave orchestration, phase tracking, and cross-session persistence"
+category: command
 base: SuperClaude /task command
 shannon_enhancement: true
 description: Long-term project management with wave orchestration, phase tracking, and cross-session persistence

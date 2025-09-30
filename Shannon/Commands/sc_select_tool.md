@@ -1,5 +1,6 @@
 ---
-name: sc:select-tool
+name: sc:select_tool
+command: /sc:select-tool
 description: Intelligent tool and MCP server selection with Shannon MCP awareness
 category: command
 base: SuperClaude /select-tool command

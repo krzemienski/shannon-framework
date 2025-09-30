@@ -1,6 +1,8 @@
 ---
-name: sh_restore
-category: context-management
+name: sh:restore
+command: /sh:restore
+description: "Restore project state from Serena MCP checkpoint"
+category: command
 purpose: Restore project state from Serena MCP checkpoint
 triggers: [restore, resume, recover, reload, continue]
 sub_agent: CONTEXT_GUARDIAN

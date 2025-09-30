@@ -1,7 +1,9 @@
 ---
+name: sc:save
 command: /sc:save
+description: "SuperClaude-compatible session checkpoint command that maps to Shannon's /sh:checkpoint"
 aliases: [save]
-category: session-management
+category: command
 base_command: SuperClaude /save
 shannon_mapping: /sh:checkpoint
 complexity: standard

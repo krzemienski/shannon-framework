@@ -1,5 +1,6 @@
 ---
-name: sc_build
+name: sc:build
+command: /sc:build
 category: command
 type: enhanced_superclaude
 base_command: /build

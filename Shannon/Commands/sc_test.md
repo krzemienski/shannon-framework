@@ -1,7 +1,8 @@
 ---
+name: sc:test
 command: /sc:test
-category: Testing & Quality Assurance
-purpose: Shannon V3 enhanced testing command with NO MOCKS enforcement and functional validation
+description: Shannon V3 enhanced testing command with NO MOCKS enforcement and functional validation
+category: command
 wave-enabled: false
 performance-profile: standard
 base: SuperClaude /test command

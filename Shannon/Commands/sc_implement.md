@@ -1,7 +1,8 @@
 ---
 name: sc:implement
-description: Feature and code implementation with wave orchestration, NO MOCKS testing, context preservation, and intelligent persona activation
-category: implementation
+command: /sc:implement
+description: "Feature and code implementation with wave orchestration, NO MOCKS testing, context preservation, and intelligent persona activation"
+category: command
 complexity: advanced
 triggers: [implement, build, create, code, develop, feature]
 mcp_servers: [serena, magic, context7, sequential]

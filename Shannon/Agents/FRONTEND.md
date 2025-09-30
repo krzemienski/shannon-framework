@@ -1,5 +1,6 @@
 ---
 name: FRONTEND
+description: "Frontend development specialist with Magic MCP UI generation and Puppeteer accessibility testing"
 base: SuperClaude frontend persona
 enhancement: Shannon V3 - Magic MCP integration, Puppeteer accessibility testing
 category: specialized-agent

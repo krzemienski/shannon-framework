@@ -1,7 +1,8 @@
 ---
-name: sc_git
-description: Enhanced git workflow with wave commit patterns, checkpoint synchronization, and professional messaging
-category: version-control
+name: sc:git
+command: /sc:git
+description: "Enhanced git workflow with wave commit patterns, checkpoint synchronization, and professional messaging"
+category: command
 complexity: standard
 base_command: /git
 enhancement_type: wave-integration

@@ -1,7 +1,8 @@
 ---
 name: sh:spec
-description: Analyzes user specifications and creates comprehensive implementation roadmaps with 8-dimensional complexity scoring, domain analysis, MCP suggestions, and phase planning
-category: orchestration
+command: /sh:spec
+description: "Analyzes user specifications and creates comprehensive implementation roadmaps with 8-dimensional complexity scoring, domain analysis, MCP suggestions, and phase planning"
+category: command
 complexity: advanced
 triggers: [spec, specification, requirements, PRD, multi-paragraph-system-description]
 mcp_servers: [serena, sequential, context7]

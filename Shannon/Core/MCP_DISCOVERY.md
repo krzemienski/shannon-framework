@@ -138,6 +138,56 @@ Shannon Framework integrates with six primary MCP servers, each providing specia
 - Parallelizable: Yes
 - Cache TTL: 1800 seconds
 
+### shadcn-ui - React Component Library
+**Primary Capabilities**:
+- React/Next.js UI component generation
+- shadcn/ui library integration
+- Accessible component patterns (Radix UI primitives)
+- Tailwind CSS integration
+- Pre-built component blocks
+
+**Optimal Use Cases**:
+- React/Next.js component development
+- Design system implementation
+- Accessible UI component creation
+- Dashboard and authentication patterns
+- Form and data display components
+
+**Performance Profile**:
+- Latency: 60ms average
+- Token efficiency: 85%
+- Parallelizable: Yes
+- Cache TTL: 3600 seconds
+
+**Available Components** (50+):
+- Forms: Button, Input, Form, Select, Checkbox, Radio
+- Data: Table, DataTable, Card, Badge, Avatar
+- Overlays: Dialog, Sheet, Dropdown, Popover, Tooltip
+- Navigation: Tabs, Accordion, Command, Navigation Menu
+- Feedback: Alert, Toast, Progress, Skeleton
+
+**Available Blocks**:
+- Authentication (login, signup, password reset)
+- Dashboard layouts and charts
+- Settings pages and forms
+- Data tables with filtering/sorting
+- Sidebar and navigation patterns
+
+**Configuration**:
+```json
+{
+  "mcpServers": {
+    "shadcn-ui": {
+      "command": "npx",
+      "args": ["@jpisnice/shadcn-ui-mcp-server"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_token"
+      }
+    }
+  }
+}
+```
+
 ---
 
 ## Server Capability Matrix
@@ -160,8 +210,9 @@ Shannon Framework integrates with six primary MCP servers, each providing specia
 - Fallback: Native reasoning
 
 **UI Generation**:
-- Primary: Magic (component generation)
-- Secondary: Context7 (pattern guidance)
+- Primary: shadcn (React/Next.js) - MANDATORY for React projects
+- Secondary: Magic (other frameworks)
+- Tertiary: Context7 (pattern guidance)
 - Fallback: Native generation
 
 **Testing and Validation**:
@@ -199,9 +250,11 @@ Shannon Framework integrates with six primary MCP servers, each providing specia
 ### Domain-Specific Preferences
 
 **Frontend Development**:
-- Primary: Magic, Context7
+- Primary: shadcn (React/Next.js components) - MANDATORY for React projects
+- Secondary: Context7 (framework patterns)
 - Support: Playwright (testing)
-- Reasoning: UI generation + validation
+- Deprecated: Magic (use shadcn instead for React/Next.js)
+- Reasoning: Production-ready accessible components + validation
 
 **Backend Development**:
 - Primary: Context7, Serena
@@ -430,9 +483,74 @@ MCP (Morphllm): Pattern-based transformations
 Result: Efficient hybrid execution
 ```
 
+### Pattern 6: shadcn + Playwright Integration (React/Next.js)
+```markdown
+**When to Use**: React/Next.js component development with testing
+
+**Selection Criteria**:
+- React or Next.js framework detected
+- UI component creation or modification
+- Accessibility and behavior testing required
+- Production-ready component standards
+
+**Integration Flow**:
+1. shadcn MCP: Query available components and blocks
+2. shadcn MCP: Generate component source code
+3. Native: Install via `npx shadcn@latest add [component]`
+4. Native: Customize with Tailwind classes and Radix props
+5. Playwright MCP: Test accessibility (WCAG compliance)
+6. Playwright MCP: Test user interactions and behavior
+7. Playwright MCP: Visual regression testing
+8. Native: Integration with application code
+
+**Example**:
+Task: "Create accessible login form for React app"
+Step 1: shadcn MCP query available form components
+Step 2: shadcn MCP generate login form with validation
+Step 3: Install: npx shadcn@latest add form input button
+Step 4: Customize: Apply brand colors, spacing, validation rules
+Step 5: Playwright test: Keyboard navigation, screen reader, focus management
+Step 6: Playwright test: Form submission, error states, success flows
+Result: Production-ready accessible login form with full test coverage
+
+**NO MOCK TESTING**: Playwright provides real browser validation
+**NO MAGIC FALLBACK**: shadcn is mandatory for React/Next.js components
+```
+
 ---
 
 ## Server Selection Logic
+
+### Framework-Specific Rules
+
+**React/Next.js Frontend Rule (MANDATORY)**:
+```markdown
+IF domain.frontend >= 20% AND framework IN ["React", "Next.js"]:
+  MANDATORY: shadcn MCP
+  FORBIDDEN: Magic MCP
+  REASON: shadcn provides production-ready, accessible React components
+  COMPONENTS: 50+ accessible components with Radix UI + Tailwind
+  BLOCKS: Pre-built authentication, dashboard, settings patterns
+  INSTALLATION: npx shadcn@latest add [component]
+  TESTING: Use Playwright for accessibility and behavior validation (NO MOCKS)
+```
+
+**Vue/Angular/Other Frontend Rule**:
+```markdown
+IF domain.frontend >= 20% AND framework NOT IN ["React", "Next.js"]:
+  PRIMARY: Magic MCP
+  SECONDARY: Context7 (framework-specific patterns)
+  REASON: Magic supports multiple frameworks for UI generation
+```
+
+**Non-React Component Requests**:
+```markdown
+IF operation = "create component" AND framework != "React":
+  PRIMARY: Magic MCP
+ELSE IF operation = "create component" AND framework = "React":
+  MANDATORY: shadcn MCP
+  ERROR if shadcn unavailable: "shadcn MCP required for React components"
+```
 
 ### Fast Selection Algorithm (<10ms)
 
@@ -575,7 +693,13 @@ After 60s: Test request → Success → Circuit CLOSED
 3. Fallback 2: Native reasoning
 4. Final: Simplified analysis
 
-**UI Generation (Magic)**:
+**UI Generation (React/Next.js)**:
+1. Primary: shadcn component generation (MANDATORY)
+2. Fallback 1: Context7 React patterns
+3. Fallback 2: Native React component creation
+4. Final: Error - shadcn required for production React components
+
+**UI Generation (Other Frameworks)**:
 1. Primary: Magic component generation
 2. Fallback 1: Context7 pattern templates
 3. Fallback 2: Native component creation
@@ -775,6 +899,62 @@ Example: "analyze:frontend:0.7:a3b5c9d2"
 **Combined**: Up to 82% total reduction
 ```
 
+### Practice 6: React Component Standards (shadcn)
+```markdown
+**Rule**: Always use shadcn MCP for React/Next.js component generation
+
+**Rationale**:
+- Production-ready accessible components (Radix UI primitives)
+- Tailwind CSS integration for consistent styling
+- 50+ components covering common UI patterns
+- Pre-built blocks for complex features (auth, dashboard, settings)
+- Built-in WCAG compliance and keyboard navigation
+- Type-safe with TypeScript support
+- Customizable source code (not node_modules dependency)
+
+**Mandatory Usage**:
+- React framework detected → MUST use shadcn
+- Next.js framework detected → MUST use shadcn
+- Component creation request → Query shadcn available components
+- Form development → Use shadcn form components with validation
+- Data display → Use shadcn table and card components
+- Navigation → Use shadcn navigation components
+
+**Installation Flow**:
+1. Query shadcn MCP for available components
+2. Review component APIs and examples
+3. Install selected components: `npx shadcn@latest add [component]`
+4. Customize with Tailwind utility classes
+5. Configure Radix UI props for behavior
+6. Test with Playwright MCP (accessibility + behavior)
+
+**Component Categories**:
+- Forms: Button, Input, Form, Select, Checkbox, Radio, Switch, Slider
+- Data: Table, DataTable, Card, Badge, Avatar, Separator
+- Overlays: Dialog, Sheet, Dropdown, Popover, Tooltip, Context Menu
+- Navigation: Tabs, Accordion, Command, Navigation Menu, Breadcrumb
+- Feedback: Alert, Toast, Progress, Skeleton, Spinner
+- Layout: Container, Grid, Flex, Aspect Ratio
+
+**Block Usage**:
+- Authentication: Login, signup, password reset flows
+- Dashboard: Layout, stats cards, charts integration
+- Settings: Form-based configuration pages
+- Data Management: Tables with filtering, sorting, pagination
+
+**Testing Requirements**:
+- NO MOCK TESTING: Use Playwright for real browser validation
+- Accessibility: WCAG 2.1 AA compliance (keyboard, screen reader)
+- Behavior: Form submission, validation, error states
+- Visual: Responsive design, theming, dark mode
+- Performance: Component render time, interaction latency
+
+**Deprecation Notice**:
+- Magic MCP: DEPRECATED for React/Next.js (use shadcn)
+- Native React Generation: Only for non-component utilities
+- HTML/CSS Generation: Not acceptable for React components
+```
+
 ---
 
 ## Performance Standards
@@ -839,5 +1019,15 @@ This MCP Discovery system provides Shannon Framework with intelligent, efficient
 4. **Robust Fallbacks**: Circuit breaker protected chains with 97.8% success
 5. **Continuous Monitoring**: Real-time dashboards and automated alerts
 6. **Token Optimization**: 45-82% reduction through intelligent coordination
+7. **Framework-Specific Rules**: Mandatory shadcn MCP for React/Next.js frontend work
+
+### React/Next.js Component Standards
+
+**MANDATORY**: Shannon Framework MUST use shadcn MCP for all React/Next.js UI component work:
+- 50+ production-ready accessible components (Radix UI + Tailwind)
+- Pre-built blocks for authentication, dashboards, settings
+- Built-in WCAG compliance and TypeScript support
+- Real browser testing via Playwright MCP (NO MOCKS)
+- Magic MCP is DEPRECATED for React/Next.js projects
 
 The system automatically discovers optimal MCP servers for any task, coordinates their execution efficiently, and gracefully handles failures—all while maintaining high performance and reliability standards.

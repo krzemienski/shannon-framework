@@ -5,11 +5,11 @@ description: "Feature and code implementation with wave orchestration, NO MOCKS 
 category: command
 complexity: advanced
 triggers: [implement, build, create, code, develop, feature]
-mcp_servers: [serena, magic, context7, sequential]
+mcp_servers: [serena, shadcn (react/nextjs), magic (non-react), context7, sequential]
 personas: [frontend, backend, architect, security]
 auto_activate: false
 base_command: /implement
-enhancements: [wave_orchestration, context_preservation, no_mocks_mandate, serena_integration]
+enhancements: [wave_orchestration, context_preservation, no_mocks_mandate, serena_integration, shadcn_enforcement]
 ---
 
 # /sc:implement - Enhanced Implementation Command
@@ -21,14 +21,15 @@ enhancements: [wave_orchestration, context_preservation, no_mocks_mandate, seren
 Feature and code implementation with systematic intelligence and quality guarantees:
 
 - **Wave-Based Parallel Implementation** - Multiple features/components implemented simultaneously by specialized sub-agents
+- **shadcn MCP Integration** - React/Next.js components use shadcn/ui exclusively for modern, accessible UI
 - **NO MOCKS Mandate** - Functional testing only, zero tolerance for fake implementations or stub code
 - **Context Preservation** - All implementation decisions and code saved to Serena MCP for cross-wave access
 - **Working Code Guarantee** - Every function fully implemented, no placeholders, no TODO comments
 - **Intelligent Persona Activation** - Auto-selects domain experts (Frontend, Backend, Security, etc.)
-- **MCP Coordination** - Magic for UI, Context7 for patterns, Sequential for complex logic
+- **MCP Coordination** - shadcn for React UI, Magic for other frameworks, Context7 for patterns, Sequential for complex logic
 - **Quality Validation** - Automated testing, lint checks, type validation before completion
 
-**What Makes This Different**: SuperClaude's `/implement` executes sequentially with manual testing. Shannon's `/sc:implement` orchestrates parallel waves of specialized sub-agents, enforces NO MOCKS testing, and preserves complete context for iterative development.
+**What Makes This Different**: SuperClaude's `/implement` executes sequentially with manual testing. Shannon's `/sc:implement` orchestrates parallel waves of specialized sub-agents, enforces shadcn/ui for React frontends, enforces NO MOCKS testing, and preserves complete context for iterative development.
 
 ## Shannon V3 Enhancements Over SuperClaude
 
@@ -50,7 +51,20 @@ wave_3_validation:
   - wave-coordinator → Aggregate & validate
 ```
 
-### 2. NO MOCKS Testing (MANDATORY)
+### 2. shadcn MCP Integration (NEW - React/Next.js ONLY)
+**SuperClaude**: Uses Magic MCP for generic UI generation
+**Shannon**: Enforces shadcn/ui via shadcn MCP for all React UI components
+
+```yaml
+shadcn_enforcement:
+  - React/Next.js components use shadcn MCP exclusively
+  - Automated component installation via npx shadcn@latest add
+  - Magic MCP deprecated for React frontends
+  - Full customization with Tailwind CSS
+  - Puppeteer tests for accessibility validation (NO MOCKS)
+```
+
+### 3. NO MOCKS Testing (MANDATORY)
 **SuperClaude**: Testing approach undefined
 **Shannon**: Mandatory functional testing with real dependencies
 
@@ -214,13 +228,32 @@ parallel_agents:
       - frontend-specialist (UI/components)
       - backend-specialist (APIs/services)
       - database-specialist (schema/migrations)
-    tools: [Magic (UI), Context7 (patterns), Write, Edit]
+    tools:
+      - IF frontend AND framework IN ["React", "Next.js"]:
+          PRIMARY: shadcn MCP (components)
+          SECONDARY: Context7 (React patterns)
+          DEPRECATED: Magic MCP (use shadcn instead)
+      - ELSE IF frontend AND framework NOT IN ["React", "Next.js"]:
+          PRIMARY: Magic MCP (UI generation)
+      - ELSE IF backend:
+          PRIMARY: Context7 (backend patterns)
     output: write_memory("wave_1_domain_implementation")
 
   agent_3: [Secondary Specialist - if needed]
     condition: complexity > 0.6
     role: "Supporting implementation"
     output: write_memory("wave_1_secondary_implementation")
+
+frontend_react_workflow:
+  IF implementation.type == "frontend" AND framework IN ["React", "Next.js"]:
+    1. Activate FRONTEND agent
+    2. FRONTEND uses shadcn MCP:
+       a. list_components() - Browse available shadcn components
+       b. get_component([name]) - Get component source code
+       c. get_component_demo([name]) - See usage examples
+    3. Install components: npx shadcn@latest add [components]
+    4. Customize components with Tailwind CSS
+    5. Create Puppeteer tests (NO MOCKS)
 
 dependency_management:
   - All agents read previous wave results
@@ -384,9 +417,17 @@ output:
 **Frontend Specialist**:
 ```yaml
 triggers: [UI, component, React, Vue, interface, design]
-mcp_servers: [magic, context7]
-tools: [Magic (21st.dev components), Context7 (React patterns)]
+mcp_servers: [shadcn (React/Next.js), magic (other frameworks), context7]
+tools:
+  - React/Next.js: shadcn MCP (shadcn/ui components), Context7 (React patterns)
+  - Vue/Angular/Svelte: Magic MCP (21st.dev components), Context7 (framework patterns)
 focus: ["User interfaces", "Component architecture", "Accessibility"]
+workflow_react:
+  1. list_components() - Browse shadcn components
+  2. get_component([name]) - Get component source
+  3. get_component_demo([name]) - See usage examples
+  4. npx shadcn@latest add [components] - Install
+  5. Customize with Tailwind CSS
 ```
 
 **Backend Specialist**:
@@ -534,8 +575,13 @@ code_creation:
   - Edit: Modify existing files
   - MultiEdit: Bulk changes across files
 
-ui_components:
-  - Magic MCP: Generate modern UI components
+ui_components_react:
+  - shadcn MCP: React/Next.js components (PRIMARY)
+  - Context7 MCP: React patterns and best practices
+  - DEPRECATED: Magic MCP (use shadcn for React)
+
+ui_components_other:
+  - Magic MCP: Vue, Angular, Svelte UI generation
 
 patterns:
   - Context7 MCP: Framework-specific patterns
@@ -720,21 +766,67 @@ Proceeding to Wave 2: Integration & Testing...
 
 ## Examples
 
-### Example 1: Simple Component Implementation
+### Example 1: React Login Form (shadcn MCP)
 
 **User Input**:
 ```
-/sc:implement "Create a reusable Button component with loading state"
+/sc:implement "User login form with email and password" --framework react
 ```
 
 **Execution**:
 ```yaml
 wave_1:
   agent: implementation-worker + frontend-specialist
+  framework: React (triggers shadcn MCP)
+
+  shadcn_workflow:
+    1. list_components() → Shows: Button, Input, Form, Label, Card
+    2. get_component("form") → Get form component source
+    3. get_component("button") → Get button component source
+    4. get_component("input") → Get input component source
+    5. npx shadcn@latest add form button input label card
+
+  output:
+    - components/ui/button.tsx (shadcn component)
+    - components/ui/input.tsx (shadcn component)
+    - components/ui/form.tsx (shadcn component)
+    - components/ui/label.tsx (shadcn component)
+    - components/ui/card.tsx (shadcn component)
+    - components/login-form.tsx (composed component, 95 lines)
+    - tests/login-form.test.tsx (Puppeteer, NO MOCKS, 52 lines)
+
+  features:
+    - Fully accessible (ARIA labels)
+    - Form validation with zod
+    - Loading states with shadcn Button
+    - Error handling with shadcn Alert
+    - Tailwind CSS customization
+
+validation:
+  - ✓ Lint passed
+  - ✓ Type check passed
+  - ✓ 12/12 Puppeteer tests passing (NO MOCKS)
+  - ✓ Accessibility validation passed
+
+context_saved: implementation_login_form
+```
+
+### Example 2: Simple Button Component (Non-React)
+
+**User Input**:
+```
+/sc:implement "Create a reusable Button component with loading state" --framework vue
+```
+
+**Execution**:
+```yaml
+wave_1:
+  agent: implementation-worker + frontend-specialist
+  framework: Vue (triggers Magic MCP)
   mcp: magic (for component patterns)
   output:
-    - src/components/Button.tsx (78 lines)
-    - src/components/Button.test.tsx (42 lines, Playwright)
+    - src/components/Button.vue (78 lines)
+    - src/components/Button.test.ts (42 lines, Playwright)
     - Fully accessible (ARIA labels)
     - Loading spinner animation
     - NO TODOs, complete implementation
@@ -747,7 +839,7 @@ validation:
 context_saved: implementation_button_component
 ```
 
-### Example 2: API Endpoint Implementation
+### Example 3: API Endpoint Implementation
 
 **User Input**:
 ```
@@ -780,7 +872,7 @@ wave_2:
 context_saved: implementation_users_api
 ```
 
-### Example 3: Complex Feature (Multi-Wave)
+### Example 4: Complex Feature (Multi-Wave)
 
 **User Input**:
 ```

@@ -31,27 +31,32 @@ description: Build command with wave orchestration, parallel builds, and NO MOCK
    - Each wave completes before next wave starts
    - Cross-wave context via Serena MCP
 
-2. **Mandatory NO MOCKS Testing**
+2. **shadcn Component Builds**: React/Next.js UI built with shadcn MCP exclusively
+   - Automated Installation: Components installed via `npx shadcn@latest add`
+   - Accessibility First: All UI uses Radix UI primitives (shadcn foundation)
+   - Forbidden: Magic MCP (deprecated for React UI)
+
+3. **Mandatory NO MOCKS Testing**
    - All builds include functional tests
    - Web: Puppeteer MCP for real browser testing
    - iOS: XCUITests on actual simulator
    - Backend: Real HTTP requests with test database
    - NEVER use unittest.mock, jest.mock, or any mocking libraries
 
-3. **Serena Checkpoint Integration**
+4. **Serena Checkpoint Integration**
    - Automatic checkpoints before each wave
    - PreCompact hook integration
    - Complete build state preserved
    - Restoration capability if context lost
 
-4. **Intelligent Sub-Agent Activation**
+5. **Intelligent Sub-Agent Activation**
    - IMPLEMENTATION_WORKER: Core build logic
-   - FRONTEND: UI components (with Magic MCP)
+   - FRONTEND: React/Next.js UI components (with shadcn MCP)
    - BACKEND: APIs and services
    - TESTING_WORKER: Functional test creation
    - Platform-specific agents (iOS, Web) as needed
 
-5. **Enhanced Output Format**
+6. **Enhanced Output Format**
    - Wave-by-wave progress reporting
    - Real-time build status updates
    - Functional test results (NO MOCKS)
@@ -190,12 +195,17 @@ Wave N:
 
 **Wave 1: Component Implementation**
 ```yaml
-Objective: Build LoginForm component
+Objective: Build LoginForm component with shadcn
 Sub-Agents: FRONTEND (primary)
-MCP Tools: Magic MCP (UI generation), Context7 (React patterns)
+MCP Tools: shadcn MCP (component installation), Context7 (React patterns)
+Workflow:
+  - list_components() → Button, Input, Form, Card
+  - get_component("button") → shadcn Button details
+  - npx shadcn@latest add button input form card
+  - Compose LoginForm.tsx using installed components
 Deliverables:
-  - LoginForm.tsx (functional component)
-  - LoginForm.module.css (styles)
+  - LoginForm.tsx (shadcn components)
+  - components/ui/* (shadcn components)
 Checkpoint: "build_wave1_complete"
 ```
 
@@ -293,12 +303,15 @@ write_memory("build_complete", {
 **FRONTEND** (UI Builder)
 - **Role**: User interface implementation
 - **Activation**: Web/iOS UI builds
+- **Specialization**: React/Next.js UI with shadcn components
 - **Responsibilities**:
-  - Component creation (with Magic MCP)
-  - Styling implementation
+  - Component installation via shadcn MCP
+  - Styling implementation with Tailwind CSS
   - State management
-  - Accessibility compliance
-- **MCP Tools**: Magic MCP (21st.dev components), Context7 (framework patterns)
+  - Accessibility compliance (Radix UI primitives)
+- **MCP Tools**: shadcn MCP (primary), Puppeteer MCP (testing)
+- **Workflow**: list_components → get_component → npx shadcn add → test
+- **FORBIDDEN**: Magic MCP (deprecated for React UI)
 
 **BACKEND_SPECIALIST** (API Builder)
 - **Role**: Server-side implementation
@@ -333,13 +346,14 @@ write_memory("build_complete", {
 
 **WEB_SPECIALIST** (Web-Specific)
 - **Role**: Modern web stack implementation
-- **Activation**: React/Vue/Angular builds
+- **Activation**: React/Next.js builds
 - **Responsibilities**:
-  - Framework-specific patterns
-  - Build tool configuration
+  - shadcn component installation and integration
+  - Build tool configuration (Tailwind CSS, etc.)
   - Performance optimization
   - Browser compatibility
-- **MCP Tools**: Magic MCP (components), Context7 (framework docs)
+- **MCP Tools**: shadcn MCP (components), Context7 (framework docs)
+- **FORBIDDEN**: Magic MCP (deprecated for React UI)
 
 ---
 
@@ -362,10 +376,13 @@ Output:
 ```yaml
 Agent 1: FRONTEND (parallel)
 Tasks:
-  - Build LoginForm component
+  - Install shadcn components (Button, Input, Form, Card)
+  - Build LoginForm using shadcn components
   - Build AuthContext provider
+MCP Tools:
+  - shadcn MCP: list_components() → get_component() → npx shadcn add
 Output:
-  - LoginForm.tsx, AuthContext.tsx
+  - LoginForm.tsx (shadcn components), AuthContext.tsx
   - write_memory("frontend_output", component_details)
 
 Agent 2: BACKEND_SPECIALIST (parallel)
@@ -402,10 +419,29 @@ Output:
 
 ### Testing by Platform
 
-**Web Applications**:
+**Web Applications** (shadcn Components):
 ```javascript
-// ✅ CORRECT: Functional test with Puppeteer (NO MOCKS)
-test('user can login', async () => {
+// ✅ CORRECT: Functional test with Puppeteer for shadcn Button (NO MOCKS)
+test('shadcn Button accessible and functional', async () => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto('http://localhost:3000');
+
+  // Test real shadcn Button component
+  const button = await page.$('button[data-shadcn="button"]');
+
+  // Validate Radix UI accessibility
+  const ariaLabel = await button.getAttribute('aria-label');
+  expect(ariaLabel).toBeTruthy();
+
+  // Real click interaction
+  await button.click();
+
+  await browser.close();
+});
+
+// ✅ CORRECT: Functional test for shadcn login form
+test('user can login with shadcn form', async () => {
   await page.goto('http://localhost:3000/login');
   await page.type('#email', 'user@example.com');
   await page.type('#password', 'password123');
@@ -486,12 +522,14 @@ jest.mock('./database');  // NEVER DO THIS
   └─ IMPLEMENTATION_WORKER (coordinator)
 
 🛠️  MCP Tools:
-  ├─ Magic MCP: UI component generation
+  ├─ shadcn MCP: Component installation (list_components, get_component)
   └─ Context7 MCP: React patterns
 
 📦 Deliverables:
-  ✅ src/components/LoginForm.tsx (created)
-  ✅ src/components/LoginForm.module.css (created)
+  ✅ src/components/LoginForm.tsx (created with shadcn components)
+  ✅ src/components/ui/button.tsx (shadcn Button installed)
+  ✅ src/components/ui/input.tsx (shadcn Input installed)
+  ✅ src/components/ui/form.tsx (shadcn Form installed)
 
 💾 Context Saved:
   └─ build_wave1_output (Serena memory)
@@ -546,12 +584,14 @@ jest.mock('./database');  // NEVER DO THIS
   ├─ Total Waves: 2
   ├─ Total Duration: 6m 0s
   ├─ Sub-Agents Used: 2
-  └─ MCP Tools: Magic, Context7, Puppeteer
+  └─ MCP Tools: shadcn, Context7, Puppeteer
 
 📂 Files Created:
-  ├─ src/components/LoginForm.tsx (182 lines)
-  ├─ src/components/LoginForm.module.css (45 lines)
-  └─ src/components/LoginForm.test.js (78 lines)
+  ├─ src/components/LoginForm.tsx (182 lines, shadcn components)
+  ├─ src/components/ui/button.tsx (shadcn Button)
+  ├─ src/components/ui/input.tsx (shadcn Input)
+  ├─ src/components/ui/form.tsx (shadcn Form)
+  └─ src/components/LoginForm.test.js (78 lines, Puppeteer tests)
 
 🧪 Testing:
   ├─ Test Type: Functional (NO MOCKS)
@@ -588,7 +628,32 @@ jest.mock('./database');  // NEVER DO THIS
 - TESTING_WORKER creates Puppeteer test
 - Output: Button.tsx + Button.test.js
 
-### Example 2: Feature Build with Backend
+### Example 2: Build React Component Library with shadcn
+
+**Command**:
+```bash
+/sc:build component "User authentication flow" @src/features/auth/
+```
+
+**Execution**:
+- Wave 1: Component Installation
+  - FRONTEND agent uses shadcn MCP
+  - list_components() → Button, Input, Form, Card
+  - npx shadcn@latest add button input form card
+
+- Wave 2: Implementation
+  - Compose login-form.tsx using shadcn components
+  - Create shadcn-based authentication UI
+
+- Wave 3: Testing
+  - Puppeteer tests for all components
+  - Validate Radix UI accessibility
+
+**Output**:
+  - login-form.tsx (shadcn components)
+  - login-form.test.js (Puppeteer accessibility tests)
+
+### Example 3: Feature Build with Backend
 
 **Command**:
 ```bash
@@ -597,11 +662,11 @@ jest.mock('./database');  // NEVER DO THIS
 
 **Execution**:
 - Wave 1: IMPLEMENTATION_WORKER plans architecture
-- Wave 2: FRONTEND builds TaskList/TaskForm + BACKEND builds /api/tasks routes
+- Wave 2: FRONTEND builds TaskList/TaskForm with shadcn + BACKEND builds /api/tasks routes
 - Wave 3: TESTING_WORKER creates E2E tests (Puppeteer + real HTTP)
-- Output: 8 files (components, routes, tests)
+- Output: 8 files (shadcn components, routes, tests)
 
-### Example 3: iOS View Build
+### Example 4: iOS View Build
 
 **Command**:
 ```bash
@@ -613,7 +678,7 @@ jest.mock('./database');  // NEVER DO THIS
 - Wave 2: TESTING_WORKER creates XCUITest
 - Output: SettingsView.swift + SettingsViewTests.swift
 
-### Example 4: Full-Stack Feature
+### Example 5: Full-Stack Feature
 
 **Command**:
 ```bash
@@ -622,10 +687,10 @@ jest.mock('./database');  // NEVER DO THIS
 
 **Execution**:
 - Wave 1: Architecture planning
-- Wave 2: Frontend components + Backend API routes (parallel)
+- Wave 2: Frontend shadcn components + Backend API routes (parallel)
 - Wave 3: Database schema + JWT middleware
 - Wave 4: Functional test suite (browser + API tests, NO MOCKS)
-- Output: 15+ files (complete authentication system)
+- Output: 15+ files (complete authentication system with shadcn UI)
 
 ---
 
@@ -636,11 +701,12 @@ jest.mock('./database');  // NEVER DO THIS
 **From SuperClaude /build**:
 - ✅ Automatic framework detection
 - ✅ Intelligent persona activation (Frontend/Backend/Architect)
-- ✅ MCP integration (Magic for UI, Context7 for patterns)
+- ✅ MCP integration (Context7 for patterns)
 - ✅ Tool orchestration (Read, Edit, MultiEdit, Bash)
 
 **Shannon Additions**:
 - ✅ Wave-based parallel execution
+- ✅ shadcn MCP for React UI (replaces Magic MCP)
 - ✅ Mandatory NO MOCKS testing
 - ✅ Serena checkpoint integration
 - ✅ Cross-wave context sharing

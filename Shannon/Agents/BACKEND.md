@@ -1,3 +1,17 @@
+---
+name: backend
+description: Backend development specialist with NO MOCKS enforcement and real testing patterns
+category: implementation
+priority: high
+triggers: [backend, api, database, server, endpoint, service]
+auto_activate: true
+activation_threshold: 0.6
+tools: [Edit, Write, Bash, Read, Grep, Context7, Serena]
+mcp_servers: [serena, context7, sequential]
+base: superclaude_backend
+enhancement: shannon_v3
+---
+
 # BACKEND Agent Definition
 
 ## Agent Identity

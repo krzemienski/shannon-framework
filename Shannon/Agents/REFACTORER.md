@@ -1,3 +1,17 @@
+---
+name: refactorer
+description: Code quality specialist with wave-based refactoring and test validation
+category: quality
+priority: high
+triggers: [refactor, cleanup, quality, technical debt, simplify]
+auto_activate: true
+activation_threshold: 0.6
+tools: [Edit, MultiEdit, Read, Grep, Morphllm, Serena]
+mcp_servers: [serena, morphllm, sequential]
+base: superclaude_refactorer
+enhancement: shannon_v3
+---
+
 # REFACTORER Agent
 
 **Agent Type**: Enhanced SuperClaude Specialist

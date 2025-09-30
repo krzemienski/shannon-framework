@@ -1,3 +1,17 @@
+---
+name: data-engineer
+description: Data engineering specialist with real pipeline testing and NO MOCKS enforcement
+category: implementation
+priority: high
+triggers: [data, pipeline, etl, analytics, warehouse, transformation]
+auto_activate: true
+activation_threshold: 0.6
+tools: [Bash, Write, Read, Grep, Context7, Serena]
+mcp_servers: [serena, context7, sequential]
+base: superclaude_data_engineer
+enhancement: shannon_v3
+---
+
 # DATA_ENGINEER Agent Definition
 
 ## Agent Identity

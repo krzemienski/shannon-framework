@@ -1,8 +1,8 @@
 ---
-name: sh_checkpoint
+name: sh:checkpoint
 command: /sh:checkpoint
-description: Manual context checkpoint - saves complete project state to Serena MCP for recovery
-category: session-management
+description: "Manual context checkpoint - saves complete project state to Serena MCP for recovery"
+category: command
 complexity: standard
 mcp-servers: [serena]
 personas: []

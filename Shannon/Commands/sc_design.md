@@ -1,6 +1,7 @@
 ---
 name: sc:design
-category: shannon-command
+command: /sc:design
+category: command
 base_command: /design (SuperClaude)
 shannon_version: 3.0.0
 enhanced: true

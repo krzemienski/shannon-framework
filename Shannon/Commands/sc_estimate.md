@@ -1,7 +1,8 @@
 ---
 name: sc:estimate
-description: Evidence-based development estimation with 8-dimensional complexity analysis and historical learning
-category: Planning
+command: /sc:estimate
+description: "Evidence-based development estimation with 8-dimensional complexity analysis and historical learning"
+category: command
 priority: high
 base: SuperClaude /estimate command
 shannon_enhancements: true

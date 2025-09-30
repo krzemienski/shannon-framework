@@ -1,5 +1,6 @@
 ---
-name: sc_troubleshoot
+name: sc:troubleshoot
+command: /sc:troubleshoot
 description: Enhanced systematic debugging and root cause analysis with evidence tracking
 category: command
 base: SuperClaude /troubleshoot

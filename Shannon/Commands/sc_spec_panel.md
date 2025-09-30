@@ -1,7 +1,8 @@
 ---
-name: spec-panel
+name: sc:spec_panel
+command: /sc:spec-panel
 description: "Multi-expert specification review enhanced with Shannon's 8-dimensional complexity analysis and phase planning integration"
-category: analysis
+category: command
 complexity: enhanced
 mcp-servers: [sequential, context7, serena]
 personas: [technical-writer, system-architect, quality-engineer]

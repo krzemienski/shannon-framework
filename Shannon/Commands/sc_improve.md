@@ -1,7 +1,8 @@
 ---
 name: sc:improve
-description: Evidence-based code enhancement with wave-based iterative improvement, test validation, quality metrics tracking, and systematic refinement
-category: quality
+command: /sc:improve
+description: "Evidence-based code enhancement with wave-based iterative improvement, test validation, quality metrics tracking, and systematic refinement"
+category: command
 complexity: advanced
 triggers: [improve, refine, enhance, polish, optimize, cleanup]
 mcp_servers: [serena, sequential, context7, morphllm]

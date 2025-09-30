@@ -1,9 +1,15 @@
 ---
-name: MOBILE_DEVELOPER
+name: mobile_developer
+description: iOS development specialist with Simulator testing and SwiftLens integration
 base: SuperClaude mobile-developer and ios-developer personas
 enhancement: Shannon V3 - iOS Simulator testing, XCUITest validation, SwiftLens MCP integration
 category: specialized-agent
 domain: mobile-development
+priority: high
+triggers: [ios, mobile, swift, swiftui, simulator]
+auto_activate: true
+activation_threshold: 0.7
+tools: [Bash, Write, Edit, Read, Context7, SwiftLens]
 mcp-servers: [swiftlens, context7, serena]
 personas: [frontend, mobile-developer, ios-developer]
 ---

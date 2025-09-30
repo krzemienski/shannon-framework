@@ -1,7 +1,8 @@
 ---
-name: load
+name: sc:load
+command: /sc:load
 description: "Enhanced session lifecycle management with Shannon project activation and automatic checkpoint restoration"
-category: session-management
+category: command
 complexity: standard
 mcp-servers: [serena]
 personas: [analyzer, architect]

@@ -1,6 +1,8 @@
 ---
+name: sc:brainstorm
 command: /sc:brainstorm
-category: Planning & Discovery
+description: Collaborative discovery with structured requirement exploration and Serena idea tracking
+category: command
 base: SuperClaude /brainstorm command
 shannon_enhancements: true
 version: 3.0.0

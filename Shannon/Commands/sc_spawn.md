@@ -1,8 +1,8 @@
 ---
 command: /sc:spawn
-name: sc_spawn
+name: sc:spawn
 description: Enhanced meta-orchestration command with wave coordination awareness and Serena context sharing
-category: orchestration
+category: command
 priority: high
 base: SuperClaude /spawn command
 enhancements: [wave_orchestration, serena_context_sharing, parallel_coordination]

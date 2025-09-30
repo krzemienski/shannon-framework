@@ -1,7 +1,8 @@
 ---
 name: sc:workflow
-description: Enhanced workflow orchestration with wave-based phase execution, systematic validation gates, and PRD-to-production planning
-category: orchestration
+command: /sc:workflow
+description: "Enhanced workflow orchestration with wave-based phase execution, systematic validation gates, and PRD-to-production planning"
+category: command
 complexity: advanced
 triggers: [workflow, orchestrate, coordinate, plan-execution, systematic]
 mcp_servers: [serena, sequential, context7]

@@ -1,7 +1,8 @@
 ---
 name: sc:document
-description: Enhanced documentation creation with structured templates and localization
-category: documentation
+command: /sc:document
+description: "Enhanced documentation creation with structured templates and localization"
+category: command
 priority: high
 triggers: [document, write-docs, api-docs, readme, guide, manual, technical-writing]
 auto_activate: true

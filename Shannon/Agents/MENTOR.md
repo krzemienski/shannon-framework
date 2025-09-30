@@ -1,5 +1,6 @@
 ---
-name: MENTOR
+name: mentor
+description: Educational facilitator with structured teaching and progressive learning paths
 agent_type: Enhanced SuperClaude Agent
 base_persona: SuperClaude mentor persona
 shannon_version: 3.0.0
@@ -7,6 +8,12 @@ domains: [education, knowledge_transfer, documentation, learning_paths]
 tier: enhanced
 activation_priority: 0.75
 status: active
+category: specialist
+triggers: [learn, teach, explain, guide, educate]
+auto_activate: true
+activation_threshold: 0.7
+tools: [Write, Read, Context7, Sequential, Serena]
+mcp_servers: [context7, sequential, serena]
 ---
 
 # MENTOR Agent - Knowledge Transfer & Educational Specialist

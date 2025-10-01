@@ -25,7 +25,7 @@ import json
 import sys
 import os
 import subprocess
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Dict, Any, Optional
 
 
@@ -45,7 +45,7 @@ class ShannonPreCompactHook:
         """Initialize hook with environment configuration"""
         self.project_dir = os.environ.get('CLAUDE_PROJECT_DIR', '.')
         self.shannon_dir = f"{self.project_dir}/.claude/shannon"
-        self.timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        self.timestamp = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
         self.checkpoint_key = f"shannon_precompact_checkpoint_{self.timestamp}"
 
     def execute(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -113,7 +113,7 @@ list_memories() → Retrieve all existing memory keys
 ```
 write_memory("{self.checkpoint_key}", {{
     "checkpoint_type": "auto_precompact",
-    "timestamp": "{datetime.utcnow().isoformat()}Z",
+    "timestamp": "{datetime.now(UTC).isoformat()}Z",
     "session_id": "[current_session_identifier]",
 
     "serena_memory_keys": [
@@ -175,7 +175,7 @@ write_memory("{self.checkpoint_key}", {{
 ```
 write_memory("shannon_latest_checkpoint", {{
     "checkpoint_key": "{self.checkpoint_key}",
-    "timestamp": "{datetime.utcnow().isoformat()}Z",
+    "timestamp": "{datetime.now(UTC).isoformat()}Z",
     "type": "auto_precompact"
 }})
 ```
@@ -190,7 +190,7 @@ read_memory("{self.checkpoint_key}") → Confirm data saved correctly
 write_memory("checkpoint_history", {{
     "append": {{
         "key": "{self.checkpoint_key}",
-        "timestamp": "{datetime.utcnow().isoformat()}Z",
+        "timestamp": "{datetime.now(UTC).isoformat()}Z",
         "trigger": "auto_precompact",
         "status": "success"
     }}
@@ -217,7 +217,7 @@ When session resumes after compaction:
 Execute ALL steps above before allowing compaction to proceed.
 
 **Checkpoint Key**: `{self.checkpoint_key}`
-**Timestamp**: {datetime.utcnow().isoformat()}Z
+**Timestamp**: {datetime.now(UTC).isoformat()}Z
 **Hook Version**: {self.VERSION}
 """
         return instructions
@@ -279,7 +279,7 @@ Execute ALL steps above before allowing compaction to proceed.
             os.makedirs(log_dir, exist_ok=True)
 
             log_file = f"{log_dir}/precompact_hook.log"
-            timestamp = datetime.utcnow().isoformat()
+            timestamp = datetime.now(UTC).isoformat()
 
             with open(log_file, 'a') as f:
                 f.write(f"{timestamp} [{level}] {message}\n")

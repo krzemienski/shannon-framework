@@ -5,6 +5,7 @@ description: "Feature and code implementation with wave orchestration, NO MOCKS 
 category: command
 complexity: advanced
 triggers: [implement, build, create, code, develop, feature]
+sub_agents: [IMPLEMENTATION_WORKER, FRONTEND, BACKEND]
 mcp_servers: [serena, shadcn (react/nextjs), magic (non-react), context7, sequential]
 personas: [frontend, backend, architect, security]
 auto_activate: false

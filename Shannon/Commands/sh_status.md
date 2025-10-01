@@ -1,7 +1,10 @@
 ---
-name: sh_status
+name: sh:status
+command: /sh:status
 description: Display current project state and memory overview from Serena MCP
 category: command
+sub_agents: [CONTEXT_GUARDIAN]
+mcp_servers: [serena]
 version: 3.0
 ---
 

@@ -6,6 +6,8 @@ type: enhanced_superclaude
 base_command: /build
 shannon_version: 3.0.0
 wave_enabled: true
+sub_agents: [IMPLEMENTATION_WORKER, FRONTEND, BACKEND]
+mcp_servers: [serena, shadcn, puppeteer, context7]
 description: Build command with wave orchestration, parallel builds, and NO MOCKS testing
 ---
 

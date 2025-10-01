@@ -5,6 +5,8 @@ description: Shannon V3 enhanced testing command with NO MOCKS enforcement and f
 category: command
 wave-enabled: false
 performance-profile: standard
+sub_agents: [TEST_GUARDIAN, QA]
+mcp_servers: [puppeteer, playwright, serena]
 base: SuperClaude /test command
 enhancements: NO MOCKS enforcement, Puppeteer/Simulator testing, TEST_GUARDIAN activation
 authority: TEST_GUARDIAN blocks non-compliant tests

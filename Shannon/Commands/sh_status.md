@@ -1,20 +1,20 @@
 ---
 name: sh:status
 command: /sh:status
-description: Display current project state and memory overview from Serena MCP
+description: Display comprehensive Shannon Framework status and session state
 category: command
 sub_agents: [CONTEXT_GUARDIAN]
 mcp_servers: [serena]
 version: 3.0
 ---
 
-# /sh:status - Project Status Dashboard
+# /sh:status - Shannon Framework Status Dashboard
 
 ## Purpose
 
-Display comprehensive project status by querying Serena MCP for all stored memories and presenting an organized overview of project state, progress, and context.
+Display comprehensive Shannon Framework status by querying Serena MCP for stored memories and presenting organized overview of project state, active operations, and system health.
 
-**Core Objective**: Provide instant visibility into project state, memory health, and continuation readiness.
+**Core Objective**: Provide instant visibility into all Shannon components with component-specific filtering for focused inspection.
 
 ---
 
@@ -22,20 +22,21 @@ Display comprehensive project status by querying Serena MCP for all stored memor
 
 ```yaml
 command: /sh:status
-aliases: [status, state, project-status]
-category: Project Management
+aliases: [shannon:info, shannon:state]
+category: Monitoring
 sub_agent: CONTEXT_GUARDIAN
 mcp_servers:
   primary: Serena
   required: true
 tools:
-  - list_memories
-  - read_memory
+  - Read
+  - TodoWrite
+  - mcp__memory__read_graph
 outputs:
-  - Project status dashboard
-  - Memory category breakdown
-  - Checkpoint information
-  - Continuation readiness
+  - Status dashboard (all or filtered)
+  - Health metrics
+  - Progress indicators
+  - Alert notifications
 ```
 
 ---
@@ -44,29 +45,227 @@ outputs:
 
 ### Basic Usage
 ```bash
-# Display full project status
+# Full status display
 /sh:status
 
-# Quick status check (abbreviated)
-/sh:status --brief
+# Component-specific views
+/sh:status wave        # Wave session details only
+/sh:status memory      # Memory statistics only
+/sh:status checkpoint  # Checkpoint status only
+/sh:status goal        # North Star goal only
+/sh:status session     # Session info only
 
-# Status for specific project
-/sh:status project_taskapp
+# Brief overview
+/sh:status --brief
 ```
 
 ### Context-Aware Usage
 ```bash
-# After session break
-User returns after break → /sh:status
-Claude shows: Last checkpoint, pending work, project phase
-
-# Before starting work
-Morning session start → /sh:status
-Claude shows: Yesterday's progress, today's priorities
+# Morning session start
+User starts new session → /sh:status
+Response: Yesterday's progress, current phase, today's priorities
 
 # After auto-compact
-Context restored → /sh:status
-Claude shows: Checkpoint validity, memory integrity
+Context restored → /sh:status checkpoint
+Response: Checkpoint validity, memory integrity, recovery status
+
+# Mid-development check
+During wave execution → /sh:status wave
+Response: Current wave progress, phase status, next checkpoint
+
+# Memory health check
+After long session → /sh:status memory
+Response: Memory statistics, coordination score, optimization needs
+```
+
+---
+
+## Status Components
+
+### North Star Component
+
+**Display Elements**:
+```yaml
+north_star_display:
+  - Current goal text
+  - Time since set
+  - Overall alignment score
+  - Recent aligned operations
+  - Drift warnings
+```
+
+**Example**:
+```bash
+/sh:status goal
+
+# Output:
+🎯 NORTH STAR STATUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**Goal**: Build secure authentication with <100ms response time
+**Set**: 4 hours ago (2025-10-03 12:00:00)
+**Alignment**: 0.85 (Good)
+
+**Recent Operations**:
+✅ JWT implementation (1.0)
+✅ Rate limiting (0.95)
+✅ Token optimization (0.9)
+⚠️  UI enhancements (0.4 - LOW)
+
+**Drift Warnings**: 1 operation below threshold
+```
+
+### Wave Session Component
+
+**Display Elements**:
+```yaml
+wave_display:
+  - Active wave type/strategy
+  - Current phase
+  - Progress percentage
+  - Time elapsed
+  - Next checkpoint timing
+```
+
+**Example**:
+```bash
+/sh:status wave
+
+# Output:
+🌊 WAVE SESSION STATUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**Strategy**: Linear
+**Phase**: 3/4 (Implementation)
+**Progress**: [████████░░] 75%
+**Elapsed**: 2h 15min
+**Est. Remaining**: 45min
+
+**Phase History**:
+✅ Phase 1: Analysis (25min)
+✅ Phase 2: Design (35min)
+🔄 Phase 3: Implementation (1h 15min - IN PROGRESS)
+⏳ Phase 4: Validation (pending)
+
+**Next Checkpoint**: Phase 3 completion (est. 30min)
+```
+
+### Memory Component
+
+**Display Elements**:
+```yaml
+memory_display:
+  - Total entities and relations
+  - Recent additions
+  - Access patterns
+  - Coordination score
+  - Health status
+```
+
+**Example**:
+```bash
+/sh:status memory
+
+# Output:
+💾 MEMORY STATUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**Graph Size**:
+- Entities: 42
+- Relations: 78
+- Observations: 247
+- Ratio: 1.86 relations/entity (✅ healthy)
+
+**Recent Activity** (Last hour):
+➕ Added: 3 entities, 7 relations, 15 observations
+🔄 Modified: 5 entities (observations updated)
+
+**Access Patterns**:
+🔥 Hot: authentication (23 accesses)
+🔥 Hot: user_service (18 accesses)
+❄️  Cold: legacy_payment (1 access)
+
+**Health Metrics**:
+- Coordination: 0.78 (Good)
+- Freshness: 87% recent
+- Efficiency: 0.81 (Good)
+
+**Overall**: ✅ HEALTHY
+```
+
+### Checkpoint Component
+
+**Display Elements**:
+```yaml
+checkpoint_display:
+  - Recent checkpoints (last 5)
+  - Current checkpoint ID
+  - Time since last checkpoint
+  - Rollback availability
+```
+
+**Example**:
+```bash
+/sh:status checkpoint
+
+# Output:
+💾 CHECKPOINT STATUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**Latest**: cp_20251003_143022_a7f3
+**Created**: 2 hours ago
+**Type**: Auto (phase boundary)
+
+**Recent Checkpoints**:
+1. cp_20251003_143022_a7f3 (2h ago) - Phase 2 boundary
+2. cp_20251003_120500_p3m1 (4h ago) - PreCompact auto
+3. cp_20251002_173045_q8r7 (1d ago) - Manual save
+4. cp_20251002_120000_x9k2 (2d ago) - Wave complete
+5. cp_20251001_160000_m5n3 (3d ago) - Daily checkpoint
+
+**Status**: ✅ CURRENT (< 3 hours old)
+**Rollback**: Available to any checkpoint
+```
+
+### Session Component
+
+**Display Elements**:
+```yaml
+session_display:
+  - Session start time
+  - Operations completed
+  - Memory evolution
+  - Goal achievement progress
+```
+
+**Example**:
+```bash
+/sh:status session
+
+# Output:
+⏱️  SESSION STATUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**Start**: 2025-10-03 12:00:00 (4 hours ago)
+**Duration**: 4h 15min
+
+**Operations Completed**: 23 total
+- Analysis: 5
+- Implementation: 12
+- Testing: 4
+- Documentation: 2
+
+**Memory Evolution**:
+Start: 35 entities → Current: 42 entities (+7)
+Growth: 1.75 entities/hour
+
+**Goal Progress**:
+North Star: "Build secure auth <100ms"
+→ Auth core: ✅ Complete
+→ Performance: 🔄 85% complete (120ms → 95ms)
+→ Security: ✅ Complete
+
+**Est. Completion**: 30-45 minutes
 ```
 
 ---
@@ -77,263 +276,202 @@ Claude shows: Checkpoint validity, memory integrity
 
 **Sub-Agent Activation**:
 ```python
-# Activate specialized memory inspection agent
+# Activate status monitoring agent
 activate_agent("CONTEXT_GUARDIAN")
 
 # Agent characteristics:
-# - Reads all Serena memory keys
-# - Categorizes by memory hierarchy
-# - Validates checkpoint integrity
-# - Reports memory health
+# - Comprehensive status collector
+# - Health metric calculator
+# - Component-aware reporter
+# - Alert generator
 ```
 
-### Step 2: List All Memories
+### Step 2: Parse Component Filter
 
-**Serena MCP Query**:
+**Filter Application**:
 ```python
-# STEP 1: List all available memory keys
-all_keys = list_memories()
+# STEP 1: Detect component parameter
+component = parse_component(command)  # all, wave, memory, checkpoint, goal, session
 
-# STEP 2: Categorize by hierarchy level
-categorized = {
-    'project_foundation': [],
-    'wave_context': [],
-    'phase_context': [],
-    'session_state': [],
-    'checkpoints': [],
-    'decisions': [],
-    'other': []
-}
-
-for key in all_keys:
-    if 'project_' in key and any(x in key for x in ['spec_analysis', 'phase_plan', 'decisions', 'final_results']):
-        categorized['project_foundation'].append(key)
-    elif 'wave_' in key:
-        categorized['wave_context'].append(key)
-    elif 'phase_' in key:
-        categorized['phase_context'].append(key)
-    elif 'session_' in key:
-        categorized['session_state'].append(key)
-    elif 'checkpoint' in key:
-        categorized['checkpoints'].append(key)
-    elif 'decision_' in key:
-        categorized['decisions'].append(key)
-    else:
-        categorized['other'].append(key)
-```
-
-### Step 3: Read Latest Checkpoint
-
-**Checkpoint Analysis**:
-```python
-# STEP 1: Find latest checkpoint
-try:
-    latest_checkpoint_key = read_memory("latest_checkpoint")
-    checkpoint_data = read_memory(latest_checkpoint_key)
-    checkpoint_valid = True
-except:
-    checkpoint_valid = False
-    checkpoint_data = None
-
-# STEP 2: Extract checkpoint details
-if checkpoint_valid:
-    project_id = checkpoint_data.get('project_id')
-    active_phase = checkpoint_data['state'].get('active_phase')
-    current_wave = checkpoint_data['state'].get('current_wave')
-    timestamp = checkpoint_data.get('timestamp')
-    todo_list = checkpoint_data['state'].get('todo_list', [])
-    completed_today = checkpoint_data['state'].get('completed_today', [])
-```
-
-### Step 4: Analyze Memory Health
-
-**Health Metrics**:
-```python
-# Calculate memory health indicators
-health_metrics = {
-    'total_memories': len(all_keys),
-    'has_foundation': len(categorized['project_foundation']) > 0,
-    'has_checkpoint': checkpoint_valid,
-    'recent_activity': check_recent_timestamps(all_keys),
-    'memory_age': calculate_oldest_memory(all_keys),
-    'checkpoint_age': calculate_checkpoint_age(checkpoint_data)
-}
-
-# Determine health status
-if health_metrics['has_foundation'] and health_metrics['has_checkpoint']:
-    health_status = "✅ HEALTHY"
-elif health_metrics['has_foundation']:
-    health_status = "⚠️ CHECKPOINT MISSING"
+# STEP 2: Validate component
+if component not in VALID_COMPONENTS:
+    error(f"Invalid component. Use: {VALID_COMPONENTS}")
+    
+# STEP 3: Set display scope
+if component == "all":
+    components_to_display = ALL_COMPONENTS
 else:
-    health_status = "🚨 NO PROJECT CONTEXT"
+    components_to_display = [component]
 ```
 
-### Step 5: Generate Status Dashboard
+### Step 3: Collect Component Data
+
+**Data Gathering**:
+```python
+status_data = {}
+
+for component in components_to_display:
+    if component == "north_star":
+        status_data["north_star"] = get_north_star_status()
+    elif component == "wave":
+        status_data["wave"] = get_wave_session_status()
+    elif component == "memory":
+        status_data["memory"] = get_memory_statistics()
+    elif component == "checkpoint":
+        status_data["checkpoint"] = get_checkpoint_status()
+    elif component == "session":
+        status_data["session"] = get_session_info()
+```
+
+### Step 4: Calculate Health Metrics
+
+**Health Score Formula**:
+```python
+def calculate_health_score(status_data: dict) -> float:
+    """
+    Overall Shannon Framework health score
+    
+    Formula:
+    (goal_alignment × 0.3) +
+    (memory_coordination × 0.3) +
+    (checkpoint_frequency × 0.2) +
+    (wave_progress × 0.2)
+    
+    Range: 0.0 to 1.0
+    - Healthy: >= 0.7
+    - Warning: 0.4 - 0.7
+    - Critical: < 0.4
+    """
+    goal_alignment = status_data["north_star"]["alignment"]
+    memory_coord = status_data["memory"]["coordination_score"]
+    
+    # Checkpoint frequency (1.0 if < 30min, decays to 0.0 at 3h)
+    checkpoint_age_min = status_data["checkpoint"]["age_minutes"]
+    checkpoint_freq = max(0, 1.0 - (checkpoint_age_min / 180))
+    
+    # Wave progress (0-1 based on phase completion)
+    wave_progress = status_data["wave"]["progress_percentage"] / 100
+    
+    health = (
+        goal_alignment * 0.3 +
+        memory_coord * 0.3 +
+        checkpoint_freq * 0.2 +
+        wave_progress * 0.2
+    )
+    
+    return round(health, 2)
+```
+
+### Step 5: Generate Dashboard
 
 **Output Assembly**:
 ```python
-# Build comprehensive status report
-status_dashboard = generate_dashboard(
-    categorized_memories=categorized,
-    checkpoint_data=checkpoint_data,
-    health_metrics=health_metrics,
-    health_status=health_status
+# Build status dashboard
+dashboard = generate_status_dashboard(
+    status_data,
+    health_score,
+    component_filter
 )
 
-# Return formatted output
-return status_dashboard
+# Add visual elements
+add_progress_bars(dashboard)
+add_status_indicators(dashboard)
+add_alerts(dashboard)
+
+# Display
+display(dashboard)
 ```
 
 ---
 
-## Output Format
+## Output Formats
 
-### Full Dashboard Template
+### Full Dashboard (Default)
 
 ```markdown
-📊 PROJECT STATUS DASHBOARD
+📊 SHANNON FRAMEWORK STATUS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## Overall Status
-**Health**: ✅ HEALTHY
-**Total Memories**: 24
-**Last Checkpoint**: precompact_checkpoint_20250930_143000
-**Project**: project_taskapp
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-## Memory Breakdown by Category
-
-### 📦 Project Foundation (Indefinite Retention)
-- project_taskapp_spec_analysis_20250930
-- project_taskapp_phase_plan_20250930
-- project_taskapp_decisions
-- project_taskapp_mcp_config
-
-**Status**: ✅ Complete foundation established
-
-### 🌊 Wave Context (30-Day Retention)
-- project_taskapp_wave_1_plan
-- project_taskapp_wave_1_complete
-- project_taskapp_wave_2_plan
-- project_taskapp_wave_2_progress
-
-**Status**: ✅ Wave 2 in progress
-
-### 🔄 Phase Context (30-Day Retention)
-- project_taskapp_phase_requirements_complete
-- project_taskapp_phase_implementation_start
-
-**Status**: ✅ Implementation phase active
-
-### 💾 Checkpoints (Recovery Points)
-- precompact_checkpoint_20250930_143000 (2 hours ago)
-- manual_checkpoint_endofday_20250929
-- wave_checkpoint_wave1_20250929
-
-**Status**: ✅ Recent checkpoint available
-
-### 📝 Session State (7-Day Retention)
-- session_20250930_active_work
-- session_20250930_todo_list
-- session_20250930_focus
-
-**Status**: ✅ Active session context
-
-### 🎯 Decisions (Indefinite Retention)
-- decision_auth_jwt_20250929
-- decision_database_postgresql_20250929
-- decision_ui_react_20250929
-
-**Status**: ✅ 3 architectural decisions recorded
+## Overall Health
+**Score**: 0.85 🟢 HEALTHY
+**Components**: All operational
+**Last Update**: Just now
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## Latest Checkpoint Details
+## 🎯 North Star Goal
+**Goal**: Build secure authentication <100ms
+**Alignment**: [█████████░] 0.85
+**Status**: ✅ On track
 
-**Checkpoint**: precompact_checkpoint_20250930_143000
-**Saved**: 2025-09-30 14:30:00 (2 hours ago)
-**Type**: Automatic (PreCompact Hook)
+## 🌊 Wave Session
+**Strategy**: Linear (Phase 3/4)
+**Progress**: [████████░░] 75%
+**Time**: 2h 15min elapsed
 
-**Project State**:
-- Phase: Implementation
-- Wave: 2 of 5
-- Active Tasks: 3
-- Completed Today: 5
+## 💾 Memory
+**Entities**: 42 | **Relations**: 78
+**Coordination**: [████████░░] 0.78
+**Health**: ✅ Healthy
 
-**Active Work**:
-- ✅ Database schema implementation
-- ✅ API authentication endpoints
-- 🔄 User registration flow (in progress)
-- 📋 Email verification (pending)
-- 📋 Password reset (pending)
+## 💾 Checkpoints
+**Latest**: cp_a7f3 (2h ago)
+**Status**: ✅ Current
+**Rollback**: Available
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-## Continuation Readiness
-
-✅ **READY TO CONTINUE**
-
-All critical context preserved:
-- ✅ Specification analysis available
-- ✅ Phase plan available
-- ✅ Recent checkpoint (< 3 hours)
-- ✅ Wave context complete
-- ✅ Architectural decisions documented
-
-**Next Steps**:
-1. Resume work on user registration flow
-2. Complete pending authentication tasks
-3. Progress to Wave 3 after Wave 2 validation
-
-**Commands Available**:
-- `/sh:restore` - Load checkpoint if context lost
-- `/sh:checkpoint` - Create new manual checkpoint
-- Continue working - Context already loaded
+## ⏱️  Session
+**Duration**: 4h 15min
+**Operations**: 23 completed
+**Est. Completion**: 30-45min
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**Status Check Complete** | 📅 2025-09-30 16:45:00
+**Status**: ✅ ALL SYSTEMS OPERATIONAL
 ```
 
-### Brief Output Template
+### Component-Specific Views
 
-```markdown
-📊 PROJECT STATUS (Brief)
+(Examples shown in individual component sections above)
 
-**Health**: ✅ HEALTHY
-**Memories**: 24 total
-**Checkpoint**: 2 hours ago
-**Phase**: Implementation (Wave 2/5)
-**Active**: 3 tasks in progress
+---
 
-✅ Ready to continue - Full details: /sh:status
+## Alert System
+
+### Alert Conditions
+
+```yaml
+alerts:
+  critical:
+    - memory_coordination < 0.5
+    - no_checkpoint_in_3_hours
+    - goal_alignment < 0.3
+    - wave_stalled_15_min
+  
+  warning:
+    - memory_coordination < 0.7
+    - no_checkpoint_in_30_min
+    - goal_alignment < 0.5
+    - wave_progress_slow
+  
+  info:
+    - new_checkpoint_created
+    - goal_updated
+    - wave_phase_complete
 ```
 
-### Warning States
+### Alert Display
 
-**Missing Checkpoint**:
 ```markdown
-📊 PROJECT STATUS
+🚨 ALERTS (2 Active)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**Health**: ⚠️ CHECKPOINT MISSING
-**Memories**: 18 total
-**Checkpoint**: None found
+⚠️  WARNING: No checkpoint in 45 minutes
+→ Action: Run /sh:checkpoint to create recovery point
 
-⚠️ **Action Required**:
-Create checkpoint before continuing: /sh:checkpoint
-```
+⚠️  WARNING: Memory coordination: 0.62 (below 0.7 target)
+→ Action: Run /sh:memory optimize for recommendations
 
-**No Project Context**:
-```markdown
-📊 PROJECT STATUS
-
-**Health**: 🚨 NO PROJECT CONTEXT
-**Memories**: 0 project memories found
-
-🚨 **Action Required**:
-1. Start new project: /sh:analyze-spec [specification]
-2. Or restore existing: /sh:restore
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 ---
@@ -342,29 +480,29 @@ Create checkpoint before continuing: /sh:checkpoint
 
 ### CONTEXT_GUARDIAN Role
 
-**Specialization**: Memory inspection and health monitoring
+**Specialization**: Comprehensive status monitoring and health assessment
 
 **Responsibilities**:
-1. **Memory Enumeration**: List all Serena MCP keys
-2. **Categorization**: Organize by hierarchy and retention policy
-3. **Validation**: Check checkpoint integrity and completeness
-4. **Health Assessment**: Evaluate memory health metrics
-5. **Reporting**: Generate human-readable status dashboard
+1. **Status Collection**: Gather data from all Shannon components
+2. **Health Calculation**: Compute system health metrics
+3. **Alert Generation**: Identify issues requiring attention
+4. **Visualization**: Create clear status dashboards
+5. **Guidance**: Recommend corrective actions
 
 **Agent Characteristics**:
 ```yaml
-personality: Systematic, detail-oriented, protective
-communication_style: Clear status reports with actionable insights
+personality: Vigilant, systematic, health-focused
+communication_style: Clear dashboards with actionable alerts
 focus_areas:
-  - Memory health monitoring
-  - Checkpoint validation
-  - Context preservation
-  - Recovery readiness
-strengths:
-  - Comprehensive memory inspection
-  - Health metric calculation
-  - Status visualization
+  - System health monitoring
+  - Component status tracking
+  - Alert management
   - Recovery guidance
+strengths:
+  - Comprehensive data collection
+  - Metric calculation
+  - Dashboard visualization
+  - Proactive alerting
 ```
 
 ---
@@ -373,192 +511,151 @@ strengths:
 
 ### Related Commands
 
-**Before /sh:status**:
-- `/sh:analyze-spec` - Creates project foundation
-- `/sh:checkpoint` - Creates checkpoint to inspect
+**Status Providers**:
+- `/sh:wave` - Contributes wave session data
+- `/sh:north-star` - Provides goal information
+- `/sh:memory` - Supplies memory statistics
+- `/sh:checkpoint` - Reports checkpoint state
 
-**After /sh:status**:
-- `/sh:restore` - If checkpoint issues found
-- `/sh:checkpoint` - If no recent checkpoint
-- `/sh:cleanup-context` - If too many old memories
+**Status Consumers**:
+- User - Makes informed decisions
+- Other commands - Adapt based on status
 
 ### Workflow Integration
 
 ```bash
-# Morning workflow
-/sh:status                    # Check project state
-/sh:restore                   # If needed
-Continue work                 # Context ready
-
-# End of day workflow
-/sh:status                    # Review progress
-/sh:checkpoint endofday       # Save state
-Exit session                  # Safe to leave
-
-# After auto-compact
-Session starts                # New conversation
-/sh:status                    # Assess recovery
-/sh:restore                   # Load checkpoint
-Continue work                 # Context restored
-```
-
----
-
-## Examples
-
-### Example 1: Healthy Project
-
-**Input**:
-```bash
-/sh:status
-```
-
-**Output**:
-```markdown
-📊 PROJECT STATUS DASHBOARD
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-## Overall Status
-**Health**: ✅ HEALTHY
-**Total Memories**: 24
-**Last Checkpoint**: precompact_checkpoint_20250930_143000 (2h ago)
-**Project**: project_taskapp
-
-[Full dashboard output...]
-
-✅ **READY TO CONTINUE** - All critical context preserved
-```
-
-### Example 2: Missing Checkpoint
-
-**Input**:
-```bash
-/sh:status
-```
-
-**Output**:
-```markdown
-📊 PROJECT STATUS DASHBOARD
-
-## Overall Status
-**Health**: ⚠️ CHECKPOINT MISSING
-**Total Memories**: 18
-**Last Checkpoint**: None found
-
-[Memory breakdown...]
-
-⚠️ **Action Required**: Create checkpoint before continuing
-Run: /sh:checkpoint
-```
-
-### Example 3: Fresh Session
-
-**Input**:
-```bash
-/sh:status
-```
-
-**Output**:
-```markdown
-📊 PROJECT STATUS
-
-**Health**: 🚨 NO PROJECT CONTEXT
-**Memories**: No project memories found
-
-🚨 **Action Required**:
-1. Start new project: /sh:analyze-spec [specification]
-2. Or restore existing: /sh:restore [checkpoint_name]
+# Daily workflow
+/sh:status                     # Morning health check
+# [Work throughout day]
+/sh:status wave                # Check wave progress
+# [Continue work]
+/sh:status checkpoint          # Verify checkpoint recency
+/sh:checkpoint                 # Create if needed
 ```
 
 ---
 
 ## Technical Implementation
 
-### Memory Query Optimization
+### Health Score Calculation
 
 ```python
-# Efficient memory listing
-def get_categorized_memories():
+def calculate_health_score(components: dict) -> dict:
     """
-    Efficiently categorize all memories in single pass
+    Calculate overall Shannon Framework health
     """
-    all_keys = list_memories()
-
-    categories = {
-        'project_foundation': [],
-        'wave_context': [],
-        'phase_context': [],
-        'session_state': [],
-        'checkpoints': [],
-        'decisions': []
+    # Component scores
+    goal_score = components["north_star"]["alignment"]
+    memory_score = components["memory"]["coordination"]
+    checkpoint_score = calculate_checkpoint_freshness(
+        components["checkpoint"]["age_minutes"]
+    )
+    wave_score = components["wave"]["progress"] / 100
+    
+    # Weighted combination
+    health = (
+        goal_score * 0.3 +
+        memory_score * 0.3 +
+        checkpoint_score * 0.2 +
+        wave_score * 0.2
+    )
+    
+    # Determine status
+    if health >= 0.7:
+        status = "HEALTHY"
+        indicator = "🟢"
+    elif health >= 0.4:
+        status = "WARNING"
+        indicator = "🟡"
+    else:
+        status = "CRITICAL"
+        indicator = "🔴"
+    
+    return {
+        "score": round(health, 2),
+        "status": status,
+        "indicator": indicator
     }
-
-    # Single-pass categorization
-    for key in all_keys:
-        if 'checkpoint' in key:
-            categories['checkpoints'].append(key)
-        elif key.startswith('project_') and any(x in key for x in ['spec', 'plan', 'decisions', 'final']):
-            categories['project_foundation'].append(key)
-        elif 'wave_' in key:
-            categories['wave_context'].append(key)
-        elif 'phase_' in key:
-            categories['phase_context'].append(key)
-        elif 'session_' in key:
-            categories['session_state'].append(key)
-        elif 'decision_' in key:
-            categories['decisions'].append(key)
-
-    return categories
 ```
 
-### Checkpoint Validation
+### Alert Detection
 
 ```python
-def validate_checkpoint(checkpoint_data):
+def detect_alerts(components: dict) -> list:
     """
-    Validate checkpoint contains required fields
+    Identify conditions requiring user attention
     """
-    required_fields = ['timestamp', 'project_id', 'state']
-
-    for field in required_fields:
-        if field not in checkpoint_data:
-            return False, f"Missing field: {field}"
-
-    # Check state completeness
-    if 'active_phase' not in checkpoint_data['state']:
-        return False, "Missing phase information"
-
-    return True, "Valid checkpoint"
+    alerts = []
+    
+    # Memory coordination check
+    if components["memory"]["coordination"] < 0.5:
+        alerts.append({
+            "level": "CRITICAL",
+            "message": f"Memory coordination: {components['memory']['coordination']}",
+            "action": "/sh:memory optimize"
+        })
+    elif components["memory"]["coordination"] < 0.7:
+        alerts.append({
+            "level": "WARNING",
+            "message": f"Memory coordination: {components['memory']['coordination']}",
+            "action": "/sh:memory pattern"
+        })
+    
+    # Checkpoint freshness check
+    age_min = components["checkpoint"]["age_minutes"]
+    if age_min > 180:
+        alerts.append({
+            "level": "CRITICAL",
+            "message": f"No checkpoint in {age_min} minutes",
+            "action": "/sh:checkpoint"
+        })
+    elif age_min > 30:
+        alerts.append({
+            "level": "WARNING",
+            "message": f"Checkpoint age: {age_min} minutes",
+            "action": "/sh:checkpoint recommended"
+        })
+    
+    # Goal alignment check
+    if components["north_star"]["alignment"] < 0.3:
+        alerts.append({
+            "level": "CRITICAL",
+            "message": "Severe goal misalignment",
+            "action": "Review North Star or current work"
+        })
+    
+    return alerts
 ```
 
 ---
 
 ## Success Criteria
 
-**Command succeeds when**:
-- ✅ All Serena memory keys enumerated
-- ✅ Memories categorized by hierarchy level
-- ✅ Latest checkpoint identified and validated
-- ✅ Health status accurately determined
-- ✅ Dashboard generated with actionable insights
-- ✅ User understands project state clearly
-- ✅ Continuation readiness communicated
+**Status display succeeds when**:
+- ✅ All requested components displayed accurately
+- ✅ Health metrics calculated correctly
+- ✅ Alerts identified and prioritized
+- ✅ Visual elements clear and helpful
+- ✅ Actionable guidance provided
+- ✅ User understands system state completely
 
-**Command fails if**:
-- ❌ Cannot connect to Serena MCP
-- ❌ list_memories() returns error
-- ❌ Dashboard generation incomplete
+**Status display fails if**:
+- ❌ Missing component data
+- ❌ Incorrect health calculations
+- ❌ Alerts missed or wrong priority
+- ❌ Visual elements confusing
+- ❌ No actionable guidance
 
 ---
 
 ## Summary
 
-`/sh:status` provides comprehensive visibility into project state through Serena MCP memory inspection, enabling users to:
+`/sh:status` provides comprehensive system visibility through:
 
-- **Assess Health**: Understand memory health and checkpoint status
-- **Track Progress**: See active work and completed tasks
-- **Plan Continuation**: Know exactly how to resume work
-- **Identify Issues**: Detect missing checkpoints or context gaps
-- **Make Decisions**: Determine if checkpoint or restoration needed
+- **Full Dashboard**: All components in single view
+- **Component Filters**: Focused views (wave, memory, checkpoint, goal, session)
+- **Health Metrics**: System-wide health scoring
+- **Alert System**: Proactive issue detection
+- **Actionable Guidance**: Clear next steps
 
-**Key Principle**: Transparency into project state enables confident continuation and recovery.
+**Key Principle**: Complete transparency into system state enables informed decisions and proactive issue resolution.

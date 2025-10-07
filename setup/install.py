@@ -68,11 +68,17 @@ FILE_MAPPINGS = {
     "Agents/DATA_ENGINEER.md": "agents/DATA_ENGINEER.md",
     "Agents/MENTOR.md": "agents/MENTOR.md",
 
-    # Commands
-    "Commands/sh_status.md": "commands/sh_status.md",
-    "Commands/sh_restore.md": "commands/sh_restore.md",
+    # Commands - Shannon commands (sh:*)
+    "Commands/sh_analyze.md": "commands/sh_analyze.md",
     "Commands/sh_checkpoint.md": "commands/sh_checkpoint.md",
+    "Commands/sh_memory.md": "commands/sh_memory.md",
+    "Commands/sh_north_star.md": "commands/sh_north_star.md",
+    "Commands/sh_restore.md": "commands/sh_restore.md",
     "Commands/sh_spec.md": "commands/sh_spec.md",
+    "Commands/sh_status.md": "commands/sh_status.md",
+    "Commands/sh_wave.md": "commands/sh_wave.md",
+
+    # Commands - SuperClaude commands (sc:*)
     "Commands/sc_build.md": "commands/sc_build.md",
     "Commands/sc_analyze.md": "commands/sc_analyze.md",
     "Commands/sc_implement.md": "commands/sc_implement.md",

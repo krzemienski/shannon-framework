@@ -10,6 +10,7 @@ Usage:
     python3 install.py uninstall  # Remove Shannon V3
     python3 install.py verify     # Verify installation
     python3 install.py status     # Show installation status
+    python3 install.py test       # Test hook functionality
 
 Requirements:
     - Python 3.8+
@@ -21,6 +22,7 @@ import os
 import sys
 import json
 import shutil
+import subprocess
 import argparse
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
@@ -33,7 +35,7 @@ from typing import Dict, List, Tuple, Optional
 SHANNON_VERSION = "3.0.0"
 CLAUDE_DIR = Path.home() / ".claude"
 SHANNON_SOURCE = Path(__file__).parent.parent / "Shannon"
-HOOKS_SOURCE = Path(__file__).parent.parent / "Hooks"
+HOOKS_SOURCE = Path(__file__).parent.parent / "Shannon" / "Hooks"
 
 # File mappings: source → destination
 FILE_MAPPINGS = {
@@ -223,7 +225,7 @@ def install_precompact_hook() -> bool:
         # Make executable
         os.chmod(dest, 0o755)
 
-        # Register in settings.json
+        # Register in settings.json using CORRECT Claude Code hook format
         settings_path = CLAUDE_DIR / SETTINGS_FILE
 
         if settings_path.exists():
@@ -232,15 +234,28 @@ def install_precompact_hook() -> bool:
         else:
             settings = {}
 
-        # Add PreCompact hook
+        # Initialize hooks structure
         if 'hooks' not in settings:
             settings['hooks'] = {}
+        if 'PreCompact' not in settings['hooks']:
+            settings['hooks']['PreCompact'] = []
 
-        settings['hooks']['preCompact'] = {
-            "enabled": True,
-            "script": str(dest),
-            "description": "Shannon V3 PreCompact Hook - Context preservation before context limits"
+        # Add PreCompact hook configuration (Claude Code compatible format)
+        hook_config = {
+            "type": "command",
+            "command": str(dest),
+            "timeout": 5000
         }
+
+        # Check if already registered (avoid duplicates)
+        already_registered = any(
+            h.get('command') == str(dest)
+            for h in settings['hooks']['PreCompact']
+            if isinstance(h, dict)
+        )
+
+        if not already_registered:
+            settings['hooks']['PreCompact'].append(hook_config)
 
         # Write settings
         with open(settings_path, 'w') as f:
@@ -251,6 +266,74 @@ def install_precompact_hook() -> bool:
     except Exception as e:
         print_error(f"Failed to install PreCompact hook: {e}")
         return False
+
+
+def verify_precompact_hook() -> Tuple[bool, str]:
+    """
+    Verify PreCompact hook is installed and functional
+
+    Returns:
+        (success, message)
+    """
+    try:
+        # Check file exists
+        hook_path = CLAUDE_DIR / "hooks" / HOOK_FILE
+        if not hook_path.exists():
+            return False, f"Hook file not found: {hook_path}"
+
+        # Check executable
+        if not os.access(hook_path, os.X_OK):
+            return False, f"Hook file not executable: {hook_path}"
+
+        # Check registered in settings
+        settings_path = CLAUDE_DIR / SETTINGS_FILE
+        if not settings_path.exists():
+            return False, "settings.json not found"
+
+        with open(settings_path, 'r') as f:
+            settings = json.load(f)
+
+        if 'hooks' not in settings:
+            return False, "No hooks configured in settings.json"
+
+        if 'PreCompact' not in settings['hooks']:
+            return False, "PreCompact hook not registered in settings.json"
+
+        if not isinstance(settings['hooks']['PreCompact'], list):
+            return False, "PreCompact hook has wrong format (should be array)"
+
+        if len(settings['hooks']['PreCompact']) == 0:
+            return False, "PreCompact hook array is empty"
+
+        # Test hook execution
+        test_input = json.dumps({"test": True})
+        result = subprocess.run(
+            [str(hook_path)],
+            input=test_input,
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+
+        if result.returncode != 0:
+            return False, f"Hook execution failed: {result.stderr}"
+
+        # Validate output format
+        try:
+            output = json.loads(result.stdout)
+            if 'hookSpecificOutput' not in output:
+                return False, "Hook output missing hookSpecificOutput"
+            if output['hookSpecificOutput'].get('hookEventName') != 'PreCompact':
+                return False, "Hook returned wrong event name"
+        except json.JSONDecodeError:
+            return False, "Hook output is not valid JSON"
+
+        return True, "PreCompact hook is functional"
+
+    except subprocess.TimeoutExpired:
+        return False, "Hook execution timed out (>5s)"
+    except Exception as e:
+        return False, f"Verification error: {str(e)}"
 
 
 def verify_serena_mcp() -> bool:
@@ -297,13 +380,15 @@ def verify_installation() -> Tuple[bool, Dict[str, bool]]:
     hook_path = CLAUDE_DIR / "hooks" / HOOK_FILE
     checks['hook_installed'] = hook_path.exists()
 
-    # Check hook registered
+    # Check hook registered (using correct key: PreCompact not preCompact)
     try:
         settings_path = CLAUDE_DIR / SETTINGS_FILE
         if settings_path.exists():
             with open(settings_path, 'r') as f:
                 settings = json.load(f)
-            checks['hook_registered'] = 'preCompact' in settings.get('hooks', {})
+            # Check for PreCompact (correct Claude Code format)
+            precompact_hooks = settings.get('hooks', {}).get('PreCompact', [])
+            checks['hook_registered'] = len(precompact_hooks) > 0
     except Exception:
         pass
 
@@ -342,15 +427,20 @@ def uninstall_shannon() -> Tuple[int, int]:
     if hook_path.exists():
         hook_path.unlink()
 
-    # Remove hook registration
+    # Remove hook registration (using correct PreCompact key and array format)
     try:
         settings_path = CLAUDE_DIR / SETTINGS_FILE
         if settings_path.exists():
             with open(settings_path, 'r') as f:
                 settings = json.load(f)
 
-            if 'hooks' in settings and 'preCompact' in settings['hooks']:
-                del settings['hooks']['preCompact']
+            if 'hooks' in settings and 'PreCompact' in settings['hooks']:
+                # Remove Shannon hook from PreCompact array
+                hook_path_str = str(CLAUDE_DIR / "hooks" / HOOK_FILE)
+                settings['hooks']['PreCompact'] = [
+                    h for h in settings['hooks']['PreCompact']
+                    if isinstance(h, dict) and h.get('command') != hook_path_str
+                ]
 
                 with open(settings_path, 'w') as f:
                     json.dump(settings, f, indent=2)
@@ -486,6 +576,33 @@ def cmd_status(args):
     return 0
 
 
+def cmd_test(args):
+    """Test PreCompact hook functionality"""
+    print_header(f"Shannon Framework V{SHANNON_VERSION} Hook Testing")
+
+    print_info("Testing PreCompact hook...")
+    success, message = verify_precompact_hook()
+
+    if success:
+        print_success(message)
+        print_info("\n✓ Hook test results:")
+        print("  • File exists and is executable")
+        print("  • Registered in settings.json with correct format")
+        print("  • Returns valid JSON output")
+        print("  • Hook event name correct (PreCompact)")
+        print("  • Executes within timeout (<5s)")
+        print_info("\nHook is ready to preserve context during auto-compaction")
+        return 0
+    else:
+        print_error(f"Hook test failed: {message}")
+        print_info("\nTroubleshooting steps:")
+        print("  1. Run: python3 install.py install")
+        print("  2. Check: ~/.claude/settings.json has PreCompact hook")
+        print("  3. Verify: Hook file is executable (chmod +x)")
+        print("  4. Check: Python 3.8+ is installed")
+        return 1
+
+
 # ============================================================================
 # MAIN
 # ============================================================================
@@ -501,6 +618,7 @@ Examples:
   python3 install.py uninstall        Remove Shannon V3
   python3 install.py verify           Verify installation
   python3 install.py status           Show status
+  python3 install.py test             Test hook functionality
         """
     )
 
@@ -522,6 +640,10 @@ Examples:
     # Status command
     parser_status = subparsers.add_parser('status', help='Show installation status')
     parser_status.set_defaults(func=cmd_status)
+
+    # Test command
+    parser_test = subparsers.add_parser('test', help='Test hook functionality')
+    parser_test.set_defaults(func=cmd_test)
 
     # Parse arguments
     args = parser.parse_args()

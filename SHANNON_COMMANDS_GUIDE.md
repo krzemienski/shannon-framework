@@ -20,6 +20,75 @@
 
 ---
 
+## Complete Command Reference & Syntax
+
+> **Complete technical specifications - see [COMMAND_REFERENCE.md](./COMMAND_REFERENCE.md) for exhaustive details**
+
+### Syntax Quick Reference
+
+```bash
+# Goal Management
+/sh:north-star "goal statement"              # Set goal
+/sh:north-star                                # Get current goal
+/sh:north-star check "operation"              # Check alignment
+/sh:north-star history                        # View goal evolution
+
+# Wave Orchestration
+/sh:wave [linear|parallel|iterative|adaptive] [request]
+/sh:wave Build authentication system          # Auto-select strategy
+
+# Multi-Layer Analysis
+/sh:analyze [target] [surface|structural|comprehensive|exhaustive]
+/sh:analyze authentication comprehensive      # Default depth
+/sh:analyze src/ structural                   # Architecture focus
+/sh:analyze @docs/spec.md exhaustive          # Analyze spec file
+
+# State Management
+/sh:checkpoint create [name]                  # Create named checkpoint
+/sh:checkpoint load [id]                      # Load checkpoint
+/sh:checkpoint list [--limit N]               # List checkpoints
+/sh:checkpoint compare [id1] [id2]            # Compare two checkpoints
+/sh:checkpoint rollback [id]                  # Rollback to checkpoint
+
+# Memory Intelligence
+/sh:memory track [entity]                     # Track entity evolution
+/sh:memory pattern                            # Analyze all patterns
+/sh:memory visualize                          # Graph visualization
+/sh:memory optimize                           # Get optimization suggestions
+/sh:memory stats                              # Show statistics
+
+# System Monitoring
+/sh:status [all|wave|memory|checkpoint|goal|session]
+/sh:status --brief                            # Abbreviated output
+```
+
+### Parameters & Flags Summary
+
+| Command | Key Parameters | Available Flags | Technical Output |
+|---------|----------------|-----------------|------------------|
+| `/sh:north-star` | Actions: get, check, history | None | Goal entity, alignment scores |
+| `/sh:wave` | Strategies: linear, parallel, iterative, adaptive | None | Wave entities, phase checkpoints |
+| `/sh:analyze` | Depths: surface, structural, comprehensive, exhaustive | `--verbose` | Analysis report, coordination metrics |
+| `/sh:checkpoint` | Actions: create, load, list, compare, rollback | `--limit`, `--preserve-memory` | Checkpoint JSON, state snapshots |
+| `/sh:memory` | Actions: track, pattern, visualize, optimize, stats | None | Metrics, visualizations, recommendations |
+| `/sh:status` | Components: all, wave, memory, checkpoint, goal, session | `--brief` | Dashboard, health score, alerts |
+
+### Performance Estimates
+
+```yaml
+Command Execution Times:
+  /sh:north-star: < 1-2 seconds
+  /sh:wave: 5-30 seconds planning, minutes-hours execution
+  /sh:analyze: 2-60 minutes (depth-dependent)
+  /sh:checkpoint: 5-30 seconds
+  /sh:memory: 3-30 seconds (action-dependent)
+  /sh:status: 2-10 seconds (component-dependent)
+```
+
+For complete technical specifications, parameter details, and advanced usage patterns, see **[COMMAND_REFERENCE.md](./COMMAND_REFERENCE.md)**.
+
+---
+
 ## Command Ecosystem Overview
 
 ### Quick Reference Matrix

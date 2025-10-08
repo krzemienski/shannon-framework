@@ -1290,6 +1290,114 @@ Shannon Commands (sh:*):
 
 ---
 
+## Complete Command Reference & Syntax
+
+> **Quick reference for command syntax, parameters, and flags - see [COMMAND_REFERENCE.md](./COMMAND_REFERENCE.md) for full specifications**
+
+### Syntax Quick Reference
+
+```bash
+# Goal Management
+/sh:north-star "goal statement"              # Set goal
+/sh:north-star                                # Get current goal
+/sh:north-star check "operation"              # Check alignment
+/sh:north-star history                        # View goal evolution
+
+# Wave Orchestration
+/sh:wave [linear|parallel|iterative|adaptive] [request]
+/sh:wave Build authentication system          # Auto-select strategy
+
+# Multi-Layer Analysis
+/sh:analyze [target] [surface|structural|comprehensive|exhaustive]
+/sh:analyze authentication comprehensive      # Default depth
+/sh:analyze src/ structural                   # Architecture focus
+/sh:analyze @docs/spec.md exhaustive          # Analyze spec file
+
+# State Management
+/sh:checkpoint create [name]                  # Create named checkpoint
+/sh:checkpoint load [id]                      # Load checkpoint
+/sh:checkpoint list [--limit N]               # List checkpoints
+/sh:checkpoint compare [id1] [id2]            # Compare two checkpoints
+/sh:checkpoint rollback [id]                  # Rollback to checkpoint
+
+# Memory Intelligence
+/sh:memory track [entity]                     # Track entity evolution
+/sh:memory pattern                            # Analyze all patterns
+/sh:memory visualize                          # Graph visualization
+/sh:memory optimize                           # Get optimization suggestions
+/sh:memory stats                              # Show statistics
+
+# System Monitoring
+/sh:status [all|wave|memory|checkpoint|goal|session]
+/sh:status --brief                            # Abbreviated output
+```
+
+### Parameters & Options
+
+| Command | Parameters | Options/Flags | Example |
+|---------|------------|---------------|---------|
+| **north-star** | Actions: `get`, `check`, `history` | None | `/sh:north-star check "Add OAuth"` |
+| **wave** | Strategies: `linear`, `parallel`, `iterative`, `adaptive` | None | `/sh:wave iterative Optimize performance` |
+| **analyze** | Target, Depths: `surface`, `structural`, `comprehensive`, `exhaustive` | None | `/sh:analyze src/auth/ comprehensive` |
+| **checkpoint** | Actions: `create`, `load`, `list`, `compare`, `rollback` | `--limit N`, `--preserve-memory` | `/sh:checkpoint list --limit 5` |
+| **memory** | Actions: `track`, `pattern`, `visualize`, `optimize`, `stats` | None | `/sh:memory track authentication` |
+| **status** | Components: `all`, `wave`, `memory`, `checkpoint`, `goal`, `session` | `--brief` | `/sh:status wave` |
+
+### Technical Output Types
+
+**What Each Command Produces**:
+
+```yaml
+/sh:north-star:
+  outputs: ["Goal entity in Serena", "Alignment scores (0-1)", "Quality assessment", "Drift warnings"]
+  serena_writes: ["north_star_goal entity", "goal_history observations"]
+
+/sh:wave:
+  outputs: ["Wave entities", "Phase entities", "Phase checkpoints", "Execution report", "Deliverables list"]
+  serena_writes: ["wave_[id] entity", "phase_[name] entities", "wave_complete entity"]
+
+/sh:analyze:
+  outputs: ["Multi-layer analysis report", "Coordination metrics", "Recommendations", "Access logs"]
+  serena_writes: ["analysis_results entity", "accessed entity tracking"]
+
+/sh:checkpoint:
+  outputs: ["Checkpoint JSON files", "Checkpoint entities", "Comparison reports", "State snapshots"]
+  file_writes: ["~/.claude/shannon/checkpoints/[id].json"]
+  serena_writes: ["checkpoint_[id] entity", "latest_checkpoint pointer"]
+
+/sh:memory:
+  outputs: ["Pattern analysis", "Visualizations", "Optimization plan", "Statistics dashboard"]
+  serena_reads: ["Complete memory graph", "Entity access logs"]
+
+/sh:status:
+  outputs: ["Health dashboard", "Component status", "Alerts", "Progress metrics"]
+  serena_reads: ["All project entities", "Wave state", "Checkpoint history"]
+```
+
+### File Operations
+
+**Commands Support File References**:
+
+```bash
+# Analyze specification files
+/sh:analyze @docs/requirements.md comprehensive
+/sh:analyze @specs/api_spec.yaml structural
+
+# Implement from spec
+/sh:wave linear Implement feature per @docs/feature_spec.md
+
+# Analyze code files
+/sh:analyze src/auth/jwt.ts exhaustive
+/sh:analyze src/ comprehensive  # Entire directory
+
+# Wave can process multiple files
+/sh:wave linear Refactor all files in src/auth/ for better security
+```
+
+**Reference**: See [COMMAND_REFERENCE.md](./COMMAND_REFERENCE.md) for complete technical specifications, all parameters, performance characteristics, and advanced usage patterns.
+
+---
+
 ## Core Workflow Patterns
 
 ### The Typical Shannon Session

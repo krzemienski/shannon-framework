@@ -1,0 +1,32 @@
+{
+  "name": "shannon-framework",
+  "description": "Official Shannon Framework plugin marketplace - Specification-driven development tools for Claude Code",
+
+  "owner": {
+    "name": "Shannon Framework Team",
+    "url": "https://github.com/shannon-framework",
+    "email": "info@shannon-framework.dev"
+  },
+
+  "plugins": [
+    {
+      "name": "shannon",
+      "source": "./shannon-plugin",
+      "description": "Complete Shannon Framework: 8D complexity analysis, wave orchestration, context preservation, NO MOCKS testing",
+      "version": "3.0.0",
+      "author": "Shannon Framework Team",
+      "license": "MIT",
+      "tags": [
+        "specification",
+        "requirements",
+        "testing",
+        "quality-assurance",
+        "project-planning",
+        "complexity-analysis",
+        "wave-orchestration"
+      ],
+      "homepage": "https://github.com/shannon-framework/shannon",
+      "documentation": "https://github.com/shannon-framework/shannon#readme"
+    }
+  ]
+}

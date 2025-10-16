@@ -1,0 +1,30 @@
+{
+  "name": "shannon",
+  "version": "3.0.0",
+  "description": "Specification-driven development framework featuring 8-dimensional complexity analysis, wave orchestration, context preservation, and NO MOCKS testing philosophy for Claude Code",
+
+  "author": {
+    "name": "Shannon Framework Team",
+    "email": "info@shannon-framework.dev",
+    "url": "https://github.com/shannon-framework"
+  },
+
+  "homepage": "https://github.com/shannon-framework/shannon",
+  "repository": "https://github.com/shannon-framework/shannon",
+  "license": "MIT",
+
+  "keywords": [
+    "specification-analysis",
+    "complexity-scoring",
+    "wave-orchestration",
+    "context-preservation",
+    "no-mocks-testing",
+    "requirements-engineering",
+    "project-planning",
+    "quality-assurance",
+    "serena-integration",
+    "shadcn-ui",
+    "testing-framework",
+    "development-workflow"
+  ]
+}

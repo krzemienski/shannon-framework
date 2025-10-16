@@ -5,6 +5,75 @@ All notable changes to Shannon Framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.1] - 2024-10-16
+
+### Added
+
+#### Enhanced Hook System (5 Hooks Total)
+- **UserPromptSubmit Hook**: Automatically injects North Star goal into every prompt for consistent goal alignment
+- **Stop Hook**: Enforces wave validation gates by blocking completion until user approval
+- **PostToolUse Hook**: Real-time NO MOCKS detection in test files with functional test guidance
+- Structured logging infrastructure for all hooks (`~/.claude/shannon-logs/`)
+- Hook execution analytics and debugging capabilities
+
+#### Plugin Metadata Enhancements
+- `displayName`: "Shannon Framework" for better marketplace presentation
+- `publisher`: "shannon-framework" for organization
+- `readme`: Link to README.md in plugin manifest
+- `changelog`: Link to CHANGELOG.md for version history
+- `engines`: Requires Claude Code >=1.0.0
+
+#### Infrastructure
+- `.gitignore` for shannon-plugin/ to exclude Python cache and logs
+- `IMPROVEMENTS_V3.0.1.md` documenting all 27 identified improvements
+- `TEST_RESULTS_V3.0.1.md` with comprehensive validation results
+
+### Changed
+
+#### Hook System Improvements
+- PreCompact hook timeout increased from 5s to 15s for large projects
+- PreCompact hook now logs to structured .jsonl files
+- PreCompact hook includes Serena directory check with warnings
+- PreCompact hook version bumped to 3.0.1
+- SessionStart notification updated to show v3.0.1
+
+#### CLAUDE.md Transformation
+- Converted from legacy @ reference system to plugin development guide
+- Removed all broken Shannon/ directory references (now Shannon-legacy/)
+- Added comprehensive development workflow documentation
+- Clarified usage: plugin for users, CLAUDE.md for Shannon developers only
+
+#### Error Handling
+- PreCompact hook: Added structured error logging and warnings
+- PreCompact hook: Better visibility with stderr messages
+- PreCompact hook: Added plugin_root tracking to metadata
+- All hooks: Graceful error handling with silent failures where appropriate
+
+### Fixed
+
+- PreCompact hook matcher removed (was invalid ".*" for non-tool hook)
+- CLAUDE.md broken @ references to renamed Shannon-legacy/ directory
+- Plugin version consistency (now 3.0.1 throughout)
+
+### Documentation
+
+- Comprehensive improvement analysis via Context7 documentation review
+- 27 improvements identified with implementation priorities
+- Test procedures documented for all components
+- Hook system fully documented with examples
+
+### Impact
+
+**North Star Activation**: Game-changing feature - North Star goal now active in every interaction instead of passive storage
+
+**Validation Gates**: Stop hook automatically enforces Shannon's validation philosophy
+
+**Testing Philosophy**: PostToolUse hook provides real-time NO MOCKS enforcement
+
+**Logging**: All hooks now log to structured files for analytics and debugging
+
+**Developer Experience**: CLAUDE.md provides clear guidance for Shannon development
+
 ## [3.0.0] - 2024-10-16
 
 ### Added

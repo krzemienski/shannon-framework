@@ -13,7 +13,7 @@
       "name": "shannon",
       "source": "./shannon-plugin",
       "description": "Complete Shannon Framework: 8D complexity analysis, wave orchestration, context preservation, NO MOCKS testing",
-      "version": "3.0.0",
+      "version": "3.0.1",
       "author": "Shannon Framework Team",
       "license": "MIT",
       "tags": [

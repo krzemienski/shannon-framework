@@ -2,7 +2,7 @@
 
 **Behavioral Programming Framework for Claude Code**
 
-[![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)](https://github.com/krzemienski/shannon-framework)
+[![Version](https://img.shields.io/badge/version-3.0.1-blue.svg)](https://github.com/krzemienski/shannon-framework)
 [![Tests](https://img.shields.io/badge/tests-46%2F46%20passing-brightgreen.svg)](./VERIFICATION_REPORT.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
 [![Plugin](https://img.shields.io/badge/claude--code-plugin-purple.svg)](https://docs.claude.com/en/docs/claude-code/plugins)

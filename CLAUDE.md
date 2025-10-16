@@ -1,229 +1,138 @@
-# Shannon Framework V3 - Project Configuration
+# Shannon Framework V3 - Plugin Development Context
 
 <!--
-  This CLAUDE.md activates Shannon behavioral patterns for THIS project only.
+  ⚠️ NOTICE: Shannon v3.0.0+ is distributed as a Claude Code PLUGIN
 
-  Project-level CLAUDE.md files override user-level ~/.claude/ instructions
-  for files within this project directory. This prevents global pollution
-  while enabling Shannon's specialized behavioral patterns for Shannon projects.
+  FOR SHANNON USERS:
+  Install via plugin system instead of this CLAUDE.md:
+    /plugin marketplace add shannon-framework/shannon
+    /plugin install shannon@shannon-framework
+  See: docs/PLUGIN_INSTALL.md
 
-  When Claude Code operates on Shannon files, it automatically loads this
-  configuration and activates Shannon-specific behaviors, commands, agents,
-  and execution modes.
+  FOR SHANNON DEVELOPERS:
+  This file provides development context when working on Shannon itself.
+  The plugin source is in shannon-plugin/ directory.
 -->
 
-# ═══════════════════════════════════════════════════
-# Shannon Framework Core Components
-# ═══════════════════════════════════════════════════
+# Shannon Plugin Development Guide
 
-## Core Behavioral Patterns
+## Quick Reference
 
-@Shannon/Core/SPEC_ANALYSIS.md
-@Shannon/Core/PHASE_PLANNING.md
-@Shannon/Core/WAVE_ORCHESTRATION.md
-@Shannon/Core/CONTEXT_MANAGEMENT.md
-@Shannon/Core/TESTING_PHILOSOPHY.md
-@Shannon/Core/HOOK_SYSTEM.md
-@Shannon/Core/PROJECT_MEMORY.md
-@Shannon/Core/MCP_DISCOVERY.md
+**Plugin Location**: `shannon-plugin/`
+**Commands**: `shannon-plugin/commands/` (33 commands)
+**Agents**: `shannon-plugin/agents/` (19 agents)
+**Hooks**: `shannon-plugin/hooks/` (PreCompact, SessionStart)
+**Core Patterns**: `shannon-plugin/core/` (8 behavioral documents)
+**Documentation**: `shannon-plugin/README.md`, `docs/`
 
-# ═══════════════════════════════════════════════════
-# Shannon Sub-Agents
-# ═══════════════════════════════════════════════════
+## Development Workflow
 
-## New Shannon Agents (5)
+When developing Shannon Framework:
 
-@Shannon/Agents/SPEC_ANALYZER.md
-@Shannon/Agents/PHASE_ARCHITECT.md
-@Shannon/Agents/WAVE_COORDINATOR.md
-@Shannon/Agents/CONTEXT_GUARDIAN.md
-@Shannon/Agents/TEST_GUARDIAN.md
+### 1. Make Changes
+Edit files in `shannon-plugin/`:
+- Commands: `shannon-plugin/commands/*.md`
+- Agents: `shannon-plugin/agents/*.md`
+- Hooks: `shannon-plugin/hooks/hooks.json` or `hooks/*.py`
+- Core: `shannon-plugin/core/*.md`
 
-## Enhanced SuperClaude Agents (14)
-
-@Shannon/Agents/IMPLEMENTATION_WORKER.md
-@Shannon/Agents/ANALYZER.md
-@Shannon/Agents/ARCHITECT.md
-@Shannon/Agents/REFACTORER.md
-@Shannon/Agents/SECURITY.md
-@Shannon/Agents/FRONTEND.md
-@Shannon/Agents/BACKEND.md
-@Shannon/Agents/PERFORMANCE.md
-@Shannon/Agents/DEVOPS.md
-@Shannon/Agents/QA.md
-@Shannon/Agents/MENTOR.md
-@Shannon/Agents/SCRIBE.md
-@Shannon/Agents/DATA_ENGINEER.md
-@Shannon/Agents/MOBILE_DEVELOPER.md
-
-# ═══════════════════════════════════════════════════
-# Shannon Commands
-# ═══════════════════════════════════════════════════
-
-## New Shannon Commands (4)
-
-@Shannon/Commands/sh_spec.md
-@Shannon/Commands/sh_checkpoint.md
-@Shannon/Commands/sh_restore.md
-@Shannon/Commands/sh_status.md
-
-## Enhanced SuperClaude Commands (25)
-
-@Shannon/Commands/sc_analyze.md
-@Shannon/Commands/sc_brainstorm.md
-@Shannon/Commands/sc_build.md
-@Shannon/Commands/sc_business_panel.md
-@Shannon/Commands/sc_cleanup.md
-@Shannon/Commands/sc_design.md
-@Shannon/Commands/sc_document.md
-@Shannon/Commands/sc_estimate.md
-@Shannon/Commands/sc_explain.md
-@Shannon/Commands/sc_git.md
-@Shannon/Commands/sc_help.md
-@Shannon/Commands/sc_implement.md
-@Shannon/Commands/sc_improve.md
-@Shannon/Commands/sc_index.md
-@Shannon/Commands/sc_load.md
-@Shannon/Commands/sc_reflect.md
-@Shannon/Commands/sc_research.md
-@Shannon/Commands/sc_save.md
-@Shannon/Commands/sc_select_tool.md
-@Shannon/Commands/sc_spawn.md
-@Shannon/Commands/sc_spec_panel.md
-@Shannon/Commands/sc_task.md
-@Shannon/Commands/sc_test.md
-@Shannon/Commands/sc_troubleshoot.md
-@Shannon/Commands/sc_workflow.md
-
-# ═══════════════════════════════════════════════════
-# Shannon Execution Modes
-# ═══════════════════════════════════════════════════
-
-@Shannon/Modes/WAVE_EXECUTION.md
-@Shannon/Modes/SHANNON_INTEGRATION.md
-
-# ═══════════════════════════════════════════════════
-# Required MCP Servers
-# ═══════════════════════════════════════════════════
-
-## Critical MCP Servers (Shannon Framework Requirements)
-
-Shannon Framework requires these MCP servers to be configured for full functionality:
-
-### 1. Serena MCP (MANDATORY)
-**Purpose**: Context preservation, memory management, checkpoint/restore
-**Why Required**: Shannon's core context preservation system depends on Serena
-**Configuration**: Must be configured in Claude Code settings
-
-### 2. shadcn MCP (MANDATORY for React/Next.js UI)
-**Purpose**: React/Next.js UI components and blocks from shadcn/ui library
-**Why Required**: Shannon enforces shadcn/ui for ALL React UI work
-**Package**: @jpisnice/shadcn-ui-mcp-server
-**Configuration**:
-```json
-{
-  "mcpServers": {
-    "shadcn-ui": {
-      "command": "npx",
-      "args": ["@jpisnice/shadcn-ui-mcp-server"],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "your_github_token_here"
-      }
-    }
-  }
-}
-```
-
-**MCP Tools Provided**:
-- `get_component(name)` - Get component source code
-- `list_components()` - Browse all shadcn components
-- `get_block(name)` - Get pre-built block implementations
-- `list_blocks()` - Browse all shadcn blocks
-- `get_component_demo(name)` - View component usage examples
-
-**Why Shannon Enforces shadcn**:
-- Accessible by default (Radix UI primitives)
-- Production-ready (battle-tested by major companies)
-- Customizable (copied into your project)
-- Type-safe (TypeScript-first)
-- NO MOCKS testable (real Puppeteer tests)
-
-### 3. Sequential MCP (Recommended)
-**Purpose**: Complex multi-step reasoning and analysis
-**Why Recommended**: Enhances specification analysis and planning
-**Configuration**: Recommended for best Shannon experience
-
-### 4. Puppeteer MCP (Recommended for Testing)
-**Purpose**: Real browser testing for web applications
-**Why Recommended**: NO MOCKS testing philosophy requires real browsers
-**Configuration**: Required for web UI testing workflows
-
-### 5. Context7 MCP (Recommended)
-**Purpose**: Official library documentation and patterns
-**Why Recommended**: Provides React, Next.js, and framework-specific patterns
-**Configuration**: Enhances development with official documentation
-
-## MCP Configuration Guide
-
-See `docs/SHADCN_INTEGRATION.md` for complete shadcn MCP setup instructions.
-
-For other MCP servers, refer to user-level ~/.claude/ configuration.
-
-# ═══════════════════════════════════════════════════
-# Activation & Configuration
-# ═══════════════════════════════════════════════════
-
-## How Shannon Activates
-
-When Claude Code operates on files within `/Users/nick/Documents/shannon/`:
-1. This CLAUDE.md is automatically loaded
-2. Shannon behavioral patterns activate
-3. Shannon commands become available (/sh:* commands)
-4. Sub-agents are accessible for delegation
-5. Wave execution mode is enabled
-6. shadcn MCP enforced for React UI work
-
-## Verification
-
-To verify Shannon is active in your Claude Code session:
-
+### 2. Test Locally
 ```bash
-# Check Shannon commands are available
-/sh:status
+# In Claude Code:
+/plugin marketplace add /Users/nick/Documents/shannon
+/plugin uninstall shannon@shannon  # If already installed
+/plugin install shannon@shannon
 
-# Verify shadcn MCP is configured
-# Should show shadcn MCP server in available tools
+# Restart Claude Code
 
-# Test specification analysis
-/sh:spec "Build a simple todo app"
-# Should produce 8-dimensional complexity analysis
+# Test your changes:
+/sh_status
+/sh_spec "test specification"
 ```
 
-## Configuration Hierarchy
+### 3. Validate
+```bash
+# Run automated validation
+python3 shannon-plugin/scripts/validate.py
 
-1. **Project-Level** (this file): Active for Shannon project files
-2. **User-Level** (~/.claude/): Fallback for non-Shannon work
-3. **Global Defaults**: Claude Code base behavior
+# Check JSON syntax
+jq . .claude-plugin/marketplace.json
+jq . shannon-plugin/.claude-plugin/plugin.json
+jq . shannon-plugin/hooks/hooks.json
+```
 
-This hierarchy ensures Shannon patterns activate ONLY for Shannon work,
-preventing behavioral pollution in other projects.
+### 4. Commit
+```bash
+git add shannon-plugin/
+git commit -m "feat(component): description of change"
+```
 
-## Integration with SuperClaude
+## Key Components for Development
 
-Shannon V3 is designed to complement SuperClaude framework:
-- Shannon commands integrate with `/sc:*` commands
-- Sub-agents work alongside SuperClaude personas
-- Wave execution coordinates with SuperClaude orchestration
-- Quality gates align with SuperClaude validation
-- **shadcn MCP**: Used by Shannon for React UI (replaces Magic MCP)
+### Core Behavioral Patterns
+Reference documentation in `shannon-plugin/core/`:
+- SPEC_ANALYSIS.md - 8D complexity framework
+- PHASE_PLANNING.md - 5-phase planning system
+- WAVE_ORCHESTRATION.md - Multi-stage execution
+- CONTEXT_MANAGEMENT.md - Checkpoint/restore patterns
+- TESTING_PHILOSOPHY.md - NO MOCKS principles
+- HOOK_SYSTEM.md - Hook integration
+- PROJECT_MEMORY.md - Serena memory patterns
+- MCP_DISCOVERY.md - Dynamic MCP recommendations
 
-Both frameworks can be active simultaneously, with Shannon handling
-spec-driven development workflows and SuperClaude managing general
-engineering operations.
+### Execution Modes
+Reference in `shannon-plugin/modes/`:
+- WAVE_EXECUTION.md - Wave orchestration behaviors
+- SHANNON_INTEGRATION.md - SuperClaude coordination
+
+## MCP Requirements for Development
+
+Testing Shannon requires:
+- **Serena MCP** (mandatory) - Context preservation
+- **Sequential MCP** (recommended) - Complex analysis
+- **Context7 MCP** (recommended) - Framework patterns
+- **Puppeteer MCP** (recommended) - Browser testing
+
+See: `docs/PLUGIN_INSTALL.md` for MCP configuration
+
+## Testing Your Changes
+
+### Manual Testing
+1. Install plugin locally (see above)
+2. Test commands: `/sh_spec`, `/sh_checkpoint`, etc.
+3. Test agents: Check auto-activation works
+4. Test hooks: Verify PreCompact triggers
+
+### Automated Testing
+```bash
+# Structure validation
+python3 tests/validate_structure.py
+
+# Frontmatter validation
+python3 tests/validate_frontmatter.py
+
+# Hook testing
+python3 tests/test_hooks.py
+```
+
+## Documentation
+
+When developing Shannon, reference:
+- **Plugin Spec**: `SHANNON_V3_SPECIFICATION.md`
+- **Commands**: `SHANNON_COMMANDS_GUIDE.md`
+- **Installation**: `docs/PLUGIN_INSTALL.md`
+- **Migration**: `docs/MIGRATION_GUIDE.md`
+- **Testing**: `docs/TEST_PLAN.md`
 
 ## Important Notes
 
-- **React/Next.js UI**: Shannon REQUIRES shadcn MCP and FORBIDS Magic MCP
-- **Other Frameworks**: Magic MCP still available for Vue, Angular, Svelte
-- **NO MOCKS Philosophy**: All tests use real browsers, simulators, databases
-- **Context Preservation**: PreCompact hook requires Serena MCP configuration
+- **This CLAUDE.md**: For Shannon development only
+- **Plugin Installation**: Primary method for Shannon users
+- **Legacy Shannon/**: Deprecated, see Shannon-legacy/
+- **Active Plugin**: Install shannon-plugin/ as plugin for actual use
+
+---
+
+**For Development Questions**: See `docs/DEVELOPER_GUIDE.md` (to be created)
+
+**For Plugin Usage**: Install Shannon plugin, don't use this CLAUDE.md

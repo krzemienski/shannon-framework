@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S python3
 """
 Shannon PreCompact Hook - Critical Context Preservation
 
@@ -17,8 +17,9 @@ How It Works:
 Critical: This hook prevents information loss during auto-compaction.
 
 Author: Shannon Framework
-Version: 1.0.0
+Version: 3.0.1
 License: MIT
+Copyright (c) 2024 Shannon Framework Team
 """
 
 import json
@@ -27,6 +28,7 @@ import os
 import subprocess
 from datetime import datetime, UTC
 from typing import Dict, Any, Optional
+from pathlib import Path
 
 
 class ShannonPreCompactHook:
@@ -37,16 +39,21 @@ class ShannonPreCompactHook:
     to preserve all session state before Claude Code auto-compacts.
     """
 
-    VERSION = "1.0.0"
-    TIMEOUT_MS = 5000
+    VERSION = "3.0.1"
+    TIMEOUT_MS = 15000  # Increased from 5000 to 15000 for large projects
     HOOK_EVENT_NAME = "PreCompact"
 
     def __init__(self):
         """Initialize hook with environment configuration"""
         self.project_dir = os.environ.get('CLAUDE_PROJECT_DIR', '.')
+        self.plugin_root = os.environ.get('CLAUDE_PLUGIN_ROOT', '.')
         self.shannon_dir = f"{self.project_dir}/.claude/shannon"
         self.timestamp = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
         self.checkpoint_key = f"shannon_precompact_checkpoint_{self.timestamp}"
+
+        # Setup logging
+        self.log_dir = Path.home() / ".claude" / "shannon-logs" / "precompact"
+        self.log_dir.mkdir(parents=True, exist_ok=True)
 
     def execute(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -59,6 +66,17 @@ class ShannonPreCompactHook:
             Hook output JSON with checkpoint instructions
         """
         try:
+            # Log hook invocation
+            self._log_to_file("hook_invoked", {"trigger": input_data.get("trigger", "auto")})
+
+            # Check if Serena MCP is likely available (best effort)
+            # We can't directly check MCP status from hook, but we can check for .serena directory
+            serena_dir = Path(self.project_dir) / ".serena"
+            if not serena_dir.exists():
+                self._log_warning("Serena directory not found - Serena MCP may not be configured")
+                # Don't block - just warn and continue with instructions
+                print("⚠️  Shannon PreCompact: Serena directory not found, checkpoint may not save", file=sys.stderr)
+
             # Generate checkpoint instructions
             checkpoint_instructions = self._generate_checkpoint_instructions()
 
@@ -74,19 +92,28 @@ class ShannonPreCompactHook:
                     "metadata": {
                         "executionTime": "instant",
                         "success": True,
-                        "projectDir": self.project_dir
+                        "projectDir": self.project_dir,
+                        "pluginRoot": self.plugin_root
                     }
                 }
             }
 
             # Log successful execution
             self._log_info(f"PreCompact hook executed successfully. Checkpoint key: {self.checkpoint_key}")
+            self._log_to_file("checkpoint_created", {"key": self.checkpoint_key})
 
             return output
 
         except Exception as e:
             # Handle any errors gracefully
-            self._log_error(f"PreCompact hook error: {str(e)}")
+            error_msg = f"PreCompact hook error: {str(e)}"
+            self._log_error(error_msg)
+            self._log_to_file("hook_error", {"error": str(e), "type": type(e).__name__})
+
+            # Print to stderr for visibility
+            print(f"⚠️  Shannon PreCompact: Error during checkpoint - {str(e)}", file=sys.stderr)
+
+            # Return error response but don't block compaction (exit 1 not 2)
             return self._error_response(str(e))
 
     def _generate_checkpoint_instructions(self) -> str:
@@ -340,3 +367,22 @@ def main():
 
 if __name__ == "__main__":
     main()
+    def _log_warning(self, message: str) -> None:
+        """Log warning message"""
+        print(f"[WARNING] {message}", file=sys.stderr)
+
+    def _log_to_file(self, event_type: str, data: Dict[str, Any]) -> None:
+        """Log to structured file for analytics"""
+        try:
+            log_file = self.log_dir / f"{datetime.now(UTC).date()}.jsonl"
+            entry = {
+                "timestamp": datetime.now(UTC).isoformat(),
+                "event": event_type,
+                "data": data,
+                "checkpoint_key": self.checkpoint_key
+            }
+            with open(log_file, 'a') as f:
+                f.write(json.dumps(entry) + '\n')
+        except Exception as e:
+            # Logging failure shouldn't break hook
+            print(f"[WARNING] Failed to write log: {e}", file=sys.stderr)

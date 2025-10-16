@@ -2,14 +2,13 @@
   "hooks": {
     "PreCompact": [
       {
-        "matcher": ".*",
         "description": "Shannon context preservation - Saves comprehensive checkpoint before auto-compaction to prevent information loss",
         "hooks": [
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/precompact.py",
             "description": "Triggers CONTEXT_GUARDIAN agent to create Serena MCP checkpoint with complete session state",
-            "timeout": 5000,
+            "timeout": 15000,
             "continueOnError": false
           }
         ]

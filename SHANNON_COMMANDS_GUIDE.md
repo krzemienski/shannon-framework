@@ -1,6 +1,10 @@
-# Shannon Commands (sh:*) - Complete Usage Guide
+# Shannon Commands Guide
 
-> **Deep dive into Shannon's six core commands with execution diagrams, memory visualizations, and complete workflow examples**
+> **Complete guide to Shannon Framework commands - specification analysis, wave orchestration, context preservation, and enhanced SuperClaude commands**
+
+**📦 Installation**: Shannon v3.0.0+ is distributed as a Claude Code plugin. See [docs/PLUGIN_INSTALL.md](docs/PLUGIN_INSTALL.md) for installation instructions.
+
+**🔄 Migrating from Legacy Shannon?**: See [docs/MIGRATION_GUIDE.md](docs/MIGRATION_GUIDE.md)
 
 ---
 

@@ -6500,3 +6500,514 @@ Shannon will be built using Shannon's own methodology:
 ---
 
 END OF SPECIFICATION
+
+---
+
+# Plugin Architecture (v3.0.0+)
+
+## Overview
+
+Shannon V3.0.0 introduces plugin architecture for Claude Code, transforming Shannon from a project-level CLAUDE.md configuration system to a distributable Claude Code plugin.
+
+## Architecture Changes
+
+### Distribution Model
+
+**Before v3.0.0** (Legacy CLAUDE.md System):
+```
+shannon/
+├── CLAUDE.md                    # Project-level config with @ references
+├── Shannon/
+│   ├── Commands/                # Command definitions
+│   ├── Agents/                  # Agent definitions
+│   ├── Core/                    # Behavioral patterns
+│   └── Hooks/                   # Hook scripts
+```
+
+Installation: Clone repo, add @ references to project CLAUDE.md
+
+**v3.0.0+** (Plugin System):
+```
+shannon/
+├── .claude-plugin/
+│   └── marketplace.json         # Marketplace configuration
+├── shannon-plugin/              # The distributable plugin
+│   ├── .claude-plugin/
+│   │   └── plugin.json          # Plugin manifest
+│   ├── commands/                # Slash commands (plugin root)
+│   ├── agents/                  # Agent definitions (plugin root)
+│   ├── hooks/                   # Hook configurations (plugin root)
+│   ├── core/                    # Reference documentation
+│   └── modes/                   # Execution mode docs
+└── Shannon-legacy/              # Deprecated v2.x for reference
+```
+
+Installation: `/plugin marketplace add` → `/plugin install` → restart
+
+### Plugin Components
+
+Shannon plugin provides four component types per Claude Code plugin specification:
+
+#### 1. Commands (33 Total)
+
+**Location**: `shannon-plugin/commands/`
+
+**Format**: Markdown with frontmatter
+```markdown
+---
+description: Command description for help system
+---
+
+# Command Name
+
+Instructions for Claude on how to execute this command
+```
+
+**Shannon Commands** (9):
+- sh_spec.md → /sh_spec - Specification analysis
+- sh_checkpoint.md → /sh_checkpoint - Save context
+- sh_restore.md → /sh_restore - Restore context
+- sh_status.md → /sh_status - Framework status ⭐ NEW in v3.0.0
+- sh_check_mcps.md → /sh_check_mcps - MCP verification ⭐ NEW in v3.0.0
+- sh_analyze.md, sh_memory.md, sh_north_star.md, sh_wave.md
+
+**Enhanced SuperClaude Commands** (24):
+- sc_*.md files provide wave orchestration, Serena integration, structured patterns
+- Compatible with SuperClaude when both present
+- Shannon versions add wave awareness and context preservation
+
+#### 2. Agents (19 Total)
+
+**Location**: `shannon-plugin/agents/`
+
+**Format**: Markdown with capabilities array
+```markdown
+---
+description: Agent specialization
+capabilities:
+  - "Capability 1"
+  - "Capability 2"
+  - "Capability 3"
+---
+
+# Agent Name
+
+Detailed agent behavior and activation rules
+```
+
+**Shannon-Specific Agents** (5):
+- SPEC_ANALYZER.md - 8D complexity scoring
+- PHASE_ARCHITECT.md - 5-phase planning
+- WAVE_COORDINATOR.md - Multi-stage orchestration
+- CONTEXT_GUARDIAN.md - Context preservation
+- TEST_GUARDIAN.md - NO MOCKS enforcement
+
+**Enhanced SuperClaude Agents** (14):
+- ANALYZER, ARCHITECT, FRONTEND, BACKEND, PERFORMANCE, SECURITY, QA, REFACTORER, DEVOPS, MENTOR, SCRIBE, DATA_ENGINEER, MOBILE_DEVELOPER, IMPLEMENTATION_WORKER
+
+#### 3. Hooks
+
+**Location**: `shannon-plugin/hooks/`
+
+**Configuration**: `hooks/hooks.json`
+```json
+{
+  "hooks": {
+    "PreCompact": [...],
+    "SessionStart": [...]
+  }
+}
+```
+
+**Shannon Hooks**:
+- **PreCompact**: Triggers CONTEXT_GUARDIAN to save Serena checkpoint before auto-compaction
+- **SessionStart**: Notifies user Shannon is active ⭐ NEW in v3.0.0
+
+**Hook Scripts**:
+- `precompact.py` - Python script for context preservation
+- Uses `${CLAUDE_PLUGIN_ROOT}` for portability
+
+#### 4. MCP Servers
+
+Shannon doesn't bundle MCP servers but documents requirements:
+
+**Required**: Serena MCP (context preservation)
+**Recommended**: Sequential, Context7, Puppeteer
+**Conditional**: shadcn-ui (React/Next.js projects)
+
+Verification: `/sh_check_mcps` command provides setup guidance
+
+### Plugin Manifest
+
+**File**: `shannon-plugin/.claude-plugin/plugin.json`
+
+```json
+{
+  "name": "shannon",
+  "version": "3.0.0",
+  "description": "Specification-driven development framework...",
+  "author": {...},
+  "keywords": [...]
+}
+```
+
+Contains:
+- Plugin metadata (name, version, description)
+- Author and repository information
+- Keywords for marketplace discovery
+- License information
+
+### Marketplace Configuration
+
+**File**: `.claude-plugin/marketplace.json` (repository root)
+
+```json
+{
+  "name": "shannon-framework",
+  "plugins": [
+    {
+      "name": "shannon",
+      "source": "./shannon-plugin",
+      "description": "Complete Shannon Framework..."
+    }
+  ]
+}
+```
+
+Enables distribution via Claude Code marketplace system.
+
+## Installation Flow
+
+### User Installation
+
+```mermaid
+flowchart TD
+    A[User runs /plugin marketplace add] --> B[Claude Code fetches marketplace.json]
+    B --> C[Marketplace added to available sources]
+    C --> D[User runs /plugin install shannon]
+    D --> E[Claude Code reads shannon-plugin/plugin.json]
+    E --> F[Loads commands from commands/]
+    F --> G[Loads agents from agents/]
+    G --> H[Registers hooks from hooks/hooks.json]
+    H --> I[Shannon active - /sh_status works]
+```
+
+### Team Installation
+
+```mermaid
+flowchart TD
+    A[Repository .claude/settings.json configured] --> B[Team member clones repo]
+    B --> C[Team member trusts repository in Claude Code]
+    C --> D[Shannon auto-installs from marketplace]
+    D --> E[User restarts Claude Code]
+    E --> F[Shannon active for team member]
+```
+
+## Component Loading
+
+### On Claude Code Startup
+
+```
+1. Claude Code reads plugin manifest
+2. Loads all commands/*.md files (33 files)
+3. Parses command frontmatter for descriptions
+4. Registers commands with help system
+
+5. Loads all agents/*.md files (19 files)
+6. Parses agent capabilities arrays
+7. Registers agents with agent system
+
+8. Loads hooks/hooks.json
+9. Registers PreCompact and SessionStart hooks
+10. Makes hook scripts executable
+
+11. SessionStart hook triggers
+12. User sees: "✓ Shannon Framework v3.0.0 active..."
+```
+
+### Command Invocation Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant ClaudeCode
+    participant Shannon
+    participant Serena
+
+    User->>ClaudeCode: /sh_spec "Build todo app"
+    ClaudeCode->>Shannon: Load sh_spec.md command
+    Shannon->>Shannon: Parse command instructions
+    Shannon->>Serena: Load context if available
+    Shannon->>Shannon: Execute 8D analysis
+    Shannon->>Serena: Save spec_analysis
+    Shannon->>User: Display analysis results
+```
+
+## Behavioral Pattern Integration
+
+### Core Patterns Distribution
+
+Shannon's behavioral patterns (8 core documents) are distributed across plugin components:
+
+**SPEC_ANALYSIS.md** → Embedded in:
+- commands/sh_spec.md - Usage instructions
+- agents/SPEC_ANALYZER.md - Analysis methodology
+- core/SPEC_ANALYSIS.md - Complete reference
+
+**WAVE_ORCHESTRATION.md** → Embedded in:
+- agents/WAVE_COORDINATOR.md - Orchestration logic
+- core/WAVE_ORCHESTRATION.md - Complete reference
+
+**CONTEXT_MANAGEMENT.md** → Embedded in:
+- agents/CONTEXT_GUARDIAN.md - Preservation protocols
+- hooks/precompact.py - Implementation logic
+- core/CONTEXT_MANAGEMENT.md - Complete reference
+
+**Pattern Philosophy**:
+- Essential patterns embedded in components that use them
+- Complete patterns preserved in core/ as reference documentation
+- No @ reference system needed - each component is self-contained
+
+## MCP Integration Architecture
+
+### MCP Dependency Chain
+
+```mermaid
+flowchart TB
+    Shannon[Shannon Plugin] --> Serena[Serena MCP]
+    Shannon -.->|recommended| Sequential[Sequential MCP]
+    Shannon -.->|recommended| Context7[Context7 MCP]
+    Shannon -.->|recommended| Puppeteer[Puppeteer MCP]
+    Shannon -.->|conditional| Shadcn[shadcn-ui MCP]
+
+    Serena -->|provides| CP[Context Preservation]
+    Serena -->|provides| Memory[Project Memory]
+
+    Sequential -.->|provides| Analysis[Complex Analysis]
+    Context7 -.->|provides| Patterns[Framework Patterns]
+    Puppeteer -.->|provides| Testing[Browser Testing]
+    Shadcn -.->|provides| ReactUI[React Components]
+
+    style Serena fill:#ff6b6b
+    style Shannon fill:#339af0
+```
+
+**Solid Lines**: Required dependencies
+**Dashed Lines**: Recommended dependencies
+
+### MCP Verification System
+
+```
+/sh_check_mcps command
+    ↓
+Detects MCP tool availability
+    ↓
+For each MCP:
+    - Check for characteristic tools
+    - If found: ✅ Connected
+    - If missing: ❌ Not Found + setup instructions
+    ↓
+Reports status with actionable guidance
+```
+
+## Versioning and Updates
+
+### Semantic Versioning
+
+Shannon follows semantic versioning:
+
+**Major (X.0.0)**: Breaking changes
+- Installation method changes
+- Command behavior changes
+- Agent modifications affecting workflows
+- Example: v3.0.0 (CLAUDE.md → plugin)
+
+**Minor (3.X.0)**: New features, backward compatible
+- New commands or agents
+- Enhanced capabilities
+- Additional MCPs supported
+- Example: v3.1.0 (planned - new commands)
+
+**Patch (3.0.X)**: Bug fixes, docs
+- Bug fixes
+- Documentation updates
+- Performance improvements
+- Example: v3.0.1 (hypothetical bug fix)
+
+### Update Process
+
+**Plugin System**:
+```bash
+# Check for updates (when available)
+/plugin update shannon@shannon-framework
+
+# Or reinstall for latest
+/plugin uninstall shannon@shannon-framework
+/plugin install shannon@shannon-framework
+```
+
+**GitHub**:
+```bash
+# For local development
+cd path/to/shannon
+git pull origin main
+
+# Reinstall in Claude Code
+/plugin uninstall shannon@shannon
+/plugin install shannon@shannon
+```
+
+## Testing Architecture
+
+### Plugin Structure Tests
+
+Validates plugin structure meets Claude Code requirements:
+- JSON schema validation (plugin.json, marketplace.json, hooks.json)
+- Directory structure verification
+- File count validation
+- Frontmatter completeness
+
+### Plugin Loading Tests
+
+Validates plugin loads in Claude Code:
+- `claude --debug` shows no errors
+- Marketplace addition succeeds
+- Plugin installation completes
+- Commands appear in `/help`
+- Agents appear in `/agents`
+
+### Functional Tests
+
+Validates Shannon functionality:
+- `/sh_spec` produces 8D analysis
+- `/sh_checkpoint` saves to Serena
+- `/sh_restore` retrieves checkpoint
+- Wave orchestration executes
+- NO MOCKS testing enforced
+
+See [docs/FUNCTIONAL_TESTING.md](docs/FUNCTIONAL_TESTING.md) for complete test procedures.
+
+## Migration Impact
+
+### For Developers
+
+**Positive**:
+- ✅ Easier installation (2 commands vs manual setup)
+- ✅ Better discoverability (/help integration)
+- ✅ Simplified updates
+- ✅ Works across all projects (user-level, not project-level)
+
+**Neutral**:
+- ⚖️ Must learn plugin installation commands
+- ⚖️ One-time migration effort (15-30 minutes)
+
+**No Negatives**: All functionality preserved
+
+### For Teams
+
+**Positive**:
+- ✅ Repository-level automatic installation
+- ✅ Version consistency across team
+- ✅ Centralized updates
+- ✅ Better onboarding (auto-install for new members)
+
+**Neutral**:
+- ⚖️ Each team member configures MCPs (user-level setting)
+
+### For Shannon Maintainers
+
+**Positive**:
+- ✅ Standard distribution mechanism
+- ✅ Easier to maintain and release
+- ✅ Version management built-in
+- ✅ Better community discovery
+
+**Neutral**:
+- ⚖️ Must follow Claude Code plugin schema
+- ⚖️ Updates require testing plugin system compatibility
+
+## Compatibility Matrix
+
+| Shannon Version | Installation Method | Claude Code Version | SuperClaude | MCP Requirements |
+|----------------|---------------------|---------------------|-------------|------------------|
+| v1.x           | CLAUDE.md           | Any                 | Optional    | None             |
+| v2.x           | CLAUDE.md           | Any                 | Optional    | Serena (new)     |
+| v3.0.0         | Plugin              | v1.0.0+             | Optional    | Serena (required)|
+
+**Checkpoint Compatibility**: Serena checkpoints from v2.x work with v3.0.0 (same format)
+
+**Command Compatibility**: v2.x command names work identically in v3.0.0
+
+**Agent Compatibility**: v2.x agents behave identically in v3.0.0 (added capabilities metadata only)
+
+## Security Considerations
+
+### Plugin Trust Model
+
+When users install Shannon plugin:
+- Commands execute with same permissions as Claude Code
+- Hooks (precompact.py) execute with script permissions
+- MCP servers operate in their own processes
+- No elevated privileges required
+
+### Code Review
+
+Shannon is open source:
+- All plugin code visible in repository
+- Commands and agents are markdown (human-readable)
+- Hook script is short Python (~300 lines)
+- No compiled binaries or obfuscated code
+
+### MCP Server Security
+
+Shannon requires Serena MCP:
+- Serena operates on local filesystem
+- No network access required
+- Data stored in project .serena/ directory
+- User controls data location via SERENA_PROJECT_ROOT
+
+## Performance Characteristics
+
+### Plugin Load Time
+
+- Plugin loads on Claude Code startup
+- ~50 files parsed (commands + agents + hooks + docs)
+- Estimated load time: <500ms
+- No noticeable impact on Claude Code startup
+
+### Command Execution Time
+
+- Commands are instructions, not code
+- Execution time unchanged from v2.x
+- MCP call overhead unchanged
+- Wave orchestration benefits from parallel execution
+
+### Memory Footprint
+
+- Plugin files: ~3MB (markdown + Python script)
+- Loaded into Claude Code memory
+- Negligible impact (<0.1% of typical system memory)
+
+## Future Plugin Enhancements
+
+### Planned for v3.1.0+
+
+- **Plugin Extension API**: Allow third-party Shannon extensions
+- **Custom Complexity Dimensions**: User-defined scoring dimensions
+- **Industry Templates**: Pre-built specification templates
+- **Enhanced Wave Strategies**: Additional orchestration patterns
+
+### Potential Ecosystem
+
+- **shannon-templates**: Specification templates plugin
+- **shannon-visualizer**: Visual complexity analysis
+- **shannon-analytics**: Usage tracking and insights
+- **shannon-industry-***: Industry-specific adaptations
+
+---
+
+**Plugin Architecture Version**: v3.0.0
+**Last Updated**: 2024-10-16
+**Status**: Stable
+
+See [docs/PLUGIN_INSTALL.md](docs/PLUGIN_INSTALL.md) for installation instructions.

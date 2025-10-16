@@ -8,7 +8,7 @@
 
 | Command | Syntax | Primary Use | Key Parameters |
 |---------|--------|-------------|----------------|
-| `/sh:north-star` | `/sh:north-star ["goal"]` | Goal management | Actions: get, check, history |
+| `/sh:north-sta I took a look at all the various frames inside of the transition zero path that you're looking at. And based on my findings, Yes, so the DURING looks perfect. That absolutely means this is happening. If I look at frame 174 and that, no, that is still a DURING. Basically 180, which is stable, that would be the start of the SHORT 1. That's perfect. And basically 150 though, basically 150 is the old current SHORT, meaning you are still stable. That is before transition is really what that is, right? Frame 150 is what it's looking at. And then basically 164 at transition, yes.r` | `/sh:north-star ["goal"]` | Goal management | Actions: get, check, history |
 | `/sh:wave` | `/sh:wave [strategy] [request]` | Wave orchestration | Strategies: linear, parallel, iterative, adaptive |
 | `/sh:analyze` | `/sh:analyze [target] [depth]` | Multi-layer analysis | Depths: surface, structural, comprehensive, exhaustive |
 | `/sh:checkpoint` | `/sh:checkpoint [action] [id]` | State management | Actions: create, load, list, compare, rollback |

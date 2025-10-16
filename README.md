@@ -5,8 +5,35 @@
 [![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)](https://github.com/krzemienski/shannon-framework)
 [![Tests](https://img.shields.io/badge/tests-46%2F46%20passing-brightgreen.svg)](./VERIFICATION_REPORT.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
+[![Plugin](https://img.shields.io/badge/claude--code-plugin-purple.svg)](https://docs.claude.com/en/docs/claude-code/plugins)
 
 > **⚠️ Important**: If you're looking for Python/JavaScript code, you won't find it here. Shannon is a **behavioral framework** that uses markdown files to modify Claude Code's behavior via system prompt injection. The markdown files ARE the framework—not documentation FOR a framework.
+
+## 🚀 Quick Start (Plugin Installation - Recommended)
+
+Shannon is now distributed as a Claude Code plugin for easier installation and team adoption:
+
+```bash
+# 1. Add Shannon marketplace
+/plugin marketplace add shannon-framework/shannon
+
+# 2. Install Shannon plugin
+/plugin install shannon@shannon-framework
+
+# 3. Restart Claude Code
+
+# 4. Verify installation
+/sh_status
+
+# 5. Try your first specification
+/sh_spec "Build a task management app with React and Node.js"
+```
+
+**📖 Complete Installation Guide**: [docs/PLUGIN_INSTALL.md](docs/PLUGIN_INSTALL.md)
+
+**📖 Migrating from Legacy Shannon?**: [docs/MIGRATION_GUIDE.md](docs/MIGRATION_GUIDE.md)
+
+---
 
 # What Shannon Actually Is
 

@@ -1,5 +1,19 @@
 {
   "hooks": {
+    "UserPromptSubmit": [
+      {
+        "description": "Shannon North Star goal injection for consistent goal alignment",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/user_prompt_submit.py",
+            "description": "Injects North Star goal and active wave context into every prompt",
+            "timeout": 2000
+          }
+        ]
+      }
+    ],
+
     "PreCompact": [
       {
         "description": "Shannon context preservation - Saves comprehensive checkpoint before auto-compaction to prevent information loss",
@@ -15,13 +29,42 @@
       }
     ],
 
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "description": "Shannon NO MOCKS testing philosophy enforcement",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post_tool_use.py",
+            "description": "Detects and blocks mock usage in test files to enforce functional testing",
+            "timeout": 3000
+          }
+        ]
+      }
+    ],
+
+    "Stop": [
+      {
+        "description": "Shannon wave validation gate enforcement",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/stop.py",
+            "description": "Blocks completion until wave validation gates are satisfied",
+            "timeout": 2000
+          }
+        ]
+      }
+    ],
+
     "SessionStart": [
       {
         "description": "Shannon session initialization notification",
         "hooks": [
           {
             "type": "notification",
-            "message": "✓ Shannon Framework v3.0.0 active | Commands: /sh_status | MCP Check: /sh_check_mcps | Help: /help shannon",
+            "message": "✓ Shannon Framework v3.0.1 active | Commands: /sh_status | MCP Check: /sh_check_mcps | Docs: /help shannon",
             "level": "info"
           }
         ]

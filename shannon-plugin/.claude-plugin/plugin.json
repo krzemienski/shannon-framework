@@ -1,6 +1,8 @@
 {
   "name": "shannon",
-  "version": "3.0.0",
+  "version": "3.0.1",
+  "displayName": "Shannon Framework",
+  "publisher": "shannon-framework",
   "description": "Specification-driven development framework featuring 8-dimensional complexity analysis, wave orchestration, context preservation, and NO MOCKS testing philosophy for Claude Code",
 
   "author": {
@@ -12,6 +14,13 @@
   "homepage": "https://github.com/shannon-framework/shannon",
   "repository": "https://github.com/shannon-framework/shannon",
   "license": "MIT",
+
+  "readme": "README.md",
+  "changelog": "../../CHANGELOG.md",
+
+  "engines": {
+    "claudeCode": ">=1.0.0"
+  },
 
   "keywords": [
     "specification-analysis",

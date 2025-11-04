@@ -1,0 +1,116 @@
+{
+  "version": "4.0.0",
+  "last_updated": "2025-11-03",
+  "description": "Domain-to-MCP mapping matrix for intelligent MCP recommendations",
+  "tiers": {
+    "mandatory": {
+      "threshold": "always",
+      "priority": 1,
+      "description": "Required for Shannon Framework operation"
+    },
+    "primary": {
+      "threshold": "domain >= 20%",
+      "priority": 2,
+      "description": "Core functionality for significant domains"
+    },
+    "secondary": {
+      "threshold": "domain >= 10% OR supporting",
+      "priority": 3,
+      "description": "Supporting functionality and tooling"
+    },
+    "optional": {
+      "threshold": "keyword-triggered",
+      "priority": 4,
+      "description": "Nice-to-have, context-specific"
+    }
+  },
+  "mandatory_mcps": [
+    {
+      "name": "serena",
+      "tier": "mandatory",
+      "purpose": "Context preservation across waves",
+      "rationale": "Shannon Framework requirement",
+      "setup_priority": 1,
+      "health_check": "list_memories",
+      "fallback": "none",
+      "degradation": "critical"
+    }
+  ],
+  "domain_mappings": {
+    "frontend": {
+      "keywords": [
+        "React",
+        "Vue",
+        "component",
+        "UI",
+        "responsive"
+      ],
+      "mcps": {
+        "primary": [
+          {
+            "name": "puppeteer",
+            "threshold": 20,
+            "purpose": "Browser testing (NO MOCKS)",
+            "rationale": "Frontend >= 20% requires real browser testing"
+          },
+          {
+            "name": "magic",
+            "threshold": 30,
+            "purpose": "Component generation",
+            "rationale": "Frontend >= 30% benefits from automated scaffolding"
+          }
+        ]
+      }
+    },
+    "backend": {
+      "keywords": [
+        "API",
+        "Express",
+        "server",
+        "authentication"
+      ],
+      "mcps": {
+        "primary": [
+          {
+            "name": "context7",
+            "threshold": 20,
+            "purpose": "Backend framework documentation",
+            "rationale": "Backend >= 20% needs framework references"
+          }
+        ]
+      }
+    },
+    "database": {
+      "keywords": [
+        "PostgreSQL",
+        "MongoDB",
+        "schema",
+        "SQL"
+      ],
+      "mcps": {
+        "primary": [
+          {
+            "name": "postgres",
+            "threshold": 15,
+            "purpose": "PostgreSQL operations",
+            "rationale": "PostgreSQL projects need database access"
+          }
+        ]
+      }
+    }
+  },
+  "fallback_chains": {
+    "puppeteer": [
+      "playwright",
+      "chrome-devtools",
+      "manual-testing"
+    ],
+    "magic": [
+      "manual-coding"
+    ],
+    "context7": [
+      "web-search",
+      "manual-docs"
+    ]
+  }
+}

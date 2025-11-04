@@ -16,14 +16,18 @@ License: MIT
 """
 
 from .parser import SpecificationParser
-from .validator import SpecificationValidator
-from .monitor import SpecificationMonitor
+from .validator import SpecificationValidator, ValidationError
+from .monitor import SpecificationMonitor, SpecificationEvent, DeviationAlert, MonitoringContext
 from .models import Specification, SpecificationObject
 
 __all__ = [
     'SpecificationParser',
     'SpecificationValidator',
+    'ValidationError',
     'SpecificationMonitor',
+    'SpecificationEvent',
+    'DeviationAlert',
+    'MonitoringContext',
     'Specification',
     'SpecificationObject',
 ]

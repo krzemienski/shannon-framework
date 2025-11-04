@@ -22,18 +22,39 @@ allowed-tools: Read, Serena
 
 The phase-planning skill generates structured, complexity-adaptive implementation plans using a 5-phase framework with validation gates. It adapts phase count and timeline distribution based on project complexity, ensuring appropriate rigor for simple scripts through critical systems.
 
-**When to Use**:
+## When to Use
+
+Use this skill when:
 - Planning implementation after spec analysis complete
 - Need structured timeline with validation checkpoints
 - Want systematic progression with quality gates
 - Require resource allocation and effort distribution
+- Have complexity score from spec-analysis (0.0-1.0)
 
-**Key Features**:
-- Complexity-adaptive phase structure (3-5+ phases)
-- Validation gates between phases
-- Timeline distribution based on complexity
-- Integration with wave orchestration
-- Serena memory preservation
+DO NOT use when:
+- No spec analysis available (run @spec-analysis first)
+- Ad-hoc tasks without formal planning needs
+- Quick experiments or prototypes
+
+## Core Competencies
+
+1. **Complexity-Adaptive Planning**: Automatically adjusts phase count (3-6 phases) based on complexity score, ensuring appropriate rigor without over-engineering
+2. **Timeline Distribution**: Calculates optimal time allocation per phase using algorithmic formula with complexity and domain-based adjustments
+3. **Validation Gates**: Defines explicit success criteria between phases to prevent downstream failures and ensure quality progression
+4. **Wave Coordination**: Maps parallel execution patterns to phases for multi-agent coordination when complexity >=0.5
+5. **Serena Integration**: Persists phase plans to memory for cross-session retrieval and wave agent coordination
+
+## Inputs
+
+**Required:**
+- `complexity_score` (float 0.0-1.0): Complexity score from spec-analysis
+- `spec_analysis_result` (object): Complete spec analysis including domain breakdown, features, timeline constraints
+- `project_name` (string): Name of project for phase plan identification
+
+**Optional:**
+- `timeline_constraint` (string): Total available timeline (e.g., "40 hours", "2 weeks")
+- `domain_preferences` (object): Override domain-based timeline adjustments
+- `custom_phases` (array): Custom phase definitions for non-standard workflows
 
 ---
 
@@ -167,6 +188,83 @@ All 5 phases + risk mitigation phases
 + Security review gates
 + Performance validation gates
 ```
+
+## Workflow
+
+### Phase 1: Context Loading
+
+1. **Retrieve Spec Analysis**
+   - Action: Read from Serena memory or specification document
+   - Tool: `read_memory("spec_analysis")` or Read
+   - Output: Complexity score, domain breakdown, total timeline
+
+2. **Extract Key Parameters**
+   - Action: Parse complexity score, domain percentages, timeline constraints
+   - Validation: Verify complexity score is 0.0-1.0, domains sum to 100%
+   - Output: Validated input parameters
+
+### Phase 2: Phase Structure Determination
+
+1. **Calculate Phase Count**
+   - Action: Apply complexity-based algorithm to determine 3-6 phases
+   - Tool: Python calculation or algorithmic decision tree
+   - Output: Integer phase count (3-6)
+
+2. **Select Phase Pattern**
+   - Action: Choose phase template based on complexity band
+   - Validation: Verify pattern matches complexity requirements
+   - Output: Phase structure (Simple/Moderate/Complex/High/Critical)
+
+### Phase 3: Timeline Distribution
+
+1. **Calculate Base Percentages**
+   - Action: Apply standard 5-phase distribution (15%, 35%, 25%, 20%, 5%)
+   - Tool: Mathematical calculation
+   - Output: Base timeline percentages
+
+2. **Apply Complexity Adjustments**
+   - Action: Adjust percentages based on complexity score
+   - Formula: Simple (+5% setup), Complex (+5% planning, -5% impl), High (+10% planning), Critical (+15% planning)
+   - Output: Complexity-adjusted percentages
+
+3. **Apply Domain Adjustments**
+   - Action: Adjust based on dominant domains (Frontend-heavy, Backend-heavy, Database-heavy)
+   - Formula: Frontend >50% (+5% Phase 2, +5% Phase 4, -10% Phase 5)
+   - Output: Final timeline distribution summing to 100%
+
+### Phase 4: Validation Gate Definition
+
+1. **Define Per-Phase Criteria**
+   - Action: Specify success criteria for each phase transition
+   - Tool: Template-based generation with domain customization
+   - Output: Validation checklist per phase
+
+2. **Verification Method**
+   - Action: Define how to verify each criterion
+   - Output: Verification procedures (tests, reviews, checks)
+
+### Phase 5: Wave Mapping (if complexity >=0.5)
+
+1. **Determine Parallelization Pattern**
+   - Action: Identify which phases can use parallel wave execution
+   - Trigger: Multiple domains >=30%, complexity >=0.5
+   - Output: Wave pattern (Two Parallel + Integration or Three Parallel + Integration)
+
+2. **Map Waves to Phases**
+   - Action: Assign domain-specific agents to parallel waves
+   - Output: Wave execution plan for Phase 2/3
+
+### Phase 6: Document Generation & Storage
+
+1. **Generate Phase Plan Document**
+   - Action: Populate template with calculated values
+   - Tool: Write Markdown structure
+   - Output: Complete phase plan in Markdown format
+
+2. **Store in Serena Memory**
+   - Action: Persist to Serena for cross-session retrieval
+   - Tool: `write_memory("phase_plan", plan_object)`
+   - Output: Memory storage confirmation
 
 ## Implementation Protocol
 
@@ -436,7 +534,119 @@ write_memory("phase_plan", {
 })
 ```
 
-## Usage Examples
+## Outputs
+
+Structured output object:
+
+```json
+{
+  "project_name": "string",
+  "complexity_score": "float (0.0-1.0)",
+  "phase_count": "int (3-6)",
+  "total_timeline": "string (e.g., '40 hours', '2 weeks')",
+  "interpretation_band": "Simple | Moderate | Complex | High | Critical",
+  "phases": [
+    {
+      "number": "int",
+      "name": "string",
+      "percentage": "float (sums to 100%)",
+      "duration": "string",
+      "objectives": ["objective1", "objective2"],
+      "activities": ["activity1", "activity2"],
+      "deliverables": ["deliverable1", "deliverable2"],
+      "validation_criteria": ["criterion1", "criterion2"]
+    }
+  ],
+  "wave_plan": {
+    "enabled": "boolean",
+    "pattern": "Sequential | TwoParallel | ThreeParallel",
+    "waves": [
+      {
+        "wave_id": "string",
+        "phase": "int",
+        "agents": ["agent1", "agent2"],
+        "execution": "parallel | sequential"
+      }
+    ]
+  },
+  "domain_adjustments": {
+    "frontend_adjustment": "string",
+    "backend_adjustment": "string",
+    "database_adjustment": "string"
+  },
+  "created_at": "ISO timestamp"
+}
+```
+
+**Markdown Document**: Complete phase plan document saved to:
+- Serena memory: `phase_plan_{project_name}`
+- Local file: `PHASE_PLAN.md` (optional)
+
+## Success Criteria
+
+This skill succeeds if:
+
+1. ✅ **Phase count is algorithmically correct**
+   - Complexity 0.00-0.30 → 3 phases
+   - Complexity 0.30-0.50 → 3-4 phases
+   - Complexity 0.50-0.70 → 5 phases
+   - Complexity 0.70-0.85 → 5 phases + extended gates
+   - Complexity 0.85-1.00 → 5-6 phases + risk mitigation
+
+2. ✅ **Timeline percentages sum to exactly 100%**
+   - No rounding errors
+   - All adjustments accounted for
+   - Distribution makes logical sense
+
+3. ✅ **Every phase has validation gate with >=3 criteria**
+   - Clear success metrics
+   - Measurable outcomes
+   - Verification method defined
+
+4. ✅ **Wave plan is correct for complexity >=0.5 AND multiple domains >=30%**
+   - Parallel waves only when justified
+   - Sequential integration phase included
+   - Domain-specific agent assignments
+
+5. ✅ **Plan is stored in Serena memory**
+   - Memory key: `phase_plan_{project_name}`
+   - Retrievable via `read_memory()`
+   - Contains complete phase structure
+
+Validation:
+```python
+def validate_phase_plan(plan):
+    # Verify phase count algorithm
+    if plan.complexity_score < 0.30:
+        assert plan.phase_count == 3
+    elif plan.complexity_score < 0.50:
+        assert plan.phase_count in [3, 4]
+    elif plan.complexity_score < 0.70:
+        assert plan.phase_count == 5
+    elif plan.complexity_score < 0.85:
+        assert plan.phase_count == 5
+    else:
+        assert plan.phase_count in [5, 6]
+
+    # Verify timeline percentages
+    total_percentage = sum(phase.percentage for phase in plan.phases)
+    assert abs(total_percentage - 100.0) < 0.01, "Timeline must sum to 100%"
+
+    # Verify validation gates
+    for phase in plan.phases:
+        assert len(phase.validation_criteria) >= 3, "Each phase needs >=3 validation criteria"
+
+    # Verify wave plan logic
+    if plan.complexity_score >= 0.5:
+        multi_domain = sum(1 for d in plan.domain_percentages.values() if d >= 30) >= 2
+        if multi_domain:
+            assert plan.wave_plan.enabled, "Wave plan required for complex multi-domain projects"
+
+    # Verify Serena storage
+    assert serena.memory_exists(f"phase_plan_{plan.project_name}"), "Plan must be stored in Serena"
+```
+
+## Examples
 
 ### Example 1: Simple Project (Complexity 0.25)
 

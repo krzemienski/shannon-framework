@@ -38,6 +38,41 @@ allowed-tools: Read, Glob, Grep, Bash, Serena, Write
 
 **ROI Proven**: 40,000+ tokens saved per project analysis, 12-60x speedup, eliminates redundant file reads in multi-agent scenarios.
 
+## When to Use
+
+Use this skill when:
+- Starting ANY project analysis or implementation (always generate index first)
+- Onboarding new agents to existing codebase
+- Launching multi-agent wave execution
+- Switching between multiple projects/codebases
+- Context window efficiency is critical
+- After major codebase changes (regenerate index)
+
+DO NOT use when:
+- **NEVER skip** - Even "small" or "focused" questions benefit from indexing (see Anti-Rationalization section)
+- Index already generated and current (< 24 hours old, no major changes)
+
+## Core Competencies
+
+1. **94% Token Compression**: Reduces 58K full codebase to 3K structured summary through hierarchical summarization and pattern abstraction
+2. **Project Scan**: Discovers file counts, languages, LOC, dependencies without loading full content (500 token cost)
+3. **Architecture Summarization**: Identifies core modules, key patterns, tech stack from directory structure and metadata (1,500 token cost)
+4. **Context Enrichment**: Adds git recent changes, dependency analysis, testing setup (500 token cost)
+5. **Template Population**: Generates structured SHANNON_INDEX.md following 7-section template (500 token cost)
+6. **Serena Persistence**: Stores index in memory for cross-session retrieval and wave agent coordination (100 token cost)
+7. **Multi-Agent Optimization**: Enables 81-95% token savings in parallel wave execution scenarios
+
+## Inputs
+
+**Required:**
+- `project_path` (string): Absolute path to project root directory
+
+**Optional:**
+- `include_tests` (boolean): Include test file statistics (default: true)
+- `git_days` (int): Number of days of git history to include (default: 7)
+- `max_dependencies` (int): Maximum dependencies to list (default: 10)
+- `custom_sections` (array): Additional sections to include beyond standard 7
+
 ---
 
 ## Anti-Rationalization (From Baseline Testing)
@@ -133,6 +168,113 @@ allowed-tools: Read, Glob, Grep, Bash, Serena, Write
 **Then**: **STOP. Generate SHANNON_INDEX first.** Token waste is exponential, not linear.
 
 ---
+
+## Workflow
+
+### Phase 1: Project Discovery
+
+1. **Count Files by Type**
+   - Action: Use `find` or Glob to count files per extension
+   - Tool: `find . -type f -name "*.ts" | wc -l` for each file type
+   - Output: File counts (typescript_count, python_count, jsx_count, etc.)
+
+2. **Calculate Total Lines of Code**
+   - Action: Use `wc -l` on all files by language
+   - Tool: `find . -type f -name "*.ts" -exec wc -l {} + | tail -1`
+   - Output: LOC per language
+
+3. **Identify Tech Stack**
+   - Action: Read dependency files (package.json, requirements.txt, Cargo.toml)
+   - Tool: Grep for dependencies
+   - Output: Raw dependency lists
+
+**Cost:** ~500 tokens
+
+### Phase 2: Architecture Summarization
+
+1. **Extract Directory Structure**
+   - Action: Generate 2-level directory tree
+   - Tool: `tree -L 2 -d` or recursive directory listing
+   - Output: Hierarchical directory structure
+
+2. **Identify Core Modules**
+   - Action: Read first 50 lines of README or index files in top-level directories
+   - Tool: Read (limited lines)
+   - Output: 1-2 sentence purpose per module
+
+3. **Detect Key Patterns**
+   - Action: Identify architectural patterns from file names and imports
+   - Patterns: Test runners (Jest/Pytest), state management (Redux/Context), routing (React Router)
+   - Output: Pattern descriptions
+
+**Cost:** ~1,500 tokens (97% compression from full file reads)
+
+### Phase 3: Context Enrichment
+
+1. **Extract Git Recent Changes**
+   - Action: Get last 7 days of commits
+   - Tool: `git log --since="7 days ago" --pretty=format:"%h - %s" --abbrev-commit`
+   - Output: Recent commit list
+
+2. **Analyze Key Dependencies**
+   - Action: Extract top 10 dependencies by usage frequency
+   - Tool: Parse package files, count imports via Grep
+   - Output: Dependency list with versions
+
+3. **Detect Testing Setup**
+   - Action: Identify test framework, file patterns, coverage tools
+   - Tool: Check for test config files, test directories
+   - Output: Testing strategy description
+
+**Cost:** ~500 tokens
+
+### Phase 4: Template Population
+
+1. **Generate Quick Stats Section**
+   - Action: Format file counts, languages, LOC, timestamp
+   - Output: 5-line stats block (100 tokens)
+
+2. **Generate Tech Stack Section**
+   - Action: Format languages, frameworks, build tools
+   - Output: Tech stack list (200 tokens)
+
+3. **Generate Core Modules Section**
+   - Action: Format directory structure with purposes
+   - Output: Module descriptions (800 tokens)
+
+4. **Generate Recent Changes Section**
+   - Action: Format git commits
+   - Output: Commit list (300 tokens)
+
+5. **Generate Dependencies Section**
+   - Action: Format top 10 dependencies with versions
+   - Output: Dependency table (150 tokens)
+
+6. **Generate Testing Strategy Section**
+   - Action: Format framework, patterns, coverage
+   - Output: Testing description (150 tokens)
+
+7. **Generate Key Patterns Section**
+   - Action: Format routing, state, auth, API conventions
+   - Output: Pattern descriptions (400 tokens)
+
+**Cost:** ~500 tokens
+
+### Phase 5: Persistence
+
+1. **Store in Serena Memory**
+   - Action: Write complete index to Serena
+   - Tool: `write_memory("shannon_index_{project_name}", index_content)`
+   - Output: Memory storage confirmation
+
+2. **Write Local Backup**
+   - Action: Save SHANNON_INDEX.md to project root
+   - Tool: Write
+   - Output: File creation confirmation
+
+**Cost:** ~100 tokens
+
+**Total Generation Cost:** 3,100 tokens
 
 ## SHANNON_INDEX Generation Algorithm
 
@@ -370,6 +512,297 @@ REDUCTION: (58,000 - 3,000) / 58,000 = 94.8% ≈ 94%
 ```
 
 ---
+
+## Outputs
+
+**SHANNON_INDEX.md file** containing:
+
+```markdown
+# Shannon Project Index
+
+## Quick Stats
+- **Total Files**: 247
+- **Primary Languages**: TypeScript (65%), JavaScript (20%), CSS (10%), JSON (5%)
+- **Total Lines of Code**: 18,543
+- **Last Updated**: 2025-11-03T14:23:00Z
+- **Dependencies**: 42
+
+## Tech Stack
+- **Languages**: TypeScript 65%, JavaScript 20%, CSS 10%, JSON 5%
+- **Frameworks**: React 18.2.0, Next.js 13.4.0
+- **Build Tools**: Vite 4.3.0, TypeScript 5.1.0
+- **Testing**: Playwright 1.35.0
+- **Package Manager**: npm
+
+## Core Modules
+- **src/**: Main application source code (React components, hooks, utilities)
+- **public/**: Static assets (images, fonts, favicon)
+- **tests/**: Playwright functional tests (NO MOCKS)
+- **docs/**: Project documentation and guides
+- **config/**: Build and deployment configuration
+
+## Recent Changes (Last 7 Days)
+- d25b52a - feat(validation): add skill structure validation
+- 25b283e - feat(skills): add comprehensive skill template
+- f1bf9dc - WIP
+- fc93e23 - docs(v4): Add completion SITREP
+
+## Key Dependencies
+1. react@18.2.0 - UI framework
+2. next@13.4.0 - React framework
+3. playwright@1.35.0 - Browser automation
+4. typescript@5.1.0 - Type safety
+5. vite@4.3.0 - Build tool
+
+## Testing Strategy
+- **Framework**: Playwright
+- **Test Location**: tests/**/*.spec.ts
+- **Coverage Tool**: None
+- **Test Types**: E2E functional tests (NO MOCKS)
+
+## Key Patterns
+- **Routing**: Next.js file-based routing with App Router
+- **State Management**: React Context with custom hooks
+- **Authentication**: JWT tokens with NextAuth.js
+- **API Design**: REST API with tRPC for type safety
+- **Error Handling**: Error boundaries with fallback UI
+```
+
+**Serena Memory Storage:**
+- Key: `shannon_index_{project_name}`
+- Content: Complete SHANNON_INDEX.md content
+- Retrievable via: `read_memory("shannon_index_{project_name}")`
+
+**Metrics:**
+```json
+{
+  "generation_time_seconds": 120,
+  "token_cost": 3100,
+  "original_size_tokens": 58000,
+  "compressed_size_tokens": 3000,
+  "compression_ratio": 0.948,
+  "savings_tokens": 54900,
+  "roi_multiplier": 17.7
+}
+```
+
+## Success Criteria
+
+This skill succeeds if:
+
+1. ✅ **Index generated in < 5 minutes**
+   - Small projects (< 50 files): 30-60 seconds
+   - Medium projects (50-150 files): 60-120 seconds
+   - Large projects (150-300 files): 120-180 seconds
+   - Extra large (300+ files): 180-300 seconds
+
+2. ✅ **Compression ratio >= 90%**
+   - Target: 94% (58K → 3K)
+   - Acceptable: 90-96%
+   - Poor: < 90%
+
+3. ✅ **All 7 sections present and populated**
+   - Quick Stats (5 lines minimum)
+   - Tech Stack (5 entries minimum)
+   - Core Modules (3 modules minimum)
+   - Recent Changes (1+ commits or "No recent changes")
+   - Key Dependencies (3+ dependencies)
+   - Testing Strategy (framework identified)
+   - Key Patterns (2+ patterns identified)
+
+4. ✅ **Token count within target range**
+   - Small projects: 1,500-2,000 tokens
+   - Medium projects: 2,000-2,500 tokens
+   - Large projects: 2,500-3,500 tokens
+   - Extra large: 3,500-4,500 tokens
+
+5. ✅ **Stored in Serena memory**
+   - Memory key: `shannon_index_{project_name}`
+   - Retrievable via `read_memory()`
+   - Content matches local file
+
+Validation:
+```python
+def validate_shannon_index(index_content, metrics):
+    # Verify compression ratio
+    compression = 1 - (metrics.compressed_size / metrics.original_size)
+    assert compression >= 0.90, f"Compression ratio {compression:.2%} below 90% target"
+
+    # Verify all sections present
+    required_sections = [
+        "## Quick Stats",
+        "## Tech Stack",
+        "## Core Modules",
+        "## Recent Changes",
+        "## Key Dependencies",
+        "## Testing Strategy",
+        "## Key Patterns"
+    ]
+    for section in required_sections:
+        assert section in index_content, f"Missing required section: {section}"
+
+    # Verify token count
+    assert 1500 <= metrics.compressed_size <= 4500, "Token count outside acceptable range"
+
+    # Verify Serena storage
+    project_name = extract_project_name(index_content)
+    assert serena.memory_exists(f"shannon_index_{project_name}"), "Index not stored in Serena"
+
+    # Verify ROI
+    assert metrics.roi_multiplier >= 10, f"ROI {metrics.roi_multiplier}x below 10x minimum"
+```
+
+## Examples
+
+### Example 1: Small React Project
+
+**Input:**
+```
+project_path: "/Users/dev/my-react-app"
+include_tests: true
+git_days: 7
+max_dependencies: 10
+```
+
+**Process:**
+1. Project Scan: 47 files, 3,200 LOC, TypeScript + React detected
+2. Architecture: src/ (components), public/ (assets), tests/ identified
+3. Context: 3 commits in last 7 days, 15 dependencies, Jest detected
+4. Template: Generate 7 sections totaling 1,800 tokens
+5. Storage: Save to Serena + local file
+
+**Output:**
+```markdown
+# Shannon Project Index
+
+## Quick Stats
+- **Total Files**: 47
+- **Primary Languages**: TypeScript (75%), CSS (15%), JSON (10%)
+- **Total Lines of Code**: 3,200
+- **Last Updated**: 2025-11-03T15:30:00Z
+- **Dependencies**: 15
+
+## Tech Stack
+- **Languages**: TypeScript 75%, CSS 15%, JSON 10%
+- **Frameworks**: React 18.2.0, Vite 4.3.0
+- **Testing**: Jest 29.5.0
+- **Package Manager**: npm
+
+## Core Modules
+- **src/components/**: React UI components (Button, Input, Modal)
+- **src/hooks/**: Custom React hooks (useAuth, useData)
+- **src/utils/**: Utility functions (formatDate, validateEmail)
+- **tests/**: Jest unit tests
+
+## Recent Changes (Last 7 Days)
+- abc123 - feat: add login form component
+- def456 - fix: resolve validation bug
+- ghi789 - test: add component tests
+
+## Key Dependencies
+1. react@18.2.0
+2. vite@4.3.0
+3. jest@29.5.0
+
+## Testing Strategy
+- **Framework**: Jest
+- **Test Location**: tests/**/*.test.ts
+- **Test Types**: Component tests
+
+## Key Patterns
+- **Routing**: React Router v6
+- **State Management**: React Context
+```
+
+**Metrics:**
+- Original: 12,000 tokens (47 files × 255 avg)
+- Compressed: 1,800 tokens
+- Savings: 10,200 tokens (85% reduction)
+- ROI: 5.7x
+
+### Example 2: Large Full-Stack Project
+
+**Input:**
+```
+project_path: "/Users/dev/enterprise-app"
+include_tests: true
+git_days: 7
+max_dependencies: 10
+```
+
+**Process:**
+1. Project Scan: 247 files, 18,543 LOC, TypeScript + React + Node.js detected
+2. Architecture: Multiple directories (frontend/, backend/, database/, tests/)
+3. Context: 15 commits in last 7 days, 42 dependencies, Playwright + Jest detected
+4. Template: Generate 7 sections totaling 3,200 tokens
+5. Storage: Save to Serena + local file
+
+**Output:**
+```markdown
+# Shannon Project Index
+
+## Quick Stats
+- **Total Files**: 247
+- **Primary Languages**: TypeScript (60%), JavaScript (25%), SQL (10%), CSS (5%)
+- **Total Lines of Code**: 18,543
+- **Last Updated**: 2025-11-03T15:45:00Z
+- **Dependencies**: 42
+
+## Tech Stack
+- **Languages**: TypeScript 60%, JavaScript 25%, SQL 10%, CSS 5%
+- **Frontend**: React 18.2.0, Next.js 13.4.0
+- **Backend**: Express 4.18.0, Node.js 18.x
+- **Database**: PostgreSQL 15, Prisma ORM 4.15.0
+- **Testing**: Playwright 1.35.0, Jest 29.5.0
+- **Build**: Vite 4.3.0, TypeScript 5.1.0
+
+## Core Modules
+- **frontend/src/**: Next.js application with React components
+- **backend/src/**: Express API server with REST endpoints
+- **database/**: Prisma schema and migrations
+- **tests/e2e/**: Playwright functional tests (NO MOCKS)
+- **tests/unit/**: Jest component tests
+- **docs/**: API documentation and architecture guides
+
+## Recent Changes (Last 7 Days)
+- d25b52a - feat(auth): add OAuth integration
+- 25b283e - fix(api): resolve rate limiting issue
+- f1bf9dc - test: add E2E checkout flow test
+- fc93e23 - docs: update API documentation
+- 68dbbd4 - refactor(db): optimize query performance
+
+## Key Dependencies
+1. react@18.2.0 - Frontend framework
+2. next@13.4.0 - React framework with SSR
+3. express@4.18.0 - Backend API server
+4. prisma@4.15.0 - Database ORM
+5. playwright@1.35.0 - E2E testing
+6. jest@29.5.0 - Unit testing
+7. typescript@5.1.0 - Type safety
+8. zod@3.21.0 - Runtime validation
+9. stripe@12.10.0 - Payment processing
+10. next-auth@4.22.0 - Authentication
+
+## Testing Strategy
+- **Framework**: Playwright (E2E), Jest (Unit)
+- **Test Location**: tests/e2e/**/*.spec.ts, tests/unit/**/*.test.ts
+- **Coverage Tool**: Istanbul (c8)
+- **Test Types**: E2E functional (NO MOCKS), Unit component tests
+
+## Key Patterns
+- **Routing**: Next.js App Router with server components
+- **State Management**: React Context + Zustand for global state
+- **Authentication**: NextAuth.js with OAuth providers (Google, GitHub)
+- **API Design**: REST API with tRPC for type-safe endpoints
+- **Database**: Prisma ORM with PostgreSQL, migrations via Prisma Migrate
+- **Error Handling**: Error boundaries (frontend), global error middleware (backend)
+```
+
+**Metrics:**
+- Original: 58,000 tokens (247 files × 235 avg)
+- Compressed: 3,200 tokens
+- Savings: 54,800 tokens (94% reduction)
+- ROI: 17.1x
 
 ## Usage Patterns
 

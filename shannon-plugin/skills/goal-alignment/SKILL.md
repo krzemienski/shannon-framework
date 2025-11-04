@@ -478,6 +478,64 @@ If you find yourself thinking:
 
 **STOP**. You are rationalizing. Return to workflow. Run alignment scoring.
 
+---
+
+### Enhanced Anti-Rationalization Rules (From Pressure Testing)
+
+**These rules close loopholes identified during REFACTOR phase adversarial testing:**
+
+1. **No Threshold Rounding**:
+   - 88% alignment ≠ 90% (no rounding)
+   - Scores are exact (two decimal places)
+   - No "close enough" exception
+
+2. **No Similarity Inflation**:
+   - Similarity = exact keyword overlap only
+   - Formula: |tokens(A) ∩ tokens(B)| / |tokens(A) ∪ tokens(B)|
+   - No semantic interpretation ("dashboard = payments" rejected)
+
+3. **No Partial Completion**:
+   - Milestones are 100% complete OR incomplete
+   - No "mostly complete" credit
+   - All criteria must be satisfied
+
+4. **Cumulative Drift Tracking**:
+   - Track drift across all waves: sum(drift_per_wave)
+   - Alert if cumulative > 20% (even if individual waves < 20%)
+   - Store: drift_history in goal metadata
+
+5. **Vague Term Blacklist**:
+   - Reject: "more", "better", "higher", "a lot", "many", "few"
+   - Require: Specific numbers (e.g., "10,000 users", "< 100ms")
+   - Validation: Regex check for numeric values
+
+6. **High Drift Blocks**:
+   - Drift > 50% prevents next wave execution
+   - Hard blocker until goal updated
+   - No "defer update" option
+
+7. **Excess Deliverable Threshold**:
+   - Similarity < 0.30 = excess deliverable
+   - Flag for removal OR goal expansion
+   - No "related work" rationalization
+
+8. **Wave Reordering Detection**:
+   - Track expected wave sequence
+   - Alert if executed out of order
+   - Require validation on reordering
+
+9. **Exact Technology Match**:
+   - "Stripe" ≠ "PayPal" (no substitution)
+   - Tech match bonus only for exact match
+   - Goal-specified tech is mandatory
+
+10. **Drift Persistence**:
+    - Store drift_per_wave in Serena
+    - Query cumulative drift before each wave
+    - Alert on cumulative threshold breach
+
+**Pressure Test Validation**: These rules passed 10/10 adversarial scenarios (REFACTOR phase)
+
 ## Outputs
 
 **For "validate" mode:**

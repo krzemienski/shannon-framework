@@ -1,203 +1,233 @@
 ---
-description: Verify MCP server configuration and provide detailed setup guidance for Shannon requirements
-category: diagnostic
-complexity: simple
+name: sh_check_mcps
+description: Verify MCP configuration and provide setup guidance
+usage: /sh_check_mcps [--install-guide] [--fix]
 ---
 
-# /sh_check_mcps - MCP Server Configuration Checker
+# MCP Server Configuration Checker Command
 
-Comprehensive MCP server verification with step-by-step setup instructions for missing or misconfigured servers.
+## Overview
 
-## Purpose
+Verifies MCP server availability and provides detailed setup guidance through delegation to the mcp-discovery skill. Uses quantitative domain analysis to recommend appropriate MCPs with tier-based prioritization.
 
-Shannon Framework requires specific MCP servers to function. This command:
-- Checks for required and recommended MCP servers
-- Verifies server connectivity and tool availability
-- Provides detailed setup instructions for missing servers
-- Guides users through MCP configuration process
-- Troubleshoots common MCP issues
+## Prerequisites
 
-## Usage
+None (this command helps establish prerequisites)
 
-```bash
-/sh_check_mcps                  # Complete MCP check with setup guidance
-/sh_check_mcps --install-guide  # Show only installation instructions
-/sh_check_mcps --serena-only    # Check only critical Serena MCP
-/sh_check_mcps --fix            # Interactive setup assistance
+## Workflow
+
+### Step 1: Determine Check Type
+
+Parse command arguments:
+
+**Check Types:**
+- No arguments → Full MCP verification with recommendations
+- `--install-guide` → Show only installation instructions
+- `--fix` → Interactive setup assistance
+- `--serena-only` → Check only critical Serena MCP
+
+### Step 2: Analyze Project Domains (if available)
+
+If project context exists, estimate domain breakdown:
+
+**Domain Estimation:**
+```
+IF project files accessible:
+  - Count frontend files (React, Vue, etc.) → Frontend %
+  - Count backend files (Express, FastAPI, etc.) → Backend %
+  - Count database files (migrations, queries) → Database %
+ELSE:
+  - Use generic recommendations (Serena mandatory, common secondaries)
 ```
 
-## MCP Requirements
+### Step 3: Invoke mcp-discovery Skill
 
-### Required MCPs (Critical)
+Delegate to `@skill mcp-discovery` for recommendations:
 
-**Serena MCP** - MANDATORY
-- **Purpose**: Context preservation, checkpoint/restore, project memory
-- **Why Critical**: Shannon cannot function without context preservation
-- **Impact if Missing**: Shannon commands will fail with errors
-- **Tools Used**: list_memories, write_memory, read_memory, create_entities, search_nodes
-
-### Recommended MCPs (Strongly Advised)
-
-**Sequential MCP**
-- **Purpose**: Complex multi-step reasoning and analysis
-- **Impact**: Reduced analysis quality, no deep reasoning support
-- **Tools Used**: sequentialthinking
-
-**Context7 MCP**
-- **Purpose**: Official framework patterns and documentation
-- **Impact**: Less guidance on framework-specific implementations
-- **Tools Used**: resolve-library-id, get-library-docs
-
-**Puppeteer MCP**
-- **Purpose**: Real browser testing for NO MOCKS philosophy
-- **Impact**: Cannot perform browser automation and E2E testing
-- **Tools Used**: puppeteer_navigate, puppeteer_screenshot, puppeteer_click, puppeteer_fill
-
-### Conditional MCPs
-
-**shadcn-ui MCP**
-- **Purpose**: React/Next.js UI components from shadcn/ui library
-- **Required For**: React/Next.js projects only
-- **Shannon Enforcement**: Shannon REQUIRES shadcn for all React UI work
-- **Tools Used**: get_component, list_components, get_block, list_blocks
-- **Package**: @jpisnice/shadcn-ui-mcp-server
-
-## Example Output
-
+**For Full Check:**
 ```
+@skill mcp-discovery
+- Input:
+  * mode: "recommend"
+  * domain_breakdown: {
+      frontend: {frontend_percentage},
+      backend: {backend_percentage},
+      database: {database_percentage}
+    }
+  * include_health_checks: true
+  * include_setup_guide: true
+- Output: mcp_recommendations
+```
+
+**For Health Check:**
+```
+@skill mcp-discovery
+- Input:
+  * mode: "health_check"
+  * recommended_mcps: {mcps from domain analysis}
+- Output: health_status
+```
+
+**For Fallback Recommendations:**
+```
+@skill mcp-discovery
+- Input:
+  * mode: "fallback"
+  * unavailable_mcp: "{mcp_name}"
+- Output: fallback_chain
+```
+
+### Step 4: Present Results
+
+Format skill output for user display:
+
+```markdown
 ═══════════════════════════════════════════════════════════════
 🔍 SHANNON MCP SERVER VERIFICATION
 ═══════════════════════════════════════════════════════════════
 
-🔴 REQUIRED SERVERS
+🔴 TIER 1: MANDATORY SERVERS
 ───────────────────────────────────────────────────────────────
 
-❌ Serena MCP - NOT FOUND
-   Status: CRITICAL - Shannon cannot function without Serena
-   Purpose: Context preservation, checkpoint/restore, project memory
-   Tools Missing: list_memories, write_memory, read_memory
-
-   📦 Installation:
-   npm install -g @modelcontextprotocol/server-serena
-
-   ⚙️  Configuration (add to Claude Code settings):
-   {
-     "mcpServers": {
-       "serena": {
-         "command": "npx",
-         "args": ["-y", "@modelcontextprotocol/server-serena"],
-         "env": {
-           "SERENA_PROJECT_ROOT": "${workspaceFolder}"
-         }
-       }
-     }
-   }
-
-   ✓ Verification:
-   After adding configuration and restarting Claude Code:
-   1. Run /sh_status
-   2. Confirm Serena shows ✅ Connected
-   3. Test with: Check if you have access to list_memories tool
-
-   📚 Documentation:
-   https://github.com/modelcontextprotocol/servers/tree/main/serena
-
-🟡 RECOMMENDED SERVERS
-───────────────────────────────────────────────────────────────
-
-✅ Sequential MCP - CONNECTED
-   Version: Detected
+{for each mandatory MCP}
+{if operational}
+✅ {mcp_name} - CONNECTED
+   Version: {version}
    Status: Operational
-   Tools Available: sequentialthinking ✓
-
-⚠️  Context7 MCP - NOT FOUND
-   Status: Recommended - Provides framework patterns
-   Purpose: Official documentation and code patterns
-   Impact: Less guidance on React, Next.js, and framework specifics
+   Tools Available: {tools_list}
+{else}
+❌ {mcp_name} - NOT FOUND
+   Status: CRITICAL - Shannon cannot function without {mcp_name}
+   Purpose: {purpose}
 
    📦 Installation:
-   npm install -g @context7/mcp-server
+   {installation_command}
 
    ⚙️  Configuration:
-   {
-     "mcpServers": {
-       "context7": {
-         "command": "npx",
-         "args": ["-y", "@context7/mcp-server"]
-       }
-     }
-   }
+   {configuration_json}
+
+   ✓ Verification:
+   {health_check_command}
 
    📚 Documentation:
-   https://context7.dev/docs
+   {documentation_url}
+{end if}
+{end for}
 
-✅ Puppeteer MCP - CONNECTED
-   Version: Detected
-   Status: Operational
-   Tools Available: puppeteer_navigate, puppeteer_screenshot ✓
-
-🟢 CONDITIONAL SERVERS
+🟡 TIER 2: PRIMARY SERVERS
 ───────────────────────────────────────────────────────────────
 
-✅ shadcn-ui MCP - CONNECTED
-   Status: Required for React/Next.js projects
-   Purpose: Shannon enforces shadcn for all React UI work
-   Tools Available: get_component, list_components ✓
+{for each primary MCP}
+{if operational}
+✅ {mcp_name} - CONNECTED
+   Rationale: {domain} {percentage}% >= 20% threshold
+   Status: Operational
+   Tools Available: {tools_list}
+{else}
+⚠️  {mcp_name} - NOT FOUND
+   Status: Recommended - {purpose}
+   Rationale: {domain} {percentage}% >= 20% threshold
+   Impact: {impact_description}
 
-   ⚠️  Note: If building React/Next.js apps, this MCP is mandatory
-   Shannon will error without it for React UI operations
+   📦 Installation:
+   {installation_command}
+
+   ⚙️  Configuration:
+   {configuration_json}
+
+   🔄 Fallback Chain:
+   {fallback_chain}
+
+   📚 Documentation:
+   {documentation_url}
+{end if}
+{end for}
+
+🟢 TIER 3: SECONDARY SERVERS
+───────────────────────────────────────────────────────────────
+
+{for each secondary MCP}
+{status and details similar to primary}
+{end for}
 
 ───────────────────────────────────────────────────────────────
 📊 SUMMARY
 ───────────────────────────────────────────────────────────────
 
-Required:     0/1 available ❌ CRITICAL - Serena MCP must be configured
-Recommended:  2/3 available ⚠️  FUNCTIONAL - Context7 recommended for best experience
-Conditional:  1/1 available ✅ READY for React/Next.js projects
+Required:     {mandatory_available}/{mandatory_total} available
+Primary:      {primary_available}/{primary_total} available
+Secondary:    {secondary_available}/{secondary_total} available
 
-🚨 CRITICAL: Serena MCP must be configured for Shannon to function
-   Run this command with --install-guide for detailed setup walkthrough
+{if any mandatory missing}
+🚨 CRITICAL: {missing_mandatory_list} must be configured
+{else if any primary missing}
+⚠️  FUNCTIONAL: {missing_primary_list} recommended for best experience
+{else}
+✅ ALL SYSTEMS OPERATIONAL
+{end if}
 
 💡 After configuring MCPs, run /sh_status to verify full Shannon functionality
 
 ═══════════════════════════════════════════════════════════════
 ```
 
-## MCP Detection Logic
+### Step 5: Provide Next Steps
 
-This command checks MCP availability by attempting to detect their tools:
+Based on health check results:
 
+**If Serena Missing (Critical):**
+```markdown
+🚨 IMMEDIATE ACTION REQUIRED
+
+Serena MCP is MANDATORY for Shannon Framework.
+
+**Quick Setup**:
+1. Install: {installation_command}
+2. Configure: Add to Claude Code settings
+3. Restart: Claude Code
+4. Verify: /sh_check_mcps
+
+Without Serena, Shannon commands will fail.
 ```
-FOR each MCP server:
-  CHECK if characteristic tools exist in available tool list
-  IF tools found:
-    STATUS = Connected ✅
-    VERIFY by listing tool names
-  ELSE:
-    STATUS = Not Found ❌
-    PROVIDE installation instructions
-    PROVIDE configuration example
-    PROVIDE verification steps
+
+**If Primary MCPs Missing:**
+```markdown
+⚠️  RECOMMENDED SETUP
+
+Missing Primary MCPs affect core functionality:
+{for each missing primary}
+- {mcp_name}: {purpose}
+  Impact: {impact_description}
+{end for}
+
+Setup Order:
+1. Install missing Primary MCPs
+2. Verify each: {health_check_command}
+3. Confirm: /sh_check_mcps
 ```
 
-## Setup Guidance
+## Backward Compatibility
 
-### For Each Missing MCP
+**V3 Compatibility:** ✅ Maintained
+- Same command syntax
+- Same output format structure
+- Enhanced with quantitative domain analysis
 
-The command provides:
-1. **Clear status**: Why this MCP is needed
-2. **Installation command**: Copy-paste ready npm install
-3. **Configuration example**: Complete Claude Code settings JSON
-4. **Verification steps**: How to confirm it's working
-5. **Documentation link**: Official docs for troubleshooting
+**Changes from V3:**
+- Internal: Now uses mcp-discovery skill (was hardcoded checks)
+- Enhancement: Tier-based recommendations (MANDATORY/PRIMARY/SECONDARY)
+- Enhancement: Quantitative domain analysis (Frontend %, Backend %)
+- Enhancement: Fallback chain recommendations from domain-mcp-matrix.json
+- Enhancement: Health check workflow generation
+- No breaking changes to user interface
 
-### Interactive Mode (--fix)
+## Skill Dependencies
 
-With `--fix` flag, this command can guide users through:
-1. Detecting Claude Code settings file location
-2. Showing current MCP configuration
-3. Providing exact edits needed
-4. Confirming each MCP after configuration
+- mcp-discovery (REQUIRED)
+
+## MCP Dependencies
+
+None (this command helps establish MCP dependencies)
 
 ## Common Issues
 
@@ -207,20 +237,8 @@ With `--fix` flag, this command can guide users through:
 
 **Issue: "Serena connection failed"**
 - Cause: Serena MCP configured but not responding
-- Solution: Restart Claude Code, check Serena logs, verify SERENA_PROJECT_ROOT
+- Solution: Restart Claude Code, verify SERENA_PROJECT_ROOT
 
-**Issue: "shadcn-ui not available"**
-- Cause: Working on React project without shadcn MCP
-- Solution: Install shadcn-ui MCP per instructions
-
-## Related Commands
-
-- `/sh_status` - Overall framework status
-- `/help` - All available commands
-- Claude Code settings for MCP configuration
-
-## Implementation Notes
-
-This command is essential for user success. It dramatically reduces setup friction and support burden by providing actionable, specific guidance for MCP configuration.
-
-New users should run this immediately after installing Shannon to ensure all dependencies are met.
+**Issue: "Threshold gaming" (Frontend 19.9%)**
+- Detection: User tries to avoid testing by staying below 20%
+- Response: Apply threshold margin (±1%), enforce Shannon testing requirements

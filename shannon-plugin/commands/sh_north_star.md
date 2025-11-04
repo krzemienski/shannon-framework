@@ -1,420 +1,177 @@
 ---
-name: sh:north-star
-command: /sh:north-star
-description: Set and manage the North Star goal that guides all operations
-category: command
-sub_agents: [NORTH_STAR_KEEPER]
-mcp_servers: [serena, sequential]
-version: 3.0
+name: sh_north_star
+description: Set and manage North Star goals with progress tracking
+usage: /sh_north_star [goal] [--update] [--history]
 ---
 
-# /sh:north-star - North Star Goal Management
+# North Star Goal Management Command
 
-## Purpose
+## Overview
 
-Set, manage, and maintain the North Star goal that acts as a persistent beacon ensuring all waves, operations, and decisions align with original intent throughout sessions.
+Manages Shannon Framework's North Star goal system through delegation to the goal-management skill. Transforms vague goals into measurable milestones with persistent Serena MCP storage.
 
-**Core Objective**: Prevent scope creep and drift by anchoring all work to a clear, measurable goal that guides decision-making and resource allocation.
+## Prerequisites
 
----
+- Serena MCP available (check with `/sh_check_mcps`)
+- Goal text provided for setting new goals
 
-## Command Metadata
+## Workflow
 
-```yaml
-command: /sh:north-star
-aliases: [shannon:goal, shannon:north, shannon:ns]
-category: Goal Management
-sub_agent: NORTH_STAR_KEEPER
-mcp_servers:
-  primary: Serena
-  secondary: Sequential
-tools:
-  - Read
-  - Write
-  - mcp__memory__create_entities
-  - mcp__memory__add_observations
-outputs:
-  - Goal statements
-  - Alignment scores
-  - Strategic guidance
-  - Drift warnings
+### Step 1: Validate Input and Determine Mode
+
+Parse command arguments to determine operation mode:
+
+**Mode Detection:**
+- No arguments → `mode: "list"` (show all active goals)
+- `"history"` argument → `mode: "history"` (show goal history)
+- Text argument + no `--update` → `mode: "set"` (create new goal)
+- Text argument + `--update` → `mode: "update"` (update progress)
+- Goal ID + `complete` → `mode: "complete"` (mark complete)
+
+### Step 2: Invoke goal-management Skill
+
+Delegate to `@skill goal-management` with appropriate mode:
+
+**For SET mode (creating goal):**
+```
+@skill goal-management
+- Input:
+  * mode: "set"
+  * goal_text: "{user's goal description}"
+  * priority: "north-star" (default for /sh_north_star)
+- Output: goal_result
 ```
 
----
-
-## Usage Patterns
-
-### Basic Usage
-```bash
-# Set North Star goal
-/sh:north-star "Build secure, scalable authentication system"
-
-# Get current goal
-/sh:north-star
-
-# Check alignment
-/sh:north-star check "Add social login feature"
-
-# View goal history
-/sh:north-star history
+**For LIST mode (showing goals):**
+```
+@skill goal-management
+- Input:
+  * mode: "list"
+- Output: goals_list
 ```
 
-### Context-Aware Usage
-```bash
-# Session start
-User: "Let's build an auth system"
-Response: /sh:north-star "Build production-ready authentication with JWT and OAuth"
-→ Goal established for session guidance
-
-# Mid-development drift detection
-User: "Should we also add a payment system?"
-Response: /sh:north-star check "Add payment system"
-→ Alignment: 0.15 (MISALIGNED)
-→ Warning: Scope creep detected
-
-# Goal evolution
-User: "Requirements changed - need to support SSO"
-Response: /sh:north-star "Build enterprise auth with JWT, OAuth, and SSO"
-→ Goal updated with rationale
-→ History preserved
+**For UPDATE mode (progress update):**
+```
+@skill goal-management
+- Input:
+  * mode: "update"
+  * goal_id: "{goal_id from context or argument}"
+  * notes: "{progress notes if provided}"
+- Output: progress_result
 ```
 
----
-
-## North Star Actions
-
-### SET - Establish Goal
-
-**Purpose**: Define the guiding objective for all operations
-
-**Goal Quality Criteria**:
-```yaml
-goal_characteristics:
-  clear_and_specific:
-    ✅ "Build JWT authentication with refresh tokens"
-    ❌ "Make auth better"
-  
-  measurable_outcomes:
-    ✅ "Achieve <100ms token validation"
-    ❌ "Fast performance"
-  
-  time_bounded:
-    ✅ "Launch MVP auth by end of sprint"
-    ⚠️  "Eventually have auth" (acceptable if long-term)
-  
-  achievable:
-    ✅ "Add rate limiting to existing auth"
-    ❌ "Build AI-powered quantum blockchain auth"
-  
-  aligned_with_intent:
-    ✅ Reflects user's actual request
-    ❌ Interpreted differently than intended
+**For HISTORY mode:**
+```
+@skill goal-management
+- Input:
+  * mode: "history"
+- Output: history_result
 ```
 
-**Example**:
-```bash
-/sh:north-star "Build secure authentication system with <100ms response time"
+**For COMPLETE mode:**
+```
+@skill goal-management
+- Input:
+  * mode: "complete"
+  * goal_id: "{goal_id}"
+- Output: completion_result
+```
 
-# Output:
+### Step 3: Present Results
+
+Format skill output for user display:
+
+**For SET mode:**
+```markdown
 🎯 NORTH STAR GOAL SET
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**Goal**: Build secure authentication system with <100ms response time
+**Goal**: {goal_text}
+**ID**: {goal_id}
+**Priority**: North Star
+**Progress**: 0%
 
-**Quality Assessment**:
-✅ Clear and specific (authentication system defined)
-✅ Measurable (<100ms performance target)
-⚠️  Time-bounded (no explicit deadline - acceptable for now)
-✅ Achievable (realistic technical goal)
-✅ Aligned (matches user intent)
+**Milestones**:
+{for each milestone}
+├─ {milestone_name} ({weight}%)
+   Status: {status}
+   Criteria: {completion_criteria}
 
-**Overall Quality**: 🟢 HIGH (4/5 criteria strong)
+💾 Saved to Serena MCP
+🔄 Restore: /sh_restore {checkpoint_id}
 
-💾 Saved to: Serena memory + ~/.claude/shannon/north_star.txt
-
-🧭 All subsequent operations will be evaluated against this goal
-```
-
-### GET - Retrieve Current Goal
-
-**Purpose**: Display active North Star goal and metrics
-
-**Example**:
-```bash
-/sh:north-star
-
-# Output:
-🎯 CURRENT NORTH STAR GOAL
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**Goal**: Build secure authentication system with <100ms response time
-
-**Set**: 2025-10-03 12:00:00 (4 hours ago)
-**Status**: ✅ ACTIVE
-
-**Recent Aligned Operations** (Last 10):
-1. ✅ Implemented JWT token generation (Alignment: 1.0)
-2. ✅ Added token validation middleware (Alignment: 1.0)
-3. ✅ Optimized database queries (Alignment: 0.9)
-4. ⚠️  Added user profile features (Alignment: 0.4)
-5. ✅ Implemented rate limiting (Alignment: 0.95)
-
-**Overall Alignment**: 0.85 (Good)
-
-**Drift Warnings**: 1 operation below 0.5 threshold (#4)
+**Next Steps**:
+- Track progress: /sh_north_star
+- Update progress: /sh_north_star --update
+- Create waves: @skill wave-orchestration
 ```
 
-### CHECK - Alignment Verification
-
-**Purpose**: Verify if proposed operation aligns with goal
-
-**Alignment Scoring**:
-```yaml
-scoring_rubric:
-  direct_alignment: 1.0
-    - Core functionality for goal
-    - Essential requirement
-    Example: "Add JWT validation" for "Build JWT auth" = 1.0
-  
-  partial_alignment: 0.5-0.9
-    - Supports goal but not core
-    - Enhances primary functionality
-    Example: "Add password strength meter" = 0.7
-  
-  indirect_support: 0.2-0.5
-    - Tangentially related
-    - Nice-to-have feature
-    Example: "Improve UI animations" = 0.3
-  
-  misalignment: <0.2
-    - Scope creep
-    - Unrelated feature
-    - Goal drift
-    Example: "Add payment processing" = 0.1
-```
-
-**Example**:
-```bash
-/sh:north-star check "Add OAuth social login"
-
-# Output:
-🧭 ALIGNMENT CHECK
+**For LIST mode:**
+```markdown
+🎯 ACTIVE GOALS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**Operation**: Add OAuth social login
-**North Star**: Build secure authentication system with <100ms response time
+⭐ North Star Goal:
+ID: {goal_id}
+Goal: {goal_text}
+Progress: {progress}% ({completed_milestones}/{total_milestones})
+Next: {next_milestone_name}
 
-**Alignment Analysis**:
-📊 Score: 0.85 (Strong alignment)
+{if other goals exist}
+Other Goals:
+{for each goal}
+- {goal_text} ({priority}) - {progress}%
+{end for}
 
-**Rationale**:
-✅ Direct support: OAuth is authentication mechanism
-✅ Security: Leverages provider security (Google, GitHub)
-⚠️  Performance: May add latency (external API calls)
-✅ Scope: Within authentication system boundaries
-
-**Recommendation**: ✅ PROCEED
-Operation strongly aligns with North Star goal
-
-**Considerations**:
-- Monitor OAuth response times (keep <100ms budget)
-- Implement caching for provider data
-- Add fallback if OAuth providers slow
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### HISTORY - Goal Evolution
-
-**Purpose**: Show how North Star has evolved
-
-**Example**:
-```bash
-/sh:north-star history
-
-# Output:
-📜 NORTH STAR HISTORY
+**For UPDATE mode:**
+```markdown
+📊 PROGRESS UPDATE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**Current Goal** (Active):
-"Build secure authentication with <100ms response time"
-Set: 2025-10-03 12:00:00
-Duration: 4 hours
-Operations: 23 aligned
+**Goal**: {goal_text}
+**Progress**: {new_progress}% (+{progress_change}%)
 
-**Previous Goals**:
+**Completed Milestones**:
+{for each completed}
+✅ {milestone_name}
 
-1. "Build basic authentication" (Replaced)
-   Set: 2025-10-03 08:00:00
-   Duration: 2 hours
-   Reason for change: "Performance requirement added"
-   Impact: Expanded scope, added optimization focus
+**Remaining Milestones**:
+{for each remaining}
+⏳ {milestone_name} ({weight}%)
 
-2. "Create user login system" (Replaced)
-   Set: 2025-10-02 14:00:00
-   Duration: 6 hours
-   Reason for change: "Clarified security requirements"
-   Impact: Added security emphasis, broader scope
+{if progress >= 100}
+🎉 Goal appears complete!
+   Run: /sh_north_star complete {goal_id}
+{end if}
 
-**Evolution Insights**:
-- Goals becoming more specific (good)
-- Performance focus added (strategic improvement)
-- Scope expanding gradually (monitor for creep)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
----
+## Backward Compatibility
 
-## Execution Flow
+**V3 Compatibility:** ✅ Maintained
+- Same command syntax
+- Same required arguments
+- Compatible output format
+- Enhanced with Serena persistence
 
-### Step 1: Activate NORTH_STAR_KEEPER
+**Changes from V3:**
+- Internal: Now uses goal-management skill (was monolithic command)
+- Enhancement: Better milestone parsing from vague goals
+- Enhancement: Progress tracking with health checks
+- Enhancement: Milestone dependency validation
+- No breaking changes to user interface
 
-**Sub-Agent Activation**:
-```python
-# Activate goal management specialist
-activate_agent("NORTH_STAR_KEEPER")
+## Skill Dependencies
 
-# Agent characteristics:
-# - Strategic alignment assessor
-# - Scope creep detector
-# - Goal evolution tracker
-# - Decision guidance provider
-```
+- goal-management (REQUIRED)
 
-### Step 2: Parse Action
+## MCP Dependencies
 
-**Action Router**:
-```python
-action = detect_action(command)
-
-if no_arguments:
-    action = "get"
-elif is_goal_statement(arguments):
-    action = "set"
-elif arguments.startswith("check"):
-    action = "check"
-elif arguments == "history":
-    action = "history"
-
-params = extract_parameters(arguments, action)
-```
-
-### Step 3: Execute Action
-
-**Action-Specific Logic**:
-```python
-if action == "set":
-    # Validate goal quality
-    quality = assess_goal_quality(params["goal"])
-    if quality["score"] < 0.6:
-        warn_user("Goal quality below threshold")
-    
-    # Store goal
-    store_goal(params["goal"])
-    create_entities([{
-        "name": "north_star_goal",
-        "entityType": "Goal",
-        "observations": [params["goal"]]
-    }])
-
-elif action == "check":
-    # Calculate alignment
-    alignment = calculate_alignment(
-        operation=params["operation"],
-        goal=current_goal
-    )
-    
-    # Provide guidance
-    if alignment < 0.2:
-        recommendation = "STOP - Misaligned"
-    elif alignment < 0.5:
-        recommendation = "RECONSIDER - Low alignment"
-    elif alignment < 0.8:
-        recommendation = "PROCEED with caution"
-    else:
-        recommendation = "PROCEED - Strong alignment"
-```
-
----
-
-## Sub-Agent Integration
-
-### NORTH_STAR_KEEPER Role
-
-**Specialization**: Goal alignment and strategic guidance
-
-**Responsibilities**:
-1. **Goal Management**: Set, update, and track North Star
-2. **Alignment Scoring**: Calculate operation-goal fit
-3. **Drift Detection**: Identify scope creep and misalignment
-4. **Strategic Guidance**: Recommend aligned vs misaligned operations
-5. **Evolution Tracking**: Monitor goal changes and impacts
-
-**Agent Characteristics**:
-```yaml
-personality: Strategic, protective, alignment-focused
-communication_style: Clear guidance with evidence
-focus_areas:
-  - Goal clarity and quality
-  - Alignment assessment
-  - Scope creep prevention
-  - Strategic decision support
-strengths:
-  - Alignment calculation
-  - Scope boundary enforcement
-  - Goal evolution tracking
-  - Strategic recommendations
-```
-
----
-
-## Integration with Shannon Commands
-
-### Related Commands
-
-**Goal-Aware Commands**:
-- `/sh:wave` - Evaluates each wave against North Star
-- `/sh:analyze` - Includes goal alignment layer
-- `/sh:checkpoint` - Preserves North Star in snapshots
-- `/sh:status` - Shows current goal and alignment
-
-### Workflow Integration
-
-```bash
-# Goal-driven development
-/sh:north-star "Build REST API with <50ms latency"
-/sh:wave linear Implement API endpoints
-# [During wave execution]
-/sh:north-star check "Add GraphQL support"
-→ Alignment: 0.3 (scope creep warning)
-→ Decision: Defer to separate project
-/sh:checkpoint  # Preserve aligned work
-```
-
----
-
-## Success Criteria
-
-**North Star management succeeds when**:
-- ✅ Goals are clear and measurable
-- ✅ Alignment scoring is accurate
-- ✅ Drift is detected early
-- ✅ Decisions guided by goal
-- ✅ Goal evolution tracked
-- ✅ Scope boundaries enforced
-
-**North Star management fails if**:
-- ❌ Goals too vague to guide decisions
-- ❌ Alignment scoring inconsistent
-- ❌ Scope creep not detected
-- ❌ Goal ignored in decisions
-
----
-
-## Summary
-
-`/sh:north-star` provides strategic goal management through:
-
-- **Set**: Establish clear, measurable objectives
-- **Get**: Review current goal and alignment metrics
-- **Check**: Verify operation alignment before proceeding
-- **History**: Track goal evolution and impacts
-
-**Key Principle**: A clear North Star prevents drift, guides decisions, and ensures all work delivers value toward the intended outcome.
+- Serena MCP (required for goal persistence)
+- Sequential MCP (recommended for complex goal parsing)

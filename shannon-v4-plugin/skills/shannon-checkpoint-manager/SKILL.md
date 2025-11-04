@@ -215,42 +215,59 @@ await serena_write_memory(`${checkpoint.id}_restore_info`, {
 });
 ```
 
-### Step 5: Generate Checkpoint Report
+### Step 5: Generate Checkpoint SITREP
 
 ```javascript
-const report = `
-# Checkpoint Created ✅
+// Generate standardized SITREP using shannon-status-reporter
+const sitrep_data = {
+  agent_name: "shannon-checkpoint-manager",
+  task_id: checkpoint.id,
+  current_phase: state.current_phase,
+  progress: calculate_project_progress(state),
+  state: "completed",
 
-**ID**: ${checkpoint.id}
-**Label**: ${checkpoint_label}
-**Timestamp**: ${new Date(state.timestamp).toISOString()}
+  objective: `Create checkpoint: ${checkpoint_label}`,
+  scope: ["Project state preservation", "Zero-context-loss checkpoint", checkpoint.type],
+  dependencies: state.active_mcps,
 
-## Project State
-- **Phase**: ${state.current_phase}
-- **Wave**: ${state.current_wave || 'N/A'}
-- **Todos**: ${state.active_todos.length} in progress, ${state.pending_todos.length} pending
+  findings: [
+    `Phase: ${state.current_phase}, Wave: ${state.current_wave || 'N/A'}`,
+    `Active todos: ${state.active_todos.length}, Pending: ${state.pending_todos.length}`,
+    `Modified files: ${state.modified_files.length}`,
+    `Generated skills: ${state.generated_skills.length}`,
+    `North Star: ${state.north_star_goal || 'Not set'}`
+  ],
 
-## North Star Goal
-${state.north_star_goal || 'Not set'}
+  blockers: [],
+  risks: state.token_usage.total > 150000 ? ["Token usage high - compaction imminent"] : [],
+  questions: [],
 
-## Modified Files (${state.modified_files.length})
-${state.modified_files.slice(0, 10).map(f => `- ${f}`).join('\n')}
-${state.modified_files.length > 10 ? `... and ${state.modified_files.length - 10} more` : ''}
+  next_steps: [
+    checkpoint.type === "precompact"
+      ? "Auto-compaction will proceed - context will be restored on SessionStart"
+      : "Continue development",
+    `Restore with: /sh_restore ${checkpoint.id}`
+  ],
 
-## Generated Skills (${state.generated_skills.length})
-${state.generated_skills.map(s => `- ${s}`).join('\n')}
+  artifacts: [
+    ...state.modified_files.slice(0, 10),
+    state.modified_files.length > 10 ? `... and ${state.modified_files.length - 10} more files` : ""
+  ].filter(Boolean),
 
-## Active MCPs
-${state.active_mcps.map(m => `- ${m.name} (${m.status})`).join('\n')}
+  tests_executed: ["state_extraction", "serena_persistence", "knowledge_graph_creation"],
+  test_results: "All checkpoint validations passed"
+};
 
-## Restore
-To restore this checkpoint: \`/sh_restore ${checkpoint.id}\`
+// Invoke shannon-status-reporter to generate SITREP
+const sitrep = await generate_sitrep(sitrep_data);
 
----
-Saved to Serena MCP: ${checkpoint.id}
-`;
+// Save SITREP alongside checkpoint
+await serena_write_memory(`${checkpoint.id}_sitrep`, {
+  sitrep_markdown: sitrep,
+  sitrep_data
+});
 
-return report;
+return sitrep;
 ```
 
 ## PreCompact Integration
@@ -329,17 +346,48 @@ def session_start_hook():
 ```bash
 # User creates checkpoint
 /sh_checkpoint "Finished database schema design"
+```
 
-# Output:
-# Checkpoint Created ✅
-# ID: checkpoint_myproject_1699123456789
-# Label: Finished database schema design
-# Phase: Architecture
-# Wave: 2
-# Todos: 3 in progress, 5 pending
-# Files Modified: 12 files
-#
-# Restore: /sh_restore checkpoint_myproject_1699123456789
+**SITREP Output**:
+```markdown
+## SITREP: shannon-checkpoint-manager - checkpoint_myproject_1699123456789
+
+### Status
+- **Current Phase**: Architecture
+- **Progress**: 35%
+- **State**: completed
+
+### Context
+- **Objective**: Create checkpoint: Finished database schema design
+- **Scope**: Project state preservation, Zero-context-loss checkpoint, manual
+- **Dependencies**: serena, puppeteer
+
+### Findings
+- Phase: Architecture, Wave: 2
+- Active todos: 3, Pending: 5
+- Modified files: 12
+- Generated skills: 2
+- North Star: Build production-ready dashboard
+
+### Issues
+- **Blockers**: None
+- **Risks**: None
+- **Questions**: None
+
+### Next Steps
+- [ ] Continue development
+- [ ] Restore with: /sh_restore checkpoint_myproject_1699123456789
+
+### Artifacts
+- src/database/schema.sql
+- src/models/User.ts
+- src/models/Session.ts
+- tests/database.test.ts
+... and 8 more files
+
+### Validation
+- **Tests Executed**: state_extraction, serena_persistence, knowledge_graph_creation
+- **Results**: All checkpoint validations passed
 ```
 
 ### Example 2: PreCompact Auto-Checkpoint
@@ -440,6 +488,7 @@ def session_start_hook():
 - PreCompact hook (automatic)
 
 **Uses**:
+- shannon-status-reporter (SITREP generation)
 - shannon-serena-manager (for memory operations)
 
 **Composition**:

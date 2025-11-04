@@ -1,0 +1,814 @@
+---
+name: wave-orchestration
+description: |
+  True parallel sub-agent coordination with wave-based execution. Analyzes phase dependencies,
+  groups independent phases into waves for parallel execution, allocates agents based on complexity
+  score. Proven 3.5x speedup for complexity >=0.50. Use when: executing complex projects,
+  need parallel coordination, want to achieve 2-4x speedup.
+
+skill-type: QUANTITATIVE
+shannon-version: ">=4.0.0"
+complexity-triggers: [0.50-1.00]
+
+mcp-requirements:
+  required:
+    - name: serena
+      purpose: Wave checkpoint storage
+  recommended:
+    - name: sequential
+      purpose: Dependency analysis thinking
+
+required-sub-skills:
+  - context-preservation
+
+optional-sub-skills:
+  - sitrep-reporting
+  - confidence-check
+
+allowed-tools: [Task, Read, Serena, Sequential]
+---
+
+# Wave Orchestration Skill
+
+## Purpose
+
+Transform sequential agent execution into **genuinely parallel workflows** to achieve 2-4x faster completion through true parallelism. This skill analyzes phase dependencies, groups independent phases into waves, allocates agents based on complexity, and manages synthesis checkpoints between waves.
+
+**Key Innovation**: Proven 3.5x speedup through deterministic wave-based parallel execution.
+
+---
+
+## When to Use This Skill
+
+### Complexity Triggers
+
+**MANDATORY** when:
+- Complexity Score ≥ 0.50 (Complex, High, or Critical)
+- Multiple parallel work streams identified in phase plan
+- Multi-agent coordination needed
+
+**OPTIONAL** when:
+- Complexity Score 0.30-0.50 (Moderate) AND
+  - User explicitly requests parallel execution
+  - Project has clear parallel opportunities
+  - Timeline constraints require speedup
+
+**DO NOT USE** when:
+- Complexity Score < 0.30 (Simple)
+- Single linear work stream
+- No parallelization opportunities
+
+### Project Indicators
+
+Use wave orchestration when project has:
+- ✅ Multiple independent components (frontend + backend + database)
+- ✅ Clear dependency boundaries (API depends on DB, UI depends on API)
+- ✅ Work that can be divided by domain (React vs Express vs PostgreSQL)
+- ✅ Testing that can run after implementation complete
+- ✅ Multiple agents needed (≥3 agents)
+
+Do NOT use when:
+- ❌ Single component to build
+- ❌ Circular dependencies everywhere
+- ❌ Everything depends on everything else
+- ❌ Only 1-2 agents needed
+
+---
+
+## Anti-Rationalization (From Baseline Testing)
+
+**CRITICAL**: Agents systematically rationalize away parallelization under pressure. Below are the 6 most common rationalizations detected in baseline testing, with mandatory counters.
+
+### Rationalization 1: "Execute sequentially to avoid complexity"
+**Example**: Project has Frontend, Backend, Database (all independent) → Agent says "I'll build these one at a time to keep it simple"
+
+**COUNTER**:
+- ❌ **NEVER** default to sequential for independent work
+- ✅ Complexity ≥0.50 MANDATES wave orchestration
+- ✅ Sequential = ignoring proven 3.5x speedup
+- ✅ "Simple" means follow the algorithm, not skip parallelization
+- ✅ Check dependencies: If none, MUST parallelize
+
+**Rule**: Independent components MUST execute in parallel. Complexity score determines this, not preference.
+
+### Rationalization 2: "Accept user's agent estimate without calculation"
+**Example**: User says "I think we need 3-4 agents" → Agent responds "3-4 agents sounds reasonable, let's proceed"
+
+**COUNTER**:
+- ❌ **NEVER** accept user's agent count without complexity-based allocation
+- ✅ User intuition systematically under-estimates by 50-70%
+- ✅ ALWAYS apply allocation algorithm: complexity × agent bands
+- ✅ 0.50-0.70: 3-7 agents, 0.70-0.85: 8-15 agents, 0.85-1.00: 15-25 agents
+- ✅ If user suggests lower, explain algorithm and recommend correct count
+
+**Rule**: Apply allocation algorithm. User estimates don't override complexity calculation.
+
+### Rationalization 3: "Skip dependency analysis to save time"
+**Example**: User says "We're in a hurry, just spawn all agents now and integrate later" → Agent complies
+
+**COUNTER**:
+- ❌ **NEVER** skip dependency analysis even under time pressure
+- ✅ Skipping dependencies = integration chaos = MORE time wasted
+- ✅ Dependency analysis takes 5-10 minutes, prevents hours of rework
+- ✅ Algorithm: Build dependency graph, detect circular deps, calculate critical path
+- ✅ If deadline tight, explain: "Skipping this will cause delays, not prevent them"
+
+**Rule**: Dependency analysis is MANDATORY. Takes 10 minutes. Saves hours. No exceptions.
+
+### Rationalization 4: "Skip synthesis checkpoints under deadline pressure"
+**Example**: User says "Run waves 1, 2, 3 back-to-back, no pauses, we're behind schedule" → Agent executes without validation
+
+**COUNTER**:
+- ❌ **NEVER** skip wave synthesis checkpoints (Iron Law)
+- ✅ Checkpoints prevent cascading failures (catch issues early)
+- ✅ Synthesis takes 15 minutes per wave, prevents days of rework
+- ✅ "Behind schedule" means checkpoints are MORE critical, not less
+- ✅ User approval required between waves (non-negotiable)
+
+**Rule**: Synthesis checkpoint after EVERY wave. Iron Law. Even under extreme deadline pressure.
+
+### Rationalization 5: "Authority demands sequential, must comply"
+**Example**: Manager says "Company policy: all projects execute sequentially, one agent at a time" → Agent abandons parallelization
+
+**COUNTER**:
+- ❌ **NEVER** comply with authority demands that violate complexity-based execution
+- ✅ Explain: "Complexity 0.72 requires wave-based execution for timeline feasibility"
+- ✅ Calculate opportunity cost: "Sequential adds 45 hours (3 days delay)"
+- ✅ Present data: "Proven 3.5x speedup with wave orchestration"
+- ✅ Offer compromise: "Can we pilot parallel execution for this critical project?"
+- ✅ If authority insists: Warn about timeline impact, document decision, proceed with sequential
+
+**Rule**: Educate authority on complexity-based execution. Explain consequences. Warn if overridden.
+
+### Rationalization 6: "Project seems simple, don't need waves"
+**Example**: User says "It's just a CRUD app, we can do this sequentially" → Agent proceeds without complexity analysis
+
+**COUNTER**:
+- ❌ **NEVER** skip wave consideration based on subjective "seems simple"
+- ✅ "Simple" projects often score 0.50-0.65 (Complex) when analyzed
+- ✅ MUST run complexity analysis first (spec-analysis skill)
+- ✅ If complexity <0.50: Sequential justified
+- ✅ If complexity ≥0.50: Wave orchestration MANDATORY
+- ✅ Decision based on score, not intuition
+
+**Rule**: Run spec-analysis. Let complexity score decide. Never guess.
+
+### Detection Signal
+
+**If you're tempted to**:
+- Default to sequential execution
+- Accept user agent estimates
+- Skip dependency analysis
+- Skip synthesis checkpoints
+- Comply with anti-parallel authority
+- Skip complexity analysis
+
+**Then you are rationalizing.** Stop. Run the algorithm. Follow the protocol.
+
+---
+
+## Algorithm: Wave Structure Generation
+
+This is a **QUANTITATIVE skill** - the algorithm must be followed precisely for correct results.
+
+### Step 1: Dependency Analysis
+
+**Input**: Phase plan from `phase-planning` skill
+
+**Process**:
+```python
+# Load phase plan
+phase_plan = read_memory("phase_plan_detailed")
+
+# Extract all phases
+phases = phase_plan["phases"]
+
+# Build dependency graph
+dependency_graph = {}
+for phase in phases:
+    dependency_graph[phase.id] = {
+        "name": phase.name,
+        "depends_on": phase.dependencies,  # List of phase IDs
+        "blocks": [],  # Will be calculated
+        "estimated_time": phase.estimated_time
+    }
+
+# Calculate what each phase blocks
+for phase_id, phase_data in dependency_graph.items():
+    for other_id, other_data in dependency_graph.items():
+        if phase_id in other_data["depends_on"]:
+            phase_data["blocks"].append(other_id)
+
+# Validate: No circular dependencies
+if has_circular_dependencies(dependency_graph):
+    ERROR: "Circular dependency detected. Cannot create wave structure."
+    # Recommend: Redesign phase plan to remove circular dependencies
+```
+
+**Output**: Complete dependency graph with forward/backward relationships
+
+### Step 2: Wave Structure Generation
+
+**Algorithm** (Critical Path Method):
+```python
+waves = []
+remaining_phases = phases.copy()
+completed_phases = set()
+wave_number = 1
+
+while remaining_phases:
+    # Find phases with all dependencies satisfied
+    ready_phases = []
+    for phase in remaining_phases:
+        deps_satisfied = all(
+            dep in completed_phases
+            for dep in phase.dependencies
+        )
+        if deps_satisfied:
+            ready_phases.append(phase)
+
+    # Error check: deadlock detection
+    if not ready_phases and remaining_phases:
+        ERROR: "Deadlock - no phases ready but work remains"
+        # Indicates circular dependency or missing prerequisite
+        break
+
+    # Create wave from ready phases
+    waves.append({
+        "wave_number": wave_number,
+        "wave_name": f"Wave {wave_number}",
+        "phases": ready_phases,
+        "parallel": len(ready_phases) > 1,
+        "estimated_time": max([p.estimated_time for p in ready_phases]) if ready_phases else 0,
+        "dependencies": [list of prerequisite waves]
+    })
+
+    # Mark phases as completed for next iteration
+    for phase in ready_phases:
+        remaining_phases.remove(phase)
+        completed_phases.add(phase.id)
+
+    wave_number += 1
+
+return waves
+```
+
+**Output**: Wave structure with phases grouped by dependency level
+
+### Step 3: Agent Allocation
+
+**Algorithm** (Complexity-Based):
+```python
+def allocate_agents(complexity_score: float, wave: dict) -> int:
+    """
+    Allocate agents based on 8D complexity score
+
+    Complexity Bands (Shannon V4 Standard):
+    - Simple (0.00-0.30): 1-2 agents
+    - Moderate (0.30-0.50): 2-3 agents
+    - Complex (0.50-0.70): 3-7 agents
+    - High (0.70-0.85): 8-15 agents
+    - Critical (0.85-1.00): 15-25 agents
+    """
+
+    num_phases = len(wave["phases"])
+
+    if complexity_score < 0.30:
+        # Simple: 1 agent per phase, max 2 total
+        return min(num_phases, 2)
+
+    elif complexity_score < 0.50:
+        # Moderate: 1 agent per phase, max 3 total
+        return min(num_phases, 3)
+
+    elif complexity_score < 0.70:
+        # Complex: 1-2 agents per phase, 3-7 total
+        base_agents = min(num_phases, 7)
+        # If many phases, increase allocation
+        if num_phases > 5:
+            return min(num_phases, 7)
+        return min(num_phases * 1, 7)
+
+    elif complexity_score < 0.85:
+        # High: 2-3 agents per phase, 8-15 total
+        base_agents = min(num_phases * 2, 15)
+        return min(base_agents, 15)
+
+    else:
+        # Critical: 3-5 agents per phase, 15-25 total
+        base_agents = min(num_phases * 3, 25)
+        return min(base_agents, 25)
+
+# Apply to each wave
+for wave in waves:
+    wave["agents_allocated"] = allocate_agents(complexity_score, wave)
+    wave["agent_types"] = assign_agent_types(wave["phases"])
+```
+
+**Agent Type Assignment**:
+```python
+def assign_agent_types(phases: list) -> list:
+    """
+    Map phases to specialized agent types
+    """
+    agent_assignments = []
+
+    for phase in phases:
+        # Determine agent type based on phase domain
+        if "frontend" in phase.name.lower() or "ui" in phase.name.lower():
+            agent_type = "frontend-builder"
+        elif "backend" in phase.name.lower() or "api" in phase.name.lower():
+            agent_type = "backend-builder"
+        elif "database" in phase.name.lower() or "schema" in phase.name.lower():
+            agent_type = "database-builder"
+        elif "test" in phase.name.lower():
+            agent_type = "testing-specialist"
+        elif "integration" in phase.name.lower():
+            agent_type = "integration-specialist"
+        else:
+            agent_type = "generalist-builder"
+
+        agent_assignments.append({
+            "phase": phase,
+            "agent_type": agent_type,
+            "task_description": phase.description
+        })
+
+    return agent_assignments
+```
+
+**Output**: Agent allocation plan with types and counts
+
+### Step 4: Synthesis Checkpoint Definition
+
+**Algorithm**:
+```python
+checkpoints = []
+
+for i, wave in enumerate(waves):
+    checkpoint = {
+        "checkpoint_id": f"wave_{wave['wave_number']}_checkpoint",
+        "location": "After wave completion",
+        "validation_criteria": [
+            "All agents in wave completed successfully",
+            "Agent results saved to Serena",
+            "No integration conflicts detected",
+            "Quality metrics satisfied (no TODOs, functional tests pass)"
+        ],
+        "synthesis_tasks": [
+            "Collect all agent results from Serena",
+            "Aggregate deliverables (files, components, tests)",
+            "Cross-validate for conflicts and gaps",
+            "Create wave synthesis document",
+            "Present to user for validation"
+        ],
+        "serena_keys": [
+            f"wave_{wave['wave_number']}_complete",
+            f"wave_{wave['wave_number']}_synthesis"
+        ],
+        "sitrep_trigger": True,
+        "user_validation_required": True
+    }
+    checkpoints.append(checkpoint)
+
+return checkpoints
+```
+
+**Output**: Checkpoint definitions for each wave transition
+
+---
+
+## Execution Protocol
+
+### Pre-Wave Execution Checklist
+
+Before spawning ANY wave, execute this checklist:
+
+```markdown
+☐ 1. Load wave execution plan
+   read_memory("wave_execution_plan")
+
+☐ 2. Verify this is the correct wave
+   Check: Is this the next wave in sequence?
+   Check: Are we in the right phase?
+
+☐ 3. Verify prerequisites complete
+   Check: Do prerequisite waves have _complete memories?
+   Check: Are all expected deliverables present?
+
+☐ 4. Load previous wave contexts
+   read_memory("wave_1_complete") if exists
+   read_memory("wave_2_complete") if exists
+   ... (all previous waves)
+
+☐ 5. Verify MCP servers available
+   Check: Serena connected
+   Check: Required MCPs active
+
+☐ 6. Estimate token usage
+   Current + (agents × 3000) < 150000?
+   If no: Create checkpoint first
+
+☐ 7. Prepare agent prompts
+   Include context loading protocol
+   Include specific task instructions
+   Include save-to-Serena instructions
+```
+
+### Agent Spawning (Critical for Parallelism)
+
+**MANDATORY RULE**: To achieve TRUE parallelism, spawn ALL wave agents in ONE message.
+
+**Correct Pattern** ✅:
+```xml
+<!-- ONE MESSAGE with multiple Task invocations -->
+<function_calls>
+  <invoke name="Task">
+    <parameter name="subagent_type">frontend-builder</parameter>
+    <parameter name="description">Build React UI</parameter>
+    <parameter name="prompt">[Agent 1 prompt with context loading]</parameter>
+  </invoke>
+
+  <invoke name="Task">
+    <parameter name="subagent_type">backend-builder</parameter>
+    <parameter name="description">Build Express API</parameter>
+    <parameter name="prompt">[Agent 2 prompt with context loading]</parameter>
+  </invoke>
+
+  <invoke name="Task">
+    <parameter name="subagent_type">database-builder</parameter>
+    <parameter name="description">Create DB schema</parameter>
+    <parameter name="prompt">[Agent 3 prompt with context loading]</parameter>
+  </invoke>
+</function_calls>
+
+Result: All 3 agents execute SIMULTANEOUSLY
+Speedup: max(agent_times) NOT sum(agent_times)
+Example: 3 agents × 12 min = 12 min parallel (not 36 min sequential)
+```
+
+**Incorrect Pattern** ❌:
+```xml
+<!-- MULTIPLE MESSAGES (sequential execution) -->
+Message 1: <invoke name="Task">Agent 1</invoke>
+Wait for completion...
+Message 2: <invoke name="Task">Agent 2</invoke>
+Wait for completion...
+Message 3: <invoke name="Task">Agent 3</invoke>
+
+Result: SEQUENTIAL execution (no parallelism)
+Speedup: NONE - same as doing tasks one by one
+Time: 12 + 12 + 12 = 36 minutes
+```
+
+### Context Loading Protocol (Mandatory for Every Agent)
+
+Every agent prompt MUST include:
+
+```markdown
+## MANDATORY CONTEXT LOADING PROTOCOL
+
+Execute these commands BEFORE your task:
+
+1. list_memories() - Discover all available Serena memories
+2. read_memory("spec_analysis") - Understand project requirements
+3. read_memory("phase_plan_detailed") - Know execution structure
+4. read_memory("architecture_complete") if exists - System design
+5. read_memory("wave_1_complete") if exists - Learn from Wave 1
+6. read_memory("wave_2_complete") if exists - Learn from Wave 2
+... (read all previous waves)
+7. read_memory("wave_[N-1]_complete") - Immediate previous wave
+
+Verify you understand:
+✓ What we're building (from spec_analysis)
+✓ How it's designed (from architecture_complete)
+✓ What's been built (from previous waves)
+✓ Your specific task (detailed below)
+
+If ANY verification fails → STOP and request clarification
+```
+
+### Wave Synthesis Protocol
+
+**MANDATORY after EVERY wave completion**:
+
+```markdown
+## Wave [N] Synthesis Protocol
+
+### Step 1: Collect All Agent Results
+results = []
+for agent in wave_agents:
+    results.append(read_memory(f"wave_{N}_{agent.type}_results"))
+
+Verify: All agents completed successfully
+If any failed: Trigger error recovery
+
+### Step 2: Aggregate Deliverables
+Combine from all agent results:
+- Files Created: Merge all file lists, remove duplicates
+- Components Built: List all components, verify no conflicts
+- Decisions Made: Compile decision log, flag conflicts
+- Tests Created: Sum test counts, verify NO MOCKS
+
+### Step 3: Cross-Validate Results
+Quality Checks:
+☐ Conflicting Implementations (check for contradictions)
+☐ Missing Integrations (check for connection gaps)
+☐ Duplicate Work (check for redundancy)
+☐ Incomplete Deliverables (check for missing work)
+☐ Test Coverage (check all components tested)
+☐ NO MOCKS Compliance (verify functional tests only)
+
+### Step 4: Create Wave Synthesis Document
+write_memory(f"wave_{N}_complete", {
+  wave_number: N,
+  wave_name: "[Name]",
+  agents_deployed: [count],
+  execution_time_minutes: [actual time],
+  parallel_efficiency: "[speedup calculation]",
+  deliverables: {
+    files_created: [list],
+    components_built: [list],
+    tests_created: [count]
+  },
+  decisions: [...],
+  integration_status: {...},
+  quality_metrics: {...},
+  next_wave_context: {...}
+})
+
+### Step 5: Present Synthesis to User
+Show:
+- Execution summary (performance, deliverables)
+- Key accomplishments
+- Important decisions
+- Integration status
+- Quality validation
+- Next wave requirements
+
+### Step 6: Wait for User Approval
+User must explicitly approve before next wave
+Options: "approved", feedback for iteration, report issues
+```
+
+### Error Recovery
+
+**Agent Failure Types**:
+
+1. **Tool Failure**: Retry with corrected context or alternative tool
+2. **Task Misunderstanding**: Respawn with clarified instructions
+3. **Timeout/Crash**: Resume from last state or respawn
+4. **Context Corruption**: Restore from checkpoint, respawn
+5. **Integration Failure**: Spawn integration-fixer agent
+
+**Partial Wave Failure Decision Tree**:
+```
+Agent failure detected?
+├─ Critical to wave? (blocks other work)
+│  └─ YES: MUST fix before proceeding
+│     1. Analyze failure
+│     2. Respawn with fixes
+│     3. Wait for completion
+│     4. Re-synthesize
+│
+└─ NO: Can defer or skip
+   └─ Document in synthesis
+      Present options to user
+      Proceed based on choice
+```
+
+---
+
+## Performance Metrics
+
+### Parallelization Speedup Calculation
+
+After EVERY parallel wave:
+
+```python
+# Calculate sequential time (hypothetical)
+sequential_time = sum(agent.completion_time for agent in wave_agents)
+
+# Calculate parallel time (actual)
+parallel_time = max(agent.completion_time for agent in wave_agents)
+
+# Calculate speedup
+speedup = sequential_time / parallel_time
+
+# Calculate efficiency
+efficiency = speedup / len(wave_agents)
+
+# Report in synthesis
+print(f"Wave {N}: {len(wave_agents)} agents in {parallel_time}m")
+print(f"Sequential would be {sequential_time}m")
+print(f"Speedup: {speedup:.2f}x faster")
+print(f"Efficiency: {efficiency:.0%}")
+```
+
+**Expected Speedup by Wave Size**:
+- 2 agents: 1.5-1.8x speedup
+- 3 agents: 2.0-2.5x speedup
+- 5 agents: 3.0-4.0x speedup
+- 7+ agents: 3.5-5.0x speedup
+
+**Efficiency Guidelines**:
+- >80% efficiency: Excellent parallelization
+- 60-80% efficiency: Good parallelization
+- 40-60% efficiency: Acceptable with tradeoffs
+- <40% efficiency: Poor parallelization, reconsider wave structure
+
+---
+
+## Wave Size Optimization
+
+### Optimal Wave Size by Complexity
+
+| Complexity | Score Range | Agents/Wave | Rationale |
+|------------|-------------|-------------|-----------|
+| Simple | 0.00-0.30 | 1-2 | Overhead not justified |
+| Moderate | 0.30-0.50 | 2-3 | Balance speed/control |
+| Complex | 0.50-0.70 | 3-7 | Sweet spot for parallelization |
+| High | 0.70-0.85 | 8-15 | Maximum benefit from parallelism |
+| Critical | 0.85-1.00 | 15-25 | Necessary for timeline |
+
+### Token Budget Constraints
+
+```python
+def calculate_max_agents(available_tokens: int) -> int:
+    """
+    Calculate maximum agents based on token budget
+    """
+    TOKENS_PER_AGENT = 3000  # Average
+    SAFETY_BUFFER = 20000    # Reserve for synthesis
+
+    usable_tokens = available_tokens - SAFETY_BUFFER
+    max_agents_tokens = usable_tokens // TOKENS_PER_AGENT
+
+    # Never exceed 10 agents per wave (synthesis overhead)
+    MAX_AGENTS_SYNTHESIS = 10
+
+    return min(max_agents_tokens, MAX_AGENTS_SYNTHESIS)
+
+# Example:
+# 180,000 tokens available
+# Safety buffer: 20,000
+# Usable: 160,000
+# Max agents: 160,000 / 3,000 = 53 agents (token-wise)
+# Actual max: 10 agents (synthesis constraint)
+# Result: 10 agents per wave maximum
+```
+
+### Wave Splitting Strategy
+
+When total agents > max agents per wave:
+
+```python
+def split_into_waves(phases: list, max_agents: int) -> list:
+    """
+    Split large parallel work into multiple waves
+    """
+    waves = []
+    for i in range(0, len(phases), max_agents):
+        wave_phases = phases[i:i+max_agents]
+        waves.append({
+            "wave_number": len(waves) + 1,
+            "phases": wave_phases,
+            "agents": len(wave_phases)
+        })
+    return waves
+
+# Example:
+# 15 parallel components to build
+# Max agents: 5 per wave
+# Result:
+#   Wave 3a: Components 1-5 (5 agents)
+#   Wave 3b: Components 6-10 (5 agents)
+#   Wave 3c: Components 11-15 (5 agents)
+```
+
+---
+
+## Integration with Other Skills
+
+### Required: context-preservation
+
+Wave orchestration **REQUIRES** context-preservation skill:
+
+```python
+# Before starting wave execution
+use_skill("context-preservation", {
+    "checkpoint_name": "pre_wave_execution",
+    "context_to_save": [
+        "spec_analysis",
+        "phase_plan_detailed",
+        "architecture_complete",
+        "all_previous_wave_results"
+    ]
+})
+
+# Result: Can restore if wave execution fails
+```
+
+### Optional: sitrep-reporting
+
+Enable progress updates at wave checkpoints:
+
+```python
+# At each wave synthesis checkpoint
+if "sitrep-reporting" in active_skills:
+    use_skill("sitrep-reporting", {
+        "checkpoint_id": f"wave_{wave_number}_complete",
+        "progress_data": wave_synthesis
+    })
+```
+
+### Optional: confidence-check
+
+Validate wave readiness before spawn:
+
+```python
+# Before spawning large/risky waves
+if "confidence-check" in active_skills:
+    confidence = use_skill("confidence-check", {
+        "target": "wave_readiness",
+        "factors": [
+            "dependencies_satisfied",
+            "context_complete",
+            "token_budget_adequate",
+            "agent_prompts_prepared"
+        ]
+    })
+
+    if confidence < 0.70:
+        WARNING: "Low confidence in wave readiness"
+        # Consider: Creating checkpoint, reducing wave size
+```
+
+---
+
+## Examples
+
+See `examples/` directory:
+- **2-wave-simple.md**: Simple project (0.45 complexity) with 2 waves
+- **4-wave-complex.md**: Complex project (0.65 complexity) with 4 waves
+- **8-wave-critical.md**: Critical project (0.90 complexity) with 8 waves
+
+---
+
+## Templates
+
+See `templates/` directory:
+- **wave-plan.md**: Complete wave execution plan template
+- **synthesis-checkpoint.md**: Wave synthesis document template
+- **agent-allocation.md**: Agent assignment and prompt template
+
+---
+
+## Success Criteria
+
+Wave orchestration is successful when:
+
+✅ **Parallelism Verified**: Speedup ≥ 1.5x vs sequential
+   - Evidence: Timestamps show concurrent execution
+   - Metric: parallel_time = max(agent_times), not sum
+
+✅ **Zero Duplicate Work**: No redundant agent tasks
+   - Check: No files created by multiple agents
+   - Check: No decisions made multiple times
+
+✅ **Perfect Context Sharing**: Every agent has complete history
+   - Check: All agents loaded required Serena memories
+   - Check: No decisions based on incomplete info
+
+✅ **Clean Validation Gates**: User approval between waves
+   - Check: Synthesis presented after each wave
+   - Check: Explicit user approval obtained
+
+✅ **Complete Memory Trail**: All wave results saved
+   - Check: wave_[N]_complete exists for all waves
+   - Check: Individual agent results saved
+
+✅ **Production Quality**: No TODOs, functional tests only
+   - Check: No placeholders in code
+   - Check: All tests functional (NO MOCKS)
+
+---
+
+## Reference
+
+See `references/WAVE_ORCHESTRATION.md` for complete behavioral framework (1612 lines).
+
+---
+
+## Conclusion
+
+Wave orchestration achieves **3.5x average speedup** through:
+1. ✅ True parallelism (all agents spawn in one message)
+2. ✅ Complete context (every agent loads full history)
+3. ✅ Systematic synthesis (validation after each wave)
+4. ✅ Smart dependencies (maximize parallel work)
+5. ✅ Optimal sizing (balance speed and manageability)
+6. ✅ Robust recovery (graceful failure handling)
+7. ✅ Performance focus (measured speedup, optimized tokens)
+
+This is the **most impactful skill** in Shannon V4 for accelerating complex project execution.

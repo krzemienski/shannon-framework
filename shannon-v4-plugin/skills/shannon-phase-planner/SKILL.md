@@ -392,48 +392,78 @@ await serena_create_relations([{
 }]);
 ```
 
-### Step 10: Generate Planning Report
+### Step 10: Generate Planning SITREP
 
-Create user-facing report:
+Generate standardized SITREP using shannon-status-reporter:
 
-```markdown
-# Shannon Phase Plan
+```javascript
+// Generate planning SITREP
+const sitrep_data = {
+  agent_name: "shannon-phase-planner",
+  task_id: `phase_plan_${project_id}_${timestamp}`,
+  current_phase: "Planning",
+  progress: 100, // Planning complete
+  state: "completed",
 
-**Project**: [North Star Goal]
-**Complexity Score**: [X.XX] (X dimensions)
-**Total Phases**: 5
-**Total Waves**: [N waves]
-**Estimated Duration**: [X weeks/months]
+  objective: `Create 5-phase implementation plan for: ${north_star_goal}`,
+  scope: [
+    "5-phase structure (Discovery, Architecture, Implementation, Testing, Deployment)",
+    `${total_waves} waves across all phases`,
+    "Validation gates and success criteria",
+    "Complexity-adjusted effort distribution"
+  ],
+  dependencies: ["spec_analysis", "north_star_goal"],
 
-## Phase Breakdown
+  findings: [
+    `Complexity score: ${complexity_score} (${complexity_dimensions.length} dimensions)`,
+    `Total waves: ${total_waves}`,
+    `Estimated duration: ${estimated_duration}`,
+    `Effort distribution: ${effort_distribution.join(', ')}`,
+    `Critical path: ${critical_path_length} sequential dependencies`,
+    `Identified risks: ${risks.length} (${high_priority_risks.length} high-priority)`
+  ],
 
-### Phase 1: Discovery (20%)
-**Waves**: X
-**Duration**: ~X weeks
-**Objectives**:
-- [List objectives]
+  blockers: [],
+  risks: risks.map(r => r.description),
+  questions: [],
 
-**Validation Gate**:
-- [List criteria]
+  next_steps: [
+    "Review and approve this plan",
+    `Begin Phase 1, Wave 1: ${phases[0].waves[0].name}`,
+    "Use /sh:wave 1 to execute first wave"
+  ],
 
-### Phase 2: Architecture (15%)
-...
+  artifacts: [
+    `phase_plan_detailed (saved to Serena)`,
+    `wave_structure.json`,
+    `validation_gates.json`,
+    `risk_matrix.json`
+  ],
 
-[Continue for all phases]
+  tests_executed: [
+    "complexity_analysis",
+    "dependency_validation",
+    "wave_grouping",
+    "effort_distribution_check"
+  ],
+  test_results: "All planning validations passed"
+};
 
-## Critical Path
+// Invoke shannon-status-reporter to generate SITREP
+const sitrep = await generate_sitrep(sitrep_data);
 
-[Visualize dependencies]
+// Save SITREP alongside phase plan
+await serena_write_memory(`phase_plan_${project_id}_sitrep`, {
+  sitrep_markdown: sitrep,
+  sitrep_data,
+  full_plan_summary: phases.map(p => ({
+    phase: p.name,
+    waves: p.waves.length,
+    objectives: p.objectives
+  }))
+});
 
-## Risks
-
-[List identified risks with mitigation]
-
-## Next Steps
-
-1. Review and approve this plan
-2. Begin Phase 1, Wave 1: [First wave tasks]
-3. Use /sh:wave 1 to execute first wave
+return sitrep;
 ```
 
 ## Complexity-Based Adjustments
@@ -531,9 +561,11 @@ Uses sequential thinking for planning
   ↓
 Generates 5-phase plan with waves
   ↓
-Saves to Serena for wave execution
+Invokes shannon-status-reporter to generate planning SITREP
   ↓
-Returns planning report
+Saves plan and SITREP to Serena for wave execution
+  ↓
+Returns planning SITREP
 ```
 
 **Wave Execution Integration**:
@@ -606,6 +638,49 @@ Phase Plan:
   Phase 5: Deployment (5%)
     Wave 1: Deploy to Vercel (1 day)
     Validation: Production functional
+```
+
+**SITREP Output (Example 1)**:
+```markdown
+## SITREP: shannon-phase-planner - phase_plan_reactdashboard_1730739600000
+
+### Status
+- **Current Phase**: Planning
+- **Progress**: 100%
+- **State**: completed
+
+### Context
+- **Objective**: Create 5-phase implementation plan for: Build React dashboard with charts
+- **Scope**: 5-phase structure (Discovery, Architecture, Implementation, Testing, Deployment), 8 waves across all phases, Validation gates and success criteria, Complexity-adjusted effort distribution
+- **Dependencies**: spec_analysis, north_star_goal
+
+### Findings
+- Complexity score: 0.35 (3 dimensions: frontend, backend, integration)
+- Total waves: 8
+- Estimated duration: ~3 weeks
+- Effort distribution: 15%, 10%, 55%, 15%, 5%
+- Critical path: 5 sequential phase dependencies
+- Identified risks: 2 (0 high-priority)
+
+### Issues
+- **Blockers**: None
+- **Risks**: API integration complexity, React state management patterns
+- **Questions**: None
+
+### Next Steps
+- [ ] Review and approve this plan
+- [ ] Begin Phase 1, Wave 1: Requirements gathering
+- [ ] Use /sh:wave 1 to execute first wave
+
+### Artifacts
+- phase_plan_detailed (saved to Serena)
+- wave_structure.json
+- validation_gates.json
+- risk_matrix.json
+
+### Validation
+- **Tests Executed**: complexity_analysis, dependency_validation, wave_grouping, effort_distribution_check
+- **Results**: All planning validations passed
 ```
 
 ### Example 2: Complex Full-Stack SaaS

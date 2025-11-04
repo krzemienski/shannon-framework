@@ -5,6 +5,68 @@ All notable changes to Shannon Framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+---
+
+## [4.0.0] - 2025-01-XX
+
+### Major Release - Skill-Based Architecture
+
+Shannon V4 represents a complete architectural evolution while maintaining 100% backward compatibility with V3.
+
+### Added
+
+#### Skill-Based Architecture
+- **15 composable skills** replacing monolithic command implementations
+- Modular, reusable behavioral units
+- Skills: spec-analysis, wave-orchestration, phase-planning, context-preservation, context-restoration, goal-management, goal-alignment, mcp-discovery, functional-testing, confidence-check, shannon-analysis, memory-coordination, project-indexing, sitrep-reporting, using-shannon
+
+#### Enhanced Agent System
+- **14 new domain agents** (5 → 19 total agents)
+- Specialized agents: FRONTEND, BACKEND, DATABASE_ARCHITECT, MOBILE_DEVELOPER, DEVOPS, SECURITY, PERFORMANCE_ENGINEER, QA_ENGINEER, DATA_ENGINEER, ARCHITECT, PRODUCT_MANAGER, TECHNICAL_WRITER, API_DESIGNER, CODE_REVIEWER
+
+#### 8D Complexity Analysis
+- Quantitative scoring across 8 dimensions (0.0-1.0)
+- Technical, Temporal, Integration, Cognitive, Environmental, Data, Scale, Unknown dimensions
+- Domain detection with percentage breakdown
+- Wave recommendations based on complexity
+
+#### New Commands
+- `/sh_check_mcps` - Check MCP status and installation guidance
+- `/sh_analyze` - Deep project analysis
+- `/sh_test` - Generate functional tests (NO MOCKS)
+- `/sh_scaffold` - Generate project scaffolding
+
+#### Documentation
+- Complete User Guide
+- Comprehensive Command Reference  
+- Detailed Skill Reference
+- Migration Guide (V3 → V4)
+- Troubleshooting Guide
+- Integration Test Suite
+
+### Changed
+- Commands delegate to skills (thin orchestrators)
+- Better error messages with recovery guidance
+- Improved performance for complex specs
+- Enhanced MCP integration with graceful degradation
+
+### Compatibility
+- **100% V3 backward compatible**
+- All V3 commands work identically
+- V3 checkpoints work in V4
+- Migration time: < 5 minutes
+
+### Requirements
+- Claude Code >=1.0.0
+- Serena MCP >=2.0.0 (required)
+- Sequential MCP >=1.0.0 (recommended)
+- Puppeteer MCP >=1.0.0 (recommended)
+- Context7 MCP >=3.0.0 (optional)
+
+---
+
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
 ## [3.0.1] - 2024-10-16
 
 ### Added

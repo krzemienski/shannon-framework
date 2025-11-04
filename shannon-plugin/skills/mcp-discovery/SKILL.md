@@ -102,6 +102,32 @@ allowed-tools: Read, Serena
 
 **Rule**: Domain percentages drive ALL recommendations. Always calculate first.
 
+### Rationalization 6: "Close enough to threshold"
+
+**Example**: "Frontend is 19.9%, which is basically 20%, so I'll skip Puppeteer to keep it simple"
+
+**COUNTER**:
+- ❌ **NEVER** allow threshold gaming to avoid testing
+- ✅ Apply threshold margin: ±1% still triggers (19% Frontend → Puppeteer still PRIMARY)
+- ✅ Shannon Iron Law: Any frontend >= 15% requires functional testing (NO MOCKS)
+- ✅ Testing MCPs are non-negotiable for Shannon compliance
+- ✅ If user tries to game threshold: "19.9% vs 20% is insignificant margin. Puppeteer REQUIRED."
+
+**Rule**: Thresholds have margin (±1%). Testing is non-negotiable.
+
+### Rationalization 7: "I'll use [random tool] instead"
+
+**Example**: "Puppeteer isn't available, so I'll just use Selenium. That's equivalent, right?"
+
+**COUNTER**:
+- ❌ **NEVER** accept alternatives not in fallback chain
+- ✅ Consult domain-mcp-matrix.json fallback_chains ALWAYS
+- ✅ Only suggest defined fallbacks: Puppeteer → Playwright → Chrome DevTools → Manual
+- ✅ Explain why arbitrary alternatives fail (MCP integration, context preservation required)
+- ✅ Shannon requires MCP integration for checkpoint/wave coordination
+
+**Rule**: Fallback chains are defined. Follow them exactly. No improvisation.
+
 ---
 
 ## Core Competencies

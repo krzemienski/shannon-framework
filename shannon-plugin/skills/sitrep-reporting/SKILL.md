@@ -36,6 +36,77 @@ allowed-tools: Read, Write, Serena
 
 ---
 
+## When to Use
+
+Use this skill when:
+- Coordinating multiple agents in wave execution
+- Agent needs to report progress during long-running tasks
+- Wave coordinator requests status update
+- Agent encounters blocker requiring immediate escalation
+- Agent completes deliverable and needs to hand off work
+- Executive/stakeholder requests project status
+
+DO NOT use when:
+- Casual conversation without status request
+- Single-agent work with no coordination needed
+- User asks for explanation (not status)
+
+## Inputs
+
+**Required:**
+- `agent_name` (string): Name of reporting agent (e.g., "frontend-dev")
+- `status` (string): Status code - "ON TRACK" (🟢), "AT RISK" (🟡), or "BLOCKED" (🔴)
+- `progress` (integer): Progress percentage 0-100
+- `current_task` (string): Description of current task
+
+**Optional:**
+- `completed_items` (list): List of completed work items
+- `blockers` (string): Blocker description or "NONE"
+- `dependencies` (list): List of dependencies (waiting or ready)
+- `eta_hours` (float): Estimated time to completion in hours
+- `handoff_ready` (boolean): Whether deliverable is ready for handoff (default: false)
+- `format` (string): "full" or "brief" SITREP format (default: "full")
+
+## Outputs
+
+Formatted SITREP message (string):
+
+**Full Format:**
+```markdown
+═══════════════════════════════════════════════════════════
+🎯 SITREP: {AGENT_NAME}
+═══════════════════════════════════════════════════════════
+
+**STATUS**: 🟢 ON TRACK
+**PROGRESS**: 75% complete
+**CURRENT TASK**: {task_description}
+
+**COMPLETED**:
+- ✅ {item_1}
+- ✅ {item_2}
+
+**IN PROGRESS**:
+- 🔄 {task_1} (60% complete)
+
+**BLOCKERS**: NONE
+
+**DEPENDENCIES**:
+- ✅ Ready: {dependency}
+
+**ETA TO COMPLETION**: {time_estimate}
+**NEXT CHECKPOINT**: {checkpoint}
+**HANDOFF**: {HANDOFF-CODE | N/A}
+═══════════════════════════════════════════════════════════
+```
+
+**Brief Format:**
+```markdown
+🎯 **{AGENT}** | 🟢 | 75% | ETA: 2h
+Blockers: NONE
+```
+
+---
+
 ## Anti-Rationalization (From Baseline Testing)
 
 **CRITICAL**: Agents systematically rationalize skipping SITREP structure or providing informal updates. Below are the 5 most common rationalizations detected in baseline testing, with mandatory counters.
@@ -123,6 +194,62 @@ allowed-tools: Read, Write, Serena
 - Use narrative for executives ("CEO won't understand codes")
 
 **STOP. You're rationalizing. Use SITREP format.**
+
+---
+
+## Workflow
+
+### Phase 1: Determine SITREP Trigger
+
+1. **Check Trigger Type**
+   - Action: Identify why SITREP is needed
+   - Triggers: 30-minute interval, blocker encountered, deliverable ready, coordinator request
+   - Output: Trigger type and urgency level
+
+2. **Select Format**
+   - Action: Choose full or brief format
+   - Decision: Full for detailed reports, brief for coordinator scanning
+   - Output: Format selection
+
+### Phase 2: Collect Status Data
+
+1. **Determine Status Code**
+   - Action: Evaluate current work state
+   - Tool: Check blockers, dependencies, timeline
+   - Output: 🟢 ON TRACK, 🟡 AT RISK, or 🔴 BLOCKED
+
+2. **Calculate Progress**
+   - Action: Quantify completion percentage
+   - Validation: Must be 0-100, not qualitative
+   - Output: Integer percentage
+
+3. **Identify Blockers**
+   - Action: List any blocking issues
+   - Validation: Explicit statement (NONE or description)
+   - Output: Blocker list
+
+### Phase 3: Generate SITREP Message
+
+1. **Format Message**
+   - Action: Apply SITREP template
+   - Tool: Use full or brief format
+   - Output: Structured SITREP message
+
+2. **Generate Authorization Code** (if deliverable ready)
+   - Action: Create HANDOFF code
+   - Tool: SHA-256 hash generation
+   - Output: HANDOFF-{AGENT}-{TIMESTAMP}-{HASH}
+
+### Phase 4: Save and Report
+
+1. **Save to Serena**
+   - Action: Store SITREP in memory
+   - Tool: Serena write_memory()
+   - Output: SITREP saved with timestamp
+
+2. **Present to Coordinator**
+   - Action: Report formatted SITREP
+   - Output: SITREP message delivered
 
 ---
 
@@ -598,6 +725,17 @@ A SITREP is compliant when it includes:
 ✅ **ETA**: Time estimate to completion
 ✅ **Next Checkpoint**: Description of next milestone
 ✅ **Handoff Code**: When deliverable ready (or N/A)
+
+Validation:
+```python
+def validate_sitrep(sitrep):
+    assert sitrep["status"] in ["ON TRACK", "AT RISK", "BLOCKED"]
+    assert 0 <= sitrep["progress"] <= 100
+    assert "blockers" in sitrep
+    assert sitrep["eta_hours"] > 0 or sitrep["status"] == "BLOCKED"
+    if sitrep.get("handoff_ready"):
+        assert sitrep["handoff_code"].startswith("HANDOFF-")
+```
 
 **Failure Modes to Avoid**:
 - ❌ Informal narrative without structure

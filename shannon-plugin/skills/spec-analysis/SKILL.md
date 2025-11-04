@@ -100,6 +100,69 @@ allowed-tools: Read, Grep, Glob, Sequential, Serena
 
 **Then you are rationalizing.** Stop. Run the algorithm. Report the results objectively.
 
+## When to Use
+
+Use this skill when:
+- User provides specification, requirements document, or project description (3+ paragraphs, 5+ features)
+- Starting new project or feature requiring complexity assessment
+- Planning resource allocation and timeline estimation
+- Need objective, reproducible complexity metrics to guide execution strategy
+- Determining whether to use wave-based execution (complexity >=0.50)
+
+DO NOT use when:
+- Casual conversation without specification
+- User asking questions about existing code (use code analysis instead)
+- Simple one-line requests ("change button color")
+
+## Inputs
+
+**Required:**
+- `specification` (string): Specification text (3+ paragraphs, 5+ features, or attached spec file)
+
+**Optional:**
+- `include_mcps` (boolean): Include MCP recommendations (default: true)
+- `depth` (string): Analysis depth - "standard" or "deep" for complex specs (default: "standard")
+- `save_to_serena` (boolean): Save analysis to Serena MCP (default: true)
+
+## Outputs
+
+Structured analysis object:
+
+```json
+{
+  "complexity_score": 0.68,
+  "interpretation": "Complex",
+  "dimension_scores": {
+    "structural": 0.55,
+    "cognitive": 0.65,
+    "coordination": 0.75,
+    "temporal": 0.40,
+    "technical": 0.80,
+    "scale": 0.50,
+    "uncertainty": 0.15,
+    "dependencies": 0.30
+  },
+  "domain_percentages": {
+    "Frontend": 34,
+    "Backend": 29,
+    "Database": 20,
+    "DevOps": 17
+  },
+  "mcp_recommendations": [
+    {
+      "tier": 1,
+      "name": "Serena MCP",
+      "purpose": "Context preservation",
+      "priority": "MANDATORY"
+    }
+  ],
+  "phase_plan": [...],
+  "execution_strategy": "wave-based",
+  "timeline_estimate": "10-12 days",
+  "analysis_id": "spec_analysis_20250103_144530"
+}
+```
+
 **When to Use**:
 - User provides ANY specification, requirements document, or project description (3+ paragraphs, 5+ features, or spec keywords)
 - Starting new project or feature that needs complexity assessment
@@ -933,6 +996,18 @@ Step 9: Validation: ✅ Quality score: 1.0
 - ✅ Execution strategy matches complexity (sequential <0.50, wave-based >=0.50)
 - ✅ Timeline estimate aligns with complexity interpretation band
 - ✅ Quality validation score >=0.80 (4/5 checks passed)
+
+Validation:
+```python
+def validate_spec_analysis(result):
+    assert 0.10 <= result["complexity_score"] <= 0.95
+    assert sum(result["domain_percentages"].values()) == 100
+    assert any(mcp["tier"] == 1 and mcp["name"] == "Serena MCP"
+               for mcp in result["mcp_recommendations"])
+    assert len(result["phase_plan"]) == 5
+    assert all(phase.get("validation_gate") for phase in result["phase_plan"])
+    assert result["analysis_id"].startswith("spec_analysis_")
+```
 
 **Fails if**:
 - ❌ Complexity score is 0.0 or 1.0 (calculation error)

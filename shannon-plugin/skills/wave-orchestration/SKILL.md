@@ -345,6 +345,46 @@ Proceeding with your requested approach..."
 
 ---
 
+## Inputs
+
+**Required:**
+- `spec_analysis` (object): Complete spec analysis result from spec-analysis skill
+- `phase_plan` (object): Detailed phase plan from phase-planning skill
+- `wave_number` (integer): Current wave number (for continuation)
+
+**Optional:**
+- `complexity_score` (float): Override complexity score (default: from spec_analysis)
+- `max_agents_per_wave` (integer): Maximum agents per wave (default: calculated from tokens)
+- `enable_sitrep` (boolean): Enable SITREP reporting protocol (default: true)
+
+## Outputs
+
+Wave execution plan object:
+
+```json
+{
+  "waves": [
+    {
+      "wave_number": 1,
+      "wave_name": "Wave 1: Foundation",
+      "phases": ["architecture", "database_schema"],
+      "agents_allocated": 2,
+      "agent_types": ["backend-builder", "database-builder"],
+      "parallel": true,
+      "estimated_time": 45,
+      "dependencies": []
+    }
+  ],
+  "total_waves": 4,
+  "total_agents": 12,
+  "parallel_efficiency": 0.72,
+  "expected_speedup": "3.5x",
+  "checkpoints": [...]
+}
+```
+
+---
+
 ## Algorithm: Wave Structure Generation
 
 This is a **QUANTITATIVE skill** - the algorithm must be followed precisely for correct results.
@@ -866,6 +906,164 @@ def split_into_waves(phases: list, max_agents: int) -> list:
 
 ---
 
+## Common Pitfalls
+
+### Pitfall 1: Sequential Agent Spawning (No Parallelism)
+
+**Wrong:**
+```xml
+<!-- Multiple messages = sequential execution -->
+Message 1: <invoke name="Task">Agent 1</invoke>
+Wait...
+Message 2: <invoke name="Task">Agent 2</invoke>
+```
+
+**Right:**
+```xml
+<!-- One message = parallel execution -->
+<function_calls>
+  <invoke name="Task">Agent 1</invoke>
+  <invoke name="Task">Agent 2</invoke>
+  <invoke name="Task">Agent 3</invoke>
+</function_calls>
+```
+
+**Why:** Sequential spawning eliminates ALL speedup benefits. Must spawn all wave agents in ONE message.
+
+### Pitfall 2: Skipping Dependency Analysis
+
+**Wrong:**
+```python
+# Just spawn all agents without checking dependencies
+spawn_agents([agent1, agent2, agent3, agent4])
+```
+
+**Right:**
+```python
+# Build dependency graph first
+dependency_graph = analyze_dependencies(phases)
+waves = group_by_dependencies(dependency_graph)
+for wave in waves:
+    spawn_agents(wave.agents)
+```
+
+**Why:** Skipping dependencies causes agents to collide, block each other, and create integration chaos.
+
+### Pitfall 3: Skipping Synthesis Checkpoints
+
+**Wrong:**
+```
+Wave 1 complete → Immediately spawn Wave 2
+```
+
+**Right:**
+```
+Wave 1 complete → Synthesis checkpoint → User approval → Wave 2
+```
+
+**Why:** Synthesis catches integration issues early. Skipping = cascading failures across waves.
+
+### Pitfall 4: Under-Allocating Agents Based on Intuition
+
+**Wrong:**
+```
+Complexity 0.72 but user suggests 3 agents → Accept 3 agents
+```
+
+**Right:**
+```
+Complexity 0.72 → Algorithm recommends 8-15 agents → Use algorithm
+```
+
+**Why:** User intuition systematically under-estimates by 50-70%. Trust complexity-based allocation.
+
+### Pitfall 5: Missing Context Loading Protocol
+
+**Wrong:**
+```markdown
+Agent prompt: "Build the frontend components"
+```
+
+**Right:**
+```markdown
+Agent prompt:
+## MANDATORY CONTEXT LOADING
+1. list_memories()
+2. read_memory("spec_analysis")
+3. read_memory("wave_1_complete")
+
+Your task: Build frontend components
+```
+
+**Why:** Without context, agents make decisions based on incomplete information = contradictory implementations.
+
+---
+
+## Examples
+
+### Example 1: Simple 2-Wave Project (Complexity 0.45)
+
+**Input:**
+- Complexity: 0.45 (Moderate)
+- Domains: Frontend 60%, Backend 40%
+- Phases: 5 phases (Analysis, Design, Implementation, Testing, Deployment)
+
+**Wave Structure:**
+```
+Wave 1: Analysis + Design (Sequential)
+- 1 agent: planner
+- Duration: 2 hours
+- No parallelism (single preparatory wave)
+
+Wave 2: Implementation + Testing (Parallel)
+- 2 agents: frontend-builder, backend-builder
+- Duration: 8 hours
+- Parallelism: 2x speedup
+```
+
+**Outcome:**
+- Total time: 10 hours (vs 12 hours sequential)
+- Speedup: 1.2x (modest due to single parallel wave)
+- Agents: 3 total
+
+### Example 2: Complex 4-Wave Project (Complexity 0.65)
+
+**Input:**
+- Complexity: 0.65 (Complex)
+- Domains: Frontend 35%, Backend 30%, Database 20%, DevOps 15%
+- Phases: 8 phases across domains
+
+**Wave Structure:**
+```
+Wave 1: Foundation (Parallel)
+- 3 agents: architecture-designer, database-schema-builder, devops-setup
+- Duration: 3 hours
+- Parallelism: 3 independent foundation tasks
+
+Wave 2: Core Implementation (Parallel)
+- 5 agents: frontend-ui, frontend-state, backend-api, backend-logic, database-migrations
+- Duration: 6 hours
+- Parallelism: 5 parallel tracks
+
+Wave 3: Integration (Parallel)
+- 3 agents: integration-specialist, frontend-integration, backend-integration
+- Duration: 4 hours
+- Parallelism: 3 integration tracks
+
+Wave 4: Testing + Deployment (Parallel)
+- 2 agents: testing-specialist, deployment-specialist
+- Duration: 3 hours
+- Parallelism: 2 final validation tracks
+```
+
+**Outcome:**
+- Total time: 16 hours (vs 50 hours sequential)
+- Speedup: 3.1x
+- Agents: 13 total
+- Efficiency: 78%
+
+---
+
 ## Integration with Other Skills
 
 ### Required: context-preservation
@@ -969,6 +1167,17 @@ Wave orchestration is successful when:
 ✅ **Production Quality**: No TODOs, functional tests only
    - Check: No placeholders in code
    - Check: All tests functional (NO MOCKS)
+
+Validation:
+```python
+def validate_wave_orchestration(result):
+    assert len(result["waves"]) >= 1
+    assert all(wave.get("agents_allocated") > 0 for wave in result["waves"])
+    assert all(wave.get("checkpoint_id") for wave in result["waves"])
+    parallel_waves = [w for w in result["waves"] if w.get("parallel")]
+    assert len(parallel_waves) >= 1, "Must have at least 1 parallel wave"
+    assert result["expected_speedup"] >= 1.5
+```
 
 ---
 

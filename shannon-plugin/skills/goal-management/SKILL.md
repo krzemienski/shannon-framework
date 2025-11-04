@@ -108,6 +108,29 @@ DO NOT rationalize skipping goal management because:
 
 ## Workflow
 
+### Mode: EMERGENCY-SET (Fast Path for PreCompact)
+
+**Trigger**: Token usage > 90% OR PreCompact hook active
+
+**Purpose**: Prevent goal loss during context compaction by using fast-path storage
+
+**Process**:
+1. Skip detailed milestone parsing (defer to next session)
+2. Store minimal goal structure: {goal_text, priority, created_at, needs_parsing: true}
+3. Create Serena entity (5 seconds max)
+4. Mark: needs_parsing=true for later completion
+5. Return: goal_id immediately
+
+**Next Session Recovery**:
+- Detect: goals with needs_parsing=true
+- Prompt: "Complete goal parsing for GOAL-{id}?"
+- Parse: Full milestone structure
+- Update: Remove needs_parsing flag
+
+**Priority**: Goal storage completes BEFORE PreCompact checkpoint
+
+---
+
 ### Mode: SET - Create or Update Goal
 
 **Step 1: Parse Goal Text**
@@ -119,6 +142,21 @@ DO NOT rationalize skipping goal management because:
   3. Generate measurable milestones
   4. Create goal structure
 - Output: Structured goal object
+
+**Step 1.5: Resolve Ambiguous References**
+- Action: Eliminate pronouns and ambiguous references
+- Detection: Goal contains "it", "this", "that", "them"
+- Processing:
+  1. Search recent context (last 10 messages) for referent
+  2. If found: Replace pronoun with explicit noun
+  3. If not found: Prompt user for clarification ("What does 'it' refer to?")
+  4. Store: Only fully explicit goal text (no pronouns)
+- Example:
+  - Input: "Make it production-ready"
+  - Detection: "it" is pronoun
+  - Search: Find "prototype" in context
+  - Resolve: "Make prototype production-ready"
+  - Store: Resolved text
 
 **Step 2: Extract Measurable Criteria**
 - Action: Convert vague goal into specific, testable criteria
@@ -230,6 +268,18 @@ DO NOT rationalize skipping goal management because:
 **Step 3: Update Milestone Status**
 - Mark milestones complete if criteria met
 - Example: "Auth tests passing" → mark "User Authentication" complete
+
+**Step 3.5: Health Check Completed Milestones**
+- Action: Verify previously completed milestones still meet criteria
+- Trigger: Update mode OR checkpoint creation
+- Processing:
+  1. Query each "complete" milestone's completion criteria
+  2. Check: Are tests still passing? (query test results)
+  3. If failing: Mark milestone status="regression"
+  4. Adjust: Recalculate progress (exclude regressed milestones)
+  5. Alert: "⚠️ Regression detected in [milestone name]"
+- Purpose: Maintain progress accuracy despite regressions
+- Integration: Called automatically in update mode
 
 **Step 4: Store Updated Goal**
 - Tool: Serena MCP `add_observations`
@@ -395,6 +445,27 @@ This section addresses every rationalization pattern from RED phase baseline tes
 
 ---
 
+### Rationalization 7: "Goal is clear even without numbers"
+
+**Detection**: Goal uses qualitative terms without metrics
+**Examples**: "More scalable", "Better performance", "Higher quality"
+
+**Violation**: Accept goal without forcing quantification
+
+**Counter-Argument**:
+- Qualitative = subjective, cannot definitively mark complete
+- "Scalable" → Define: 10K users? 100ms response?
+- Shannon Framework requires measurable success criteria
+- Vague completion = goal never truly finished
+
+**Protocol**: For qualitative goals, force quantification:
+1. Detect qualitative term ("scalable", "better", "quality")
+2. Prompt: "Define 'scalable': [specific metric]?"
+3. User provides number (10K concurrent users, 100ms p95)
+4. Store: Quantified milestone with testable criteria
+
+---
+
 ### Enforcement Mechanism
 
 This skill is **FLEXIBLE** type but has mandatory invocation points:
@@ -516,6 +587,61 @@ def validate_goal_management(goal_id):
     restored_goal = serena.search_nodes("shannon-goal active")
     assert goal_id in [g.name for g in restored_goal]
 ```
+
+## Advanced Features
+
+### Milestone Dependency Validation
+
+**Purpose**: Prevent circular dependencies in milestone structure
+
+**When**: Goal creation (set mode)
+
+**Process**:
+1. Extract dependencies from milestone descriptions
+2. Build dependency graph (milestones as nodes, dependencies as edges)
+3. Perform topological sort to check for cycles (DAG validation)
+4. If cycle detected: Alert user with cycle path
+5. Recommend: Break cycle by removing dependency or splitting milestone
+
+**Example**:
+- Milestone A: "Auth system" (depends on "Database")
+- Milestone B: "Database" (depends on "Auth for admin")
+- Detection: Cycle (A→B→A)
+- Alert: "⚠️ Cannot execute: circular dependency detected (Auth→Database→Auth)"
+- Fix: Remove admin auth dependency from database milestone
+
+---
+
+### Scope Monitoring
+
+**Purpose**: Detect and alert on implicit goal expansion (scope creep)
+
+**Trigger**: User adds features to active goal context
+
+**Process**:
+1. Track: Features mentioned in conversations about active goal
+2. Compare: Current features vs original milestone list
+3. Count: New features not in original milestones
+4. Threshold: 2+ additions = scope creep alert
+5. Recommend: "Update goal scope explicitly with /sh_goal update" OR "Split into new goal"
+
+**Example**:
+- Original Goal: "Build auth system" (1 milestone: email/password)
+- User mentions: "Add OAuth", "Add 2FA", "Add passwordless login"
+- Detection: 3 features added beyond original scope (300% expansion)
+- Alert: "⚠️ Scope expanded 3x beyond original goal. Update milestones?"
+- Options:
+  1. Update goal: Add 3 new milestones
+  2. Split: Create "Advanced Auth" as separate goal
+  3. Defer: Move to backlog
+
+**Benefits**:
+- Prevents hidden scope creep
+- Maintains progress accuracy
+- Forces explicit goal updates
+- Preserves velocity metrics
+
+---
 
 ## Common Pitfalls
 

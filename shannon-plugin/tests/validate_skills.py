@@ -72,18 +72,25 @@ def validate_skill_file(skill_path: Path) -> Tuple[bool, List[str]]:
 
     # Check 5: Required sections present
     required_sections = [
-        '## Purpose',
+        ('## Purpose', '## Overview'),  # Accept either
         '## When to Use',
         '## Inputs',
-        '## Workflow',
+        ('## Workflow', '## Process'),  # Accept either
         '## Outputs',
         '## Success Criteria',
         '## Examples'
     ]
 
     for section in required_sections:
-        if section not in content:
-            errors.append(f"Missing required section: {section}")
+        if isinstance(section, tuple):
+            # Accept any variant
+            if not any(variant in content for variant in section):
+                primary = section[0]
+                alternates = ', '.join(section[1:])
+                errors.append(f"Missing required section: {primary} (or alternates: {alternates})")
+        else:
+            if section not in content:
+                errors.append(f"Missing required section: {section}")
 
     # Check 6: Success criteria has validation code
     if '## Success Criteria' in content:

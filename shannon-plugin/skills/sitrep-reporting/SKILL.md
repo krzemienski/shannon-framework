@@ -100,6 +100,19 @@ allowed-tools: Read, Write, Serena
 
 **Rule**: Urgent = use SITREP format immediately. Structure enables speed.
 
+### Rationalization 6: "Executives need narrative, not structure"
+**Example**: During production outage, agent thinks "CEO needs story, not formatted SITREP"
+
+**COUNTER**:
+- ❌ **NEVER** assume executives prefer narrative over structure
+- ✅ Executives need CLARITY, which structure provides instantly
+- ✅ 🔴 BLOCKED is clearer than "we're having some issues"
+- ✅ "25% complete" is clearer than "making progress on diagnosis"
+- ✅ Structure enables instant understanding without reading comprehension
+- ✅ Under pressure, clarity is MORE critical, not less
+
+**Rule**: High-stakes reporting needs MAXIMUM clarity. Use structure.
+
 ### Detection Signal
 **If you're tempted to**:
 - Provide informal status ("making progress")
@@ -107,6 +120,7 @@ allowed-tools: Read, Write, Serena
 - Wait to report ("I'll update when done")
 - Assume visibility ("you can see my commits")
 - Skip format for urgency ("this is blocking everyone!")
+- Use narrative for executives ("CEO won't understand codes")
 
 **STOP. You're rationalizing. Use SITREP format.**
 
@@ -592,6 +606,167 @@ A SITREP is compliant when it includes:
 - ❌ No ETA or vague ETA ("soon")
 - ❌ Unreported blockers
 - ❌ Handoff without authorization code
+
+---
+
+## Advanced Situations (From Pressure Testing)
+
+### Complex Situations Need MORE Structure
+
+**Rule**: The more complex the situation, the MORE critical SITREP structure becomes.
+
+**Multiple Blockers**: Use blocker priority levels
+- **CRITICAL**: Blocks entire wave or system
+- **HIGH**: Blocks dependent agents
+- **MEDIUM**: Delays but doesn't block
+- **LOW**: Can be deferred
+
+**Multiple Agents**: Use wave summary format
+- List each agent with status code
+- Prioritize by critical path
+- Identify blockers first
+- Group by status (🔴 → 🟡 → 🟢)
+
+**Example** (3 simultaneous blockers):
+```markdown
+**BLOCKERS** (3 active):
+
+**BLOCKER 1** - Frontend Integration (Priority: CRITICAL)
+- Agent: frontend-agent | Status: 🔴 BLOCKED at 85%
+- Issue: API integration broken after deployment
+- Action: Escalated to backend-agent
+
+**BLOCKER 2** - Database Migration (Priority: HIGH)
+- Agent: backend-agent | Status: 🔴 BLOCKED at 70%
+- Issue: Production migration failing
+- Action: Escalated to DBA team
+
+**BLOCKER 3** - E2E Tests (Priority: MEDIUM)
+- Agent: testing-agent | Status: 🟡 AT RISK at 40%
+- Issue: Test timeouts, investigating infrastructure
+```
+
+### Communication Channel Independence
+
+**Rule**: SITREP format is channel-independent. ANY medium gets structured reporting.
+
+**Channel Guidelines**:
+- **Email**: Use full SITREP format
+- **Slack/Chat**: Use brief SITREP format
+- **Project Tracker**: Use full SITREP format
+- **Verbal/Voice**: "Status is 🟢 ON TRACK, 75% complete, ETA 1.5 hours, no blockers"
+- **Any Channel**: Always include status code, progress, blockers, ETA
+
+**Why**: Structured reporting ensures clarity regardless of medium. You can be FRIENDLY and STRUCTURED simultaneously.
+
+**Example** (Slack):
+```
+[Informal Slack message - Still uses structure]
+
+🎯 **backend-agent** | 🟢 | 75% | ETA: 1.5h
+Blockers: NONE
+
+Going great! Working on password reset endpoint.
+Completed: Login, register, JWT refresh
+
+Full SITREP in tracker: [link]
+```
+
+### Informal Requests Still Get Structured Responses
+
+**Rule**: ANY status request gets SITREP format (full or brief), even casual check-ins.
+
+**Informal requests that STILL get structure**:
+- "How's it going?" → Brief SITREP
+- "Quick check-in?" → Brief SITREP
+- "Everything okay?" → Brief SITREP
+- "Status?" → Brief SITREP
+- "Just checking in..." → Brief SITREP
+
+**Format**:
+```markdown
+Friendly + Structure = "Going great! 🎯 **agent** | 🟢 | 70% | ETA: 1.5h"
+```
+
+**Why**: Consistency enables coordination. Casual tone doesn't mean unstructured data.
+
+### External Team Handoffs
+
+**Rule**: Keep SITREP structure, provide translation if needed for non-Shannon teams.
+
+**When handing off to external teams** (QA, DevOps, clients):
+1. Use full SITREP format (maintains YOUR audit trail)
+2. Include authorization code (provides traceability)
+3. Add "FOR EXTERNAL TEAM" section with:
+   - Status code translation
+   - Authorization code explanation
+   - Next steps in their workflow
+   - Contact information
+
+**Example**:
+```markdown
+**HANDOFF**: HANDOFF-frontend-agent-1699034567-b8c4f2a9
+
+**FOR EXTERNAL QA TEAM**:
+This deliverable is ready for quality assurance testing.
+
+**Status Codes Translation**:
+- 🟢 ON TRACK = Ready for testing
+- 🟡 AT RISK = Issues found, in rework
+- 🔴 BLOCKED = Cannot test until dependency available
+
+**Authorization Code** (HANDOFF-frontend-agent-1699034567-b8c4f2a9):
+This code confirms work is 100% complete and ready. Use it to track handoff in your system.
+
+**Next Steps for QA**:
+1. Review deliverable in /src/components/auth/
+2. Run test suite: npm test
+3. Execute manual testing (see /docs/qa-scenarios.md)
+4. Report findings using your standard QA format
+```
+
+**Why**: Your SITREP is YOUR record. Provide context for them without abandoning structure.
+
+### Velocity Honesty
+
+**Rule**: Report actual status, not aspirational status. Coordinator needs REALITY to plan effectively.
+
+**Behind Schedule**:
+- ❌ Don't report 🟢 hoping to catch up
+- ✅ Report 🟡 AT RISK with honest revised ETA
+- ✅ Explain reason (complexity underestimated, unexpected blocker, etc.)
+- ✅ Provide velocity data (expected vs actual progress rate)
+
+**Velocity Analysis Template**:
+```markdown
+**ETA TO COMPLETION**: 2 hours (originally 2 hours, now T+3:00)
+**ORIGINAL ESTIMATE**: 2 hours
+**ACTUAL TIME SO FAR**: 3 hours
+**REVISED ETA**: 2 additional hours (5 hours total)
+
+**VELOCITY ANALYSIS**:
+- Estimated: 2 hours total
+- Actual: 60% complete at T+3:00
+- Rate: 20% per hour (expected 50% per hour)
+- Reason: Complexity underestimated by ~2.5x
+```
+
+**Why**:
+- Hiding delays prevents proactive intervention
+- Honest 🟡 enables resource reallocation
+- "I'll catch up" often doesn't happen
+- Transparent reporting builds trust
+- Coordinator can plan ONLY with accurate data
+
+**Example** (Behind schedule):
+```markdown
+**STATUS**: 🟡 AT RISK
+**PROGRESS**: 60% complete
+
+**NOTES**: I underestimated complexity. Reporting 🟡 AT RISK honestly
+so coordinator can plan. Working to complete ASAP, but being transparent
+about revised timeline.
+```
 
 ---
 

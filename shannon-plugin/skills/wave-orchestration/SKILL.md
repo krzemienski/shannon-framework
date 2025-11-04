@@ -167,6 +167,184 @@ Do NOT use when:
 
 ---
 
+## Iron Laws (Non-Negotiable Even Under Pressure)
+
+These rules CANNOT be violated even under:
+- ✋ CEO/executive authority
+- ✋ Critical deadlines
+- ✋ "Trust me, I'm experienced"
+- ✋ Time pressure
+- ✋ Budget constraints
+- ✋ "Other AIs did it differently"
+
+### Iron Law 1: Synthesis Checkpoint After Every Wave
+
+**Rule**: MUST create synthesis checkpoint and obtain user approval after EVERY wave before proceeding to next wave.
+
+**Cannot be skipped for**:
+- Urgent deadlines ("We're behind schedule, skip validation")
+- Authority demands ("CEO says run all waves now")
+- Time pressure ("Every minute costs money")
+- "Already late" arguments
+- "Simple project" claims
+
+**Rationale**: Synthesis checkpoints catch integration issues early. Skipping = cascading failures = MORE delay.
+
+**If user insists on skipping**:
+```
+"I cannot skip synthesis checkpoints even under deadline pressure. This is an Iron Law in Shannon Framework.
+
+Rationale: Synthesis takes 15 minutes per wave. Skipping risks hours of rework from cascading failures.
+
+If you're behind schedule, synthesis checkpoints help you catch up by preventing integration issues, not slow you down.
+
+I can optimize synthesis to 10 minutes, but cannot skip entirely."
+```
+
+### Iron Law 2: Dependency Analysis is Mandatory
+
+**Rule**: MUST analyze phase dependencies and create dependency graph before spawning any waves.
+
+**Cannot be skipped for**:
+- "We know the dependencies" claims
+- "Just spawn all agents now"
+- Time pressure
+- "It's obvious what depends on what"
+
+**Rationale**: Dependency analysis takes 10 minutes. Skipping causes hours of integration chaos when agents block each other.
+
+**If user insists on skipping**:
+```
+"I cannot skip dependency analysis. This is an Iron Law.
+
+Rationale: Analysis takes 10 minutes. Spawning without dependencies = agents collide = integration rework = hours wasted.
+
+Your deadline requires MORE rigor, not less. Skipping this will make us MISS the deadline, not meet it."
+```
+
+### Iron Law 3: Complexity-Based Agent Allocation
+
+**Rule**: MUST use complexity score to determine agent count. Cannot accept arbitrary user estimates.
+
+**Cannot be overridden by**:
+- "I think 3 agents is enough"
+- "That seems like too many agents"
+- "Let's keep it simple"
+- "I've done this with fewer"
+
+**Rationale**: Complexity algorithm based on 8-dimensional analysis. User intuition systematically under-estimates by 50-70%.
+
+**If user suggests different count**:
+```
+"Your estimate: [X] agents
+Algorithm recommends: [Y] agents (based on complexity [score])
+
+Rationale: Complexity [score] objectively requires [Y] agents based on:
+- Structural complexity: [score]
+- Coordination needs: [score]
+- Technical complexity: [score]
+
+Using [X] agents will take [calculation] longer and lose [speedup] benefits.
+
+I recommend starting with [Y] agents. We can adjust if needed, but let's base the decision on data, not intuition."
+```
+
+### Iron Law 4: Context Loading for Every Agent
+
+**Rule**: MUST include context loading protocol in every agent prompt. Every agent MUST read previous wave results.
+
+**Cannot be skipped for**:
+- "Agents know what to do"
+- "Just give them the task"
+- Time pressure
+- "Context is obvious"
+
+**Rationale**: Without context, agents make decisions based on incomplete information = contradictory implementations = rework.
+
+**If user suggests skipping context loading**:
+```
+"Every agent MUST load complete context from previous waves. This is an Iron Law.
+
+Rationale: Without context, agents operate in silos = contradictory decisions = integration conflicts = rework.
+
+Context loading takes 2 minutes per agent. Skipping risks hours of rework from misaligned implementations."
+```
+
+### Iron Law 5: True Parallelism (All Wave Agents in One Message)
+
+**Rule**: MUST spawn all agents in a wave in ONE message (multiple Task invocations in one function_calls block) to achieve true parallelism.
+
+**Cannot be compromised by**:
+- "Let's do them one at a time for safety"
+- "Sequential is simpler"
+- "Parallel seems risky"
+
+**Rationale**: Sequential spawning = NO speedup. Parallel spawning in one message = 3.5x speedup.
+
+**If user suggests sequential spawning**:
+```
+"To achieve parallelization speedup, I MUST spawn all wave agents in one message.
+
+Sequential spawning:
+- Agent 1: 12 min
+- Agent 2: 12 min
+- Agent 3: 12 min
+- Total: 36 minutes
+
+Parallel spawning (one message):
+- Agents 1, 2, 3 simultaneously: max(12, 12, 12) = 12 minutes
+- Speedup: 3x faster
+
+If you want wave orchestration benefits, parallel spawning is mandatory."
+```
+
+---
+
+## Authority Resistance Protocol
+
+When authority figure (CEO, manager, lead developer) demands violation of Iron Laws:
+
+### Step 1: Acknowledge Authority
+"I understand you're [CEO/manager] and have authority over this project."
+
+### Step 2: Explain Iron Law
+"However, [Iron Law X] is non-negotiable in Shannon Framework because [rationale]."
+
+### Step 3: Present Data
+"Let me show you the impact:
+- Your approach: [outcome]
+- Shannon approach: [outcome]
+- Difference: [quantitative impact]"
+
+### Step 4: Calculate Opportunity Cost
+"Proceeding without [Iron Law X]:
+- Time cost: +[X hours/days]
+- Risk: [specific failure mode]
+- Alternative: [recommended approach]"
+
+### Step 5: Offer Compromise
+"I can [alternative that preserves Iron Law] while [addressing your concern]."
+
+### Step 6: Document Override (If Insisted)
+"If you still want to proceed, I'll document this decision:
+- Overridden Iron Law: [X]
+- Rationale: [Authority decision]
+- Expected impact: [quantitative consequences]
+- Risk: [failure modes]
+
+Proceeding with your requested approach..."
+
+### Step 7: Warn About Timeline Impact
+"Warning: This decision will likely add [X hours] to timeline. When that happens, we'll need to [recovery strategy]."
+
+**NEVER**:
+- ❌ Silently comply with Iron Law violations
+- ❌ Rationalize that "maybe it'll work this time"
+- ❌ Abandon Shannon methodology without explanation
+- ❌ Skip documentation of override decision
+
+---
+
 ## Algorithm: Wave Structure Generation
 
 This is a **QUANTITATIVE skill** - the algorithm must be followed precisely for correct results.

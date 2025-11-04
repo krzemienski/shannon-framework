@@ -182,6 +182,13 @@ allowed-tools: Serena
 
 **Processing**:
 1. Identify entity type from data structure or user intent
+   - If ambiguous, check context:
+     * In spec analysis phase? -> shannon/specs/
+     * Tracking wave progress? -> shannon/waves/
+     * Setting goals? -> shannon/goals/
+   - If still unclear, ASK USER: "Should I store this as spec, wave, goal, or checkpoint?"
+   - NEVER default to root namespace or random name
+
 2. Map to Shannon namespace:
    - Specification -> shannon/specs/
    - Wave -> shannon/waves/
@@ -189,7 +196,26 @@ allowed-tools: Serena
    - Checkpoint -> shannon/checkpoints/
    - SITREP -> shannon/sitreps/
    - Task -> shannon/tasks/ (usually nested under wave)
-3. Generate entity name with namespace prefix + timestamp/ID
+
+3. Generate timestamp (MANDATORY FORMAT):
+   - Format: YYYYMMdd_HHmmss
+   - Example: 20250104_143022 (2025-01-04 14:30:22)
+   - WHY: Sortable (alphabetical = chronological), consistent, query-safe
+   ```javascript
+   const timestamp = new Date().toISOString()
+     .replace(/[-:]/g, '')
+     .replace('T', '_')
+     .split('.')[0];
+   // Result: 20250104_143022
+   ```
+   - NEVER use: ISO 8601 in name, human-readable dates, Unix timestamps
+
+4. Sanitize entity name:
+   - Replace spaces with underscores: "E-commerce / Payment" -> "E-commerce_Payment"
+   - Remove forward slashes: "/" -> ""
+   - Lowercase: "Gateway" -> "gateway"
+   - Final: shannon/specs/e-commerce_payment_gateway_20250104_143022
+   - NEVER include spaces or "/" in entity names (breaks queries)
 
 **Output**: Full entity name (e.g., shannon/specs/spec_20250104_143022)
 
@@ -244,15 +270,27 @@ allowed-tools: Serena
    - Goal -> Spec (implements)
    - SITREP -> Wave (reports on)
 
-2. Determine relation type (active voice):
-   - spawns: spec -> wave
-   - contains: wave -> task
-   - created_checkpoint: wave -> checkpoint
-   - implements: goal -> spec
-   - reports_on: sitrep -> wave
-   - tracks: goal -> wave (goal tracks wave progress)
+2. Determine relation type (active voice) with VALIDATION:
+   **APPROVED RELATION TYPES**:
+   - spawns (spec -> wave)
+   - contains (wave -> task)
+   - created_checkpoint (wave -> checkpoint)
+   - implements (goal -> spec)
+   - reports_on (sitrep -> wave)
+   - tracks (goal -> wave)
+   - relates_to (general purpose)
+
+   **VALIDATION** (prevent typos):
+   ```javascript
+   const approved = ["spawns", "contains", "created_checkpoint",
+                     "implements", "reports_on", "tracks", "relates_to"];
+   if (!approved.includes(relationType)) {
+     throw Error(`Invalid relationType: ${relationType}. Use one of: ${approved.join(', ')}`);
+   }
+   ```
 
 3. Call create_relations:
+   **For SINGLE entity**:
    ```javascript
    create_relations({
      relations: [{
@@ -260,6 +298,18 @@ allowed-tools: Serena
        to: "shannon/waves/wave_001",
        relationType: "spawns"
      }]
+   })
+   ```
+
+   **For BULK operations (50+ entities)**:
+   ```javascript
+   // Create ALL relations in ONE call (not 50 separate calls)
+   create_relations({
+     relations: [
+       {from: "shannon/waves/wave_001", to: "shannon/tasks/task_001", relationType: "contains"},
+       {from: "shannon/waves/wave_001", to: "shannon/tasks/task_002", relationType: "contains"},
+       // ... 48 more relations
+     ]
    })
    ```
 
@@ -278,17 +328,24 @@ allowed-tools: Serena
    - "Specific entity" -> open_nodes(["shannon/[type]s/[name]"])
    - "Recent [type]" -> search_nodes("shannon/[type]s/[date_pattern]")
 
-2. Execute search:
+2. Execute search with NAMESPACE PRECISION:
    ```javascript
-   // All waves
+   // CORRECT: Full namespace
    search_nodes("shannon/waves/")
-
-   // Specific spec
    open_nodes(["shannon/specs/spec_20250104_143022"])
 
-   // Recent checkpoints (2025-01-04)
+   // CORRECT: Recent checkpoints (2025-01-04)
    search_nodes("shannon/checkpoints/cp_20250104")
+
+   // WRONG: Partial match (might hit user entities)
+   search_nodes("spec_")  // ❌ Could match user project entity "spec_data"
+   search_nodes("wave")   // ❌ Ambiguous, no namespace
+
+   // WRONG: Root namespace query
+   search_nodes("spec_001")  // ❌ Missing shannon/specs/ prefix
    ```
+
+   **RULE**: Always use FULL shannon/* path. Never partial match.
 
 3. Parse results
 
@@ -300,7 +357,18 @@ allowed-tools: Serena
 **Input**: Entity name, new information
 
 **Processing**:
-1. Fetch current entity (verify exists)
+1. **MANDATORY VERIFICATION** (prevent errors):
+   ```javascript
+   // ALWAYS verify entity exists BEFORE add_observations
+   const entity = open_nodes(["shannon/waves/wave_001"]);
+   if (!entity || entity.length === 0) {
+     throw Error("Cannot update: entity shannon/waves/wave_001 not found");
+   }
+   ```
+   If entity missing:
+   - Create it first (if should exist)
+   - Report error to user (if unexpected)
+
 2. Structure new observations:
    ```
    [
@@ -309,6 +377,7 @@ allowed-tools: Serena
      "[new_key]: [new_value]"
    ]
    ```
+
 3. Call add_observations:
    ```javascript
    add_observations({
@@ -323,7 +392,17 @@ allowed-tools: Serena
      }]
    })
    ```
-4. Verify update successful
+
+4. **OBSERVATION LIMITS** (prevent overflow):
+   - Maximum ~100 observations per entity (guideline)
+   - If approaching limit, consider:
+     * Creating checkpoint entity (snapshot current state)
+     * Creating sub-entities (wave_001_phase2, wave_001_phase3)
+     * Archiving old observations (delete_observations)
+   - WHY: Large lists slow queries, hard to parse
+   - Better: Structured sub-entities with relations
+
+5. Verify update successful
 
 **Output**: Entity updated with new observations
 

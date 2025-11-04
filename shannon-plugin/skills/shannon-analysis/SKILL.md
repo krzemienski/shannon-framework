@@ -53,9 +53,9 @@ allowed-tools: [Read, Grep, Glob, Serena, Sequential, Context7, Puppeteer]
 
 ---
 
-## Anti-Rationalization (From RED Baseline Testing)
+## Anti-Rationalization (From RED + REFACTOR Testing)
 
-**CRITICAL**: Agents systematically rationalize skipping systematic analysis in favor of "quick looks" or "scanning a few files". Below are the 4 most common rationalizations with mandatory counters.
+**CRITICAL**: Agents systematically rationalize skipping systematic analysis in favor of "quick looks" or "scanning a few files". Below are the 12 most common rationalizations (4 from RED phase, 8 from REFACTOR phase) with mandatory counters.
 
 ### Rationalization 1: "User Request is Vague"
 **Example**: User says "analyze this codebase" → Agent responds "That's too vague, what specifically?"
@@ -108,6 +108,114 @@ allowed-tools: [Read, Grep, Glob, Serena, Sequential, Context7, Puppeteer]
 - ✅ Token investment upfront prevents expensive rework
 
 **Rule**: Invest tokens systematically. ROI proves it's cheaper.
+
+---
+
+### Rationalization 5: "User Wants Quick Look" (REFACTOR)
+**Example**: User says "just give me a quick look" → Agent samples 3 files
+
+**COUNTER**:
+- ❌ **NEVER** interpret "quick look" as "skip systematic discovery"
+- ✅ Shannon's systematic analysis IS fast (2 minutes complete)
+- ✅ Fast Path: Targeted Grep for key metrics (60-90 seconds)
+- ✅ Sampling saves 90 seconds, costs HOURS in rework from missed issues
+
+**Rule**: "Quick" = efficient systematic approach, not sampling.
+
+---
+
+### Rationalization 6: "Codebase Too Big" (REFACTOR)
+**Example**: 1000+ file codebase → Agent says "too large, narrow it down"
+
+**COUNTER**:
+- ❌ **NEVER** claim codebase is too large for Shannon
+- ✅ Large codebases (>200 files) trigger project-indexing (94% token reduction)
+- ✅ Then wave-orchestration for phased analysis
+- ✅ Progressive disclosure: Index → Domain focus → Waves
+
+**Rule**: Size triggers better tooling, not abandonment.
+
+---
+
+### Rationalization 7: "User's Domain Assessment Seems Right" (REFACTOR)
+**Example**: User says "70% frontend" → Agent accepts without validation
+
+**COUNTER**:
+- ❌ **NEVER** accept user's domain breakdown without calculation
+- ✅ User analysis is data point, not ground truth
+- ✅ Calculate independently from file counts, THEN compare
+- ✅ If discrepancy >15%, explain with evidence
+- ✅ Frameworks deceive: Next.js "frontend" has API routes (backend)
+
+**Rule**: Validate first, compare second, explain differences.
+
+---
+
+### Rationalization 8: "User Already Analyzed It" (REFACTOR)
+**Example**: User provides their own complexity score → Agent uses it without checking
+
+**COUNTER**:
+- ❌ **NEVER** use user's analysis as input to Shannon analysis
+- ✅ Run independent calculation via appropriate sub-skill
+- ✅ Compare Shannon result with user's estimate
+- ✅ If different: Explain why (Shannon uses 8D objective framework)
+
+**Rule**: Independent calculation always. User input = comparison, not source.
+
+---
+
+### Rationalization 9: "Just Tell Me What's Wrong" (REFACTOR)
+**Example**: User skips analysis request → "just tell me what's broken"
+
+**COUNTER**:
+- ❌ **NEVER** guess problems without systematic discovery
+- ✅ Even problem detection requires Grep for issue indicators
+- ✅ Grep: TODO/FIXME/HACK/mock/console.log/etc
+- ✅ Evidence-first: Find ACTUAL issues, then prioritize
+
+**Rule**: No guessing. Grep for issues = quantified problems.
+
+---
+
+### Rationalization 10: "Time Pressure Justifies Shortcuts" (REFACTOR)
+**Example**: User says "in a meeting, need answer now" → Agent gives subjective guess
+
+**COUNTER**:
+- ❌ **NEVER** trade correctness for perceived speed
+- ✅ Fast Path (60-90 sec) maintains quantitative approach
+- ✅ Targeted Grep: File count, debt indicators, test patterns
+- ✅ Produces maintainability score, not "looks good/bad"
+- ✅ Offer: "Fast score now (90 sec), full report later"
+
+**Rule**: Time pressure triggers Fast Path, not guessing.
+
+---
+
+### Rationalization 11: "Token Pressure Requires Shallow Analysis" (REFACTOR)
+**Example**: 87% tokens used → Agent skips systematic approach to save tokens
+
+**COUNTER**:
+- ❌ **NEVER** choose shallow analysis to save tokens
+- ✅ Token pressure triggers: Fast Path OR Checkpoint
+- ✅ Fast Path: Targeted metrics (2K tokens) with quantitative scoring
+- ✅ Checkpoint: Save context, continue next session with full budget
+- ✅ Shallow guess wastes MORE tokens (wrong direction = rebuild)
+
+**Rule**: Progressive disclosure or checkpoint, never shallow guess.
+
+---
+
+### Rationalization 12: "No Serena MCP Available" (REFACTOR)
+**Example**: Serena not installed → Agent proceeds without mentioning impact
+
+**COUNTER**:
+- ❌ **NEVER** proceed silently when Serena unavailable
+- ✅ Explicit warning: Cannot check history, cannot persist results
+- ✅ User chooses: Install Serena / Use fallback / Delay analysis
+- ✅ Fallback: Save to local file `SHANNON_ANALYSIS_{date}.md`
+- ✅ Explain: Without Serena, analysis lost after conversation
+
+**Rule**: Serena absence triggers warning + explicit choice.
 
 ---
 

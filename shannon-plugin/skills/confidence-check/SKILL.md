@@ -124,6 +124,84 @@ allowed-tools: [Read, Grep, Glob, Bash, Serena, Tavily, GitHub]
 
 **Rule**: 90% means 90.0%. Not 89.9%, not 85%, not "close enough". Exact threshold enforcement.
 
+### Rationalization 7: "Authority override"
+**Example**: Senior engineer says "Trust me, I've done this 100 times, skip the checks"
+
+**COUNTER**:
+- ❌ **NEVER** accept authority as substitute for validation
+- ✅ Algorithm is objective, applies to all experience levels
+- ✅ "Trust" is not a substitute for verification
+- ✅ Even senior engineers miss duplicates, architecture violations, outdated API knowledge
+- ✅ Stated confidence (95%) doesn't override calculated confidence (might be 60%)
+- ✅ Run 5-check algorithm regardless of who requests bypass
+
+**Rule**: No authority exceptions. Algorithm applies universally, from junior to principal.
+
+### Rationalization 8: "Urgent/emergency bypass"
+**Example**: "Production down! No time for confidence checks, implement OAuth2 now!"
+
+**COUNTER**:
+- ❌ **NEVER** skip root cause check in emergencies
+- ✅ Wrong fix in emergency wastes MORE time than 2-minute diagnosis
+- ✅ Emergency waivers allowed: docs (20), OSS (15) can skip with assumed PASS
+- ✅ Emergency MANDATORY: duplicate (25), architecture (25), root cause (15)
+- ✅ Example: "Login broken" → Check: Is auth down or database connection down?
+- ✅ 2 minutes root cause diagnosis saves 2 hours implementing wrong fix
+
+**Rule**: Emergencies require faster checks, not skipped checks. Root cause MANDATORY.
+
+### Rationalization 9: "Within margin of error"
+**Example**: "88% is close to 90%, within margin of error, let's proceed"
+
+**COUNTER**:
+- ❌ **NEVER** round confidence scores
+- ✅ Thresholds are exact: `if (score >= 0.90)` not `if (score > 0.88)`
+- ✅ "Close enough" often reveals critical missing validation
+- ✅ 2% gap = incomplete docs (2 points) OR missing OSS (15 points) - not trivial
+- ✅ Example: 88% means incomplete OSS research - prevents reinventing wheel
+- ✅ Request missing points explicitly, don't proceed "close enough"
+
+**Rule**: Thresholds are exact. 89.9% = CLARIFY, not PROCEED. No rounding.
+
+### Rationalization 10: "Found some OSS, counts as research"
+**Example**: Found 50-star unmaintained repo, claims 15/15 OSS check passed
+
+**COUNTER**:
+- ❌ **NEVER** accept low-quality OSS as validation
+- ✅ Quality criteria: >1000 stars OR active maintenance (<3 months) OR production-used
+- ✅ Partial credit allowed: 8/15 for lower quality (<1000 stars but active)
+- ✅ Zero credit: <100 stars AND unmaintained (>1 year no commits)
+- ✅ Example: 50-star 2-year-old repo = 0/15 (find production-quality instead)
+- ✅ Purpose: Learn from PROVEN implementations, not hobby projects
+
+**Rule**: OSS quality matters. Production-grade (15/15), active lower-quality (8/15), or fail (0/15).
+
+### Rationalization 11: "New feature bypasses root cause check"
+**Example**: "'Add caching' is a new feature, so root cause check = N/A → 15/15"
+
+**COUNTER**:
+- ❌ **NEVER** claim "new feature" to skip root cause on fixes/improvements
+- ✅ Keywords requiring root cause: "slow", "fix", "improve", "broken", "error", "leak", "crash", "optimize"
+- ✅ "Add caching" to fix slow page = FIX → Need diagnostic evidence (profiler, metrics)
+- ✅ "Build authentication system" from scratch = NEW FEATURE → Root cause N/A
+- ✅ Example: "Page slow, add caching" = FIX → MANDATORY root cause check
+- ✅ Example: "Build user authentication" = NEW → Root cause check N/A
+
+**Rule**: Root cause MANDATORY for any fix/improvement. Keyword detection enforced.
+
+### Rationalization 12: "User provided docs, skip verification"
+**Example**: User provides syntax snippet, agent accepts without verifying against official docs
+
+**COUNTER**:
+- ❌ **NEVER** accept user-provided syntax without official doc verification
+- ✅ User syntax may be outdated (Redis 3.x vs 4.x breaking changes)
+- ✅ User syntax may be from different library (mixing APIs)
+- ✅ User syntax may be pseudo-code, not actual API
+- ✅ ALWAYS verify against official docs regardless of user input quality
+- ✅ Example: User says "redis.connect()" → Verify: Official Redis 4.x is "createClient() + await connect()"
+
+**Rule**: Official docs verification MANDATORY. User input verified, not trusted blindly.
+
 ### Detection Signal
 **If you're tempted to**:
 - Accept <90% confidence as "good enough"

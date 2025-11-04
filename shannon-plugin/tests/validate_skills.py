@@ -130,7 +130,8 @@ def validate_all_skills(skills_dir: Path) -> Dict[str, List[str]]:
 
     # Also check for skills in root of skills/ directory
     root_skills = list(skills_dir.glob('*.md'))
-    skill_files.extend([f for f in root_skills if f.name != 'TEMPLATE.md'])
+    # Exclude README.md and TEMPLATE.md from validation
+    skill_files.extend([f for f in root_skills if f.name not in ['TEMPLATE.md', 'README.md']])
 
     if not skill_files:
         return {"_directory": ["No skill files found (looking for SKILL.md or *.md)"]}

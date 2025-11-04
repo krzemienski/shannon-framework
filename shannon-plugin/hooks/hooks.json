@@ -60,12 +60,13 @@
 
     "SessionStart": [
       {
-        "description": "Shannon session initialization notification",
+        "description": "Shannon V4 meta-skill loader - loads using-shannon into every session",
         "hooks": [
           {
-            "type": "notification",
-            "message": "✓ Shannon Framework v3.0.1 active | Commands: /sh_status | MCP Check: /sh_check_mcps | Docs: /help shannon",
-            "level": "info"
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/session_start.sh",
+            "description": "Loads using-shannon meta-skill to enforce Shannon workflows",
+            "timeout": 5000
           }
         ]
       }

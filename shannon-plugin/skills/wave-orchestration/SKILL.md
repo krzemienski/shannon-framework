@@ -385,7 +385,9 @@ Wave execution plan object:
 
 ---
 
-## Algorithm: Wave Structure Generation
+## Workflow
+
+### Algorithm: Wave Structure Generation
 
 This is a **QUANTITATIVE skill** - the algorithm must be followed precisely for correct results.
 

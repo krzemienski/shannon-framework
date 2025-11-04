@@ -43,6 +43,18 @@ allowed-tools: [Read, Grep, Glob, Bash, Serena, Tavily, GitHub]
 
 ---
 
+## Inputs
+
+**Required:**
+- `specification` (string): Implementation request or feature description from user
+- `context` (object): Optional context from spec-analysis skill (8D complexity scores, phase plan)
+
+**Optional:**
+- `skip_checks` (array): List of checks to skip (e.g., ["oss", "root_cause"] for simple tasks)
+- `confidence_threshold` (float): Override default 0.90 threshold (e.g., 0.85 for fast iterations)
+
+---
+
 ## Anti-Rationalization (Critical - Read First)
 
 **WARNING**: Agents systematically rationalize skipping confidence checks. Below are the 6 most dangerous rationalizations detected in production, with mandatory counters.

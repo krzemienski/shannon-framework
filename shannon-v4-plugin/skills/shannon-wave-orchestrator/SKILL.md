@@ -47,6 +47,9 @@ input:
     description: "Results from wave N-1"
     source: serena
 output:
+  wave_sitrep:
+    type: object
+    description: "Standardized SITREP in specification format (via shannon-status-reporter)"
   wave_results:
     type: object
     description: "Results from all agents in wave"
@@ -281,12 +284,46 @@ if (!validation.wave_complete) {
 }
 ```
 
-### Step 7: Save Wave State
+### Step 7: Generate SITREP and Save Wave State
 
 ```javascript
+// Generate standardized SITREP using shannon-status-reporter
+const sitrep_data = {
+  agent_name: "shannon-wave-orchestrator",
+  task_id: `wave_${wave_number}`,
+  current_phase: current_phase,
+  progress: Math.round((wave_number / total_waves) * 100),
+  state: validation.wave_complete ? "completed" : "blocked",
+
+  objective: `Execute Wave ${wave_number} with ${results.length} parallel tasks`,
+  scope: current_wave_tasks.map(t => t.description),
+  dependencies: wave_number > 1 ? [`wave_${wave_number - 1}_complete`] : [],
+
+  findings: results.map(r => `${r.task_id}: ${r.status} - ${r.deliverables.join(', ')}`),
+
+  blockers: results.filter(r => r.status === 'failed').map(r => r.task_id),
+  risks: validation.outputs_valid ? [] : ["Output validation failed"],
+  questions: [],
+
+  next_steps: [
+    validation.wave_complete ? `Execute Wave ${wave_number + 1}` : `Retry failed tasks in Wave ${wave_number}`
+  ],
+
+  artifacts: results.flatMap(r => r.deliverables),
+
+  tests_executed: results.map(r => r.validation?.test || "manual_validation"),
+  test_results: `${results.filter(r => r.status === 'success').length}/${results.length} tasks succeeded`
+};
+
+// Invoke shannon-status-reporter to generate SITREP
+const sitrep = await generate_sitrep(sitrep_data);
+
+// Save both SITREP and detailed results to Serena
 await serena_write_memory(`wave_${wave_number}_complete`, {
   wave_number,
   timestamp: Date.now(),
+  sitrep,
+  sitrep_data,
   tasks_completed: results.length,
   tasks_succeeded: results.filter(r => r.status === 'success').length,
   results,
@@ -296,19 +333,24 @@ await serena_write_memory(`wave_${wave_number}_complete`, {
 });
 ```
 
-### Step 8: Determine Next Action
+### Step 8: Determine Next Action and Display SITREP
 
 ```javascript
+// Display SITREP to user
+console.log(sitrep);
+
 if (waves[wave_number + 1]) {
   return {
     action: "next_wave",
     wave_number: wave_number + 1,
-    message: `Wave ${wave_number} complete. Ready for Wave ${wave_number + 1}`
+    message: `Wave ${wave_number} complete. Ready for Wave ${wave_number + 1}`,
+    sitrep
   };
 } else {
   return {
     action: "phase_complete",
-    message: `All waves complete. Phase ${current_phase} finished.`
+    message: `All waves complete. Phase ${current_phase} finished.`,
+    sitrep
   };
 }
 ```
@@ -394,7 +436,46 @@ MANDATORY: Execute these 5 steps FIRST:
 /sh_wave 1
 # Spawns: spec-analyzer, architecture-analyzer, risk-analyzer
 # Result: 3 analyses complete in parallel
+```
 
+**SITREP Output (Wave 1)**:
+```markdown
+## SITREP: shannon-wave-orchestrator - wave_1
+
+### Status
+- **Current Phase**: Discovery
+- **Progress**: 25%
+- **State**: completed
+
+### Context
+- **Objective**: Execute Wave 1 with 3 parallel tasks
+- **Scope**: Spec analysis, Architecture analysis, Risk analysis
+- **Dependencies**: None
+
+### Findings
+- spec-analyzer: success - 8D complexity framework complete, complexity score 0.65
+- architecture-analyzer: success - System design documented, 5 components identified
+- risk-analyzer: success - Risk matrix generated, 3 high-priority risks identified
+
+### Issues
+- **Blockers**: None
+- **Risks**: None
+- **Questions**: None
+
+### Next Steps
+- [ ] Execute Wave 2
+
+### Artifacts
+- spec_analysis_20251104.json
+- architecture_design.md
+- risk_matrix.json
+
+### Validation
+- **Tests Executed**: manual_validation, manual_validation, manual_validation
+- **Results**: 3/3 tasks succeeded
+```
+
+```bash
 # Wave 2: Implementation
 /sh_wave 2
 # Spawns: frontend-worker, backend-worker
@@ -436,6 +517,7 @@ MANDATORY: Execute these 5 steps FIRST:
 ## Skill Composition
 
 **This skill orchestrates**:
+- shannon-status-reporter (SITREP generation)
 - shannon-context-loader (context injection)
 - shannon-dependency-validator (dependency analysis)
 - shannon-agent-spawner (parallel execution)

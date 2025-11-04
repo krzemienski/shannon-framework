@@ -1,9 +1,9 @@
 {
   "name": "shannon",
-  "version": "3.0.1",
-  "displayName": "Shannon Framework",
+  "version": "4.0.0",
+  "displayName": "Shannon Framework V4",
   "publisher": "shannon-framework",
-  "description": "Specification-driven development framework featuring 8-dimensional complexity analysis, wave orchestration, context preservation, and NO MOCKS testing philosophy for Claude Code",
+  "description": "Specification-driven development framework with skill-based architecture, 8D complexity analysis, wave orchestration, NO MOCKS testing, and SITREP coordination",
 
   "author": {
     "name": "Shannon Framework Team",
@@ -22,18 +22,112 @@
     "claudeCode": ">=1.0.0"
   },
 
+  "capabilities": [
+    "spec-analysis",
+    "wave-orchestration",
+    "context-preservation",
+    "functional-testing",
+    "goal-management"
+  ],
+
+  "skills": [
+    "spec-analysis",
+    "wave-orchestration",
+    "phase-planning",
+    "context-preservation",
+    "context-restoration",
+    "goal-management",
+    "goal-alignment",
+    "mcp-discovery",
+    "functional-testing",
+    "confidence-check",
+    "shannon-analysis",
+    "memory-coordination",
+    "project-indexing",
+    "sitrep-reporting",
+    "using-shannon"
+  ],
+
+  "agents": [
+    "WAVE_COORDINATOR",
+    "SPEC_ANALYZER",
+    "PHASE_ARCHITECT",
+    "CONTEXT_GUARDIAN",
+    "TEST_GUARDIAN",
+    "FRONTEND",
+    "BACKEND",
+    "DATABASE_ARCHITECT",
+    "MOBILE_DEVELOPER",
+    "DEVOPS",
+    "SECURITY",
+    "PRODUCT_MANAGER",
+    "TECHNICAL_WRITER",
+    "QA_ENGINEER",
+    "CODE_REVIEWER",
+    "PERFORMANCE_ENGINEER",
+    "DATA_ENGINEER",
+    "API_DESIGNER",
+    "ARCHITECT"
+  ],
+
+  "commands": [
+    "sh_spec",
+    "sh_wave",
+    "sh_checkpoint",
+    "sh_restore",
+    "sh_status",
+    "sh_check_mcps",
+    "sh_memory",
+    "sh_north_star",
+    "sh_analyze",
+    "sh_test",
+    "sh_scaffold"
+  ],
+
+  "hooks": [
+    "SessionStart",
+    "PreCompact"
+  ],
+
+  "mcp_requirements": {
+    "required": [
+      {
+        "name": "serena",
+        "version": ">=2.0.0",
+        "purpose": "Context preservation and memory management"
+      }
+    ],
+    "recommended": [
+      {
+        "name": "sequential",
+        "version": ">=1.0.0",
+        "purpose": "Enhanced reasoning for complex specifications"
+      },
+      {
+        "name": "puppeteer",
+        "version": ">=1.0.0",
+        "purpose": "Browser automation for functional testing"
+      },
+      {
+        "name": "context7",
+        "version": ">=3.0.0",
+        "purpose": "Framework-specific patterns and best practices"
+      }
+    ]
+  },
+
   "keywords": [
     "specification-analysis",
-    "complexity-scoring",
+    "skill-based-architecture",
+    "8d-complexity-scoring",
     "wave-orchestration",
     "context-preservation",
     "no-mocks-testing",
-    "requirements-engineering",
-    "project-planning",
-    "quality-assurance",
-    "serena-integration",
-    "shadcn-ui",
-    "testing-framework",
+    "sitrep-protocol",
+    "mcp-integration",
+    "quantitative-planning",
+    "functional-testing",
+    "parallel-execution",
     "development-workflow"
   ]
 }

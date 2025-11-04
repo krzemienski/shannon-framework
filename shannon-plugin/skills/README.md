@@ -30,7 +30,7 @@ skill-name/
 
 **Enhanced Skills** (from reference frameworks):
 - confidence-check - Pre-implementation validation (from SuperClaude)
-- project-indexing - Codebase compression (from SuperClaude)
+- project-indexing - Codebase compression (from SuperClaude) ✅
 
 **Meta-Skill**:
 - using-shannon - Auto-loaded via SessionStart hook

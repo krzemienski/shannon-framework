@@ -178,6 +178,42 @@ If you see these phrases, **STOP IMMEDIATELY** - you're about to violate Shannon
 
 ---
 
+## Inputs
+
+**This is a meta-skill that modifies agent behavior rather than accepting direct inputs.**
+
+The skill establishes behavioral patterns that activate based on:
+- **User specification**: Any project/feature description triggers mandatory 8D analysis
+- **Context indicators**: Keywords like "complexity", "specification", "wave" activate protocols
+- **Session lifecycle**: Automatically loaded via SessionStart hook
+- **Checkpoint triggers**: PreCompact hook triggers automatic context preservation
+
+**No direct inputs required** - Shannon workflows activate automatically when:
+- User provides specification (triggers /sh_spec)
+- Complexity >= 0.50 detected (triggers wave-based execution)
+- Context near limit (triggers PreCompact checkpoint)
+- Testing phase begins (enforces NO MOCKS principle)
+
+---
+
+## Outputs
+
+**This skill produces behavioral changes, not direct outputs.**
+
+Expected behavioral modifications:
+- **Before implementation**: Agent MUST run 8D analysis via /sh_spec
+- **During implementation**: Agent enforces functional testing (NO MOCKS)
+- **For complexity >= 0.50**: Agent uses wave-based execution
+- **Before context loss**: Agent auto-checkpoints to Serena MCP
+
+**Indirect outputs** (produced by workflows this skill enforces):
+- 8D complexity scores (via spec-analysis skill)
+- Wave execution plans (via wave-orchestration skill)
+- Serena checkpoints (via context-preservation skill)
+- Functional test suites (via functional-testing skill)
+
+---
+
 ## Core Competencies
 
 ### 1. Quantitative Complexity Analysis
@@ -482,6 +518,37 @@ Shannon V4 works alongside your existing skills:
 - ❌ Manual context management attempted
 - ❌ Subjective complexity estimation used
 - ❌ Tests written after code (violates TDD)
+
+**Validation Code**:
+```python
+def validate_shannon_active(session_context):
+    """Verify Shannon Framework workflows are being followed"""
+
+    # Check: 8D analysis ran before implementation
+    assert session_context.get("spec_analysis_completed") == True, \
+        "VIOLATION: Implementation started without 8D analysis"
+
+    # Check: Complexity-based execution strategy
+    complexity = session_context.get("complexity_score", 0)
+    if complexity >= 0.50:
+        assert session_context.get("wave_execution") == True, \
+            f"VIOLATION: Complexity {complexity} >= 0.50 requires wave execution"
+
+    # Check: NO MOCKS enforcement
+    test_violations = session_context.get("mock_usage_detected", [])
+    assert len(test_violations) == 0, \
+        f"VIOLATION: Mock usage detected in {len(test_violations)} tests"
+
+    # Check: Automatic checkpointing active
+    assert session_context.get("precompact_hook_active") == True, \
+        "VIOLATION: PreCompact hook not active (manual checkpoints required)"
+
+    # Check: Serena MCP connected
+    assert session_context.get("serena_mcp_status") == "connected", \
+        "VIOLATION: Serena MCP not connected (Shannon requirement)"
+
+    return True
+```
 
 ---
 

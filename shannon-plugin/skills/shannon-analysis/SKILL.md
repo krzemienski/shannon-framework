@@ -1108,9 +1108,69 @@ Step 8: Persist to Serena
 
 ---
 
-## Validation
+## Outputs
 
-This skill is working correctly if:
+Structured analysis object:
+
+```json
+{
+  "analysis_type": "codebase-quality" | "architecture-review" | "technical-debt" | "complexity-assessment" | "domain-breakdown",
+  "project_summary": {
+    "total_files": 247,
+    "domains": {
+      "Frontend": {"percentage": 48.6, "file_count": 120},
+      "Backend": {"percentage": 32.4, "file_count": 80},
+      "Database": {"percentage": 6.9, "file_count": 17},
+      "Testing": {"percentage": 12.1, "file_count": 30}
+    },
+    "dominant_domain": "Frontend"
+  },
+  "quantitative_metrics": {
+    "complexity_score": 0.68,
+    "technical_debt_count": 60,
+    "test_quality_score": 0.45,
+    "maintainability_score": 0.72
+  },
+  "findings": {
+    "critical": [
+      {"issue": "Mock-based tests", "count": 15, "impact": "HIGH"}
+    ],
+    "high": [
+      {"issue": "TODO items", "count": 34, "trend": "+48%"}
+    ],
+    "medium": [],
+    "low": []
+  },
+  "recommendations": {
+    "prioritized": [
+      {
+        "priority": "HIGH",
+        "action": "Replace 15 mock tests with functional tests",
+        "effort": "3-5 days",
+        "impact": "80% fewer integration bugs",
+        "evidence": "grep jest.fn() found 15 files"
+      }
+    ]
+  },
+  "mcp_recommendations": {
+    "required": [],
+    "recommended": ["puppeteer"],
+    "conditional": ["context7"]
+  },
+  "confidence_score": 0.92,
+  "historical_context": {
+    "previous_analysis": "shannon/analysis/project-2024-12-01",
+    "trend": "WORSENING",
+    "delta": "+33% technical debt"
+  }
+}
+```
+
+---
+
+## Success Criteria
+
+This skill succeeds if:
 
 1. ✅ All analysis requests trigger systematic Glob/Grep discovery (no sampling)
 2. ✅ Every analysis queries Serena for historical context first
@@ -1126,6 +1186,57 @@ This skill is working correctly if:
 - Agent says "Looks complex" → VIOLATION (should invoke spec-analysis for 8D score)
 - Agent starts without Serena query → VIOLATION (must check history first)
 - Agent provides generic advice → VIOLATION (must include evidence + priorities)
+
+**Validation Code**:
+```python
+def validate_shannon_analysis(result):
+    """Verify analysis followed Shannon protocols"""
+
+    # Check: Systematic discovery (not sampling)
+    assert result.get("discovery_method") in ["glob", "grep"], \
+        "VIOLATION: Used sampling instead of systematic discovery"
+    assert result.get("files_analyzed") == result.get("total_files"), \
+        "VIOLATION: Incomplete analysis (sampling detected)"
+
+    # Check: Serena historical query performed
+    assert result.get("historical_context_checked") == True, \
+        "VIOLATION: Skipped Serena historical query"
+
+    # Check: Quantitative domain percentages
+    domains = result.get("project_summary", {}).get("domains", {})
+    assert all(isinstance(d.get("percentage"), (int, float)) for d in domains.values()), \
+        "VIOLATION: Domain percentages not calculated (subjective assessment used)"
+
+    # Check: Evidence-based recommendations
+    recommendations = result.get("recommendations", {}).get("prioritized", [])
+    for rec in recommendations:
+        assert "evidence" in rec, \
+            f"VIOLATION: Recommendation lacks evidence: {rec.get('action')}"
+        assert "effort" in rec, \
+            f"VIOLATION: Recommendation lacks effort estimate: {rec.get('action')}"
+
+    # Check: Confidence score present (from confidence-check)
+    confidence = result.get("confidence_score")
+    assert confidence is not None and 0.0 <= confidence <= 1.0, \
+        "VIOLATION: Missing or invalid confidence score"
+
+    # Check: Results persisted to Serena
+    assert result.get("serena_entity_id") is not None, \
+        "VIOLATION: Results not persisted to Serena"
+
+    return True
+```
+
+---
+
+## Validation
+
+This skill is working correctly if validation function passes. The skill enforces:
+- Systematic discovery (no sampling)
+- Historical context integration
+- Quantitative metrics (not subjective)
+- Evidence-based recommendations
+- Serena persistence
 
 ---
 

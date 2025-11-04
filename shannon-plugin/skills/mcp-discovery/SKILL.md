@@ -130,6 +130,54 @@ allowed-tools: Read, Serena
 
 ---
 
+## When to Use
+
+Use this skill when:
+- **User provides specification**: After spec-analysis calculates domain percentages
+- **Domain analysis complete**: Frontend %, Backend %, Database % known
+- **MCP setup needed**: User asks "What MCPs should I install?"
+- **MCP health check**: User asks "Which MCPs am I missing?"
+- **MCP unavailable**: Need fallback recommendations for missing MCP
+- **Project initialization**: Shannon setup requires Serena + domain MCPs
+- **Multi-domain project**: Need to determine PRIMARY vs SECONDARY MCPs
+
+DO NOT use when:
+- Domain percentages unknown (run spec-analysis first)
+- User already knows exact MCPs needed (no analysis required)
+- Non-Shannon workflows (this skill is Shannon-specific)
+
+---
+
+## Inputs
+
+**Required:**
+- `domains` (object): Domain percentages from spec-analysis
+  ```json
+  {
+    "Frontend": 40.5,
+    "Backend": 35.2,
+    "Database": 20.3,
+    "DevOps": 4.0
+  }
+  ```
+  - Constraint: Percentages must sum to ~100%
+  - Source: Calculated by spec-analysis skill
+
+**Optional:**
+- `include_mcps` (array): Specific MCPs to include regardless of thresholds
+  - Example: `["sequential"]` (for deep analysis)
+  - Default: `[]`
+- `exclude_mcps` (array): MCPs to exclude from recommendations
+  - Example: `["github"]` (if already configured)
+  - Default: `[]`
+- `health_check_mode` (boolean): Generate health check workflow instead of recommendations
+  - Default: `false`
+- `fallback_for` (string): MCP name to generate fallback chain for
+  - Example: `"puppeteer"`
+  - Triggers Mode 3 workflow
+
+---
+
 ## Core Competencies
 
 ### 1. Domain-to-MCP Mapping Algorithm
@@ -496,6 +544,56 @@ If fails: ⚠️ Use manual git (low priority)
 
 ---
 
+## Outputs
+
+MCP recommendations object:
+
+```json
+{
+  "mandatory": [
+    {
+      "name": "serena",
+      "purpose": "Context preservation across waves",
+      "rationale": "Shannon Framework requirement",
+      "setup_priority": 1,
+      "health_check": "/list_memories",
+      "fallback": "none"
+    }
+  ],
+  "primary": [
+    {
+      "name": "puppeteer",
+      "purpose": "Functional browser testing (NO MOCKS)",
+      "rationale": "Frontend 40% >= 20% threshold",
+      "setup_priority": 2,
+      "health_check": "/browser_navigate",
+      "fallback_chain": ["playwright", "chrome-devtools", "manual"]
+    }
+  ],
+  "secondary": [
+    {
+      "name": "github",
+      "purpose": "Version control, CI/CD",
+      "rationale": "Universal (all projects benefit)",
+      "setup_priority": 5,
+      "health_check": "/list repositories",
+      "fallback_chain": ["gh-cli", "manual-git"]
+    }
+  ],
+  "optional": [],
+  "setup_workflow": [
+    "1. Install Serena MCP (MANDATORY)",
+    "2. Verify: /list_memories",
+    "3. Install Primary MCPs: Puppeteer, Context7",
+    "4. Verify each with health check",
+    "5. Install Secondary MCPs: GitHub"
+  ],
+  "health_check_script": "# Test MANDATORY\n/list_memories\n# Test PRIMARY\n/browser_navigate https://example.com\n..."
+}
+```
+
+---
+
 ## Success Criteria
 
 **Successful when**:
@@ -516,6 +614,49 @@ If fails: ⚠️ Use manual git (low priority)
 - ❌ Random alternatives suggested (not from fallback chain)
 - ❌ No health check workflow provided
 - ❌ Domain analysis skipped
+
+**Validation Code**:
+```python
+def validate_mcp_recommendations(result):
+    """Verify MCP discovery followed protocols"""
+
+    # Check: Serena MCP in mandatory tier
+    mandatory = result.get("mandatory", [])
+    assert any(mcp["name"] == "serena" for mcp in mandatory), \
+        "VIOLATION: Serena MCP not in mandatory tier"
+
+    # Check: All MCPs have tier designation
+    all_mcps = (result.get("mandatory", []) + result.get("primary", []) +
+                result.get("secondary", []) + result.get("optional", []))
+    for mcp in all_mcps:
+        assert "name" in mcp, "VIOLATION: MCP missing name"
+        assert "rationale" in mcp, f"VIOLATION: {mcp['name']} missing rationale"
+        assert "health_check" in mcp, f"VIOLATION: {mcp['name']} missing health check"
+
+    # Check: Primary MCPs have domain justification
+    primary = result.get("primary", [])
+    for mcp in primary:
+        rationale = mcp.get("rationale", "")
+        assert "%" in rationale or "threshold" in rationale, \
+            f"VIOLATION: {mcp['name']} missing quantitative rationale"
+
+    # Check: No uncertain language
+    all_text = str(result)
+    uncertain_terms = ["might", "probably", "consider", "could use"]
+    for term in uncertain_terms:
+        assert term not in all_text.lower(), \
+            f"VIOLATION: Uncertain language detected: '{term}'"
+
+    # Check: Setup workflow provided
+    assert result.get("setup_workflow"), \
+        "VIOLATION: Setup workflow missing"
+
+    # Check: Health check script provided
+    assert result.get("health_check_script"), \
+        "VIOLATION: Health check script missing"
+
+    return True
+```
 
 ---
 

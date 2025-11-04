@@ -136,6 +136,59 @@ allowed-tools: Serena
 
 ---
 
+## When to Use
+
+Use this skill when:
+- **Storing Shannon artifacts**: Specs, waves, goals, checkpoints, SITREPs
+- **Querying Shannon history**: "Show me all waves", "Find spec for this wave"
+- **Creating Shannon entities**: Any Shannon data needs persistence
+- **Updating Shannon entities**: Wave status change, checkpoint metadata update
+- **Establishing relations**: Link wave to spec, checkpoint to wave, goal to spec
+- **Searching Shannon graph**: Find entities by namespace, type, or timestamp
+- **Context preservation**: Before wave transitions, session end, context limits
+- **SITREP coordination**: Storing multi-agent progress reports
+
+DO NOT use when:
+- Storing user project data (use user namespace, not shannon/*)
+- Non-Shannon workflows (generic Serena operations)
+- Temporary data that doesn't need persistence
+- Data that should be in project files instead of knowledge graph
+
+---
+
+## Inputs
+
+**Required:**
+- `operation_type` (string): Serena operation to perform
+  - Options: `"create"`, `"read"`, `"update"`, `"search"`, `"relate"`, `"delete"`
+- `entity_data` (object): Data for the operation
+  ```json
+  {
+    "type": "spec" | "wave" | "goal" | "checkpoint" | "sitrep" | "task",
+    "data": {
+      "complexity_score": 0.68,
+      "domain_percentages": {...},
+      "execution_strategy": "wave-based"
+    },
+    "timestamp": "20250104_143022"
+  }
+  ```
+
+**Optional (operation-specific):**
+- `entity_name` (string): For read/update/delete operations
+  - Example: `"shannon/specs/spec_20250104_143022"`
+- `search_pattern` (string): For search operations
+  - Example: `"shannon/waves/"` (all waves)
+  - Example: `"shannon/checkpoints/cp_20250104"` (date-filtered)
+- `parent_entity` (string): For create operations (establishes relation)
+  - Example: `"shannon/specs/spec_001"` (wave's parent)
+- `relation_type` (string): For relate operations
+  - Options: `"spawns"`, `"contains"`, `"tracks"`, `"created_checkpoint"`, `"implements"`, `"reports_on"`, `"relates_to"`
+- `observations` (array): For create/update operations
+  - Example: `["type: spec_analysis", "created: 2025-01-04T14:30:22Z", "complexity_score: 0.68"]`
+
+---
+
 ## Core Competencies
 
 ### 1. Shannon Namespace Management
@@ -693,6 +746,45 @@ Step 4: Verify
 
 ---
 
+## Outputs
+
+Operation result object:
+
+```json
+{
+  "operation": "create" | "read" | "update" | "search" | "relate" | "delete",
+  "success": true,
+  "entity_name": "shannon/specs/spec_20250104_143022",
+  "entity_type": "Specification",
+  "observations": [
+    "type: spec_analysis",
+    "created: 2025-01-04T14:30:22Z",
+    "complexity_score: 0.68",
+    "domains: Frontend 40%, Backend 35%, Database 25%"
+  ],
+  "relations": [
+    {
+      "from": "shannon/specs/spec_20250104_143022",
+      "to": "shannon/waves/wave_20250104_150000",
+      "type": "spawns"
+    }
+  ],
+  "validation": {
+    "namespace_correct": true,
+    "relations_exist": true,
+    "format_valid": true,
+    "no_duplicates": true
+  },
+  "lineage": {
+    "parent": "shannon/specs/spec_20250104_143022",
+    "children": ["shannon/waves/wave_20250104_150000"],
+    "depth": 2
+  }
+}
+```
+
+---
+
 ## Success Criteria
 
 **Successful when**:
@@ -718,6 +810,55 @@ Step 4: Verify
 - ❌ Observations unstructured or missing timestamps
 - ❌ Namespace collision with user project entities
 - ❌ Custom entity naming breaks conventions
+
+**Validation Code**:
+```python
+def validate_memory_coordination(result):
+    """Verify memory coordination followed protocols"""
+
+    # Check: shannon/* namespace
+    entity_name = result.get("entity_name", "")
+    assert entity_name.startswith("shannon/"), \
+        f"VIOLATION: Entity missing shannon/ prefix: {entity_name}"
+
+    # Check: Standard namespace (specs, waves, goals, checkpoints, sitreps, tasks)
+    valid_namespaces = ["shannon/specs/", "shannon/waves/", "shannon/goals/",
+                        "shannon/checkpoints/", "shannon/sitreps/", "shannon/tasks/"]
+    assert any(entity_name.startswith(ns) for ns in valid_namespaces), \
+        f"VIOLATION: Invalid namespace: {entity_name}"
+
+    # Check: Relations exist (unless root spec)
+    if result.get("operation") == "create" and "specs" not in entity_name:
+        relations = result.get("relations", [])
+        assert len(relations) >= 1, \
+            "VIOLATION: Entity created without relations (orphaned)"
+
+    # Check: Relations use approved types
+    approved_relations = ["spawns", "contains", "created_checkpoint",
+                          "implements", "reports_on", "tracks", "relates_to"]
+    for relation in result.get("relations", []):
+        assert relation["type"] in approved_relations, \
+            f"VIOLATION: Invalid relation type: {relation['type']}"
+
+    # Check: Observations have timestamps
+    observations = result.get("observations", [])
+    has_timestamp = any("created:" in obs or "updated:" in obs for obs in observations)
+    assert has_timestamp, \
+        "VIOLATION: Observations missing timestamp"
+
+    # Check: No duplicate entities (same data in multiple entities)
+    validation = result.get("validation", {})
+    assert validation.get("no_duplicates") == True, \
+        "VIOLATION: Duplicate entities detected"
+
+    # Check: Lineage traceable
+    lineage = result.get("lineage", {})
+    if "specs" not in entity_name:  # Non-root entities
+        assert lineage.get("parent") is not None, \
+            "VIOLATION: Cannot trace lineage (broken relations)"
+
+    return True
+```
 
 ---
 

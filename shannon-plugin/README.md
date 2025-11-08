@@ -147,17 +147,17 @@ Run `/help` to see all available commands.
 
 ## 🤖 Agents
 
-### Shannon Agents (5)
-- **SPEC_ANALYZER** - 8D complexity scoring
-- **PHASE_ARCHITECT** - 5-phase planning
-- **WAVE_COORDINATOR** - Multi-stage orchestration
-- **CONTEXT_GUARDIAN** - Context preservation
-- **TEST_GUARDIAN** - NO MOCKS enforcement
+Shannon includes **26 specialized agents**:
 
-### Enhanced SuperClaude Agents (14)
-- **ANALYZER**, **ARCHITECT**, **FRONTEND**, **BACKEND**, **PERFORMANCE**, **SECURITY**, **QA**, **REFACTORER**, **DEVOPS**, **MENTOR**, **SCRIBE**, **DATA_ENGINEER**, **MOBILE_DEVELOPER**, **IMPLEMENTATION_WORKER**
+**Core**: WAVE_COORDINATOR, SPEC_ANALYZER, PHASE_ARCHITECT, CONTEXT_GUARDIAN, TEST_GUARDIAN
 
-Run `/agents` to see detailed agent capabilities.
+**Development**: FRONTEND, BACKEND, DATABASE_ARCHITECT, MOBILE_DEVELOPER, IMPLEMENTATION_WORKER
+
+**Quality**: QA, CODE_REVIEWER, PERFORMANCE, SECURITY, REFACTORER
+
+**Support**: ANALYZER, ARCHITECT, TECHNICAL_WRITER, SCRIBE, MENTOR, PRODUCT_MANAGER, DATA_ENGINEER, API_DESIGNER, DEVOPS
+
+Run `/agents` in Claude Code to see all available agents.
 
 ## 🔌 MCP Requirements
 
@@ -174,13 +174,28 @@ Run `/agents` to see detailed agent capabilities.
 
 Run `/sh_check_mcps` for detailed setup instructions.
 
-## 📖 Documentation
+## 📖 Complete Documentation
 
-- **[Installation Guide](../../docs/PLUGIN_INSTALL.md)** - Detailed installation instructions
-- **[Commands Reference](../../SHANNON_COMMANDS_GUIDE.md)** - Complete command documentation
-- **[V3 Specification](../../SHANNON_V3_SPECIFICATION.md)** - Technical architecture details
-- **[Migration Guide](../../docs/MIGRATION_GUIDE.md)** - Upgrade from legacy CLAUDE.md system
-- **[Team Setup](../../docs/TEAM_SETUP.md)** - Team and enterprise configuration
+**📘 [USER_GUIDE.md](USER_GUIDE.md)** - **START HERE**
+- Complete guide with installation, concepts, commands, skills, examples, FAQ
+- Everything you need in one place (634 lines)
+
+**🏗️ [ARCHITECTURE.md](ARCHITECTURE.md)** - System Design
+- Complete architecture with ASCII diagrams
+- Component layers, data flow, V4.1 integration
+- Technology stack, security model (791 lines)
+
+**💾 [INSTALLATION.md](INSTALLATION.md)** - Install Guide
+- 3 installation methods (marketplace, local, development)
+- Prerequisites, verification, MCP configuration (341 lines)
+
+**🛠️ [TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - Problem Solving
+- Common issues, solutions, FAQ
+- Installation, command, skill, MCP, context issues (497 lines)
+
+**💡 [USAGE_EXAMPLES.md](USAGE_EXAMPLES.md)** - Practical Examples
+- 15 complete usage examples (simple to complex)
+- All V4.1 features demonstrated (717 lines)
 
 ## 🏗️ Plugin Structure
 
@@ -188,12 +203,19 @@ Run `/sh_check_mcps` for detailed setup instructions.
 shannon-plugin/
 ├── .claude-plugin/
 │   └── plugin.json        # Plugin manifest
-├── commands/               # 33 slash commands
-├── agents/                 # 19 specialized agents
-├── hooks/                  # PreCompact context preservation
-├── core/                   # Behavioral patterns (reference docs)
-├── modes/                  # Execution modes (reference docs)
-└── README.md              # This file
+├── commands/               # 48 slash commands (sh_*, sc_*, shannon_*)
+├── agents/                 # 26 specialized agents
+├── skills/                 # 16 skills (auto-discovered)
+├── core/                   # 9 behavioral patterns (inc. FORCED_READING_PROTOCOL)
+├── hooks/                  # 5 hooks (SessionStart, PreCompact, etc.)
+├── modes/                  # 2 execution modes
+├── templates/              # Command templates
+├── README.md              # This file
+├── USER_GUIDE.md          # 📘 Complete guide (START HERE)
+├── ARCHITECTURE.md        # 🏗️ System architecture with diagrams
+├── INSTALLATION.md        # 💾 Detailed installation
+├── TROUBLESHOOTING.md     # 🛠️ Common issues & solutions
+└── USAGE_EXAMPLES.md      # 💡 15 complete examples
 ```
 
 ## 🤝 Contributing

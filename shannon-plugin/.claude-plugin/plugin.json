@@ -8,11 +8,11 @@
   "author": {
     "name": "Shannon Framework Team",
     "email": "info@shannon-framework.dev",
-    "url": "https://github.com/shannon-framework"
+    "url": "https://github.com/krzemienski"
   },
 
-  "homepage": "https://github.com/shannon-framework/shannon",
-  "repository": "https://github.com/shannon-framework/shannon",
+  "homepage": "https://github.com/krzemienski/shannon-framework",
+  "repository": "https://github.com/krzemienski/shannon-framework",
   "license": "MIT",
 
   "readme": "README.md",

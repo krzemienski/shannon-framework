@@ -177,7 +177,7 @@ Shannon requires Serena MCP for context preservation. If not configured:
 
 **1. Clone Repository**:
 ```bash
-git clone https://github.com/shannon-framework/shannon
+git clone https://github.com/krzemienski/shannon-framework
 cd shannon-framework
 ```
 
@@ -332,7 +332,7 @@ cd shannon-framework
 
 ## Support
 
-**Issues**: https://github.com/shannon-framework/shannon/issues
+**Issues**: https://github.com/krzemienski/shannon-framework/issues
 **Documentation**: shannon-plugin/README.md
 **Email**: info@shannon-framework.dev
 

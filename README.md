@@ -202,9 +202,9 @@ MIT License - See [LICENSE](LICENSE)
 
 ## Links
 
-- **Repository**: https://github.com/shannon-framework/shannon
+- **Repository**: https://github.com/krzemienski/shannon-framework
 - **Documentation**: [shannon-plugin/README.md](shannon-plugin/README.md)
-- **Issues**: https://github.com/shannon-framework/shannon/issues
+- **Issues**: https://github.com/krzemienski/shannon-framework/issues
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 
 ---

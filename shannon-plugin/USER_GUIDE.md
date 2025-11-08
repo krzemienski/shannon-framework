@@ -631,4 +631,4 @@ A: Shannon works with Serena alone. Optional MCPs enhance but aren't required.
 
 **Shannon Framework V4.1.0** - Complete User Guide
 **Support**: info@shannon-framework.dev
-**Issues**: https://github.com/shannon-framework/shannon/issues
+**Issues**: https://github.com/krzemienski/shannon-framework/issues

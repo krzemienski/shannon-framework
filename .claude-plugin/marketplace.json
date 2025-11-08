@@ -4,7 +4,7 @@
 
   "owner": {
     "name": "Shannon Framework Team",
-    "url": "https://github.com/shannon-framework",
+    "url": "https://github.com/krzemienski",
     "email": "info@shannon-framework.dev"
   },
 
@@ -28,8 +28,8 @@
         "skill-discovery",
         "mission-critical"
       ],
-      "homepage": "https://github.com/shannon-framework/shannon",
-      "documentation": "https://github.com/shannon-framework/shannon#readme"
+      "homepage": "https://github.com/krzemienski/shannon-framework",
+      "documentation": "https://github.com/krzemienski/shannon-framework#readme"
     }
   ]
 }

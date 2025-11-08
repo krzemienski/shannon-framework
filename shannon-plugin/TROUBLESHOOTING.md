@@ -487,8 +487,8 @@ A: Yes (when hooks implemented): `/sh_read_normal <file>` overrides enforcement
 
 ## Contact & Support
 
-- **Issues**: https://github.com/shannon-framework/shannon/issues
-- **Discussions**: https://github.com/shannon-framework/shannon/discussions
+- **Issues**: https://github.com/krzemienski/shannon-framework/issues
+- **Discussions**: https://github.com/krzemienski/shannon-framework/discussions
 - **Email**: info@shannon-framework.dev
 - **Documentation**: shannon-plugin/README.md
 

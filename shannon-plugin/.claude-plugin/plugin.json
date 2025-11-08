@@ -33,68 +33,6 @@
     "unified-priming"
   ],
 
-  "skills": [
-    "spec-analysis",
-    "wave-orchestration",
-    "phase-planning",
-    "context-preservation",
-    "context-restoration",
-    "goal-management",
-    "goal-alignment",
-    "mcp-discovery",
-    "functional-testing",
-    "confidence-check",
-    "shannon-analysis",
-    "memory-coordination",
-    "project-indexing",
-    "sitrep-reporting",
-    "using-shannon",
-    "skill-discovery"
-  ],
-
-  "agents": [
-    "WAVE_COORDINATOR",
-    "SPEC_ANALYZER",
-    "PHASE_ARCHITECT",
-    "CONTEXT_GUARDIAN",
-    "TEST_GUARDIAN",
-    "FRONTEND",
-    "BACKEND",
-    "DATABASE_ARCHITECT",
-    "MOBILE_DEVELOPER",
-    "DEVOPS",
-    "SECURITY",
-    "PRODUCT_MANAGER",
-    "TECHNICAL_WRITER",
-    "QA_ENGINEER",
-    "CODE_REVIEWER",
-    "PERFORMANCE_ENGINEER",
-    "DATA_ENGINEER",
-    "API_DESIGNER",
-    "ARCHITECT"
-  ],
-
-  "commands": [
-    "sh_spec",
-    "sh_wave",
-    "sh_checkpoint",
-    "sh_restore",
-    "sh_status",
-    "sh_check_mcps",
-    "sh_memory",
-    "sh_north_star",
-    "sh_analyze",
-    "sh_test",
-    "sh_scaffold",
-    "sh_discover_skills",
-    "shannon_prime"
-  ],
-
-  "hooks": [
-    "SessionStart",
-    "PreCompact"
-  ],
-
   "mcp_requirements": {
     "required": [
       {

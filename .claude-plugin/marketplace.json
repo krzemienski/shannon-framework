@@ -12,8 +12,8 @@
     {
       "name": "shannon",
       "source": "./shannon-plugin",
-      "description": "Complete Shannon Framework: 8D complexity analysis, wave orchestration, context preservation, NO MOCKS testing",
-      "version": "3.0.1",
+      "description": "Shannon Framework V4.1: Most rigorous framework for mission-critical AI development. NEW: Forced Complete Reading, Auto Skill Discovery, Unified /shannon:prime. Includes 8D complexity analysis, wave orchestration, NO MOCKS testing.",
+      "version": "4.1.0",
       "author": "Shannon Framework Team",
       "license": "MIT",
       "tags": [
@@ -23,7 +23,10 @@
         "quality-assurance",
         "project-planning",
         "complexity-analysis",
-        "wave-orchestration"
+        "wave-orchestration",
+        "forced-reading",
+        "skill-discovery",
+        "mission-critical"
       ],
       "homepage": "https://github.com/shannon-framework/shannon",
       "documentation": "https://github.com/shannon-framework/shannon#readme"

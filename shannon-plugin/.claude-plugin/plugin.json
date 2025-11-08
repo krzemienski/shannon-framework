@@ -1,9 +1,9 @@
 {
   "name": "shannon",
-  "version": "4.0.0",
-  "displayName": "Shannon Framework V4",
+  "version": "4.1.0",
+  "displayName": "Shannon Framework V4.1",
   "publisher": "shannon-framework",
-  "description": "Specification-driven development framework with skill-based architecture, 8D complexity analysis, wave orchestration, NO MOCKS testing, and SITREP coordination",
+  "description": "Most rigorous framework for mission-critical AI development. NEW V4.1: Forced Complete Reading Protocol, Automatic Skill Discovery, Unified /shannon:prime command. Includes 8D complexity analysis, wave orchestration, NO MOCKS testing.",
 
   "author": {
     "name": "Shannon Framework Team",
@@ -27,7 +27,10 @@
     "wave-orchestration",
     "context-preservation",
     "functional-testing",
-    "goal-management"
+    "goal-management",
+    "forced-reading",
+    "auto-skill-discovery",
+    "unified-priming"
   ],
 
   "skills": [
@@ -45,7 +48,8 @@
     "memory-coordination",
     "project-indexing",
     "sitrep-reporting",
-    "using-shannon"
+    "using-shannon",
+    "skill-discovery"
   ],
 
   "agents": [
@@ -81,7 +85,9 @@
     "sh_north_star",
     "sh_analyze",
     "sh_test",
-    "sh_scaffold"
+    "sh_scaffold",
+    "sh_discover_skills",
+    "shannon_prime"
   ],
 
   "hooks": [

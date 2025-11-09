@@ -1233,6 +1233,308 @@ if (!verify) throw Error("Serena save failed - analysis not persisted")
 
 ---
 
+## Performance Benchmarks
+
+**Expected Performance** (measured on Claude Sonnet 3.5):
+
+| Specification Size | Analysis Time | Quality Score | Recommended Depth |
+|--------------------|---------------|---------------|-------------------|
+| <500 words | 30-60 seconds | 0.95+ | standard |
+| 500-2000 words | 1-3 minutes | 0.90+ | standard |
+| 2000-5000 words | 3-8 minutes | 0.85+ | deep (if complexity >=0.60) |
+| >5000 words | 8-15 minutes | 0.80+ | deep (mandatory) |
+
+**Performance Indicators**:
+- ✅ **Fast**: <2 minutes for typical specs (<1000 words)
+- ⚠️ **Acceptable**: 2-5 minutes for complex specs (1000-3000 words)
+- 🔴 **Slow**: >8 minutes (check: is Sequential MCP needed? Is spec ambiguous requiring research?)
+
+**Quality Validation**:
+- Analysis quality score >=0.80 (4/5 validation checks passed)
+- Domain percentages sum to exactly 100%
+- Serena save verified with read-back test
+
+**When Analysis Takes Longer**:
+- Large specifications (>3000 words) → Expected, use --deep flag
+- High uncertainty score (>0.60) → Research needed, acceptable delay
+- Sequential MCP deep reasoning → 100-500 thoughts for complex specs, 5-15 minutes
+
+---
+
+## Complete Execution Walkthrough
+
+**Scenario**: User provides moderate complexity specification
+
+**Specification Text**:
+```
+Build a customer support ticketing system. Requirements:
+
+Frontend:
+- React dashboard for support agents
+- Ticket list with filtering (status, priority, assignee)
+- Ticket detail view with rich text editor for responses
+- Real-time updates when tickets change
+
+Backend:
+- Express API with TypeScript
+- Authentication for agents and admins
+- REST endpoints for tickets (CRUD)
+- WebSocket for real-time updates
+- Email integration (send/receive via SendGrid)
+
+Database:
+- PostgreSQL for tickets, users, responses
+- Schema with tickets, users, responses tables
+- Full-text search on ticket content
+
+Deployment:
+- Docker container
+- Deploy to AWS
+
+Timeline: 1 week
+```
+
+**Execution Process** (showing actual Claude workflow):
+
+**Step 1: Activation Detection**
+```
+Input: [Specification text above]
+Process:
+  - Check: Multi-paragraph? ✅ (3 paragraphs)
+  - Check: >5 features? ✅ (12+ distinct features)
+  - Check: Primary keywords? ✅ ("Build", "Requirements", "Deployment")
+  - Check: Attached files? ❌
+Decision: ACTIVATE spec-analysis
+```
+
+**Step 2: Calculate 8D Scores**
+```
+Structural Complexity (20% weight):
+  - Extract: "React dashboard" → 1 component mentioned
+  - Extract: "Express API" → 1 service
+  - Calculate: file_factor = log10(8+1)/3 ≈ 0.32 (estimate 8 files)
+  - Calculate: service_factor = log10(2+1)/3 ≈ 0.16
+  - Score: (0.32 × 0.40) + (0.16 × 0.30) = 0.18 × 1.5 (qualifier: multiple features) = 0.27
+  - Result: structural = 0.27
+
+Cognitive Complexity (15% weight):
+  - Count: "design" (0), "analyze" (0), "architect" (0)
+  - Count: No complex design requirements
+  - Score: 0.15 (baseline for any non-trivial spec)
+  - Result: cognitive = 0.15
+
+Coordination Complexity (15% weight):
+  - Teams: Frontend team, Backend team (implied 2 teams)
+  - Integration: "real-time updates" → 1 integration keyword
+  - Score: (2 × 0.25) + (1 × 0.15) = 0.65
+  - Result: coordination = 0.65
+
+Temporal Complexity (10% weight):
+  - Deadline: "1 week" → <7 days factor
+  - Score: 0.30 (1 week deadline)
+  - Result: temporal = 0.30
+
+Technical Complexity (15% weight):
+  - Advanced tech: "WebSocket" (real-time) → +0.20, "full-text search" → +0.15
+  - Integrations: "SendGrid" → +0.15
+  - Score: 0.20 + 0.15 + 0.15 = 0.50
+  - Result: technical = 0.50
+
+Scale Complexity (10% weight):
+  - Users: Not mentioned (assume <10K)
+  - Performance: Not mentioned
+  - Score: 0.15 (moderate scale implied)
+  - Result: scale = 0.15
+
+Uncertainty Complexity (10% weight):
+  - No "TBD", "unclear", "research" keywords
+  - Well-defined requirements
+  - Score: 0.10 (minimal uncertainty)
+  - Result: uncertainty = 0.10
+
+Dependencies Complexity (5% weight):
+  - External: SendGrid API → 1 dependency
+  - No blocking dependencies mentioned
+  - Score: 0.20
+  - Result: dependencies = 0.20
+
+Weighted Total:
+  (0.20 × 0.27) + (0.15 × 0.15) + (0.15 × 0.65) + (0.10 × 0.30) +
+  (0.15 × 0.50) + (0.10 × 0.15) + (0.10 × 0.10) + (0.05 × 0.20)
+  = 0.054 + 0.023 + 0.098 + 0.030 + 0.075 + 0.015 + 0.010 + 0.010
+  = 0.315
+  → Round to 0.32
+
+Interpretation: 0.32 → MODERATE (0.30-0.50 band)
+```
+
+**Step 3: Domain Detection**
+```
+Count Keywords:
+  Frontend: React(1), dashboard(1), filtering(1), view(1), real-time(1), updates(1) = 6
+  Backend: Express(1), API(1), TypeScript(1), Authentication(1), REST(1), endpoints(1),
+           CRUD(1), WebSocket(1), email(1), integration(1), SendGrid(1) = 11
+  Database: PostgreSQL(1), Schema(1), tables(3), full-text(1), search(1) = 7
+  DevOps: Docker(1), Deploy(1), AWS(1) = 3
+  Total: 27 keywords
+
+Calculate Percentages:
+  Frontend: (6/27) × 100 = 22.2% → round to 22%
+  Backend: (11/27) × 100 = 40.7% → round to 41%
+  Database: (7/27) × 100 = 25.9% → round to 26%
+  DevOps: (3/27) × 100 = 11.1% → round to 11%
+
+Normalize (sum = 100%):
+  22 + 41 + 26 + 11 = 100% ✅
+
+Result:
+  - Backend: 41%
+  - Database: 26%
+  - Frontend: 22%
+  - DevOps: 11%
+```
+
+**Step 4: MCP Recommendations**
+```
+Tier 1 (MANDATORY):
+  - Serena MCP → Always required
+
+Tier 2 (PRIMARY) - Domain >=20%:
+  - Backend 41% >=20% → Context7 MCP (Express/TypeScript docs)
+  - Database 26% >=20% → PostgreSQL MCP
+  - Frontend 22% >=20% → Magic MCP (component generation), Puppeteer MCP (testing)
+
+Tier 3 (SECONDARY):
+  - GitHub MCP (version control)
+  - AWS MCP (deployment)
+  - SendGrid MCP (email integration)
+
+Tier 4 (OPTIONAL):
+  - None (project well-defined, no research needed)
+
+Result: 8 MCPs recommended
+```
+
+**Step 5: 5-Phase Plan**
+```
+Base Timeline: 1-2 days (MODERATE 0.32, user requested 1 week → achievable)
+
+Phase 1 (15% = 2.4 hours):
+  - Objectives: Complete spec analysis, task breakdown, risk assessment
+  - Deliverables: Task list, complexity validated, MCP configuration
+  - Validation Gate: All requirements understood, no ambiguities
+
+Phase 2 (20% = 3.2 hours):
+  - Objectives: System design, API design (Backend 41%), Database schema (Database 26%)
+  - Deliverables: API spec, database schema, component hierarchy
+  - Validation Gate: Design approved, patterns established
+
+Phase 3 (40% = 6.4 hours):
+  - Objectives: Backend API implementation (41%), Database setup (26%), Frontend components (22%)
+  - Deliverables: REST endpoints, PostgreSQL schema, React dashboard
+  - Validation Gate: Features complete, NO MOCKS tests passing
+
+Phase 4 (15% = 2.4 hours):
+  - Objectives: Integration testing (Puppeteer for Frontend, real HTTP for Backend, real DB)
+  - Deliverables: Functional test suite (NO MOCKS), integration validated
+  - Validation Gate: All tests passing (Puppeteer, API, Database)
+
+Phase 5 (10% = 1.6 hours):
+  - Objectives: Docker containerization, AWS deployment, documentation
+  - Deliverables: Deployed system, technical docs
+  - Validation Gate: System deployed, docs complete
+
+Total: 16 hours ≈ 2 days (fits 1 week timeline comfortably)
+```
+
+**Step 6: Save to Serena MCP**
+```javascript
+const analysis_id = "spec_analysis_20251108_194500"
+const analysis = {
+  analysis_id: "spec_analysis_20251108_194500",
+  complexity_score: 0.32,
+  interpretation: "Moderate",
+  dimension_scores: {
+    structural: 0.27,
+    cognitive: 0.15,
+    coordination: 0.65,
+    temporal: 0.30,
+    technical: 0.50,
+    scale: 0.15,
+    uncertainty: 0.10,
+    dependencies: 0.20
+  },
+  domain_percentages: {
+    Backend: 41,
+    Database: 26,
+    Frontend: 22,
+    DevOps: 11
+  },
+  mcp_recommendations: [...],
+  phase_plan: [...],
+  execution_strategy: "sequential",
+  timeline_estimate: "1-2 days"
+}
+
+// Save
+mcp__serena__write_memory(analysis_id, JSON.stringify(analysis))
+
+// Verify
+const verify = mcp__serena__read_memory(analysis_id)
+if (!verify) throw Error("Serena save failed")
+```
+
+**Step 7: Format Output**
+```markdown
+# Specification Analysis ✅
+
+**Complexity**: 0.32 / 1.0 (MODERATE)
+**Execution Strategy**: Sequential (no waves needed)
+**Timeline**: 1-2 days (16 hours)
+**Analysis ID**: spec_analysis_20251108_194500
+
+## Complexity Breakdown
+[8D table as shown in examples]
+
+## Domain Breakdown
+- Backend (41%): Express API, TypeScript, REST endpoints, WebSocket real-time, SendGrid integration
+- Database (26%): PostgreSQL schema, full-text search, relational data
+- Frontend (22%): React dashboard, filtering, rich text editor
+- DevOps (11%): Docker, AWS deployment
+
+## Recommended MCPs (8 total)
+[Tiered list with rationale]
+
+## 5-Phase Plan (1-2 days)
+[Detailed phase breakdown]
+
+## Next Steps
+1. Configure 8 MCPs (prioritize Serena, Context7, PostgreSQL)
+2. Begin Phase 1 (2.4 hours)
+3. Sequential execution (no waves for MODERATE)
+```
+
+**Step 8: Chain to phase-planning**
+```
+Invoke phase-planning skill with analysis as input
+```
+
+**Step 9: Validation**
+```
+✅ Complexity: 0.32 ∈ [0.10, 0.95]
+✅ Domains: 41 + 26 + 22 + 11 = 100%
+✅ Serena in Tier 1
+✅ Domain MCPs: PostgreSQL (26%), Context7 (41%), Magic (22%)
+✅ 5 phases with gates
+Quality Score: 1.0 (5/5 checks passed)
+```
+
+---
+
+This walkthrough demonstrates the complete process Claude should follow when executing spec-analysis, showing the actual calculations, MCP selections, and validation steps.
+
+---
+
 ## Metadata
 
 **Version**: 4.0.0

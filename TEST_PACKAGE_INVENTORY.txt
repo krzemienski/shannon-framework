@@ -1,0 +1,25 @@
+SHANNON FRAMEWORK SDK TEST - PACKAGE INVENTORY
+Generated: $(date)
+═══════════════════════════════════════════════════════════════════════════════
+
+PRIMARY SCRIPTS
+-------------------------------------------------------------------------------
+test_shannon_sdk.py - 11K
+verify_test_setup.py - 4.7K
+
+DOCUMENTATION FILES
+-------------------------------------------------------------------------------
+EXAMPLES_SDK_TEST.md - 12K
+EXAMPLES_SDK_TEST.md - 12K
+QUICKSTART_SDK_TEST.md - 4.0K
+QUICKSTART_SDK_TEST.md - 4.0K
+SDK_TEST_SUMMARY.md - 14K
+TEST_SHANNON_SDK.md - 11K
+
+SKILL REFERENCE
+-------------------------------------------------------------------------------
+.claude/skills/SKILL.md - 34K
+
+TOTAL SIZE
+-------------------------------------------------------------------------------
+Total: 80 KB

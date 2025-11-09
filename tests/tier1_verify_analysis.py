@@ -186,8 +186,10 @@ async def test_spec_analysis(spec_config: dict) -> bool:
 
     options = ClaudeAgentOptions(
         plugins=[{"type": "local", "path": str(plugin_path)}],
+        setting_sources=["user", "project"],  # REQUIRED for plugins to load!
         model="claude-sonnet-4-5",
-        permission_mode="bypassPermissions"
+        permission_mode="bypassPermissions",
+        allowed_tools=["Skill"]  # Enable Skill tool for Shannon
     )
 
     # Execute /sh_spec

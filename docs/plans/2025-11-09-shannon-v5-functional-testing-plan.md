@@ -12,6 +12,32 @@
 
 ---
 
+## 🚀 For New Session: Quick Start
+
+**Current State**:
+- ✅ Phase 1 COMPLETE: Repository clean, SDK skill created, 4 test specs ready
+- 📍 START HERE: Phase 2 (Test Infrastructure Setup)
+
+**Context**:
+- **Repository**: shannon-framework/ (Shannon plugin v4.1 + v5 prep)
+- **SDK Skill**: `.claude/skills/testing-shannon-via-sdk/SKILL.md` (use this for all SDK work)
+- **Test Specs**: `docs/ref/` contains 4 real specifications (18KB to 153KB)
+- **Plan**: This document (you're reading it now)
+
+**Key Resources**:
+- Python Agents SDK skill: Use via `@.claude/skills/testing-shannon-via-sdk/SKILL.md`
+- Test specs: All in `docs/ref/*.md`
+- Shannon plugin source: `shannon-plugin/` (what we're testing)
+
+**First Command in New Session**:
+```
+/superpowers:execute-plan @docs/plans/2025-11-09-shannon-v5-functional-testing-plan.md
+```
+
+This will execute the plan starting from Phase 2.
+
+---
+
 ## Table of Contents
 
 1. [Overview](#overview)

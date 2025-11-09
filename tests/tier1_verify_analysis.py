@@ -12,6 +12,7 @@ Duration: 5-10 minutes
 Exit: 0 (all pass) or 1 (any fail)
 """
 
+import os
 import sys
 import asyncio
 import re
@@ -19,8 +20,20 @@ import time
 from pathlib import Path
 from typing import Dict, List, Tuple
 
+# CRITICAL: Set API key BEFORE importing SDK
+os.environ['ANTHROPIC_API_KEY'] = "YOUR_API_KEY_HERE"
+
+# Import SDK types (AFTER setting API key)
 try:
-    from claude_agent_sdk import query, ClaudeAgentOptions
+    from claude_agent_sdk import (
+        query,
+        ClaudeAgentOptions,
+        AssistantMessage,
+        SystemMessage,
+        ResultMessage,
+        TextBlock,
+        ToolUseBlock
+    )
 except ImportError:
     print("❌ ERROR: claude-agent-sdk not installed")
     print("   Run: pip install -r tests/requirements.txt")
@@ -173,7 +186,8 @@ async def test_spec_analysis(spec_config: dict) -> bool:
 
     options = ClaudeAgentOptions(
         plugins=[{"type": "local", "path": str(plugin_path)}],
-        model="claude-sonnet-4-5"
+        model="claude-sonnet-4-5",
+        permission_mode="bypassPermissions"
     )
 
     # Execute /sh_spec
@@ -182,20 +196,38 @@ async def test_spec_analysis(spec_config: dict) -> bool:
     start_time = time.time()
     messages = []
     tool_count = 0
+    session_id = None
+    cost = 0.0
 
     try:
-        async for msg in query(prompt=f'/sh_spec "{spec_text}"', options=options):
-            if msg.type == 'assistant':
-                messages.append(msg.content)
-                print(".", end="", flush=True)
-            elif msg.type == 'tool_call':
-                tool_count += 1
+        async for message in query(prompt=f'/sh_spec "{spec_text}"', options=options):
+            # AssistantMessage - Claude's responses with content blocks
+            if isinstance(message, AssistantMessage):
+                for block in message.content:
+                    if isinstance(block, TextBlock):
+                        messages.append(block.text)
+                        print(".", end="", flush=True)
+                    elif isinstance(block, ToolUseBlock):
+                        tool_count += 1
+
+            # SystemMessage - Session events (init, completion)
+            elif isinstance(message, SystemMessage):
+                if message.subtype == 'init':
+                    print("\n✅ Session initialized", end="", flush=True)
+
+            # ResultMessage - Final result with cost and duration
+            elif isinstance(message, ResultMessage):
+                session_id = message.session_id
+                cost = message.total_cost_usd or 0.0
+
     except Exception as e:
         print(f"\n❌ ERROR during execution: {e}")
+        import traceback
+        traceback.print_exc()
         return False
 
     elapsed = time.time() - start_time
-    print(f" ({tool_count} tools, {elapsed:.1f}s)")
+    print(f"\n✅ Completed: {tool_count} tools, {elapsed:.1f}s, ${cost:.4f}")
 
     if not messages:
         print("❌ ERROR: No output received from Shannon")

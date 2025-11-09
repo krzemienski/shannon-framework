@@ -50,3 +50,9 @@ docs/_build/
 .local/
 temp/
 tmp/
+
+# Claude Code local config
+.claude/
+
+# Serena MCP local state
+.serena/

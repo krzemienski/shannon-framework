@@ -101,8 +101,8 @@ Mission-critical domains where AI hallucinations are unacceptable:
 
 - **Serena MCP Server** (MANDATORY for Shannon)
   - Purpose: Context preservation, checkpointing, memory coordination
-  - Repository: https://github.com/anthropics/serena-mcp
-  - Installation: Follow Serena setup guide
+  - Repository: https://github.com/oraios/serena
+  - Installation: See Section 2.3.1 below for complete installation guide
   - Verification: `/list_memories` should work without error
 
 #### Recommended
@@ -202,26 +202,38 @@ cd shannon-framework
 
 Shannon cannot function without Serena MCP. If not configured:
 
-**Step 1: Install Serena MCP**
-```bash
-# Follow Serena MCP installation guide
-# Typically: npm install -g @anthropic/serena-mcp
-```
+**Step 1: Configure Serena MCP**
 
-**Step 2: Configure in Claude Code**
-```bash
-# Add to Claude Code MCP settings:
-# Settings → MCP Servers → Add Serena
+Add to `~/.claude/settings.json` in the `mcpServers` section:
 
-# Example configuration:
+```json
 {
-  "serena": {
-    "command": "serena-mcp",
-    "args": ["--port", "3000"],
-    "env": {}
+  "mcpServers": {
+    "serena": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server"
+      ]
+    }
   }
 }
 ```
+
+**Prerequisites**: Ensure `uv` is installed:
+```bash
+# macOS/Linux:
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Or via Homebrew:
+brew install uv
+```
+
+**Step 2: Restart Claude Code**
+
+Completely quit and restart Claude Code for MCP configuration to take effect.
 
 **Step 3: Verify Connection**
 ```bash
@@ -241,22 +253,309 @@ Shannon cannot function without Serena MCP. If not configured:
 # If successful: Serena MCP properly configured
 ```
 
-#### Optional MCP Configuration
+---
 
-**Sequential MCP** (Recommended for complex projects):
-- Enables: 100-500 step reasoning for architectural decisions
-- Used by: /sh_spec --deep, FORCED_READING_PROTOCOL synthesis
-- Setup: Follow Sequential MCP installation guide
+### 2.3 Complete MCP Installation Guide
 
-**Context7 MCP** (Recommended for framework projects):
-- Enables: React/Vue/Express pattern recommendations
-- Used by: mcp-discovery skill
-- Setup: Install Context7 plugin
+Shannon requires and recommends several MCP servers for full functionality. This section provides complete installation instructions for each MCP.
 
-**Puppeteer MCP** (Recommended for web projects):
-- Enables: Automated functional browser testing
-- Used by: /sh_test, TEST_GUARDIAN agent
-- Setup: Install Puppeteer MCP plugin
+**Configuration File**: All MCPs are configured in `~/.claude/settings.json` in the `mcpServers` section.
+
+---
+
+#### 2.3.1 Serena MCP (MANDATORY) ⭐
+
+**Purpose**: Context preservation, checkpointing, memory coordination across waves
+**Repository**: https://github.com/oraios/serena
+**Shannon Requirement**: **MANDATORY** - Shannon cannot function without Serena
+**Used by**: All Shannon commands, context-preservation skill, checkpoint system
+
+**Installation**:
+
+1. **Ensure `uv` is installed**:
+   ```bash
+   # macOS/Linux:
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+
+   # Or via Homebrew:
+   brew install uv
+   ```
+
+2. **Add to `~/.claude/settings.json`**:
+   ```json
+   {
+     "mcpServers": {
+       "serena": {
+         "command": "uvx",
+         "args": [
+           "--from",
+           "git+https://github.com/oraios/serena",
+           "serena",
+           "start-mcp-server"
+         ]
+       }
+     }
+   }
+   ```
+
+3. **Restart Claude Code** completely (full quit and reopen)
+
+**Health Check**:
+```bash
+# In Claude Code:
+/sh_check_mcps
+
+# Expected:
+# ✅ Serena MCP - Connected
+#    Status: Operational
+#    Purpose: Context preservation
+```
+
+**Troubleshooting**:
+- If "command not found: uvx" → Install uv: `brew install uv`
+- If connection fails → Check `~/.claude/logs/mcp-serena.log`
+- If still failing → Verify git+https access to github.com
+
+---
+
+#### 2.3.2 Sequential MCP (RECOMMENDED) ⭐
+
+**Purpose**: Enhanced multi-step reasoning with 100-500 thought chains for complex analysis
+**Package**: @modelcontextprotocol/server-sequential-thinking
+**Shannon Requirement**: **RECOMMENDED** - Required for deep analysis, V4.1 FORCED_READING_PROTOCOL synthesis
+**Used by**: /sh_spec --deep, /sh_analyze --deep, FORCED_READING_PROTOCOL (200+ thoughts)
+
+**Installation**:
+
+Add to `~/.claude/settings.json`:
+```json
+{
+  "mcpServers": {
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    }
+  }
+}
+```
+
+Restart Claude Code completely.
+
+**When to Install**:
+- Complex projects (complexity >= 0.60)
+- Large specifications (>1000 lines requiring forced reading)
+- Deep architectural analysis needed
+- V4.1 FORCED_READING_PROTOCOL synthesis (200-500 thoughts)
+
+**Health Check**:
+```bash
+# Test in Claude Code:
+# Type: "ultrathink about system architecture"
+# Should see: mcp__sequential-thinking__sequentialthinking tool calls
+```
+
+**Fallback**: Without Sequential MCP, Claude uses standard reasoning (functional but less thorough for complex specs)
+
+---
+
+#### 2.3.3 Puppeteer MCP (RECOMMENDED) ⭐
+
+**Purpose**: Real browser automation for functional testing (Shannon's NO MOCKS philosophy)
+**Package**: @modelcontextprotocol/server-puppeteer
+**Shannon Requirement**: **RECOMMENDED** - Required for NO MOCKS web functional testing
+**Used by**: /sh_test, TEST_GUARDIAN agent, functional-testing skill
+
+**Installation**:
+
+Add to `~/.claude/settings.json`:
+```json
+{
+  "mcpServers": {
+    "puppeteer": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-puppeteer"
+      ]
+    }
+  }
+}
+```
+
+Restart Claude Code completely.
+
+**When to Install**:
+- Web projects (Frontend domain >= 20%)
+- Any project requiring browser testing
+- Shannon's NO MOCKS testing (no jest.mock(), real browser only)
+
+**Health Check**:
+```bash
+# Shannon will report:
+/sh_check_mcps
+
+# Should show:
+# ✅ Puppeteer MCP - Connected
+#    Purpose: Browser automation for functional testing
+```
+
+**Fallback Chain**: Puppeteer → Playwright MCP → Chrome DevTools MCP → Manual testing
+
+---
+
+#### 2.3.4 Context7 MCP (RECOMMENDED)
+
+**Purpose**: Framework-specific patterns and best practices documentation
+**Package**: @upstash/context7-mcp
+**Shannon Requirement**: **RECOMMENDED** - Enhanced framework-specific recommendations
+**Used by**: mcp-discovery skill (Backend >= 20%), framework pattern analysis
+
+**Installation**:
+
+Add to `~/.claude/settings.json`:
+```json
+{
+  "mcpServers": {
+    "Context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ]
+    }
+  }
+}
+```
+
+Restart Claude Code completely.
+
+**When to Install**:
+- Framework-based projects (React, Vue, Express, FastAPI, Django, Rails, etc.)
+- Backend domain >= 20%
+- Need up-to-date framework patterns and best practices
+
+**Fallback**: Without Context7, Shannon uses web search or generic recommendations
+
+---
+
+#### 2.3.5 Conditional MCPs (Install as Needed)
+
+These MCPs enhance specific workflows but are not required for Shannon core functionality.
+
+**Playwright MCP** (Browser testing alternative):
+```json
+"playwright": {
+  "command": "npx",
+  "args": ["@playwright/mcp@latest"]
+}
+```
+**Use when**: Alternative to Puppeteer for browser testing
+**Package**: @playwright/mcp
+
+**Magic MCP** (UI component generation):
+```json
+"magic": {
+  "command": "npx",
+  "args": ["@21st-dev/magic"],
+  "env": {
+    "TWENTYFIRST_API_KEY": "your-api-key"
+  }
+}
+```
+**Use when**: Frontend >= 30%, need rapid UI component scaffolding
+**Requires**: API key from https://21st.dev
+**Referenced in**: domain-mcp-matrix.json (Frontend primary MCP)
+
+**GitHub MCP** (Version control operations):
+```json
+"github": {
+  "command": "npx",
+  "args": ["-y", "@modelcontextprotocol/server-github"],
+  "env": {
+    "GITHUB_PERSONAL_ACCESS_TOKEN": "your-github-token"
+  }
+}
+```
+**Use when**: GitHub integration needed
+**Requires**: GitHub Personal Access Token
+**Package**: @modelcontextprotocol/server-github
+
+**Git MCP** (Git operations):
+```json
+"git": {
+  "command": "uvx",
+  "args": ["mcp-server-git"]
+}
+```
+**Use when**: Git operations within Claude Code
+**Package**: mcp-server-git (uvx)
+
+**xc-mcp** (iOS Simulator testing):
+```json
+"xc-mcp": {
+  "command": "npx",
+  "args": ["xc-mcp"]
+}
+```
+**Use when**: iOS projects requiring functional testing
+**Requires**: macOS with Xcode installed
+**Referenced in**: functional-testing skill (iOS test platform)
+
+**Chrome DevTools MCP** (Browser automation fallback):
+```json
+"chrome-devtools": {
+  "command": "npx",
+  "args": ["-y", "chrome-devtools-mcp@latest"]
+}
+```
+**Use when**: Puppeteer/Playwright unavailable, need Chrome automation
+**Package**: chrome-devtools-mcp
+
+---
+
+#### 2.3.6 Complete Configuration Example
+
+**Full `~/.claude/settings.json` for Shannon with all MANDATORY and RECOMMENDED MCPs**:
+
+```json
+{
+  "mcpServers": {
+    "serena": {
+      "comment": "MANDATORY for Shannon Framework",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server"
+      ]
+    },
+    "sequential-thinking": {
+      "comment": "RECOMMENDED for complex specs and deep analysis",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+    },
+    "puppeteer": {
+      "comment": "RECOMMENDED for NO MOCKS browser testing",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"]
+    },
+    "Context7": {
+      "comment": "RECOMMENDED for framework patterns",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    }
+  }
+}
+```
+
+**After configuration**:
+1. Save file
+2. Restart Claude Code completely
+3. Verify: `/sh_check_mcps` should show all 4 connected
 
 ---
 
@@ -2139,13 +2438,27 @@ Shannon requires Serena MCP for context preservation
 # 1. Check status
 /sh_check_mcps
 
-# 2. Install Serena MCP
-# Follow: https://github.com/anthropics/serena-mcp
+# 2. Configure Serena MCP
+# Edit ~/.claude/settings.json and add to mcpServers section:
 
-# 3. Configure in Claude Code settings
-# Add Serena to MCP servers list
+{
+  "mcpServers": {
+    "serena": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server"
+      ]
+    }
+  }
+}
 
-# 4. Restart Claude Code
+# 3. Ensure uv is installed:
+# brew install uv
+
+# 4. Restart Claude Code completely
 
 # 5. Verify
 /sh_check_mcps

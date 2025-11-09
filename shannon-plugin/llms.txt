@@ -1,0 +1,63 @@
+# Shannon Framework
+
+Shannon Framework V4.1 is a rigorous specification-driven development plugin for Claude Code. Provides 8D complexity analysis, wave-based execution, NO MOCKS testing, and context preservation.
+
+## Installation
+
+- [Plugin Installation](README.md#installation): How to install Shannon via Claude Code plugin marketplace
+- [MCP Configuration Guide](../README.md#23-complete-mcp-installation-guide): Complete MCP setup instructions including mandatory Serena MCP
+
+## Core Documentation
+
+- [Shannon Framework README](README.md): Complete guide to Shannon Framework capabilities and usage
+- [8D Complexity Analysis](core/SPEC_ANALYSIS.md): Specification analysis algorithm and quantitative scoring system
+- [Wave Orchestration](core/WAVE_ORCHESTRATION.md): Multi-stage parallel execution system with agent coordination
+- [Phase Planning](core/PHASE_PLANNING.md): 5-phase implementation methodology with validation gates
+- [Forced Reading Protocol](core/FORCED_READING_PROTOCOL.md): V4.1 complete reading enforcement preventing skimming
+- [NO MOCKS Philosophy](core/TESTING_PHILOSOPHY.md): Functional testing requirements and rationale
+- [MCP Discovery](core/MCP_DISCOVERY.md): Intelligent MCP recommendation engine with tier-based prioritization
+- [Hook System](core/HOOK_SYSTEM.md): Automatic behavioral enforcement via session hooks
+- [Context Management](core/CONTEXT_MANAGEMENT.md): Checkpoint and restore patterns for zero information loss
+
+## Commands
+
+- [/sh_spec](commands/sh_spec.md): Analyze specifications using 8D complexity framework
+- [/sh_wave](commands/sh_wave.md): Execute wave-based development with parallel agent coordination
+- [/shannon:prime](commands/shannon_prime.md): V4.1 unified session priming (replaces 6 separate commands, <60s)
+- [/sh_discover_skills](commands/sh_discover_skills.md): V4.1 auto-discover and catalog all available skills
+- [/sh_checkpoint](commands/sh_checkpoint.md): Create comprehensive checkpoints of session state
+- [/sh_restore](commands/sh_restore.md): Restore complete project state from checkpoints
+- [/sh_test](commands/sh_test.md): NO MOCKS functional testing orchestration and enforcement
+- [/sh_status](commands/sh_status.md): Display Shannon framework status and health diagnostics
+- [/sh_check_mcps](commands/sh_check_mcps.md): Verify MCP server configuration and connectivity
+- [/sh_reflect](commands/sh_reflect.md): V4.1 honest gap analysis before completion claims
+
+## Key Skills
+
+- [spec-analysis](skills/spec-analysis/SKILL.md): Quantitative 8D complexity scoring algorithm (1544 lines)
+- [wave-orchestration](skills/wave-orchestration/SKILL.md): Multi-stage parallel execution coordination (1581 lines)
+- [functional-testing](skills/functional-testing/SKILL.md): NO MOCKS enforcement and real system testing (1402 lines)
+- [skill-discovery](skills/skill-discovery/SKILL.md): V4.1 automatic skill discovery and intelligent selection (565 lines)
+- [phase-planning](skills/phase-planning/SKILL.md): 5-phase implementation methodology with validation gates (1182 lines)
+- [context-preservation](skills/context-preservation/SKILL.md): Checkpoint creation with comprehensive state capture (562 lines)
+- [context-restoration](skills/context-restoration/SKILL.md): Full project state restoration from checkpoints (957 lines)
+- [mcp-discovery](skills/mcp-discovery/SKILL.md): Domain-based MCP recommendations with tier system (726 lines)
+
+## Agents
+
+- [WAVE_COORDINATOR](agents/WAVE_COORDINATOR.md): Parallel wave execution and agent spawning orchestration
+- [TEST_GUARDIAN](agents/TEST_GUARDIAN.md): NO MOCKS enforcement and functional test generation
+- [SPEC_ANALYZER](agents/SPEC_ANALYZER.md): 8D complexity analysis execution for large specifications
+- [CONTEXT_GUARDIAN](agents/CONTEXT_GUARDIAN.md): Emergency checkpoint creation via PreCompact hook
+- [PHASE_ARCHITECT](agents/PHASE_ARCHITECT.md): Phase plan generation and validation gate management
+
+## Examples and Guides
+
+- [Usage Examples](USAGE_EXAMPLES.md): 15 comprehensive workflow examples from simple to critical complexity
+- [Troubleshooting Guide](TROUBLESHOOTING.md): Common issues and solutions with MCP diagnostics
+- [User Guide](USER_GUIDE.md): In-depth usage documentation and advanced features
+- [Installation Guide](INSTALLATION.md): Detailed setup and MCP configuration instructions
+
+## Optional
+
+- [Architecture](ARCHITECTURE.md): System architecture and component design documentation

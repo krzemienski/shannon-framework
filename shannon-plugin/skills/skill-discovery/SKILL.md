@@ -387,6 +387,173 @@ for skill in high_confidence:
 
 ---
 
+---
+
+## Examples
+
+### Example 1: Basic Discovery (Session Start)
+
+**Scenario**: Fresh session, auto-discover all skills
+
+**Execution**:
+```bash
+# Triggered automatically by SessionStart hook
+/sh_discover_skills --cache
+
+# Step 1: Scan directories
+Glob("skills/*/SKILL.md") → 16 files
+Glob("~/.claude/skills/*/SKILL.md") → 88 files
+Total: 104 SKILL.md files found
+
+# Step 2: Parse YAML frontmatter (104 files)
+Parse spec-analysis/SKILL.md:
+  name: spec-analysis
+  description: "8-dimensional quantitative complexity..."
+  skill-type: QUANTITATIVE
+  triggers: [specification, analysis, complexity, quantitative]
+
+[Parse remaining 103 skills...]
+
+# Step 3: Build catalog
+skill_catalog = {
+  "project:spec-analysis": {...},
+  "project:wave-orchestration": {...},
+  "user:my-debugging-skill": {...},
+  ...104 entries
+}
+
+# Step 4: Cache to Serena
+write_memory("skill_catalog_session_20251108", skill_catalog)
+
+# Step 5: Present results
+```
+
+**Output**:
+```markdown
+📚 Skill Discovery Complete
+
+**Skills Found**: 104 total
+├─ Project: 16 skills
+├─ User: 88 skills
+└─ Plugin: 0 skills
+
+**By Type**:
+├─ RIGID: 12 skills
+├─ PROTOCOL: 45 skills
+├─ QUANTITATIVE: 23 skills
+└─ FLEXIBLE: 24 skills
+
+**Discovery Time**: 48ms
+**Cache Status**: Saved to Serena MCP (expires in 1 hour)
+```
+
+**Duration**: <100ms total
+
+### Example 2: Filtered Discovery (Finding Testing Skills)
+
+**Scenario**: User wants to see all testing-related skills
+
+**Execution**:
+```bash
+/sh_discover_skills --filter testing
+
+# Step 1-3: Discovery (use cache if <1 hour old)
+Retrieved from cache: 104 skills
+
+# Step 4: Apply filter
+Filter pattern: "testing" (case-insensitive)
+Matches:
+  - functional-testing: description contains "functional testing"
+  - test-driven-development: name contains "testing"
+  - testing-anti-patterns: name contains "testing"
+  - condition-based-waiting: description contains "testing"
+
+Filtered: 4/104 skills matching "testing"
+```
+
+**Output**:
+```markdown
+📚 Skill Discovery - Filtered Results
+
+**Filter**: "testing" (4/104 matching)
+
+### Matching Skills:
+
+1. **functional-testing** (RIGID)
+   NO MOCKS iron law enforcement. Real browser/API/database testing.
+   Use when: generating tests, enforcing functional test philosophy
+
+2. **test-driven-development** (RIGID)
+   RED-GREEN-REFACTOR cycle enforcement.
+   Use when: implementing features, before writing code
+
+3. **testing-anti-patterns** (PROTOCOL)
+   Common testing mistakes and fixes.
+   Use when: reviewing tests, avoiding mocks
+
+4. **condition-based-waiting** (PROTOCOL)
+   Replace arbitrary timeouts with condition polling.
+   Use when: async tests, race conditions, flaky tests
+
+**Discovery Time**: 5ms (cache hit)
+```
+
+### Example 3: Auto-Invocation with Command Execution
+
+**Scenario**: User runs /sh_spec, skills auto-invoked
+
+**Execution**:
+```bash
+User: /sh_spec "Build authentication system with OAuth"
+
+# PreCommand hook triggers skill selection:
+
+Step 1: Get skill catalog (from cache)
+104 skills loaded
+
+Step 2: Calculate confidence for each skill
+spec-analysis:
+  - trigger_match: 0.75 (spec, authentication, system)
+  - command_compat: 1.0 (/sh_spec maps to spec-analysis)
+  - context_match: 0.50
+  - deps_satisfied: 1.0
+  - confidence: 0.80 ✅ (>= 0.70 threshold)
+
+mcp-discovery:
+  - trigger_match: 0.60
+  - command_compat: 1.0
+  - context_match: 0.40
+  - deps_satisfied: 1.0
+  - confidence: 0.72 ✅ (>= 0.70 threshold)
+
+functional-testing:
+  - trigger_match: 0.20
+  - command_compat: 0.0 (not mapped to /sh_spec)
+  - context_match: 0.30
+  - deps_satisfied: 1.0
+  - confidence: 0.18 ❌ (< 0.70 threshold)
+
+Step 3: Auto-invoke high-confidence skills
+Invoking: spec-analysis (0.80)
+Invoking: mcp-discovery (0.72)
+
+Step 4: Load skill content into context
+Step 5: Execute /sh_spec with skills active
+```
+
+**Output** (visible to user):
+```markdown
+🎯 Auto-Invoked Skills (2 applicable):
+   - spec-analysis (confidence: 0.80)
+   - mcp-discovery (confidence: 0.72)
+
+[Proceeds with specification analysis using both skills...]
+```
+
+**Result**: Applicable skills automatically found and used, no manual discovery needed
+
+---
+
 ## The Bottom Line
 
 **Skill discovery should be automatic, not manual.**

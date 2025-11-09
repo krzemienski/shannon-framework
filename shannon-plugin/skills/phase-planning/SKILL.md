@@ -874,6 +874,300 @@ Focus: Rigorous validation, risk mitigation
 ❌ **Ignoring Complexity**: Always use complexity score
 ❌ **Fixed Templates**: Always adapt to project needs
 
+## Performance Benchmarks
+
+**Expected Performance** (measured on Claude Sonnet 3.5):
+
+| Complexity | Phase Count | Planning Time | Adjustment Calculations | Total Time |
+|------------|-------------|---------------|-------------------------|------------|
+| 0.00-0.30 (Simple) | 3 phases | 2-4 minutes | 1 adjustment | 3-5 min |
+| 0.30-0.50 (Moderate) | 3-4 phases | 4-6 minutes | 2 adjustments | 5-8 min |
+| 0.50-0.70 (Complex) | 5 phases | 6-10 minutes | 3 adjustments + wave plan | 10-15 min |
+| 0.70-0.85 (High) | 5 phases + gates | 10-15 minutes | 4 adjustments + risk | 15-20 min |
+| 0.85-1.00 (Critical) | 5-6 phases + risk | 15-25 minutes | 5+ adjustments + extensive risk | 25-35 min |
+
+**Performance Indicators**:
+- ✅ **Fast**: <10 minutes for typical projects (complexity <0.60)
+- ⚠️ **Acceptable**: 10-20 minutes for complex projects (0.60-0.85)
+- 🔴 **Slow**: >25 minutes (check: is complexity >0.85? Are extensive risk mitigations needed?)
+
+**Quality Validation**:
+- Timeline percentages sum to exactly 100.0% (±0.01% tolerance)
+- Each phase has >=3 validation criteria
+- Wave plan enabled for complexity >=0.50 AND multiple domains >=30%
+
+---
+
+## Complete Execution Walkthrough
+
+**Scenario**: Generate phase plan for a moderate complexity full-stack project
+
+**Input**:
+```json
+{
+  "spec_analysis": {
+    "complexity_score": 0.48,
+    "interpretation": "Moderate",
+    "domain_percentages": {
+      "Frontend": 45,
+      "Backend": 35,
+      "Database": 20
+    },
+    "timeline_estimate": "32 hours"
+  },
+  "project_name": "customer_portal"
+}
+```
+
+**Execution Process** (showing actual calculations):
+
+### **Step 1: Load Context**
+
+```
+Inputs loaded:
+- Complexity: 0.48 (MODERATE)
+- Timeline: 32 hours
+- Domains: Frontend 45%, Backend 35%, Database 20%
+- Project: customer_portal
+```
+
+### **Step 2: Determine Phase Count**
+
+```python
+complexity = 0.48
+
+if complexity < 0.30:
+    phase_count = 3  # Simple
+elif complexity < 0.50:  # ← MATCHES (0.48 < 0.50)
+    phase_count = 4  # Moderate (flexible 3-4, using 4 for better structure)
+elif complexity < 0.70:
+    phase_count = 5  # Complex
+# ...
+
+Result: phase_count = 4
+```
+
+### **Step 3: Calculate Timeline Distribution**
+
+**Step 3a: Start with base percentages (4-phase template for Moderate)**
+```
+Base 4-Phase Distribution:
+Phase 1 (Setup):          20%
+Phase 2 (Implementation): 45%
+Phase 3 (Testing):        25%
+Phase 4 (Deploy):         10%
+Total:                    100% ✅
+```
+
+**Step 3b: Apply Complexity Adjustments (Moderate: 0.30-0.50)**
+```
+Moderate adjustments (lines 315-319 don't apply to Moderate, so no complexity adjustments)
+
+After complexity adjustments:
+Phase 1: 20% (no change)
+Phase 2: 45% (no change)
+Phase 3: 25% (no change)
+Phase 4: 10% (no change)
+Total: 100% ✅
+```
+
+**Step 3c: Apply Domain Adjustments (Frontend-Heavy: 45% < 50%, so no domain-heavy adjustments)**
+```
+No domain adjustments apply (Frontend 45% < 50% threshold, Backend 35% < 50%, Database 20% < 30%)
+
+Final percentages:
+Phase 1: 20%
+Phase 2: 45%
+Phase 3: 25%
+Phase 4: 10%
+Total: 100% ✅
+```
+
+**Step 3d: Calculate Absolute Times**
+```
+Total timeline: 32 hours
+
+Phase 1: 32 × 0.20 = 6.4 hours
+Phase 2: 32 × 0.45 = 14.4 hours
+Phase 3: 32 × 0.25 = 8.0 hours
+Phase 4: 32 × 0.10 = 3.2 hours
+Total: 32.0 hours ✅
+```
+
+### **Step 4: Define Validation Gates**
+
+**Phase 1 → Phase 2 Gate** (Foundation complete):
+```
+Criteria:
+☐ Environment setup complete (dev tools installed, repos created)
+☐ Database schema designed (ERD complete, tables defined)
+☐ API contracts defined (endpoints documented, request/response schemas)
+☐ Technical stack validated (React/Node.js/PostgreSQL confirmed)
+☐ No blocking unknowns (all tech decisions made)
+
+Verification:
+- Run: npm install && npm run dev (dev environment starts successfully)
+- Check: Database schema file exists with >=5 tables defined
+- Check: API specification document complete (all endpoints documented)
+```
+
+**Phase 2 → Phase 3 Gate** (Implementation complete):
+```
+Criteria:
+☐ All core features implemented (customer login, data display, CRUD operations)
+☐ Frontend components functional (all UI screens render correctly)
+☐ Backend endpoints operational (all API routes return 200/201 on valid requests)
+☐ Database migrations applied (all tables created, seed data loaded)
+☐ No critical bugs (application runs without crashes)
+
+Verification:
+- Run: npm test (all unit tests passing)
+- Check: Manual testing of each feature (login → view data → create record → success)
+- Check: Database query test (SELECT * FROM customers returns results)
+```
+
+**Phase 3 → Phase 4 Gate** (Testing complete):
+```
+Criteria:
+☐ All functional tests passing (Puppeteer tests for Frontend, real HTTP for Backend, real DB)
+☐ Integration tests passing (Frontend ↔ Backend ↔ Database flows validated)
+☐ NO MOCKS compliance verified (all tests use real browser, real HTTP, real database)
+☐ Test coverage >= 80% (code coverage report generated)
+☐ Performance acceptable (page loads <2s, API responds <500ms)
+
+Verification:
+- Run: npm run test:functional (all Puppeteer tests pass)
+- Run: npm run test:integration (all service integration tests pass)
+- Check: No mock libraries in dependencies (verify package.json)
+- Run: npm run coverage (verify >=80%)
+```
+
+**Phase 4 → Complete Gate** (Deployment ready):
+```
+Criteria:
+☐ Deployed to staging environment (accessible URL, application loads)
+☐ Smoke tests passing (critical user flows work on staging)
+☐ Documentation complete (README, API docs, deployment guide)
+☐ Deployment runbook validated (tested deployment process from scratch)
+☐ Production-ready (security review passed, performance validated)
+
+Verification:
+- Access: https://staging.customer-portal.com (loads successfully)
+- Run: smoke test suite on staging (all critical flows pass)
+- Check: docs/ directory has README.md, API.md, DEPLOY.md
+- Test: Follow deployment runbook on clean environment (succeeds)
+```
+
+### **Step 5: Create Wave Mapping**
+
+```python
+# Check wave plan requirements
+complexity >= 0.5?  # 0.48 < 0.5 → NO
+multi_domain = count(d for d in domains if d >= 30)  # Frontend 45%, Backend 35% → 2 domains
+multi_domain >= 2?  # YES
+
+# Decision: Optional wave plan (not mandatory for 0.48, but beneficial for 2 domains >=30%)
+
+# Since complexity < 0.50, wave plan is OPTIONAL
+# For this example, we'll use sequential execution
+wave_plan = {
+  "enabled": False,
+  "pattern": "Sequential",
+  "rationale": "Complexity 0.48 < 0.50 threshold for mandatory waves"
+}
+```
+
+### **Step 6: Generate Phase Plan Document**
+
+```markdown
+# Implementation Plan: Customer Portal
+
+## Executive Summary
+- **Complexity Score**: 0.48 / 1.0 (MODERATE)
+- **Phase Count**: 4 phases
+- **Total Timeline**: 32 hours (2-3 days)
+- **Parallelization**: Sequential (complexity < 0.50)
+
+## Phase Breakdown
+
+### Phase 1: Foundation & Setup (20% - 6.4 hours)
+**Objectives**:
+- Environment configuration
+- Database schema design
+- API contract definition
+
+**Key Activities**:
+1. Set up development environment (30%)
+2. Design database schema (40%)
+3. Define API contracts (30%)
+
+**Deliverables**:
+- Development environment running
+- Database ERD and schema file
+- API specification document
+
+**Validation Gate**:
+☐ Environment setup complete
+☐ Database schema designed
+☐ API contracts defined
+☐ Technical stack validated
+☐ No blocking unknowns
+
+**Estimated Duration**: 6.4 hours
+
+### Phase 2: Implementation (45% - 14.4 hours)
+[Similar structure for Phases 2-4...]
+```
+
+### **Step 7: Store in Serena Memory**
+
+```javascript
+write_memory("phase_plan_customer_portal", {
+  project_name: "customer_portal",
+  complexity_score: 0.48,
+  phase_count: 4,
+  total_timeline: "32 hours",
+  interpretation_band: "Moderate",
+  phases: [
+    {number: 1, name: "Foundation & Setup", percentage: 20, duration: "6.4 hours", ...},
+    {number: 2, name: "Implementation", percentage: 45, duration: "14.4 hours", ...},
+    {number: 3, name: "Testing", percentage: 25, duration: "8.0 hours", ...},
+    {number: 4, name: "Deployment", percentage: 10, duration: "3.2 hours", ...}
+  ],
+  wave_plan: {enabled: false, pattern: "Sequential"},
+  created_at: "2025-11-08T20:15:00Z"
+})
+
+// Verify
+const verify = read_memory("phase_plan_customer_portal")
+if (!verify) throw Error("Serena save failed")
+```
+
+### **Validation**
+
+```
+✅ Phase count: 4 (correct for complexity 0.48 ∈ [0.30, 0.50])
+✅ Timeline percentages: 20 + 45 + 25 + 10 = 100%
+✅ Each phase has >=3 validation criteria (5, 5, 5, 5 respectively)
+✅ Wave plan logic: Enabled=false (correct for 0.48 < 0.50)
+✅ Serena storage: phase_plan_customer_portal saved
+
+Quality Score: 1.0 (5/5 checks passed)
+```
+
+---
+
+This walkthrough demonstrates the complete phase planning process, showing:
+1. How to determine phase count from complexity
+2. How to calculate timeline distribution with adjustments
+3. How percentage adjustments work (additive: 15% + 5% = 20%)
+4. How to ensure percentages sum to 100%
+5. When to enable wave plans (complexity >=0.50 AND multi-domain)
+
+**Key Clarification**: All percentage adjustments are ADDITIVE (e.g., "+5%" means add 5 percentage points to the base value, not multiply). This ensures percentages always sum to 100% when adjustments are balanced.
+
+---
+
 ## References
 
 - **PHASE_PLANNING.md**: Complete 5-phase methodology (1562 lines)

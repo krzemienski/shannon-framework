@@ -1,0 +1,534 @@
+# Claude Code Expo - Mobile App Verification Scenario
+# React Native + Express + WebSocket real-time event management app
+
+metadata:
+  name: claude_code_expo
+  description: "Mobile event management app for Claude Code conferences with real-time updates"
+  architecture: "React Native (iOS/Android) + Express (REST + WebSocket) + MongoDB + Redis"
+  complexity: high
+  domains: [mobile, backend, database]
+  estimated_duration: "50-70 minutes"
+
+specification:
+  user_request: |
+    Build a mobile expo/conference management app for Claude Code events:
+    - React Native app for iOS and Android
+    - Express backend with REST API and WebSocket support
+    - MongoDB for event and attendee data
+    - Redis for real-time presence and caching
+    - Real-time features: live schedule updates, attendee tracking, notifications
+    - QR code check-in system
+    - Event calendar and session reminders
+    - Speaker profiles and session details
+    - Interactive venue maps
+    - Social features: attendee networking, session ratings
+    - Push notifications for schedule changes
+    - Offline support with local data sync
+
+  technical_requirements:
+    mobile:
+      - "React Native 0.72+ with TypeScript"
+      - "React Navigation for routing"
+      - "React Native Paper for UI components"
+      - "Redux Toolkit for state management"
+      - "React Query for data fetching"
+      - "Socket.io-client for WebSocket"
+      - "React Native QR Code Scanner"
+      - "React Native Push Notifications"
+      - "AsyncStorage for local persistence"
+      - "React Native Maps for venue navigation"
+
+    backend:
+      - "Express 4.18+ with TypeScript"
+      - "Socket.io for WebSocket server"
+      - "MongoDB with Mongoose ODM"
+      - "Redis for caching and presence"
+      - "JWT authentication with jsonwebtoken"
+      - "QR code generation with qrcode"
+      - "Push notification service with FCM/APNS"
+      - "Rate limiting with express-rate-limit"
+      - "Validation with Zod"
+
+    database:
+      - "MongoDB 6+ with proper indexing"
+      - "Collections: events, sessions, attendees, speakers, checkins, ratings"
+      - "Geospatial indexes for venue maps"
+      - "Full-text search on sessions and speakers"
+
+expected_flow:
+  skills_invoked:
+    - name: "project-planning"
+      phase: "initialization"
+      expected_output: "Project structure, mobile architecture, backend design"
+
+    - name: "mobile-architect"
+      phase: "architecture"
+      expected_output: "React Native structure, navigation flow, state management design"
+
+    - name: "react-native-dev"
+      phase: "mobile_implementation"
+      expected_output: "React Native components, screens, navigation, API integration"
+
+    - name: "nodejs-backend-dev"
+      phase: "backend_implementation"
+      expected_output: "Express routes, WebSocket handlers, MongoDB models, business logic"
+
+    - name: "database-architect"
+      phase: "database_implementation"
+      expected_output: "MongoDB schema, indexes, seed data, queries"
+
+    - name: "api-integration-specialist"
+      phase: "integration"
+      expected_output: "Mobile-backend integration, WebSocket setup, push notifications"
+
+    - name: "mobile-testing-specialist"
+      phase: "testing"
+      expected_output: "Unit tests, integration tests, E2E tests with Detox"
+
+  agents_invoked:
+    - name: "mobile-development-lead"
+      trigger: "React Native mobile app implementation"
+      expected_actions: ["coordinate mobile features", "handle platform differences", "optimize performance"]
+
+    - name: "real-time-systems-specialist"
+      trigger: "WebSocket real-time features"
+      expected_actions: ["design event architecture", "handle reconnection", "optimize message flow"]
+
+    - name: "mobile-integration-specialist"
+      trigger: "Native module integration"
+      expected_actions: ["configure native modules", "test on devices", "handle permissions"]
+
+  mcps_used:
+    - name: "memory"
+      usage: "Store app architecture, API contracts, navigation structure"
+
+    - name: "sequential-thinking"
+      usage: "Complex navigation flows, WebSocket architecture decisions"
+
+    - name: "Context7"
+      usage: "Fetch React Native, Express, Socket.io documentation"
+
+expected_artifacts:
+  directory_structure: |
+    claude-code-expo/
+    ├── mobile/
+    │   ├── src/
+    │   │   ├── components/
+    │   │   │   ├── events/
+    │   │   │   ├── sessions/
+    │   │   │   ├── attendees/
+    │   │   │   ├── maps/
+    │   │   │   └── shared/
+    │   │   ├── screens/
+    │   │   │   ├── auth/
+    │   │   │   ├── home/
+    │   │   │   ├── schedule/
+    │   │   │   ├── checkin/
+    │   │   │   └── profile/
+    │   │   ├── navigation/
+    │   │   ├── store/
+    │   │   ├── api/
+    │   │   ├── hooks/
+    │   │   ├── types/
+    │   │   └── utils/
+    │   ├── android/
+    │   ├── ios/
+    │   ├── package.json
+    │   └── tsconfig.json
+    ├── backend/
+    │   ├── src/
+    │   │   ├── routes/
+    │   │   ├── controllers/
+    │   │   ├── models/
+    │   │   ├── services/
+    │   │   ├── middleware/
+    │   │   ├── websocket/
+    │   │   ├── utils/
+    │   │   └── types/
+    │   ├── tests/
+    │   ├── package.json
+    │   └── tsconfig.json
+    ├── docker-compose.yml
+    └── README.md
+
+  mobile_files:
+    required:
+      - path: "mobile/src/App.tsx"
+        must_contain: ["NavigationContainer", "Provider", "PersistGate"]
+
+      - path: "mobile/src/navigation/AppNavigator.tsx"
+        must_contain: ["createStackNavigator", "createBottomTabNavigator"]
+
+      - path: "mobile/src/screens/home/HomeScreen.tsx"
+        must_contain: ["useQuery", "FlatList", "RefreshControl"]
+
+      - path: "mobile/src/screens/schedule/ScheduleScreen.tsx"
+        must_contain: ["Calendar", "session", "useWebSocket"]
+
+      - path: "mobile/src/screens/checkin/CheckInScreen.tsx"
+        must_contain: ["QRCodeScanner", "useMutation", "onBarCodeScanned"]
+
+      - path: "mobile/src/components/sessions/SessionCard.tsx"
+        must_contain: ["TouchableOpacity", "speaker", "time"]
+
+      - path: "mobile/src/api/client.ts"
+        must_contain: ["axios", "baseURL", "interceptors", "AsyncStorage"]
+
+      - path: "mobile/src/store/authSlice.ts"
+        must_contain: ["createSlice", "token", "user", "login"]
+
+      - path: "mobile/src/hooks/useWebSocket.ts"
+        must_contain: ["Socket", "useEffect", "emit", "on"]
+
+      - path: "mobile/package.json"
+        must_contain: ["react-native", "typescript", "@react-navigation", "socket.io-client"]
+
+  backend_files:
+    required:
+      - path: "backend/src/app.ts"
+        must_contain: ["express", "cors", "helmet", "Server"]
+
+      - path: "backend/src/routes/events.ts"
+        must_contain: ["Router", "authenticate", "validate"]
+
+      - path: "backend/src/routes/sessions.ts"
+        must_contain: ["Router", "get", "post", "put"]
+
+      - path: "backend/src/routes/checkin.ts"
+        must_contain: ["Router", "QR", "verify"]
+
+      - path: "backend/src/controllers/eventController.ts"
+        must_contain: ["async", "Request", "Response", "Event"]
+
+      - path: "backend/src/models/Event.ts"
+        must_contain: ["Schema", "model", "timestamps"]
+
+      - path: "backend/src/models/Session.ts"
+        must_contain: ["Schema", "ref", "speaker", "attendees"]
+
+      - path: "backend/src/services/notificationService.ts"
+        must_contain: ["FCM", "APNS", "sendPush"]
+
+      - path: "backend/src/websocket/handlers.ts"
+        must_contain: ["Socket", "on", "emit", "join"]
+
+      - path: "backend/package.json"
+        must_contain: ["express", "socket.io", "mongoose", "ioredis"]
+
+  database_files:
+    required:
+      - path: "backend/src/models/index.ts"
+        must_contain: ["Event", "Session", "Attendee", "CheckIn"]
+
+runtime_verification:
+  services:
+    - name: "MongoDB"
+      check_command: "docker-compose ps mongodb"
+      expected_status: "Up"
+      port: 27017
+
+    - name: "Redis"
+      check_command: "docker-compose ps redis"
+      expected_status: "Up"
+      port: 6379
+
+    - name: "Backend"
+      check_command: "curl -f http://localhost:3000/health"
+      expected_response: '{"status": "ok"}'
+      port: 3000
+
+    - name: "WebSocket Server"
+      check_command: "curl -f http://localhost:3000/socket.io/"
+      expected_status: 200
+      port: 3000
+
+  mobile_startup:
+    ios:
+      - step: "Install dependencies"
+        command: "cd mobile && npm install && cd ios && pod install"
+
+      - step: "Start Metro bundler"
+        command: "cd mobile && npm start"
+        wait_seconds: 5
+
+      - step: "Run iOS simulator"
+        command: "cd mobile && npm run ios"
+        wait_seconds: 30
+
+    android:
+      - step: "Install dependencies"
+        command: "cd mobile && npm install"
+
+      - step: "Start Metro bundler"
+        command: "cd mobile && npm start"
+        wait_seconds: 5
+
+      - step: "Run Android emulator"
+        command: "cd mobile && npm run android"
+        wait_seconds: 40
+
+functional_tests:
+  api_endpoints:
+    - name: "Health check"
+      method: GET
+      url: "http://localhost:3000/health"
+      expected_status: 200
+
+    - name: "Register attendee"
+      method: POST
+      url: "http://localhost:3000/api/auth/register"
+      body: |
+        {
+          "email": "attendee@example.com",
+          "password": "SecurePass123!",
+          "name": "Test Attendee",
+          "company": "Tech Corp"
+        }
+      expected_status: 201
+      expected_body_contains: ["id", "email", "token"]
+
+    - name: "Get events list"
+      method: GET
+      url: "http://localhost:3000/api/events"
+      expected_status: 200
+      expected_body_contains: ["events", "total"]
+
+    - name: "Get event details"
+      method: GET
+      url: "http://localhost:3000/api/events/${EVENT_ID}"
+      expected_status: 200
+      expected_body_contains: ["id", "name", "sessions", "venue"]
+
+    - name: "Get sessions for event"
+      method: GET
+      url: "http://localhost:3000/api/events/${EVENT_ID}/sessions"
+      expected_status: 200
+      expected_body_contains: ["sessions", "speakers"]
+
+    - name: "QR code check-in"
+      method: POST
+      url: "http://localhost:3000/api/checkin"
+      headers:
+        Authorization: "Bearer ${ACCESS_TOKEN}"
+      body: |
+        {
+          "qrCode": "SESSION-123-ATTENDEE-456",
+          "sessionId": "123"
+        }
+      expected_status: 200
+      expected_body_contains: ["success", "timestamp"]
+
+    - name: "Rate session"
+      method: POST
+      url: "http://localhost:3000/api/sessions/${SESSION_ID}/rate"
+      headers:
+        Authorization: "Bearer ${ACCESS_TOKEN}"
+      body: |
+        {
+          "rating": 5,
+          "comment": "Great session!"
+        }
+      expected_status: 201
+
+  mobile_interactions:
+    detox_actions:
+      - name: "User registration flow"
+        steps:
+          - action: "launch"
+            device: "iPhone 14"
+
+          - action: "tap"
+            id: "register-button"
+
+          - action: "typeText"
+            id: "email-input"
+            text: "test@example.com"
+
+          - action: "typeText"
+            id: "password-input"
+            text: "SecurePass123!"
+
+          - action: "tap"
+            id: "submit-button"
+
+          - action: "waitFor"
+            id: "home-screen"
+            timeout: 5000
+
+      - name: "Browse and join session"
+        steps:
+          - action: "tap"
+            id: "schedule-tab"
+
+          - action: "scrollTo"
+            id: "session-list"
+            edge: "bottom"
+
+          - action: "tap"
+            id: "session-card-0"
+
+          - action: "tap"
+            id: "join-session-button"
+
+          - action: "waitFor"
+            id: "session-details"
+
+      - name: "QR code check-in"
+        steps:
+          - action: "tap"
+            id: "checkin-tab"
+
+          - action: "tap"
+            id: "scan-qr-button"
+
+          - action: "wait"
+            milliseconds: 2000
+
+          - action: "mockBarCodeScan"
+            value: "SESSION-123-ATTENDEE-456"
+
+          - action: "waitFor"
+            id: "checkin-success"
+
+integration_tests:
+  cross_domain_flows:
+    - name: "Real-time schedule update flow"
+      description: "Backend pushes schedule change, mobile receives via WebSocket"
+      steps:
+        - domain: backend
+          action: "Admin updates session time"
+          verification: "Database updated, WebSocket event emitted"
+
+        - domain: websocket
+          action: "Broadcast 'schedule:updated' event"
+          verification: "All connected clients receive message"
+
+        - domain: mobile
+          action: "Mobile receives WebSocket event"
+          verification: "Schedule UI updates without refresh"
+
+        - domain: mobile
+          action: "Push notification sent"
+          verification: "Users receive notification about change"
+
+    - name: "QR check-in with offline support"
+      description: "Scan QR code, sync when online"
+      steps:
+        - domain: mobile
+          action: "User scans QR code while offline"
+          verification: "Check-in stored in AsyncStorage"
+
+        - domain: mobile
+          action: "App comes back online"
+          verification: "Pending check-ins detected"
+
+        - domain: backend
+          action: "Mobile syncs check-ins to backend"
+          verification: "Check-ins saved to MongoDB"
+
+        - domain: websocket
+          action: "Broadcast attendance update"
+          verification: "Other attendees see updated count"
+
+    - name: "Social networking flow"
+      description: "Attendee discovery and connection"
+      steps:
+        - domain: mobile
+          action: "User searches for attendees"
+          verification: "Search API returns results"
+
+        - domain: mobile
+          action: "User sends connection request"
+          verification: "Request saved and notification queued"
+
+        - domain: backend
+          action: "Push notification sent to recipient"
+          verification: "FCM/APNS notification delivered"
+
+        - domain: websocket
+          action: "Real-time notification to recipient"
+          verification: "In-app notification appears"
+
+        - domain: mobile
+          action: "Recipient accepts connection"
+          verification: "Connection stored, both users updated"
+
+cross_platform_tests:
+  devices:
+    ios:
+      - name: "iPhone 14 Pro"
+        simulator: "iOS 17.0"
+        tests: ["All screens render", "Navigation works", "Push notifications"]
+
+      - name: "iPhone SE"
+        simulator: "iOS 17.0"
+        tests: ["Small screen layout", "Touch targets", "Keyboard handling"]
+
+      - name: "iPad Air"
+        simulator: "iOS 17.0"
+        tests: ["Tablet layout", "Split screen", "Landscape orientation"]
+
+    android:
+      - name: "Pixel 7"
+        emulator: "API 33"
+        tests: ["All screens render", "Navigation works", "Push notifications"]
+
+      - name: "Pixel 5"
+        emulator: "API 33"
+        tests: ["Standard phone layout", "Android gestures"]
+
+      - name: "Samsung Galaxy Tab"
+        emulator: "API 33"
+        tests: ["Tablet layout", "Multi-window", "Landscape orientation"]
+
+  orientations:
+    - name: "Portrait"
+      tests: ["Default UI layout", "Navigation", "Modal dialogs"]
+
+    - name: "Landscape"
+      tests: ["Rotated layout", "Session details", "Map view"]
+
+performance_tests:
+  metrics:
+    - name: "App launch time"
+      measurement: "Time to interactive"
+      max_time_ms: 3000
+      platform: ["iOS", "Android"]
+
+    - name: "Session list render"
+      measurement: "FlatList render with 100 items"
+      max_time_ms: 500
+
+    - name: "QR code scan time"
+      measurement: "Time from scan to check-in confirmation"
+      max_time_ms: 1000
+
+    - name: "WebSocket message latency"
+      measurement: "Time from server emit to mobile receive"
+      max_latency_ms: 100
+
+    - name: "Offline sync performance"
+      measurement: "Sync 50 pending actions after reconnect"
+      max_time_ms: 5000
+
+validation_criteria:
+  must_pass:
+    - "Mobile app builds and runs on iOS simulator"
+    - "Mobile app builds and runs on Android emulator"
+    - "All API endpoints return expected responses"
+    - "WebSocket real-time updates function correctly"
+    - "QR code scanning works and triggers check-in"
+    - "Push notifications are received on device"
+    - "Offline mode queues actions and syncs when online"
+    - "Navigation between all screens works correctly"
+
+  should_pass:
+    - "App renders correctly on all device sizes"
+    - "Performance metrics meet thresholds"
+    - "No memory leaks in long-running sessions"
+    - "Battery usage is reasonable"
+
+  nice_to_have:
+    - "Animations are smooth (60fps)"
+    - "Accessibility features work (VoiceOver, TalkBack)"
+    - "Deep linking handles all routes correctly"

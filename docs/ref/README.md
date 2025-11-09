@@ -15,7 +15,7 @@ This directory contains permanent reference documentation for Shannon v5.0 devel
 
 ---
 
-## Claude Agent SDK Documentation (10 files)
+## Claude Agent SDK Documentation (12 files)
 
 **Complete Python SDK reference:**
 
@@ -30,15 +30,17 @@ This directory contains permanent reference documentation for Shannon v5.0 devel
 9. **agent-sdk-custom-tools.md** - Creating in-process MCP tools
 10. **agent-sdk-sessions.md** - Session management and resumption
 11. **agent-sdk-modifying-prompts.md** - System prompt customization
+12. **agent-sdk-todo-tracking.md** - Todo system integration
 
 ---
 
-## Claude Code CLI Documentation (2 files)
+## Claude Code CLI Documentation (3 files)
 
 **Interactive Claude Code reference:**
 
 1. **claude-code-cli-plugins.md** - Plugin installation and management
-2. **claude-code-plugins.md** - Plugin structure and development
+2. **claude-code-cli-skills.md** - Skills in Claude Code CLI
+3. **claude-code-cli-slash-commands.md** - Slash commands in Claude Code CLI
 
 ---
 
@@ -68,5 +70,5 @@ This directory contains permanent reference documentation for Shannon v5.0 devel
 
 ---
 
-**Total**: 18 files (4 specs + 14 SDK/CLI docs)
+**Total**: 21 files (4 specs + 12 SDK docs + 3 CLI docs + 2 llms.txt)
 **Purpose**: Offline reference, prevent documentation drift, verify patterns

@@ -2,6 +2,11 @@
 
 **This is the Shannon Framework repository.**
 
+**Current Work**: Shannon v5.0 Functional Verification (feature/v5.0-functional-testing branch)
+- Building ALL 4 test applications to verify Shannon's complete capabilities
+- Three-layer verification: Flow + Artifacts + Functionality
+- See: `.serena/memories/SHANNON_V5_COMPREHENSIVE_VERIFICATION_PLAN.md`
+
 For Shannon users: **Install via plugin system** (recommended)
 For Shannon developers: This directory contains plugin source code
 

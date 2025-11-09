@@ -36,7 +36,6 @@
 6. [Commands Reference](#commands-reference)
    - [Shannon Core Commands](#shannon-core-commands)
    - [V4.1 NEW Commands](#v41-new-commands)
-   - [SuperClaude Enhanced Commands](#superclaude-enhanced-commands)
 7. [Skills Reference](#skills-reference)
    - [Core Skills](#core-skills)
    - [Context Skills](#context-skills)
@@ -143,8 +142,8 @@ Mission-critical domains where AI hallucinations are unacceptable:
 # 🎯 Shannon Framework V4.1.0
 # Status: ACTIVE ✅
 # Serena MCP: CONNECTED ✅
-# Commands: 48 loaded
-# Skills: 16 loaded
+# Commands: 14 loaded
+# Skills: 17 loaded
 # Agents: 24 available
 ```
 
@@ -574,8 +573,8 @@ Status: ACTIVE ✅
 Serena MCP: CONNECTED ✅
 
 Components Loaded:
-├─ Commands: 48 (sh_* 11, sc_* 35, new 2)
-├─ Skills: 16 discovered
+├─ Commands: 14 (Shannon core)
+├─ Skills: 17 discovered
 ├─ Agents: 24 available
 ├─ Hooks: 6 active
 └─ Core Patterns: 9 loaded
@@ -1086,12 +1085,11 @@ Shannon operates as 6-layer behavioral framework:
 
 ### Component Architecture
 
-**48 Commands** (shannon-plugin/commands/):
+**14 Commands** (shannon-plugin/commands/):
 - **Shannon Core** (11): /sh_spec, /sh_wave, /sh_checkpoint, /sh_restore, /sh_status, /sh_check_mcps, /sh_memory, /sh_north_star, /sh_analyze, /sh_test, /sh_scaffold
-- **V4.1 NEW** (2): /sh_discover_skills, /shannon:prime
-- **SuperClaude Enhanced** (35): sc_analyze, sc_implement, sc_build, etc.
+- **V4.1 NEW** (3): /sh_discover_skills, /sh_reflect, /shannon:prime
 
-**16 Skills** (shannon-plugin/skills/):
+**17 Skills** (shannon-plugin/skills/):
 - **Core**: spec-analysis (1,544L), wave-orchestration (1,581L), phase-planning (1,182L)
 - **Context**: context-preservation (562L), context-restoration (957L), memory-coordination (1,010L)
 - **Testing**: functional-testing (1,402L), confidence-check (1,277L)
@@ -2784,8 +2782,8 @@ A: Fresh mode: 10-20s, Resume mode: 30-60s, Full mode: 60-120s
 **Q: Can I use Shannon without waves?**
 A: Yes! Simple projects (complexity <0.50) use direct implementation. Waves only for complexity >=0.50.
 
-**Q: What's the difference between sh_* and sc_* commands?**
-A: sh_* = Shannon-native commands, sc_* = SuperClaude commands enhanced by Shannon
+**Q: What commands does Shannon provide?**
+A: Shannon provides 14 commands (11 core + 3 V4.1 enhancements). All commands start with /sh_* or /shannon:*
 
 **Q: How do I know which skills are active?**
 A: Use /sh_discover_skills to see all available. Skills auto-load contextually based on task.

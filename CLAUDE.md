@@ -62,20 +62,58 @@ Working on Shannon Framework itself? You're in the right place.
 - Core: `shannon-plugin/core/` (9 behavioral patterns)
 - Hooks: `shannon-plugin/hooks/`
 
-### Testing Locally
+### Testing Locally (Interactive)
 
 ```bash
 # In Claude Code:
 /plugin marketplace add /path/to/shannon-framework
-/plugin uninstall shannon@shannon  # If already installed
-/plugin install shannon@shannon
+/plugin uninstall shannon-plugin@shannon-framework  # If already installed
+/plugin install shannon-plugin@shannon-framework
 
 # Restart Claude Code
 
 # Test your changes
-/sh_status
-/shannon:prime
+/shannon-plugin:sh_status
+/shannon-plugin:shannon_prime
 ```
+
+### Testing via SDK (Programmatic)
+
+**CRITICAL**: Shannon plugin must be INSTALLED to work with Python SDK.
+
+```bash
+# Step 1: Create marketplace.json at repo root (.claude-plugin/marketplace.json)
+# Step 2: Add marketplace
+claude plugin marketplace add /path/to/shannon-framework
+
+# Step 3: Install plugin
+claude plugin install shannon-plugin@shannon-framework
+
+# Step 4: Restart Claude Code (if running)
+```
+
+**Then in Python:**
+```python
+from claude_agent_sdk import query, ClaudeAgentOptions
+
+options = ClaudeAgentOptions(
+    setting_sources=["user", "project"],  # REQUIRED!
+    permission_mode="bypassPermissions",
+    allowed_tools=["Skill"]
+)
+
+# Use namespaced commands
+async for message in query(
+    prompt="/shannon-plugin:sh_spec \"specification text\"",
+    options=options
+):
+    print(message)
+```
+
+**Key requirements:**
+- `setting_sources=["user", "project"]` required for plugin loading
+- Commands are namespaced: `/shannon-plugin:sh_spec` (not `/sh_spec`)
+- Plugin must be installed via marketplace (cannot load from local path directly)
 
 ### Development Workflow
 

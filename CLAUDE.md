@@ -55,7 +55,7 @@ Working on Shannon Framework itself? You're in the right place.
 
 ### Plugin Source
 
-**Location**: `shannon-plugin/`
+**Location**: root directory
 - Commands: `commands/` (14 commands: 13 sh_* + 1 shannon_prime)
 - Agents: `agents/` (24 agents)
 - Skills: `skills/` (17 skills)
@@ -117,7 +117,7 @@ async for message in query(
 
 ### Development Workflow
 
-1. **Edit Files**: Make changes in `shannon-plugin/`
+1. **Edit Files**: Make changes in root directory
 2. **Test Locally**: Install plugin from local path
 3. **Validate**: Test commands and skills
 4. **Commit**: Follow conventional commit format

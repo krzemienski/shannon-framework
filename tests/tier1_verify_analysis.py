@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple
 
 # CRITICAL: Set API key BEFORE importing SDK
-os.environ['ANTHROPIC_API_KEY'] = "YOUR_API_KEY_HERE"
+os.environ['ANTHROPIC_API_KEY'] = "REMOVED_SECRET"
 
 # Import SDK types (AFTER setting API key)
 try:

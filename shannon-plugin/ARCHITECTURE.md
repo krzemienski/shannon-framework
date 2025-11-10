@@ -67,9 +67,8 @@ User Input: /sh_spec "Build web app"
 ```
 
 **48 Commands Total**:
-- **Shannon (sh_*)**: 11 core commands
-- **Shannon V4.1**: 2 new commands (sh_discover_skills, shannon_prime)
-- **SuperClaude (sc_*)**: 35 enhanced commands
+- **Shannon (sh_*)**: 13 core commands
+- **Shannon V4.1**: 1 new unified command (shannon_prime)
 
 ### Layer 2: Skills (Business Logic)
 

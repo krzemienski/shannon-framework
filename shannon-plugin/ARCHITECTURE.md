@@ -595,19 +595,19 @@ shannon-plugin/
 ├── .claude-plugin/          # Plugin Metadata
 │   └── plugin.json         # Manifest (defines plugin)
 │
-├── commands/                # User Interface Layer (48 commands)
+├── commands/                # User Interface Layer (14 commands)
 │   ├── sh_spec.md         # Specification analysis
 │   ├── sh_wave.md         # Wave execution
 │   ├── shannon_prime.md   # V4.1: Unified priming ⭐
 │   └── sh_discover_skills.md  # V4.1: Skill discovery ⭐
 │
-├── skills/                  # Business Logic Layer (16 skills)
+├── skills/                  # Business Logic Layer (17 skills)
 │   ├── spec-analysis/      # 8D algorithm
 │   ├── wave-orchestration/ # Multi-stage execution
 │   ├── skill-discovery/    # V4.1: Auto-discovery ⭐
 │   └── using-shannon/      # Meta-skill (enforces workflows)
 │
-├── agents/                  # Specialized Execution Layer (26 agents)
+├── agents/                  # Specialized Execution Layer (24 agents)
 │   ├── SPEC_ANALYZER.md
 │   ├── WAVE_COORDINATOR.md
 │   └── ... (24 more)
@@ -758,9 +758,9 @@ Installed Plugin:
      ↓
 Runtime:
 Claude Code loads plugin
-├── Registers 48 commands
-├── Registers 26 agents
-├── Loads 16 skills
+├── Registers 14 commands
+├── Registers 24 agents
+├── Loads 17 skills
 ├── Activates 5 hooks
 └── Shannon behaviors active
 ```

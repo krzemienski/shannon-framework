@@ -125,7 +125,7 @@ You'll see:
 
 ## 📚 Commands
 
-### Shannon Commands (11) - **NEW V4.1 commands in bold**
+### Shannon Commands (14 total) - **NEW V4.1 commands in bold**
 
 - `/sh_spec` - Specification analysis with 8D complexity scoring (now with forced reading)
 - `/sh_checkpoint` - Save session context to Serena MCP
@@ -139,15 +139,11 @@ You'll see:
 - **`/sh_discover_skills`** - **V4.1: Auto-discover all available skills**
 - **`/shannon:prime`** - **V4.1: Unified session priming (<60s total)**
 
-### Enhanced SuperClaude Commands (24)
-Shannon enhances SuperClaude commands with wave orchestration, Serena integration, and structured patterns:
-- `/sc_analyze`, `/sc_implement`, `/sc_build`, `/sc_test` - and 20 more enhanced commands
-
 Run `/help` to see all available commands.
 
 ## 🤖 Agents
 
-Shannon includes **26 specialized agents**:
+Shannon includes **24 specialized agents**:
 
 **Core**: WAVE_COORDINATOR, SPEC_ANALYZER, PHASE_ARCHITECT, CONTEXT_GUARDIAN, TEST_GUARDIAN
 

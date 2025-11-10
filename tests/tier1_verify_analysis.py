@@ -192,8 +192,8 @@ async def test_spec_analysis(spec_config: dict) -> bool:
         allowed_tools=["Skill"]  # Enable Skill tool for Shannon
     )
 
-    # Execute /sh_spec
-    print(f"\nExecuting /sh_spec...")
+    # Execute /shannon-plugin:sh_spec (namespaced command)
+    print(f"\nExecuting /shannon-plugin:sh_spec...")
 
     start_time = time.time()
     messages = []
@@ -202,7 +202,7 @@ async def test_spec_analysis(spec_config: dict) -> bool:
     cost = 0.0
 
     try:
-        async for message in query(prompt=f'/sh_spec "{spec_text}"', options=options):
+        async for message in query(prompt=f'/shannon-plugin:sh_spec "{spec_text}"', options=options):
             # AssistantMessage - Claude's responses with content blocks
             if isinstance(message, AssistantMessage):
                 for block in message.content:

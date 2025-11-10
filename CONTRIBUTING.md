@@ -34,7 +34,7 @@ cd shannon-framework
 
 ### 3. Make Changes
 
-Edit files in `shannon-plugin/`:
+Edit plugin files in root directory:
 - Commands: `commands/`
 - Skills: `skills/`
 - Agents: `agents/`

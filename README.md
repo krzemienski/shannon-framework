@@ -182,7 +182,7 @@ cd shannon-framework
 **For Active Shannon Development**:
 
 ```bash
-# After making changes to shannon-plugin/:
+# After making changes to plugin files:
 /plugin uninstall shannon@shannon
 /plugin install shannon@shannon
 
@@ -2810,7 +2810,7 @@ Shannon Framework is open source. Contributions welcome!
 
 1. **Fork repository**: https://github.com/krzemienski/shannon-framework
 2. **Create feature branch**: `git checkout -b feature/my-enhancement`
-3. **Make changes**: Edit files in `shannon-plugin/`
+3. **Make changes**: Edit files in root directory
 4. **Test locally**:
    ```bash
    /plugin marketplace add /path/to/shannon-framework

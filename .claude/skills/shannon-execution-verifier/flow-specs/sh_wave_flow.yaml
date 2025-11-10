@@ -1,0 +1,502 @@
+# Shannon /sh_wave Command - Expected Execution Flow
+# Defines expected behavior and verification points for Shannon Framework execution
+
+metadata:
+  command: /sh_wave
+  description: "Execute Shannon Framework with full orchestration and verification"
+  version: "5.0.0"
+  last_updated: "2025-01-09"
+
+command_signature:
+  name: sh_wave
+  aliases: [shannon:wave, wave]
+  description: "Execute project implementation using Shannon Framework orchestration"
+  arguments:
+    - name: spec_file
+      type: path
+      required: false
+      description: "Path to specification YAML (optional, can use --interactive)"
+
+  flags:
+    - name: --interactive
+      short: -i
+      type: boolean
+      description: "Launch interactive specification wizard"
+
+    - name: --dry-run
+      type: boolean
+      description: "Show execution plan without running"
+
+    - name: --phases
+      type: string
+      description: "Comma-separated phases to execute (default: all)"
+      example: "analysis,planning,implementation"
+
+    - name: --verify
+      type: boolean
+      default: true
+      description: "Enable runtime verification"
+
+    - name: --test
+      type: boolean
+      default: true
+      description: "Run functional tests after implementation"
+
+    - name: --output
+      type: path
+      description: "Output directory for generated artifacts"
+
+execution_flow:
+  phase_1_initialization:
+    name: "Initialization"
+    duration_estimate: "2-5 minutes"
+
+    steps:
+      - step: 1
+        action: "Load specification"
+        details: "Parse YAML spec or launch interactive wizard"
+        verification:
+          - "Spec file valid YAML"
+          - "All required fields present"
+          - "Tech stack specified"
+          - "Features enumerated"
+        outputs:
+          - "Parsed specification object"
+          - "Project metadata"
+
+      - step: 2
+        action: "Session priming"
+        details: "Invoke /shannon:prime equivalent behavior"
+        skills_invoked: ["session-context-priming"]
+        verification:
+          - "Critical memories loaded"
+          - "Plan files read"
+          - "Codebase context gathered"
+          - "Serena MCP activated"
+        outputs:
+          - "Session context object"
+          - "Memory references"
+
+      - step: 3
+        action: "Skill discovery"
+        details: "Discover and index available skills"
+        verification:
+          - "Skills directory scanned"
+          - "Skill metadata parsed"
+          - "Skill dependencies resolved"
+        outputs:
+          - "Available skills registry"
+          - "Skill dependency graph"
+
+      - step: 4
+        action: "Environment setup"
+        details: "Verify tools, create directories, initialize git"
+        verification:
+          - "Required tools present (node, python, docker)"
+          - "Output directory created"
+          - "Git repository initialized"
+        outputs:
+          - "Environment status report"
+          - "Tool versions"
+
+  phase_2_analysis:
+    name: "Analysis & Planning"
+    duration_estimate: "5-10 minutes"
+
+    steps:
+      - step: 1
+        action: "Invoke project-planning skill"
+        skill: "project-planning"
+        inputs:
+          - "User specification"
+          - "Tech stack preferences"
+        verification:
+          - "Architecture diagram produced"
+          - "Domain breakdown identified"
+          - "Tech stack confirmed"
+          - "File structure defined"
+        outputs:
+          - "Project plan document"
+          - "Architecture decisions"
+          - "Domain specifications"
+
+      - step: 2
+        action: "Invoke appropriate architect skill"
+        skill_selection:
+          condition: "project_type"
+          mapping:
+            web_app: "full-stack-architect"
+            mobile_app: "mobile-architect"
+            cli_tool: "python-cli-architect"
+            api_service: "api-architect"
+        verification:
+          - "Detailed architecture produced"
+          - "API contracts defined"
+          - "Database schema designed"
+          - "Component hierarchy specified"
+        outputs:
+          - "Architecture specification"
+          - "API documentation"
+          - "Database schema"
+
+      - step: 3
+        action: "Create execution plan"
+        details: "Generate phase-by-phase implementation plan"
+        verification:
+          - "Phases defined with skills"
+          - "Dependencies identified"
+          - "Execution order determined"
+        outputs:
+          - "Execution plan YAML"
+          - "Dependency graph"
+
+  phase_3_implementation:
+    name: "Implementation"
+    duration_estimate: "20-60 minutes (varies by complexity)"
+
+    domain_orchestration:
+      parallel_execution: true
+      coordination_strategy: "Lead agent coordinates parallel skills"
+
+      domains:
+        - name: frontend
+          skills: ["react-frontend-dev", "react-native-dev", "vue-frontend-dev"]
+          agent: "frontend-development-lead"
+          outputs:
+            - "React/Vue components"
+            - "Pages and routing"
+            - "State management"
+            - "API integration"
+
+        - name: backend
+          skills: ["python-backend-dev", "nodejs-backend-dev", "fastapi-dev"]
+          agent: "backend-development-lead"
+          outputs:
+            - "API routes"
+            - "Business logic"
+            - "Data models"
+            - "Middleware"
+
+        - name: database
+          skills: ["database-architect", "postgres-dev", "mongodb-dev"]
+          agent: "database-specialist"
+          outputs:
+            - "Schema definitions"
+            - "Migrations"
+            - "Seed data"
+            - "Indexes"
+
+        - name: infrastructure
+          skills: ["docker-specialist", "deployment-engineer"]
+          agent: "devops-lead"
+          outputs:
+            - "Dockerfile"
+            - "docker-compose.yml"
+            - "CI/CD config"
+
+    verification_points:
+      - checkpoint: "After each domain"
+        checks:
+          - "Files created in expected locations"
+          - "Syntax valid (linting passes)"
+          - "Dependencies installed"
+          - "No obvious errors"
+
+      - checkpoint: "After implementation phase"
+        checks:
+          - "All expected files present"
+          - "Directory structure matches spec"
+          - "Integration points defined"
+
+  phase_4_integration:
+    name: "Integration"
+    duration_estimate: "10-20 minutes"
+
+    steps:
+      - step: 1
+        action: "Invoke API integration specialist"
+        skill: "api-integration-specialist"
+        verification:
+          - "Frontend-backend integration complete"
+          - "API calls configured"
+          - "Error handling implemented"
+        outputs:
+          - "Integration code"
+          - "API client modules"
+
+      - step: 2
+        action: "Cross-domain integration"
+        details: "Ensure all domains work together"
+        verification:
+          - "Environment variables configured"
+          - "Connection strings valid"
+          - "CORS configured"
+        outputs:
+          - ".env.example"
+          - "Integration documentation"
+
+  phase_5_testing:
+    name: "Testing"
+    duration_estimate: "10-15 minutes"
+
+    steps:
+      - step: 1
+        action: "Invoke testing specialist"
+        skill: "testing-specialist"
+        verification:
+          - "Test files created"
+          - "Unit tests written"
+          - "Integration tests written"
+        outputs:
+          - "Test suites"
+          - "Test configuration"
+
+      - step: 2
+        action: "Run tests"
+        details: "Execute test suites and collect results"
+        verification:
+          - "Tests execute without errors"
+          - "Coverage meets threshold"
+        outputs:
+          - "Test results"
+          - "Coverage report"
+
+  phase_6_verification:
+    name: "Runtime Verification"
+    duration_estimate: "5-10 minutes"
+    enabled_by_flag: "--verify"
+
+    steps:
+      - step: 1
+        action: "Start services"
+        details: "Use docker-compose or direct commands"
+        verification:
+          - "All services start successfully"
+          - "Health checks pass"
+          - "Ports accessible"
+        outputs:
+          - "Service logs"
+          - "Health check results"
+
+      - step: 2
+        action: "Run functional tests"
+        details: "Execute API endpoint tests, UI interactions"
+        verification:
+          - "API endpoints return expected responses"
+          - "UI renders correctly"
+          - "User flows work end-to-end"
+        outputs:
+          - "Functional test results"
+          - "Screenshots (if applicable)"
+
+      - step: 3
+        action: "Collect metrics"
+        details: "Performance, response times, resource usage"
+        outputs:
+          - "Performance metrics"
+          - "Resource usage report"
+
+  phase_7_reporting:
+    name: "Reporting & Handoff"
+    duration_estimate: "2-5 minutes"
+
+    steps:
+      - step: 1
+        action: "Generate execution report"
+        details: "Summarize what was built and how to run it"
+        outputs:
+          - "Execution summary"
+          - "Files created list"
+          - "Skills invoked log"
+
+      - step: 2
+        action: "Create README"
+        details: "Generate comprehensive README.md"
+        verification:
+          - "Installation instructions present"
+          - "Usage examples included"
+          - "Architecture documented"
+        outputs:
+          - "README.md"
+
+      - step: 3
+        action: "Display next steps"
+        details: "Show user how to run and develop the project"
+        outputs:
+          - "Console output with next steps"
+          - "Quick start guide"
+
+agent_coordination:
+  lead_agents:
+    - role: "full-stack-development-lead"
+      triggers: ["web application", "full-stack project"]
+      responsibilities:
+        - "Coordinate frontend and backend skills"
+        - "Resolve integration issues"
+        - "Ensure consistency across domains"
+
+    - role: "mobile-development-lead"
+      triggers: ["mobile app", "React Native", "iOS", "Android"]
+      responsibilities:
+        - "Coordinate mobile-specific skills"
+        - "Handle platform differences"
+        - "Optimize performance"
+
+    - role: "cli-development-specialist"
+      triggers: ["CLI tool", "command-line"]
+      responsibilities:
+        - "Design command interface"
+        - "Implement interactive features"
+        - "Handle cross-platform compatibility"
+
+  coordination_patterns:
+    - pattern: "Parallel with sync points"
+      description: "Skills execute in parallel, sync at checkpoints"
+      use_when: "Domains are independent"
+
+    - pattern: "Sequential with dependencies"
+      description: "Skills execute in order based on dependencies"
+      use_when: "Domains depend on each other"
+
+    - pattern: "Iterative refinement"
+      description: "Skills execute, review, refine, repeat"
+      use_when: "Complex integration required"
+
+mcp_usage:
+  memory:
+    usage_points:
+      - "Store architecture decisions"
+      - "Cache API contracts"
+      - "Save component specifications"
+      - "Log skill invocations"
+
+  sequential_thinking:
+    usage_points:
+      - "Complex architectural decisions"
+      - "Debugging integration issues"
+      - "Optimizing execution plan"
+      - "Analyzing test failures"
+
+  context7:
+    usage_points:
+      - "Fetch library documentation (React, FastAPI, etc.)"
+      - "Retrieve best practices"
+      - "Get code examples"
+
+  serena:
+    usage_points:
+      - "Read codebase files"
+      - "Perform symbol searches"
+      - "Modify code with precision"
+      - "Run validation commands"
+
+error_handling:
+  strategies:
+    - error_type: "Skill invocation failed"
+      recovery:
+        - "Log error details"
+        - "Attempt retry with adjusted parameters"
+        - "Fall back to alternative skill"
+        - "Escalate to user if critical"
+
+    - error_type: "Service startup failed"
+      recovery:
+        - "Check logs for root cause"
+        - "Verify dependencies installed"
+        - "Check port availability"
+        - "Provide troubleshooting steps"
+
+    - error_type: "Test failures"
+      recovery:
+        - "Analyze failing tests"
+        - "Attempt fixes"
+        - "Re-run tests"
+        - "Report unresolved failures"
+
+    - error_type: "Integration issues"
+      recovery:
+        - "Invoke sequential-thinking MCP"
+        - "Debug connection points"
+        - "Fix configuration"
+        - "Re-run integration tests"
+
+output_artifacts:
+  required_files:
+    - "README.md"
+    - "docker-compose.yml (if applicable)"
+    - ".env.example"
+    - "package.json or pyproject.toml"
+    - "Test files"
+
+  optional_files:
+    - "ARCHITECTURE.md"
+    - "API_DOCS.md"
+    - "DEPLOYMENT.md"
+    - "CONTRIBUTING.md"
+
+  reports:
+    - "execution_summary.yaml"
+    - "skills_invoked.log"
+    - "test_results.xml"
+    - "performance_metrics.json"
+
+validation_checklist:
+  pre_execution:
+    - "Specification is valid"
+    - "Required tools are available"
+    - "Output directory is writable"
+
+  post_phase:
+    - "Expected outputs generated"
+    - "No critical errors logged"
+    - "Dependencies resolved"
+
+  post_execution:
+    - "All expected files created"
+    - "Services start successfully"
+    - "Tests pass"
+    - "README is comprehensive"
+
+success_criteria:
+  must_have:
+    - "Project builds without errors"
+    - "Core features implemented"
+    - "Basic tests pass"
+    - "README includes setup instructions"
+
+  should_have:
+    - "All specified features implemented"
+    - "Integration tests pass"
+    - "Documentation is complete"
+    - "Code follows best practices"
+
+  nice_to_have:
+    - "Performance optimizations applied"
+    - "Advanced features implemented"
+    - "Comprehensive test coverage"
+    - "Production-ready configuration"
+
+example_invocations:
+  basic:
+    command: "/sh_wave spec.yaml"
+    description: "Execute with specification file"
+
+  interactive:
+    command: "/sh_wave --interactive"
+    description: "Launch specification wizard"
+
+  dry_run:
+    command: "/sh_wave spec.yaml --dry-run"
+    description: "Show execution plan without running"
+
+  selective_phases:
+    command: "/sh_wave spec.yaml --phases analysis,implementation"
+    description: "Execute only specified phases"
+
+  no_verification:
+    command: "/sh_wave spec.yaml --verify=false --test=false"
+    description: "Skip runtime verification and testing"
+
+  custom_output:
+    command: "/sh_wave spec.yaml --output ./my-project"
+    description: "Generate artifacts in custom directory"

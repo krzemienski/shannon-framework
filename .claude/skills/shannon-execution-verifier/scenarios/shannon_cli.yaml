@@ -1,0 +1,509 @@
+# Shannon CLI - Command-Line Tool Verification Scenario
+# Python CLI with Click framework and Claude SDK integration
+
+metadata:
+  name: shannon_cli
+  description: "Command-line interface for Shannon Framework with Claude API integration"
+  architecture: "Python CLI + Click + Claude SDK + Rich UI + Config Management"
+  complexity: medium
+  domains: [cli, api_integration]
+  estimated_duration: "30-40 minutes"
+
+specification:
+  user_request: |
+    Build Shannon CLI - a command-line tool for the Shannon Framework:
+    - Python-based CLI using Click framework
+    - Claude API integration for AI-powered features
+    - Rich terminal UI with colors, tables, progress bars
+    - Interactive prompts and wizards
+    - Configuration management with YAML/TOML
+    - Command groups for different features
+    - Shell completion (bash, zsh, fish)
+    - Logging and verbose output modes
+    - Error handling with helpful messages
+    - Plugin system for extensibility
+    - Testing with pytest and Click testing utilities
+    - Distribution via PyPI
+    - Cross-platform support (Linux, macOS, Windows)
+
+  technical_requirements:
+    core:
+      - "Python 3.11+ with type hints"
+      - "Click 8.1+ for CLI framework"
+      - "Rich for terminal UI"
+      - "Anthropic SDK for Claude API"
+      - "Pydantic for configuration validation"
+      - "PyYAML or tomli for config parsing"
+      - "Prompt Toolkit for interactive prompts"
+      - "Typer for alternative CLI approach (optional)"
+
+    development:
+      - "pytest for testing"
+      - "pytest-cov for coverage"
+      - "Click testing utilities"
+      - "mypy for type checking"
+      - "ruff for linting"
+      - "black for formatting"
+
+    distribution:
+      - "Poetry or setuptools for packaging"
+      - "PyPI for distribution"
+      - "GitHub Actions for CI/CD"
+
+expected_flow:
+  skills_invoked:
+    - name: "project-planning"
+      phase: "initialization"
+      expected_output: "CLI structure, command hierarchy, config design"
+
+    - name: "python-cli-architect"
+      phase: "architecture"
+      expected_output: "Command groups, argument design, plugin architecture"
+
+    - name: "python-backend-dev"
+      phase: "implementation"
+      expected_output: "Click commands, Claude API integration, config management"
+
+    - name: "api-integration-specialist"
+      phase: "integration"
+      expected_output: "Claude SDK integration, error handling, streaming responses"
+
+    - name: "python-testing-specialist"
+      phase: "testing"
+      expected_output: "Unit tests, integration tests, CLI testing"
+
+    - name: "python-packaging-specialist"
+      phase: "packaging"
+      expected_output: "pyproject.toml, setup.py, distribution config"
+
+  agents_invoked:
+    - name: "cli-development-specialist"
+      trigger: "CLI command implementation"
+      expected_actions: ["design command interface", "handle user input", "format output"]
+
+    - name: "api-integration-specialist"
+      trigger: "Claude API integration"
+      expected_actions: ["handle API calls", "manage streaming", "error recovery"]
+
+  mcps_used:
+    - name: "memory"
+      usage: "Store CLI design patterns, command specifications"
+
+    - name: "Context7"
+      usage: "Fetch Click, Rich, Anthropic SDK documentation"
+
+expected_artifacts:
+  directory_structure: |
+    shannon-cli/
+    ├── src/
+    │   └── shannon_cli/
+    │       ├── commands/
+    │       │   ├── __init__.py
+    │       │   ├── init.py
+    │       │   ├── spec.py
+    │       │   ├── wave.py
+    │       │   ├── prime.py
+    │       │   ├── status.py
+    │       │   └── config.py
+    │       ├── core/
+    │       │   ├── __init__.py
+    │       │   ├── cli.py
+    │       │   ├── config.py
+    │       │   ├── claude_client.py
+    │       │   └── exceptions.py
+    │       ├── utils/
+    │       │   ├── __init__.py
+    │       │   ├── output.py
+    │       │   ├── prompts.py
+    │       │   └── validators.py
+    │       ├── plugins/
+    │       │   ├── __init__.py
+    │       │   └── loader.py
+    │       ├── __init__.py
+    │       ├── __main__.py
+    │       └── py.typed
+    ├── tests/
+    │   ├── commands/
+    │   ├── core/
+    │   ├── utils/
+    │   ├── conftest.py
+    │   └── test_cli.py
+    ├── docs/
+    │   ├── commands.md
+    │   ├── configuration.md
+    │   └── development.md
+    ├── pyproject.toml
+    ├── README.md
+    └── .github/
+        └── workflows/
+            ├── test.yml
+            └── publish.yml
+
+  core_files:
+    required:
+      - path: "src/shannon_cli/__main__.py"
+        must_contain: ["click", "main", "__name__ == '__main__'"]
+
+      - path: "src/shannon_cli/core/cli.py"
+        must_contain: ["@click.group", "@click.version_option", "context_settings"]
+
+      - path: "src/shannon_cli/core/config.py"
+        must_contain: ["BaseModel", "ConfigDict", "YAML", "load", "save"]
+
+      - path: "src/shannon_cli/core/claude_client.py"
+        must_contain: ["anthropic", "Anthropic", "messages", "stream"]
+
+      - path: "src/shannon_cli/core/exceptions.py"
+        must_contain: ["ClickException", "ConfigError", "APIError"]
+
+  command_files:
+    required:
+      - path: "src/shannon_cli/commands/init.py"
+        must_contain: ["@click.command", "interactive", "prompt", "config"]
+
+      - path: "src/shannon_cli/commands/spec.py"
+        must_contain: ["@click.command", "@click.argument", "claude", "analyze"]
+
+      - path: "src/shannon_cli/commands/wave.py"
+        must_contain: ["@click.command", "execute", "phases", "progress"]
+
+      - path: "src/shannon_cli/commands/prime.py"
+        must_contain: ["@click.command", "session", "context", "memories"]
+
+      - path: "src/shannon_cli/commands/status.py"
+        must_contain: ["@click.command", "Table", "health", "version"]
+
+  utility_files:
+    required:
+      - path: "src/shannon_cli/utils/output.py"
+        must_contain: ["Console", "Table", "Panel", "Syntax", "Markdown"]
+
+      - path: "src/shannon_cli/utils/prompts.py"
+        must_contain: ["Prompt", "Confirm", "Choice", "validate"]
+
+      - path: "src/shannon_cli/utils/validators.py"
+        must_contain: ["validate_api_key", "validate_path", "ValidationError"]
+
+  test_files:
+    required:
+      - path: "tests/conftest.py"
+        must_contain: ["pytest", "fixture", "CliRunner", "temp_config"]
+
+      - path: "tests/test_cli.py"
+        must_contain: ["CliRunner", "invoke", "assert", "exit_code"]
+
+      - path: "tests/commands/test_spec.py"
+        must_contain: ["test_spec_command", "mock", "assert"]
+
+  packaging_files:
+    required:
+      - path: "pyproject.toml"
+        must_contain: ["tool.poetry", "dependencies", "click", "anthropic", "rich"]
+
+      - path: "README.md"
+        must_contain: ["Installation", "Usage", "Commands", "Configuration"]
+
+runtime_verification:
+  installation:
+    - step: "Install package in development mode"
+      command: "pip install -e ."
+      expected_output_contains: ["Successfully installed", "shannon-cli"]
+
+    - step: "Verify CLI is available"
+      command: "shannon --version"
+      expected_output_contains: ["shannon", "version"]
+
+    - step: "Check command groups"
+      command: "shannon --help"
+      expected_output_contains: ["Commands:", "init", "spec", "wave", "status"]
+
+  configuration:
+    - step: "Initialize configuration"
+      command: "shannon init --non-interactive"
+      expected_output_contains: ["Configuration created", ".shannon.yaml"]
+
+    - step: "Verify config file exists"
+      command: "test -f ~/.shannon.yaml && echo 'exists'"
+      expected_output: "exists"
+
+    - step: "Show configuration"
+      command: "shannon config show"
+      expected_output_contains: ["api_key", "model", "output_format"]
+
+functional_tests:
+  commands:
+    - name: "Version command"
+      command: "shannon --version"
+      expected_exit_code: 0
+      expected_output_pattern: "^shannon, version \\d+\\.\\d+\\.\\d+"
+
+    - name: "Help command"
+      command: "shannon --help"
+      expected_exit_code: 0
+      expected_output_contains: ["Usage:", "Options:", "Commands:"]
+
+    - name: "Init command (non-interactive)"
+      command: "shannon init --non-interactive --api-key test_key"
+      expected_exit_code: 0
+      expected_output_contains: ["Configuration initialized", "~/.shannon.yaml"]
+
+    - name: "Config show command"
+      command: "shannon config show"
+      expected_exit_code: 0
+      expected_output_contains: ["api_key", "model", "output"]
+
+    - name: "Config set command"
+      command: "shannon config set model claude-sonnet-4"
+      expected_exit_code: 0
+      expected_output_contains: ["Configuration updated", "model"]
+
+    - name: "Status command"
+      command: "shannon status"
+      expected_exit_code: 0
+      expected_output_contains: ["Shannon CLI", "Version", "Configuration"]
+
+    - name: "Spec command with input"
+      command: 'shannon spec "Build a web app" --format json'
+      expected_exit_code: 0
+      expected_output_contains: ["project_type", "features", "tech_stack"]
+
+    - name: "Spec command with file"
+      command: "shannon spec --file requirements.txt --output spec.yaml"
+      expected_exit_code: 0
+      expected_output_contains: ["Specification saved", "spec.yaml"]
+
+    - name: "Wave command (dry-run)"
+      command: "shannon wave --spec spec.yaml --dry-run"
+      expected_exit_code: 0
+      expected_output_contains: ["Phase", "Duration", "Skills"]
+
+    - name: "Prime command"
+      command: "shannon prime --session-id test-session"
+      expected_exit_code: 0
+      expected_output_contains: ["Session primed", "Context loaded"]
+
+    - name: "Invalid API key handling"
+      command: "shannon spec 'test' --api-key invalid_key"
+      expected_exit_code: 1
+      expected_output_contains: ["Error", "API key", "invalid"]
+
+  cli_testing:
+    pytest_tests:
+      - name: "Test help output"
+        test: |
+          def test_help_output(cli_runner):
+              result = cli_runner.invoke(cli, ['--help'])
+              assert result.exit_code == 0
+              assert 'Usage:' in result.output
+              assert 'Commands:' in result.output
+
+      - name: "Test version output"
+        test: |
+          def test_version_output(cli_runner):
+              result = cli_runner.invoke(cli, ['--version'])
+              assert result.exit_code == 0
+              assert 'shannon, version' in result.output
+
+      - name: "Test init command"
+        test: |
+          def test_init_command(cli_runner, tmp_path):
+              result = cli_runner.invoke(cli, ['init', '--non-interactive'])
+              assert result.exit_code == 0
+              assert 'Configuration initialized' in result.output
+
+      - name: "Test spec command with mock API"
+        test: |
+          def test_spec_command(cli_runner, mock_claude_api):
+              result = cli_runner.invoke(cli, ['spec', 'Build a web app'])
+              assert result.exit_code == 0
+              assert 'project_type' in result.output
+
+      - name: "Test config set command"
+        test: |
+          def test_config_set(cli_runner, temp_config):
+              result = cli_runner.invoke(cli, ['config', 'set', 'model', 'claude-sonnet-4'])
+              assert result.exit_code == 0
+              assert 'Configuration updated' in result.output
+
+integration_tests:
+  end_to_end_flows:
+    - name: "Complete workflow from init to wave"
+      description: "Initialize CLI, create spec, execute wave"
+      steps:
+        - command: "shannon init --non-interactive --api-key ${CLAUDE_API_KEY}"
+          verification: "Config file created"
+
+        - command: 'shannon spec "Build a task manager web app" --output spec.yaml'
+          verification: "Spec file created with valid YAML"
+
+        - command: "shannon wave --spec spec.yaml --dry-run"
+          verification: "Execution plan displayed"
+
+        - command: "shannon status"
+          verification: "Status shows active session"
+
+    - name: "Configuration management workflow"
+      description: "Set, get, update configuration"
+      steps:
+        - command: "shannon config set model claude-sonnet-4"
+          verification: "Model updated"
+
+        - command: "shannon config show"
+          verification: "Shows updated model"
+
+        - command: "shannon config set output.format table"
+          verification: "Output format updated"
+
+        - command: "shannon config show --format json"
+          verification: "JSON output with all settings"
+
+    - name: "Error handling workflow"
+      description: "Test error cases and recovery"
+      steps:
+        - command: "shannon spec 'test' --api-key invalid"
+          verification: "Error message displayed"
+
+        - command: "shannon wave --spec nonexistent.yaml"
+          verification: "File not found error"
+
+        - command: "shannon config set invalid_key value"
+          verification: "Invalid config key error"
+
+output_formatting_tests:
+  formats:
+    - name: "Table format"
+      command: "shannon status --format table"
+      expected_elements: ["─", "│", "┼", "headers", "rows"]
+
+    - name: "JSON format"
+      command: "shannon status --format json"
+      expected_structure: '{"version": "...", "config": {...}}'
+
+    - name: "YAML format"
+      command: "shannon config show --format yaml"
+      expected_structure: "key: value\nnested:\n  key: value"
+
+    - name: "Markdown format"
+      command: "shannon spec 'test' --format markdown"
+      expected_elements: ["#", "##", "-", "```"]
+
+    - name: "Plain text format"
+      command: "shannon status --format text"
+      expected_elements: ["no special characters", "readable"]
+
+  colors_and_styles:
+    - name: "Success messages"
+      expected_color: "green"
+      expected_symbol: "✓"
+
+    - name: "Error messages"
+      expected_color: "red"
+      expected_symbol: "✗"
+
+    - name: "Warning messages"
+      expected_color: "yellow"
+      expected_symbol: "⚠"
+
+    - name: "Info messages"
+      expected_color: "blue"
+      expected_symbol: "ℹ"
+
+interactive_tests:
+  prompts:
+    - name: "Init wizard"
+      command: "shannon init"
+      interactions:
+        - prompt: "Enter your Claude API key:"
+          input: "sk-ant-test-key"
+
+        - prompt: "Select default model:"
+          input: "claude-sonnet-4"
+
+        - prompt: "Enable verbose logging?"
+          input: "y"
+
+        - prompt: "Save configuration to ~/.shannon.yaml?"
+          input: "y"
+
+    - name: "Spec wizard"
+      command: "shannon spec --interactive"
+      interactions:
+        - prompt: "Describe your project:"
+          input: "A web application for task management"
+
+        - prompt: "Select project type:"
+          input: "Web Application"
+
+        - prompt: "Choose tech stack:"
+          input: "React, Node.js, PostgreSQL"
+
+        - prompt: "Add additional features?"
+          input: "y"
+
+        - prompt: "Feature name:"
+          input: "User authentication"
+
+cross_platform_tests:
+  platforms:
+    - name: "Linux"
+      tests: ["All commands work", "Config path correct", "Shell completion"]
+
+    - name: "macOS"
+      tests: ["All commands work", "Config path correct", "Shell completion"]
+
+    - name: "Windows"
+      tests: ["All commands work", "Config path correct", "PowerShell support"]
+
+  shells:
+    - name: "bash"
+      completion_test: "shannon <TAB>"
+      expected: ["init", "spec", "wave", "status", "config"]
+
+    - name: "zsh"
+      completion_test: "shannon <TAB>"
+      expected: ["init", "spec", "wave", "status", "config"]
+
+    - name: "fish"
+      completion_test: "shannon <TAB>"
+      expected: ["init", "spec", "wave", "status", "config"]
+
+performance_tests:
+  metrics:
+    - name: "Command startup time"
+      command: "shannon --help"
+      max_time_ms: 200
+
+    - name: "Config read time"
+      command: "shannon config show"
+      max_time_ms: 100
+
+    - name: "Status command time"
+      command: "shannon status"
+      max_time_ms: 300
+
+    - name: "Spec command time (small input)"
+      command: 'shannon spec "Build a web app"'
+      max_time_ms: 5000
+
+validation_criteria:
+  must_pass:
+    - "CLI installs successfully via pip"
+    - "All commands execute without errors"
+    - "Help text is clear and comprehensive"
+    - "Configuration management works correctly"
+    - "Claude API integration functions properly"
+    - "Error messages are helpful and actionable"
+    - "Output formatting works for all formats"
+    - "Interactive prompts work correctly"
+
+  should_pass:
+    - "Shell completion works for bash/zsh/fish"
+    - "Cross-platform compatibility verified"
+    - "Performance metrics meet thresholds"
+    - "Plugin system loads extensions"
+
+  nice_to_have:
+    - "Rich terminal UI with animations"
+    - "Progress bars for long operations"
+    - "Color scheme customization"
+    - "Command aliases and shortcuts"

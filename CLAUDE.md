@@ -56,9 +56,9 @@ Working on Shannon Framework itself? You're in the right place.
 ### Plugin Source
 
 **Location**: `shannon-plugin/`
-- Commands: `shannon-plugin/commands/` (48 commands)
-- Agents: `shannon-plugin/agents/` (26 agents)
-- Skills: `shannon-plugin/skills/` (20 skills)
+- Commands: `shannon-plugin/commands/` (14 commands: 13 sh_* + 1 shannon_prime)
+- Agents: `shannon-plugin/agents/` (24 agents)
+- Skills: `shannon-plugin/skills/` (17 skills)
 - Core: `shannon-plugin/core/` (9 behavioral patterns)
 - Hooks: `shannon-plugin/hooks/`
 

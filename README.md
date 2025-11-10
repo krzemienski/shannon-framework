@@ -715,7 +715,7 @@ Shannon requires ONLY Serena MCP. Others enhance functionality.
 # 📚 Skill Discovery Complete
 #
 # Skills Found: 104 total
-# ├─ Project: 16 skills (Shannon Framework)
+# ├─ Project: 17 skills (Shannon Framework)
 # ├─ User: 88 skills (your custom skills)
 # └─ Plugin: 0 skills
 #
@@ -2548,7 +2548,7 @@ Priming takes >5 minutes
 
 # Verify directories exist:
 ls shannon-plugin/skills/
-# Should show: 16 skill directories
+# Should show: 17 skill directories
 
 ls ~/.claude/skills/
 # Shows your custom skills

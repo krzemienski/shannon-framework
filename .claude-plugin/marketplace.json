@@ -1,35 +1,13 @@
 {
   "name": "shannon-framework",
-  "description": "Official Shannon Framework plugin marketplace - Specification-driven development tools for Claude Code",
-
   "owner": {
-    "name": "Shannon Framework Team",
-    "url": "https://github.com/krzemienski",
-    "email": "info@shannon-framework.dev"
+    "name": "Shannon Framework Team"
   },
-
   "plugins": [
     {
-      "name": "shannon",
+      "name": "shannon-plugin",
       "source": "./shannon-plugin",
-      "description": "Shannon Framework V4.1: Most rigorous framework for mission-critical AI development. NEW: Forced Complete Reading, Auto Skill Discovery, Unified /shannon:prime. Includes 8D complexity analysis, wave orchestration, NO MOCKS testing.",
-      "version": "4.1.0",
-      "author": "Shannon Framework Team",
-      "license": "MIT",
-      "tags": [
-        "specification",
-        "requirements",
-        "testing",
-        "quality-assurance",
-        "project-planning",
-        "complexity-analysis",
-        "wave-orchestration",
-        "forced-reading",
-        "skill-discovery",
-        "mission-critical"
-      ],
-      "homepage": "https://github.com/krzemienski/shannon-framework",
-      "documentation": "https://github.com/krzemienski/shannon-framework#readme"
+      "description": "Shannon Framework for mission-critical AI development"
     }
   ]
 }

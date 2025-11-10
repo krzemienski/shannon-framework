@@ -7,7 +7,8 @@ import os
 import sys
 import asyncio
 
-os.environ['ANTHROPIC_API_KEY'] = "REMOVED_SECRET"
+if 'ANTHROPIC_API_KEY' not in os.environ:
+    raise ValueError("ANTHROPIC_API_KEY environment variable must be set")
 
 from claude_agent_sdk import query, ClaudeAgentOptions, SystemMessage, AssistantMessage, TextBlock
 

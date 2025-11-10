@@ -1,0 +1,11 @@
+# Shannon Framework v5.0 Test Dependencies
+# Python SDK for programmatic Claude agent testing
+
+# Core dependency
+claude-agent-sdk>=0.1.0
+
+# Optional but recommended for better output formatting
+rich>=13.7.0
+
+# Optional for JSON validation
+jsonschema>=4.20.0

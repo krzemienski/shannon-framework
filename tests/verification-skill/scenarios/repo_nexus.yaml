@@ -1,0 +1,633 @@
+# Repo Nexus - Full-Stack iOS App Verification Scenario
+# React Native iOS + FastAPI + PostgreSQL + Redis code repository manager
+
+metadata:
+  name: repo_nexus
+  description: "Advanced GitHub repository manager and code explorer for iOS with AI-powered insights"
+  architecture: "React Native (iOS) + FastAPI + PostgreSQL + Redis + ElasticSearch"
+  complexity: very_high
+  domains: [mobile_ios, backend, database, search]
+  estimated_duration: "60-90 minutes"
+
+specification:
+  user_request: |
+    Build Repo Nexus - an advanced iOS app for managing GitHub repositories:
+    - React Native iOS app with native iOS features
+    - FastAPI backend with async processing
+    - PostgreSQL for user data and repository metadata
+    - Redis for caching and real-time features
+    - ElasticSearch for code search across repositories
+    - GitHub API integration for repository management
+    - AI-powered code insights using Claude API
+    - Real-time collaboration features
+    - Advanced code search with syntax highlighting
+    - Pull request review interface
+    - Issue tracking and project management
+    - Automated code quality analysis
+    - Repository statistics and visualizations
+    - Offline mode with smart sync
+    - Biometric authentication (Face ID / Touch ID)
+    - Dark mode support with iOS adaptive theming
+    - Haptic feedback for interactions
+    - 3D Touch / Haptic Touch support
+    - Widget support for repository stats
+    - Push notifications for GitHub events
+
+  technical_requirements:
+    mobile_ios:
+      - "React Native 0.72+ (iOS target only)"
+      - "TypeScript with strict mode"
+      - "React Navigation 6+ with native stack"
+      - "Redux Toolkit with RTK Query"
+      - "React Native Reanimated for animations"
+      - "React Native Gesture Handler"
+      - "React Native Biometrics"
+      - "React Native Push Notifications (APNS)"
+      - "React Native Code Push for OTA updates"
+      - "Native iOS modules for Face ID/Touch ID"
+      - "WidgetKit bridge for home screen widgets"
+      - "WatchKit bridge for Apple Watch companion"
+      - "React Native MMKV for fast storage"
+      - "React Native Syntax Highlighter"
+
+    backend:
+      - "FastAPI 0.104+ with Python 3.11+"
+      - "SQLAlchemy 2.0+ async with asyncpg"
+      - "Alembic for migrations"
+      - "Redis for caching and pub/sub"
+      - "Celery for background tasks"
+      - "ElasticSearch 8+ for code search"
+      - "GitHub API client (PyGithub)"
+      - "Claude API client (anthropic SDK)"
+      - "WebSocket support for real-time features"
+      - "JWT authentication with refresh tokens"
+      - "Rate limiting and request throttling"
+      - "Code analysis tools (AST parsing, metrics)"
+
+    database:
+      - "PostgreSQL 15+ with proper indexing"
+      - "Schemas: users, repositories, pull_requests, issues, code_analysis, sync_state"
+      - "Full-text search with pg_trgm"
+      - "JSONB for flexible metadata storage"
+      - "Partitioning for large tables"
+
+    search:
+      - "ElasticSearch for code content search"
+      - "Custom analyzers for programming languages"
+      - "Faceted search for filters"
+      - "Aggregations for statistics"
+
+expected_flow:
+  skills_invoked:
+    - name: "project-planning"
+      phase: "initialization"
+      expected_output: "iOS-specific architecture, native module plan, backend design"
+
+    - name: "ios-architect"
+      phase: "architecture"
+      expected_output: "iOS navigation flow, native module interfaces, widget design"
+
+    - name: "react-native-ios-dev"
+      phase: "mobile_implementation"
+      expected_output: "React Native screens, native bridges, iOS-specific features"
+
+    - name: "python-backend-dev"
+      phase: "backend_implementation"
+      expected_output: "FastAPI routes, async services, GitHub API integration"
+
+    - name: "database-architect"
+      phase: "database_implementation"
+      expected_output: "PostgreSQL schema, ElasticSearch mappings, Redis structure"
+
+    - name: "api-integration-specialist"
+      phase: "integration"
+      expected_output: "Mobile-backend integration, GitHub API, Claude API, WebSocket"
+
+    - name: "ios-testing-specialist"
+      phase: "testing"
+      expected_output: "XCTest unit tests, XCUITest E2E tests, Detox tests"
+
+    - name: "ios-deployment-specialist"
+      phase: "deployment"
+      expected_output: "Xcode project config, App Store preparation, CI/CD setup"
+
+  agents_invoked:
+    - name: "ios-development-lead"
+      trigger: "iOS-specific native features"
+      expected_actions: ["coordinate native modules", "handle iOS APIs", "optimize performance"]
+
+    - name: "search-systems-specialist"
+      trigger: "ElasticSearch integration"
+      expected_actions: ["design search architecture", "optimize queries", "tune relevance"]
+
+    - name: "real-time-integration-specialist"
+      trigger: "WebSocket and push notifications"
+      expected_actions: ["design event system", "handle reconnection", "manage subscriptions"]
+
+  mcps_used:
+    - name: "memory"
+      usage: "Store iOS architecture, native module specs, API contracts"
+
+    - name: "sequential-thinking"
+      usage: "Complex native module integration, search algorithm optimization"
+
+    - name: "Context7"
+      usage: "Fetch React Native, iOS, FastAPI, ElasticSearch documentation"
+
+    - name: "github"
+      usage: "Reference GitHub API patterns and best practices"
+
+expected_artifacts:
+  directory_structure: |
+    repo-nexus/
+    ├── mobile/
+    │   ├── src/
+    │   │   ├── components/
+    │   │   │   ├── repository/
+    │   │   │   ├── code/
+    │   │   │   ├── pullrequest/
+    │   │   │   ├── issue/
+    │   │   │   └── shared/
+    │   │   ├── screens/
+    │   │   │   ├── auth/
+    │   │   │   ├── home/
+    │   │   │   ├── repository/
+    │   │   │   ├── code/
+    │   │   │   ├── search/
+    │   │   │   └── settings/
+    │   │   ├── navigation/
+    │   │   ├── store/
+    │   │   ├── api/
+    │   │   ├── hooks/
+    │   │   ├── types/
+    │   │   ├── native/
+    │   │   └── utils/
+    │   ├── ios/
+    │   │   ├── RepoNexus/
+    │   │   ├── RepoNexusWidget/
+    │   │   ├── RepoNexusWatch/
+    │   │   └── Podfile
+    │   ├── package.json
+    │   └── tsconfig.json
+    ├── backend/
+    │   ├── app/
+    │   │   ├── api/
+    │   │   │   ├── routes/
+    │   │   │   ├── deps.py
+    │   │   │   └── middleware.py
+    │   │   ├── models/
+    │   │   ├── schemas/
+    │   │   ├── services/
+    │   │   │   ├── github/
+    │   │   │   ├── search/
+    │   │   │   ├── analysis/
+    │   │   │   └── ai/
+    │   │   ├── db/
+    │   │   ├── core/
+    │   │   └── tasks/
+    │   ├── alembic/
+    │   ├── tests/
+    │   ├── pyproject.toml
+    │   └── requirements.txt
+    ├── docker-compose.yml
+    └── README.md
+
+  mobile_files:
+    required:
+      - path: "mobile/src/App.tsx"
+        must_contain: ["NavigationContainer", "Provider", "persistor", "theme"]
+
+      - path: "mobile/src/navigation/RootNavigator.tsx"
+        must_contain: ["createNativeStackNavigator", "gestureEnabled"]
+
+      - path: "mobile/src/screens/repository/RepositoryScreen.tsx"
+        must_contain: ["useQuery", "RefreshControl", "Animated"]
+
+      - path: "mobile/src/screens/code/CodeViewerScreen.tsx"
+        must_contain: ["SyntaxHighlighter", "ScrollView", "gestures"]
+
+      - path: "mobile/src/screens/search/CodeSearchScreen.tsx"
+        must_contain: ["SearchBar", "useQuery", "FlatList", "highlight"]
+
+      - path: "mobile/src/components/repository/RepoCard.tsx"
+        must_contain: ["TouchableOpacity", "stars", "forks", "language"]
+
+      - path: "mobile/src/components/code/CodeDiffViewer.tsx"
+        must_contain: ["diff", "additions", "deletions", "syntax"]
+
+      - path: "mobile/src/native/BiometricAuth.ts"
+        must_contain: ["NativeModules", "FaceID", "TouchID", "authenticate"]
+
+      - path: "mobile/src/native/HapticFeedback.ts"
+        must_contain: ["ReactNativeHapticFeedback", "trigger"]
+
+      - path: "mobile/src/api/client.ts"
+        must_contain: ["axios", "MMKV", "interceptors", "refresh"]
+
+      - path: "mobile/ios/RepoNexus/BiometricAuthBridge.swift"
+        must_contain: ["@objc", "RCTBridgeModule", "LAContext", "biometryType"]
+
+      - path: "mobile/ios/RepoNexusWidget/RepoWidget.swift"
+        must_contain: ["WidgetConfiguration", "Timeline", "Provider"]
+
+      - path: "mobile/package.json"
+        must_contain: ["react-native", "@react-navigation/native", "react-native-mmkv"]
+
+  backend_files:
+    required:
+      - path: "backend/app/main.py"
+        must_contain: ["FastAPI", "lifespan", "websocket", "elasticsearch"]
+
+      - path: "backend/app/api/routes/repositories.py"
+        must_contain: ["APIRouter", "async def", "github", "pagination"]
+
+      - path: "backend/app/api/routes/search.py"
+        must_contain: ["APIRouter", "elasticsearch", "highlight", "aggregations"]
+
+      - path: "backend/app/api/routes/analysis.py"
+        must_contain: ["APIRouter", "claude", "ast", "metrics"]
+
+      - path: "backend/app/services/github/client.py"
+        must_contain: ["Github", "async", "rate_limit", "webhook"]
+
+      - path: "backend/app/services/search/elasticsearch_client.py"
+        must_contain: ["AsyncElasticsearch", "index", "search", "mappings"]
+
+      - path: "backend/app/services/ai/code_analyzer.py"
+        must_contain: ["anthropic", "claude", "analyze", "complexity"]
+
+      - path: "backend/app/models/repository.py"
+        must_contain: ["Base", "Column", "relationship", "github_id"]
+
+      - path: "backend/app/schemas/repository.py"
+        must_contain: ["BaseModel", "ConfigDict", "owner", "stars"]
+
+      - path: "backend/app/tasks/sync.py"
+        must_contain: ["celery", "async", "sync_repository", "background"]
+
+      - path: "backend/pyproject.toml"
+        must_contain: ["fastapi", "sqlalchemy", "elasticsearch", "pygithub", "anthropic"]
+
+  database_files:
+    required:
+      - path: "backend/alembic/versions/001_initial_schema.py"
+        must_contain: ["create_table", "repositories", "users", "pull_requests"]
+
+      - path: "backend/app/services/search/mappings.py"
+        must_contain: ["code_files", "analyzer", "tokenizer", "filter"]
+
+  infrastructure_files:
+    required:
+      - path: "docker-compose.yml"
+        must_contain: ["postgres", "redis", "elasticsearch", "backend"]
+
+      - path: "mobile/ios/Podfile"
+        must_contain: ["use_frameworks!", "pod 'RNReanimated'", "pod 'MMKV'"]
+
+      - path: "backend/Dockerfile"
+        must_contain: ["python:3.11", "pip install", "CMD"]
+
+runtime_verification:
+  services:
+    - name: "PostgreSQL"
+      check_command: "docker-compose ps postgres"
+      expected_status: "Up"
+      port: 5432
+
+    - name: "Redis"
+      check_command: "docker-compose ps redis"
+      expected_status: "Up"
+      port: 6379
+
+    - name: "ElasticSearch"
+      check_command: "curl -f http://localhost:9200"
+      expected_response: '{"version":{"number":"8'
+      port: 9200
+
+    - name: "Backend"
+      check_command: "curl -f http://localhost:8000/health"
+      expected_response: '{"status": "healthy", "services": {"db": "up", "redis": "up", "es": "up"}}'
+      port: 8000
+
+  ios_startup:
+    - step: "Install CocoaPods dependencies"
+      command: "cd mobile/ios && pod install"
+      wait_seconds: 30
+
+    - step: "Build iOS app"
+      command: "cd mobile && npm run ios"
+      wait_seconds: 60
+
+    - step: "Verify app launch"
+      command: "xcrun simctl list | grep Booted"
+      expected_output_contains: "iPhone"
+
+functional_tests:
+  api_endpoints:
+    - name: "Health check with services"
+      method: GET
+      url: "http://localhost:8000/health"
+      expected_status: 200
+      expected_body_contains: ["db", "redis", "es"]
+
+    - name: "GitHub OAuth callback"
+      method: GET
+      url: "http://localhost:8000/api/auth/github/callback?code=TEST_CODE"
+      expected_status: 200
+      expected_body_contains: ["access_token", "refresh_token"]
+
+    - name: "Get user repositories"
+      method: GET
+      url: "http://localhost:8000/api/repositories"
+      headers:
+        Authorization: "Bearer ${ACCESS_TOKEN}"
+      expected_status: 200
+      expected_body_contains: ["repositories", "total", "page"]
+
+    - name: "Search code across repositories"
+      method: POST
+      url: "http://localhost:8000/api/search/code"
+      headers:
+        Authorization: "Bearer ${ACCESS_TOKEN}"
+      body: |
+        {
+          "query": "function handleAuth",
+          "language": "typescript",
+          "repositories": ["repo1", "repo2"]
+        }
+      expected_status: 200
+      expected_body_contains: ["results", "highlights", "total"]
+
+    - name: "Analyze code with AI"
+      method: POST
+      url: "http://localhost:8000/api/analysis/code"
+      headers:
+        Authorization: "Bearer ${ACCESS_TOKEN}"
+      body: |
+        {
+          "code": "const sum = (a, b) => a + b;",
+          "language": "javascript",
+          "analysisType": ["complexity", "quality", "security"]
+        }
+      expected_status: 200
+      expected_body_contains: ["complexity", "suggestions", "score"]
+
+    - name: "Get pull request details"
+      method: GET
+      url: "http://localhost:8000/api/repositories/${REPO_ID}/pulls/${PR_NUMBER}"
+      headers:
+        Authorization: "Bearer ${ACCESS_TOKEN}"
+      expected_status: 200
+      expected_body_contains: ["diff", "files", "comments", "reviews"]
+
+    - name: "Sync repository"
+      method: POST
+      url: "http://localhost:8000/api/repositories/${REPO_ID}/sync"
+      headers:
+        Authorization: "Bearer ${ACCESS_TOKEN}"
+      expected_status: 202
+      expected_body_contains: ["task_id", "status"]
+
+  ios_interactions:
+    xcuitest_actions:
+      - name: "Biometric authentication"
+        steps:
+          - action: "launch"
+            device: "iPhone 14 Pro"
+
+          - action: "tap"
+            id: "biometric-auth-button"
+
+          - action: "mockBiometric"
+            type: "faceID"
+            result: "success"
+
+          - action: "waitFor"
+            id: "home-screen"
+            timeout: 3000
+
+      - name: "Browse repository and view code"
+        steps:
+          - action: "tap"
+            id: "repositories-tab"
+
+          - action: "scrollTo"
+            id: "repository-list"
+            element: "repo-cell-0"
+
+          - action: "tap"
+            id: "repo-cell-0"
+
+          - action: "tap"
+            id: "files-tab"
+
+          - action: "tap"
+            id: "file-cell-0"
+
+          - action: "waitFor"
+            id: "code-viewer"
+
+          - action: "swipe"
+            direction: "up"
+
+      - name: "Search code with filters"
+        steps:
+          - action: "tap"
+            id: "search-tab"
+
+          - action: "typeText"
+            id: "search-input"
+            text: "function auth"
+
+          - action: "tap"
+            id: "filter-button"
+
+          - action: "tap"
+            id: "language-typescript"
+
+          - action: "tap"
+            id: "apply-filters"
+
+          - action: "waitFor"
+            id: "search-results"
+
+          - action: "tap"
+            id: "result-0"
+
+integration_tests:
+  cross_domain_flows:
+    - name: "Repository sync with real-time updates"
+      description: "Sync GitHub repo, index in ElasticSearch, update mobile via WebSocket"
+      steps:
+        - domain: mobile
+          action: "User taps sync on repository"
+          verification: "API call made to /sync endpoint"
+
+        - domain: backend
+          action: "Celery task queued for sync"
+          verification: "Task ID returned to mobile"
+
+        - domain: backend
+          action: "GitHub API fetches latest commits"
+          verification: "Commits retrieved and processed"
+
+        - domain: database
+          action: "Repository metadata updated in PostgreSQL"
+          verification: "Commits, files, stats saved"
+
+        - domain: search
+          action: "Code files indexed in ElasticSearch"
+          verification: "Documents indexed with proper mappings"
+
+        - domain: websocket
+          action: "Sync progress updates broadcast"
+          verification: "Mobile receives progress events"
+
+        - domain: mobile
+          action: "UI updates with sync progress"
+          verification: "Progress bar and status update"
+
+    - name: "Code search with AI insights"
+      description: "Search code, get AI analysis on results"
+      steps:
+        - domain: mobile
+          action: "User enters search query"
+          verification: "Search input captured"
+
+        - domain: backend
+          action: "Query sent to ElasticSearch"
+          verification: "Search executed with filters"
+
+        - domain: search
+          action: "ElasticSearch returns results with highlights"
+          verification: "Code snippets with matched terms"
+
+        - domain: backend
+          action: "Top results sent to Claude for analysis"
+          verification: "AI analyzes code patterns"
+
+        - domain: database
+          action: "Analysis cached in Redis"
+          verification: "Results cached for 1 hour"
+
+        - domain: mobile
+          action: "Results displayed with AI insights"
+          verification: "Code + insights rendered with syntax highlighting"
+
+    - name: "Pull request review with inline comments"
+      description: "View PR diff, add comments, update GitHub"
+      steps:
+        - domain: mobile
+          action: "User opens pull request"
+          verification: "PR details fetched from API"
+
+        - domain: backend
+          action: "Fetch PR from GitHub API"
+          verification: "PR data retrieved and enriched"
+
+        - domain: database
+          action: "PR metadata stored/updated"
+          verification: "Local cache updated"
+
+        - domain: mobile
+          action: "User views diff with syntax highlighting"
+          verification: "Diff rendered with colors"
+
+        - domain: mobile
+          action: "User adds inline comment"
+          verification: "Comment stored locally"
+
+        - domain: backend
+          action: "Comment posted to GitHub"
+          verification: "GitHub API confirms comment"
+
+        - domain: websocket
+          action: "Comment broadcast to collaborators"
+          verification: "Other viewers see comment in real-time"
+
+cross_platform_tests:
+  ios_devices:
+    - name: "iPhone 14 Pro"
+      os: "iOS 17.0"
+      screen: "6.1 inch"
+      tests: ["All screens", "Face ID", "Dynamic Island interactions"]
+
+    - name: "iPhone SE (3rd gen)"
+      os: "iOS 17.0"
+      screen: "4.7 inch"
+      tests: ["Compact layout", "Touch ID", "Small screen optimization"]
+
+    - name: "iPad Pro 12.9\""
+      os: "iOS 17.0"
+      screen: "12.9 inch"
+      tests: ["Split view", "Slide over", "iPad-specific layouts"]
+
+  ios_versions:
+    - version: "iOS 17.0"
+      tests: ["All features", "Widget support", "Latest APIs"]
+
+    - version: "iOS 16.0"
+      tests: ["Backward compatibility", "Feature graceful degradation"]
+
+  dark_mode:
+    - mode: "Light"
+      tests: ["All screens readable", "Proper contrast", "Asset colors"]
+
+    - mode: "Dark"
+      tests: ["Dark theme applied", "OLED-optimized colors", "Reduced eye strain"]
+
+    - mode: "Automatic"
+      tests: ["Switches based on system", "Smooth transition"]
+
+performance_tests:
+  metrics:
+    - name: "App cold launch time"
+      measurement: "Time from tap to interactive"
+      max_time_ms: 2000
+      platform: "iOS"
+
+    - name: "Repository list scroll performance"
+      measurement: "60fps during scroll with 1000 repos"
+      min_fps: 60
+
+    - name: "Code syntax highlighting render"
+      measurement: "Time to render 500-line file"
+      max_time_ms: 1000
+
+    - name: "Search query latency"
+      measurement: "Time from query to results"
+      max_time_ms: 500
+
+    - name: "Diff viewer render"
+      measurement: "Render large PR diff (100+ files)"
+      max_time_ms: 2000
+
+    - name: "Memory usage"
+      measurement: "Sustained memory during normal use"
+      max_mb: 150
+
+validation_criteria:
+  must_pass:
+    - "iOS app builds and runs on iPhone simulator"
+    - "Biometric authentication works (Face ID/Touch ID)"
+    - "All API endpoints return expected responses"
+    - "GitHub OAuth flow completes successfully"
+    - "Repository sync works end-to-end"
+    - "Code search returns accurate results with highlights"
+    - "AI code analysis produces meaningful insights"
+    - "WebSocket real-time updates function correctly"
+    - "Widget displays repository stats correctly"
+    - "Dark mode works across all screens"
+
+  should_pass:
+    - "App runs smoothly on all iOS device sizes"
+    - "Performance metrics meet thresholds"
+    - "No memory leaks during extended use"
+    - "Offline mode queues actions and syncs"
+    - "Haptic feedback works appropriately"
+
+  nice_to_have:
+    - "Apple Watch companion app works"
+    - "3D Touch/Haptic Touch shortcuts work"
+    - "VoiceOver accessibility fully functional"
+    - "Siri shortcuts for common actions"

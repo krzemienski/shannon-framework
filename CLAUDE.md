@@ -27,7 +27,7 @@ For Shannon developers: This directory contains plugin source code
 ### Documentation
 
 Complete documentation is in the plugin:
-- **[Shannon Plugin README](shannon-plugin/README.md)** - Complete guide
+- **[Shannon Plugin README](README.md)** - Complete guide
 - Commands, agents, skills, examples
 - Installation, configuration, troubleshooting
 
@@ -56,11 +56,11 @@ Working on Shannon Framework itself? You're in the right place.
 ### Plugin Source
 
 **Location**: `shannon-plugin/`
-- Commands: `shannon-plugin/commands/` (14 commands: 13 sh_* + 1 shannon_prime)
-- Agents: `shannon-plugin/agents/` (24 agents)
-- Skills: `shannon-plugin/skills/` (17 skills)
-- Core: `shannon-plugin/core/` (9 behavioral patterns)
-- Hooks: `shannon-plugin/hooks/`
+- Commands: `commands/` (14 commands: 13 sh_* + 1 shannon_prime)
+- Agents: `agents/` (24 agents)
+- Skills: `skills/` (17 skills)
+- Core: `core/` (9 behavioral patterns)
+- Hooks: `hooks/`
 
 ### Testing Locally (Interactive)
 
@@ -139,4 +139,4 @@ async for message in query(
 ---
 
 **Install Shannon**: `/plugin install shannon@shannon-framework`
-**Documentation**: [shannon-plugin/README.md](shannon-plugin/README.md)
+**Documentation**: [README.md](README.md)

@@ -603,8 +603,8 @@ Skill("spec-analysis")
 **Q: Does Shannon work without Serena MCP?**
 A: No. Serena is MANDATORY for Shannon.
 
-**Q: What's the difference between sh_* and sc_* commands?**
-A: sh_* = Shannon-native, sc_* = SuperClaude enhanced by Shannon
+**Q: What do the command prefixes mean?**
+A: sh_* = Shannon core commands (13 total), shannon_* = V4.1 unified commands (shannon_prime)
 
 **Q: Is forced reading automatic?**
 A: Commands like /sh_spec, /sh_analyze instruct agents to follow protocol. Future: automatic enforcement hooks.

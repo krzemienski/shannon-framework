@@ -7,7 +7,7 @@ import os
 import sys
 import asyncio
 
-os.environ['ANTHROPIC_API_KEY'] = "YOUR_API_KEY_HERE"
+os.environ['ANTHROPIC_API_KEY'] = "REMOVED_SECRET"
 
 from claude_agent_sdk import query, ClaudeAgentOptions, SystemMessage, AssistantMessage, TextBlock
 

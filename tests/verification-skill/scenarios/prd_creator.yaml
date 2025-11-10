@@ -1,0 +1,537 @@
+# PRD Creator Web Application - Verification Scenario
+# Full-stack React + FastAPI + PostgreSQL web application
+
+metadata:
+  name: prd_creator
+  description: "AI-powered Product Requirements Document creator with real-time collaboration"
+  architecture: "React (SPA) + FastAPI (REST) + PostgreSQL + Redis (cache)"
+  complexity: high
+  domains: [frontend, backend, database]
+  estimated_duration: "45-60 minutes"
+
+specification:
+  user_request: |
+    Build a PRD Creator web application with these features:
+    - React frontend with TypeScript, TailwindCSS, shadcn/ui components
+    - FastAPI backend with async/await, Pydantic models, SQLAlchemy ORM
+    - PostgreSQL database with proper schema and migrations
+    - Redis for session caching and rate limiting
+    - Real-time collaboration using WebSockets
+    - AI integration with Claude API for PRD generation
+    - User authentication with JWT tokens
+    - File upload for requirement documents (PDF, DOCX)
+    - Export PRD as PDF, Markdown, or DOCX
+    - Version control for PRD iterations
+    - Team collaboration with comments and notifications
+
+  technical_requirements:
+    frontend:
+      - "React 18+ with TypeScript"
+      - "Vite for build tooling"
+      - "TailwindCSS for styling"
+      - "shadcn/ui component library"
+      - "React Router for navigation"
+      - "TanStack Query for data fetching"
+      - "Zustand for state management"
+      - "React Hook Form + Zod for validation"
+      - "Socket.io-client for WebSocket"
+
+    backend:
+      - "FastAPI 0.104+ with Python 3.11+"
+      - "SQLAlchemy 2.0+ with asyncpg"
+      - "Alembic for database migrations"
+      - "Pydantic v2 for validation"
+      - "Redis for caching and sessions"
+      - "Socket.io for WebSocket server"
+      - "JWT authentication with python-jose"
+      - "Claude API integration with anthropic SDK"
+      - "File processing with python-docx, PyPDF2"
+      - "PDF generation with WeasyPrint"
+
+    database:
+      - "PostgreSQL 15+ with proper indexing"
+      - "Schema: users, prds, versions, comments, teams, notifications"
+      - "Full-text search on PRD content"
+      - "Audit logging for changes"
+
+expected_flow:
+  skills_invoked:
+    - name: "project-planning"
+      phase: "initialization"
+      expected_output: "Project structure, tech stack confirmation, architecture diagram"
+
+    - name: "full-stack-architect"
+      phase: "architecture"
+      expected_output: "System design, API contracts, database schema, component tree"
+
+    - name: "react-frontend-dev"
+      phase: "frontend_implementation"
+      expected_output: "React components, routing, state management, API integration"
+
+    - name: "python-backend-dev"
+      phase: "backend_implementation"
+      expected_output: "FastAPI routes, Pydantic models, SQLAlchemy models, business logic"
+
+    - name: "database-architect"
+      phase: "database_implementation"
+      expected_output: "PostgreSQL schema, migrations, seed data, indexes"
+
+    - name: "api-integration-specialist"
+      phase: "integration"
+      expected_output: "Frontend-backend integration, WebSocket setup, Claude API integration"
+
+    - name: "testing-specialist"
+      phase: "testing"
+      expected_output: "Unit tests, integration tests, E2E tests, test reports"
+
+    - name: "deployment-engineer"
+      phase: "deployment"
+      expected_output: "Docker setup, docker-compose.yml, deployment scripts, CI/CD config"
+
+  agents_invoked:
+    - name: "full-stack-development-lead"
+      trigger: "complex multi-domain implementation"
+      expected_actions: ["coordinate skills", "resolve dependencies", "ensure consistency"]
+
+    - name: "integration-specialist"
+      trigger: "API integration between domains"
+      expected_actions: ["coordinate API contracts", "test integrations", "handle errors"]
+
+    - name: "quality-assurance-lead"
+      trigger: "testing phase"
+      expected_actions: ["coordinate test suites", "validate coverage", "verify functionality"]
+
+  mcps_used:
+    - name: "memory"
+      usage: "Store architecture decisions, API contracts, component specifications"
+
+    - name: "sequential-thinking"
+      usage: "Complex architectural decisions, debugging integration issues"
+
+    - name: "Context7"
+      usage: "Fetch React, FastAPI, PostgreSQL documentation"
+
+    - name: "firecrawl"
+      usage: "Research best practices for WebSocket with FastAPI"
+
+expected_artifacts:
+  directory_structure: |
+    prd-creator/
+    ├── frontend/
+    │   ├── src/
+    │   │   ├── components/
+    │   │   │   ├── auth/
+    │   │   │   ├── prd/
+    │   │   │   ├── editor/
+    │   │   │   ├── collaboration/
+    │   │   │   └── shared/
+    │   │   ├── pages/
+    │   │   ├── hooks/
+    │   │   ├── lib/
+    │   │   ├── types/
+    │   │   ├── api/
+    │   │   └── stores/
+    │   ├── public/
+    │   ├── package.json
+    │   ├── vite.config.ts
+    │   ├── tsconfig.json
+    │   └── tailwind.config.js
+    ├── backend/
+    │   ├── app/
+    │   │   ├── api/
+    │   │   │   ├── routes/
+    │   │   │   ├── deps.py
+    │   │   │   └── middleware.py
+    │   │   ├── models/
+    │   │   ├── schemas/
+    │   │   ├── services/
+    │   │   ├── db/
+    │   │   ├── core/
+    │   │   └── utils/
+    │   ├── alembic/
+    │   ├── tests/
+    │   ├── pyproject.toml
+    │   └── requirements.txt
+    ├── database/
+    │   ├── init/
+    │   ├── migrations/
+    │   └── seeds/
+    ├── docker-compose.yml
+    ├── .env.example
+    └── README.md
+
+  frontend_files:
+    required:
+      - path: "frontend/src/App.tsx"
+        must_contain: ["<Router>", "AuthProvider", "QueryClientProvider"]
+
+      - path: "frontend/src/components/prd/PRDEditor.tsx"
+        must_contain: ["useState", "useQuery", "useMutation", "Socket"]
+
+      - path: "frontend/src/components/prd/PRDList.tsx"
+        must_contain: ["useQuery", "map", "Link"]
+
+      - path: "frontend/src/components/editor/RichTextEditor.tsx"
+        must_contain: ["contentEditable", "onChange"]
+
+      - path: "frontend/src/components/collaboration/CommentThread.tsx"
+        must_contain: ["WebSocket", "useEffect"]
+
+      - path: "frontend/src/api/client.ts"
+        must_contain: ["axios", "baseURL", "interceptors"]
+
+      - path: "frontend/src/stores/authStore.ts"
+        must_contain: ["create", "token", "user"]
+
+      - path: "frontend/package.json"
+        must_contain: ["react", "typescript", "vite", "@tanstack/react-query"]
+
+  backend_files:
+    required:
+      - path: "backend/app/main.py"
+        must_contain: ["FastAPI", "cors", "mount", "lifespan"]
+
+      - path: "backend/app/api/routes/prds.py"
+        must_contain: ["APIRouter", "async def", "Depends", "get_db"]
+
+      - path: "backend/app/api/routes/auth.py"
+        must_contain: ["OAuth2PasswordBearer", "create_access_token", "verify_password"]
+
+      - path: "backend/app/models/prd.py"
+        must_contain: ["Base", "Column", "relationship"]
+
+      - path: "backend/app/schemas/prd.py"
+        must_contain: ["BaseModel", "ConfigDict", "field_validator"]
+
+      - path: "backend/app/services/prd_service.py"
+        must_contain: ["async def", "AsyncSession", "select"]
+
+      - path: "backend/app/services/ai_service.py"
+        must_contain: ["anthropic", "claude", "async def"]
+
+      - path: "backend/app/db/session.py"
+        must_contain: ["create_async_engine", "async_sessionmaker"]
+
+      - path: "backend/pyproject.toml"
+        must_contain: ["fastapi", "sqlalchemy", "alembic", "anthropic"]
+
+  database_files:
+    required:
+      - path: "backend/alembic/versions/001_initial_schema.py"
+        must_contain: ["create_table", "users", "prds", "versions"]
+
+      - path: "backend/app/models/__init__.py"
+        must_contain: ["User", "PRD", "Version", "Comment"]
+
+  infrastructure_files:
+    required:
+      - path: "docker-compose.yml"
+        must_contain: ["postgres", "redis", "backend", "frontend"]
+
+      - path: "backend/Dockerfile"
+        must_contain: ["python:3.11", "pip install", "CMD"]
+
+      - path: "frontend/Dockerfile"
+        must_contain: ["node:", "npm install", "npm run build"]
+
+runtime_verification:
+  services:
+    - name: "PostgreSQL"
+      check_command: "docker-compose ps postgres"
+      expected_status: "Up"
+      port: 5432
+
+    - name: "Redis"
+      check_command: "docker-compose ps redis"
+      expected_status: "Up"
+      port: 6379
+
+    - name: "Backend"
+      check_command: "curl -f http://localhost:8000/health"
+      expected_response: '{"status": "healthy"}'
+      port: 8000
+
+    - name: "Frontend"
+      check_command: "curl -f http://localhost:5173"
+      expected_response: "<!DOCTYPE html>"
+      port: 5173
+
+  startup_sequence:
+    - step: "Start infrastructure"
+      command: "docker-compose up -d postgres redis"
+      wait_seconds: 5
+
+    - step: "Run migrations"
+      command: "cd backend && alembic upgrade head"
+      wait_seconds: 2
+
+    - step: "Start backend"
+      command: "cd backend && uvicorn app.main:app --reload"
+      wait_seconds: 3
+
+    - step: "Start frontend"
+      command: "cd frontend && npm run dev"
+      wait_seconds: 3
+
+functional_tests:
+  api_endpoints:
+    - name: "Health check"
+      method: GET
+      url: "http://localhost:8000/health"
+      expected_status: 200
+      expected_body: '{"status": "healthy"}'
+
+    - name: "User registration"
+      method: POST
+      url: "http://localhost:8000/api/v1/auth/register"
+      body: |
+        {
+          "email": "test@example.com",
+          "password": "SecurePass123!",
+          "name": "Test User"
+        }
+      expected_status: 201
+      expected_body_contains: ["id", "email", "name"]
+
+    - name: "User login"
+      method: POST
+      url: "http://localhost:8000/api/v1/auth/login"
+      body: |
+        {
+          "email": "test@example.com",
+          "password": "SecurePass123!"
+        }
+      expected_status: 200
+      expected_body_contains: ["access_token", "token_type"]
+
+    - name: "Create PRD"
+      method: POST
+      url: "http://localhost:8000/api/v1/prds"
+      headers:
+        Authorization: "Bearer ${ACCESS_TOKEN}"
+      body: |
+        {
+          "title": "Mobile App MVP",
+          "description": "Build a mobile app for task management",
+          "requirements": "User auth, task CRUD, notifications"
+        }
+      expected_status: 201
+      expected_body_contains: ["id", "title", "status"]
+
+    - name: "Get PRD list"
+      method: GET
+      url: "http://localhost:8000/api/v1/prds"
+      headers:
+        Authorization: "Bearer ${ACCESS_TOKEN}"
+      expected_status: 200
+      expected_body_contains: ["items", "total"]
+
+    - name: "Get PRD by ID"
+      method: GET
+      url: "http://localhost:8000/api/v1/prds/${PRD_ID}"
+      headers:
+        Authorization: "Bearer ${ACCESS_TOKEN}"
+      expected_status: 200
+      expected_body_contains: ["id", "title", "content"]
+
+    - name: "Generate PRD with AI"
+      method: POST
+      url: "http://localhost:8000/api/v1/prds/${PRD_ID}/generate"
+      headers:
+        Authorization: "Bearer ${ACCESS_TOKEN}"
+      body: |
+        {
+          "prompt": "Generate detailed PRD for task management app"
+        }
+      expected_status: 200
+      expected_body_contains: ["content", "sections"]
+
+  ui_interactions:
+    playwright_actions:
+      - name: "User registration flow"
+        steps:
+          - action: "navigate"
+            url: "http://localhost:5173/register"
+
+          - action: "fill"
+            selector: 'input[name="email"]'
+            value: "test@example.com"
+
+          - action: "fill"
+            selector: 'input[name="password"]'
+            value: "SecurePass123!"
+
+          - action: "fill"
+            selector: 'input[name="name"]'
+            value: "Test User"
+
+          - action: "click"
+            selector: 'button[type="submit"]'
+
+          - action: "waitForNavigation"
+            url: "http://localhost:5173/dashboard"
+
+      - name: "Create and edit PRD"
+        steps:
+          - action: "navigate"
+            url: "http://localhost:5173/dashboard"
+
+          - action: "click"
+            selector: 'button:has-text("New PRD")'
+
+          - action: "fill"
+            selector: 'input[name="title"]'
+            value: "Test PRD"
+
+          - action: "fill"
+            selector: 'textarea[name="description"]'
+            value: "Test description"
+
+          - action: "click"
+            selector: 'button:has-text("Create")'
+
+          - action: "waitForSelector"
+            selector: '.prd-editor'
+
+          - action: "click"
+            selector: 'button:has-text("Generate with AI")'
+
+          - action: "waitForSelector"
+            selector: '.prd-content'
+            timeout: 30000
+
+integration_tests:
+  cross_domain_flows:
+    - name: "End-to-end PRD creation flow"
+      description: "Create PRD via UI, verify in database, check API response"
+      steps:
+        - domain: frontend
+          action: "Create PRD via UI form"
+          verification: "PRD appears in list"
+
+        - domain: backend
+          action: "Query database for PRD"
+          verification: "PRD record exists with correct data"
+
+        - domain: api
+          action: "GET /api/v1/prds/{id}"
+          verification: "API returns PRD with all fields"
+
+    - name: "Real-time collaboration flow"
+      description: "Multiple users editing same PRD with WebSocket updates"
+      steps:
+        - domain: frontend
+          action: "User A opens PRD editor"
+          verification: "WebSocket connection established"
+
+        - domain: frontend
+          action: "User B opens same PRD"
+          verification: "User B sees User A's cursor"
+
+        - domain: backend
+          action: "User A makes edit"
+          verification: "Backend broadcasts change via WebSocket"
+
+        - domain: frontend
+          action: "User B receives update"
+          verification: "User B's editor updates in real-time"
+
+    - name: "AI generation flow"
+      description: "Generate PRD content using Claude API"
+      steps:
+        - domain: frontend
+          action: "User clicks 'Generate with AI'"
+          verification: "Loading indicator appears"
+
+        - domain: backend
+          action: "Backend calls Claude API"
+          verification: "API request sent with requirements"
+
+        - domain: backend
+          action: "Claude returns generated content"
+          verification: "Content parsed and structured"
+
+        - domain: database
+          action: "Save generated version"
+          verification: "Version record created"
+
+        - domain: frontend
+          action: "Update editor with content"
+          verification: "Generated content appears in editor"
+
+cross_platform_tests:
+  viewports:
+    - name: "Desktop"
+      width: 1920
+      height: 1080
+      tests: ["Full dashboard layout", "PRD editor with sidebar", "Multi-panel view"]
+
+    - name: "Laptop"
+      width: 1366
+      height: 768
+      tests: ["Responsive dashboard", "PRD editor", "Navigation"]
+
+    - name: "Tablet"
+      width: 768
+      height: 1024
+      tests: ["Collapsible sidebar", "Touch-optimized editor", "Mobile navigation"]
+
+    - name: "Mobile"
+      width: 375
+      height: 667
+      tests: ["Mobile menu", "Simplified editor", "Touch gestures"]
+
+  browsers:
+    - name: "Chrome"
+      version: "latest"
+      required: true
+
+    - name: "Firefox"
+      version: "latest"
+      required: true
+
+    - name: "Safari"
+      version: "latest"
+      required: true
+
+    - name: "Edge"
+      version: "latest"
+      required: false
+
+performance_tests:
+  metrics:
+    - name: "PRD list load time"
+      endpoint: "/api/v1/prds"
+      max_response_time_ms: 500
+      concurrent_users: 10
+
+    - name: "AI generation time"
+      endpoint: "/api/v1/prds/{id}/generate"
+      max_response_time_ms: 15000
+      concurrent_users: 5
+
+    - name: "WebSocket message latency"
+      action: "Send edit via WebSocket"
+      max_latency_ms: 100
+      concurrent_connections: 20
+
+validation_criteria:
+  must_pass:
+    - "All API endpoints return expected status codes"
+    - "Frontend successfully authenticates and manages tokens"
+    - "PRD CRUD operations work end-to-end"
+    - "AI generation produces valid PRD content"
+    - "WebSocket real-time updates function correctly"
+    - "Database migrations run without errors"
+    - "All services start and respond to health checks"
+
+  should_pass:
+    - "UI renders correctly on all viewports"
+    - "Performance metrics meet thresholds"
+    - "Error handling displays user-friendly messages"
+    - "File upload and export functions work"
+
+  nice_to_have:
+    - "Cross-browser compatibility verified"
+    - "Accessibility standards met (WCAG 2.1)"
+    - "Load testing passes with 100+ concurrent users"

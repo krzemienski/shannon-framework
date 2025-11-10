@@ -35,11 +35,11 @@ cd shannon-framework
 ### 3. Make Changes
 
 Edit files in `shannon-plugin/`:
-- Commands: `shannon-plugin/commands/`
-- Skills: `shannon-plugin/skills/`
-- Agents: `shannon-plugin/agents/`
-- Hooks: `shannon-plugin/hooks/`
-- Core patterns: `shannon-plugin/core/`
+- Commands: `commands/`
+- Skills: `skills/`
+- Agents: `agents/`
+- Hooks: `hooks/`
+- Core patterns: `core/`
 
 ### 4. Test Your Changes
 
@@ -163,7 +163,7 @@ test(skills): add pressure test for using-shannon
 
 ### For Command Enhancements
 
-1. **Follow existing pattern** (see shannon-plugin/commands/guides/):
+1. **Follow existing pattern** (see commands/guides/):
    - Overview with core value
    - 10-15 comprehensive examples
    - Anti-patterns with Shannon counters
@@ -281,9 +281,9 @@ test(skills): add pressure test for using-shannon
 - Issues: https://github.com/krzemienski/shannon-framework/issues
 
 **Documentation**:
-- Read: shannon-plugin/README.md
+- Read: README.md
 - Architecture: SHANNON_SYSTEM_ARCHITECTURE_SYNTHESIS.md
-- Hooks: shannon-plugin/hooks/README.md
+- Hooks: hooks/README.md
 
 **Testing**:
 - Guide: SHANNON_PLUGIN_TESTING_GUIDE.md

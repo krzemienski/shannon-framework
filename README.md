@@ -1085,11 +1085,11 @@ Shannon operates as 6-layer behavioral framework:
 
 ### Component Architecture
 
-**14 Commands** (shannon-plugin/commands/):
+**14 Commands** (commands/):
 - **Shannon Core** (11): /sh_spec, /sh_wave, /sh_checkpoint, /sh_restore, /sh_status, /sh_check_mcps, /sh_memory, /sh_north_star, /sh_analyze, /sh_test, /sh_scaffold
 - **V4.1 NEW** (3): /sh_discover_skills, /sh_reflect, /shannon:prime
 
-**17 Skills** (shannon-plugin/skills/):
+**17 Skills** (skills/):
 - **Core**: spec-analysis (1,544L), wave-orchestration (1,581L), phase-planning (1,182L)
 - **Context**: context-preservation (562L), context-restoration (957L), memory-coordination (1,010L)
 - **Testing**: functional-testing (1,402L), confidence-check (1,277L)
@@ -1100,13 +1100,13 @@ Shannon operates as 6-layer behavioral framework:
 - **Reporting**: sitrep-reporting (1,060L)
 - **NEW**: honest-reflections (1,200L - prevents premature completion claims)
 
-**24 Agents** (shannon-plugin/agents/):
+**24 Agents** (agents/):
 - **Orchestrators**: WAVE_COORDINATOR, CONTEXT_GUARDIAN, PHASE_ARCHITECT, SPEC_ANALYZER, ARCHITECT
 - **Domain Builders**: FRONTEND, BACKEND, MOBILE_DEVELOPER, DATABASE_ARCHITECT, DEVOPS, API_DESIGNER, DATA_ENGINEER, SECURITY
 - **Quality**: TEST_GUARDIAN, QA, CODE_REVIEWER, REFACTORER, PERFORMANCE, ANALYZER
 - **Support**: SCRIBE, MENTOR, TECHNICAL_WRITER, IMPLEMENTATION_WORKER, PRODUCT_MANAGER
 
-**6 Hooks** (shannon-plugin/hooks/):
+**6 Hooks** (hooks/):
 - **session_start.sh**: Auto-loads using-shannon meta-skill at session start
 - **post_tool_use.py**: Scans for 13 mock patterns, blocks Write/Edit if detected
 - **precompact.py**: Generates 11-section checkpoint template before auto-compact
@@ -1114,7 +1114,7 @@ Shannon operates as 6-layer behavioral framework:
 - **stop.py**: Validates wave gates before session end
 - **hooks.json**: Configuration and registration
 
-**9 Core Patterns** (shannon-plugin/core/):
+**9 Core Patterns** (core/):
 1. SPEC_ANALYSIS.md - Complete 8D algorithm (1,787 lines)
 2. WAVE_ORCHESTRATION.md - Multi-stage execution framework (1,612 lines)
 3. PHASE_PLANNING.md - 5-phase methodology (1,562 lines)
@@ -1355,7 +1355,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 # Timeline: 5-7 days
 ```
 
-**See**: shannon-plugin/commands/guides/sh_spec_GUIDE.md (15 comprehensive examples)
+**See**: commands/guides/sh_spec_GUIDE.md (15 comprehensive examples)
 
 #### /sh_wave
 **Purpose**: Execute wave-based development with parallel agent coordination
@@ -1380,7 +1380,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 # Parallel execution: 5h vs 15h sequential = 3x speedup
 ```
 
-**See**: shannon-plugin/commands/guides/sh_wave_GUIDE.md (15 comprehensive examples)
+**See**: commands/guides/sh_wave_GUIDE.md (15 comprehensive examples)
 
 #### /sh_checkpoint
 **Purpose**: Create comprehensive checkpoint of session state
@@ -1403,7 +1403,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 /sh_checkpoint --load shannon_checkpoint_20251108
 ```
 
-**See**: shannon-plugin/commands/guides/sh_checkpoint_GUIDE.md (10 comprehensive examples)
+**See**: commands/guides/sh_checkpoint_GUIDE.md (10 comprehensive examples)
 
 #### /sh_restore
 **Purpose**: Restore complete project state from checkpoint
@@ -1426,7 +1426,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 /sh_restore --goals
 ```
 
-**See**: shannon-plugin/commands/guides/sh_restore_GUIDE.md (10 comprehensive examples)
+**See**: commands/guides/sh_restore_GUIDE.md (10 comprehensive examples)
 
 #### /sh_test
 **Purpose**: NO MOCKS functional testing orchestration
@@ -1454,7 +1454,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 /sh_test --validate
 ```
 
-**See**: shannon-plugin/commands/guides/sh_test_GUIDE.md (12 comprehensive examples)
+**See**: commands/guides/sh_test_GUIDE.md (12 comprehensive examples)
 
 #### /sh_analyze
 **Purpose**: Shannon-aware codebase analysis with complexity assessment
@@ -1473,7 +1473,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 /sh_analyze --confidence
 ```
 
-**See**: shannon-plugin/commands/guides/FINAL_THREE_COMMANDS_REFERENCE.md
+**See**: commands/guides/FINAL_THREE_COMMANDS_REFERENCE.md
 
 #### /sh_status
 **Purpose**: Display Shannon framework status and health
@@ -1509,7 +1509,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 # ⚠️ Puppeteer MCP: Not connected (install guide provided)
 ```
 
-**See**: shannon-plugin/commands/guides/FINAL_THREE_COMMANDS_REFERENCE.md
+**See**: commands/guides/FINAL_THREE_COMMANDS_REFERENCE.md
 
 #### /sh_memory
 **Purpose**: Manage Serena MCP memories
@@ -1609,7 +1609,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 
 **Performance**: <60 seconds vs 15-20 minutes manual (20x faster)
 
-**See**: shannon-plugin/commands/guides/FINAL_THREE_COMMANDS_REFERENCE.md
+**See**: commands/guides/FINAL_THREE_COMMANDS_REFERENCE.md
 
 #### /sh_reflect ⭐
 **Purpose**: Honest gap analysis before claiming work complete
@@ -2547,7 +2547,7 @@ Priming takes >5 minutes
 /sh_discover_skills --refresh
 
 # Verify directories exist:
-ls shannon-plugin/skills/
+ls skills/
 # Should show: 17 skill directories
 
 ls ~/.claude/skills/
@@ -2583,7 +2583,7 @@ Skill("spec-analysis")
 **Solution**:
 ```bash
 # 1. Verify protocol exists:
-cat shannon-plugin/core/FORCED_READING_PROTOCOL.md
+cat core/FORCED_READING_PROTOCOL.md
 
 # 2. Use enforcing commands:
 /sh_spec  # Auto-enforces for specifications
@@ -2837,7 +2837,7 @@ Shannon Framework is open source. Contributions welcome!
 
 - **GitHub Issues**: https://github.com/krzemienski/shannon-framework/issues
 - **Discussions**: https://github.com/krzemienski/shannon-framework/discussions
-- **Documentation**: shannon-plugin/README.md
+- **Documentation**: README.md
 - **Email**: info@shannon-framework.dev
 
 ---
@@ -2845,10 +2845,10 @@ Shannon Framework is open source. Contributions welcome!
 ## Links
 
 - **Repository**: https://github.com/krzemienski/shannon-framework
-- **Plugin Documentation**: [shannon-plugin/README.md](shannon-plugin/README.md)
+- **Plugin Documentation**: [README.md](README.md)
 - **Architecture Synthesis**: [SHANNON_SYSTEM_ARCHITECTURE_SYNTHESIS.md](SHANNON_SYSTEM_ARCHITECTURE_SYNTHESIS.md)
-- **Hook System**: [shannon-plugin/hooks/README.md](shannon-plugin/hooks/README.md)
-- **Command Guides**: [shannon-plugin/commands/guides/](shannon-plugin/commands/guides/)
+- **Hook System**: [hooks/README.md](hooks/README.md)
+- **Command Guides**: [commands/guides/](commands/guides/)
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 - **License**: MIT
 

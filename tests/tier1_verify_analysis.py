@@ -189,7 +189,14 @@ async def test_spec_analysis(spec_config: dict) -> bool:
         setting_sources=["user", "project"],  # REQUIRED for plugins to load!
         model="claude-sonnet-4-5",
         permission_mode="bypassPermissions",
-        allowed_tools=["Skill"]  # Enable Skill tool for Shannon
+        allowed_tools=[
+            "Skill", "Read", "Grep", "Glob", "TodoWrite",
+            # Allow ALL Serena tools (spec-analysis needs memory access)
+            "mcp__serena__write_memory", "mcp__serena__read_memory",
+            "mcp__serena__list_memories", "mcp__serena__get_current_config",
+            # Allow sequential thinking
+            "mcp__sequential-thinking__sequentialthinking"
+        ]
     )
 
     # Execute /shannon-plugin:sh_spec (namespaced command)

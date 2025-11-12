@@ -50,7 +50,7 @@ async def build_application(spec_text: str, output_dir: Path) -> tuple[bool, str
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    plugin_path = Path("shannon-plugin")
+    plugin_path = Path(".")
     if not plugin_path.exists():
         return False, f"Shannon plugin not found: {plugin_path.absolute()}"
 
@@ -150,7 +150,7 @@ Run complete verification and report results.
 '''
 
     options = ClaudeAgentOptions(
-        plugins=[{"type": "local", "path": "shannon-plugin"}],
+        plugins=[{"type": "local", "path": "."}],
         model="claude-sonnet-4-5"
     )
 

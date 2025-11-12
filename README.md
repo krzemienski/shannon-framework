@@ -129,7 +129,7 @@ Mission-critical domains where AI hallucinations are unacceptable:
 ```bash
 # In Claude Code:
 /plugin marketplace add shannon-framework/shannon
-/plugin install shannon@shannon-framework
+/plugin install shannon-plugin@shannon-framework
 
 # Restart Claude Code completely
 ```
@@ -2403,7 +2403,7 @@ npm test
 
 **Symptoms**:
 ```
-Error: Plugin 'shannon@shannon-framework' not found
+Error: Plugin 'shannon-plugin@shannon-framework' not found
 ```
 
 **Diagnosis**: Marketplace not added or incorrect path
@@ -2858,4 +2858,4 @@ Shannon Framework is open source. Contributions welcome!
 *The most rigorous framework for mission-critical AI development*
 
 **Lines**: 3,842 (consolidated from 5 source documents)
-**Install**: `/plugin marketplace add shannon-framework/shannon && /plugin install shannon@shannon-framework`
+**Install**: `/plugin marketplace add shannon-framework/shannon && /plugin install shannon-plugin@shannon-framework`

@@ -19,7 +19,7 @@ For Shannon developers: This directory contains plugin source code
 ```bash
 # In Claude Code:
 /plugin marketplace add shannon-framework/shannon
-/plugin install shannon@shannon-framework
+/plugin install shannon-plugin@shannon-framework
 
 # Restart Claude Code
 ```
@@ -138,5 +138,5 @@ async for message in query(
 
 ---
 
-**Install Shannon**: `/plugin install shannon@shannon-framework`
+**Install Shannon**: `/plugin install shannon-plugin@shannon-framework`
 **Documentation**: [README.md](README.md)

@@ -168,7 +168,7 @@ shannon-framework/
 
 **Step 2**: Install shannon plugin
 ```bash
-/plugin install shannon@shannon-framework
+/plugin install shannon-plugin@shannon-framework
 ```
 
 **Step 3**: Restart Claude Code

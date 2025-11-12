@@ -167,7 +167,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Installation Method
 - **BREAKING**: Installation now via plugin system instead of CLAUDE.md
-- Commands: `/plugin marketplace add shannon-framework/shannon` → `/plugin install shannon@shannon-framework`
+- Commands: `/plugin marketplace add shannon-framework/shannon` → `/plugin install shannon-plugin@shannon-framework`
 - No longer requires project-level CLAUDE.md configuration
 - Shannon now available globally across all Claude Code sessions
 

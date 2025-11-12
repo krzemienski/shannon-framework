@@ -406,7 +406,7 @@ a7e7ae9 chore(plugin): update manifest to v4.0.0
 2. **Install Plugin Locally** (15 minutes)
    ```bash
    /plugin marketplace add /Users/nick/Desktop/shannon-framework/shannon-plugin
-   /plugin install shannon@shannon-framework
+   /plugin install shannon-plugin@shannon-framework
    # Restart Claude Code
    ```
 

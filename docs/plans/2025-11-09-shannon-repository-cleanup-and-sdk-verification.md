@@ -291,7 +291,7 @@ Shannon Framework is a Claude Code plugin that:
 
 ### Interactive Claude Code:
 ```
-/plugin install shannon@shannon-framework
+/plugin install shannon-plugin@shannon-framework
 /sh_spec "Build a web app..."
 /sh_wave 1
 ```

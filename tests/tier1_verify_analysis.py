@@ -180,8 +180,8 @@ async def test_spec_analysis(spec_config: dict) -> bool:
     file_size_kb = len(spec_text) / 1024
     print(f"Size:    {file_size_kb:.1f} KB")
 
-    # Load Shannon plugin
-    plugin_path = Path("shannon-plugin")
+    # Load Shannon plugin (flattened to root directory)
+    plugin_path = Path(".")
     if not plugin_path.exists():
         print(f"❌ ERROR: Shannon plugin not found: {plugin_path.absolute()}")
         return False
@@ -201,8 +201,8 @@ async def test_spec_analysis(spec_config: dict) -> bool:
         ]
     )
 
-    # Execute /shannon-plugin:sh_spec (namespaced command)
-    print(f"\nExecuting /shannon-plugin:sh_spec...")
+    # Execute /sh_spec command
+    print(f"\nExecuting /sh_spec...")
 
     start_time = time.time()
     messages = []
@@ -211,7 +211,7 @@ async def test_spec_analysis(spec_config: dict) -> bool:
     cost = 0.0
 
     try:
-        async for message in query(prompt=f'/shannon-plugin:sh_spec "{spec_text}"', options=options):
+        async for message in query(prompt=f'/sh_spec "{spec_text}"', options=options):
             # AssistantMessage - Claude's responses with content blocks
             if isinstance(message, AssistantMessage):
                 for block in message.content:

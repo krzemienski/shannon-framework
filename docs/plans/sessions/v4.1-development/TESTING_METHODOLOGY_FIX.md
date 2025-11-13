@@ -5,7 +5,7 @@
 **All sub-agent tests failing with**: "Unknown skill: spec-analysis"
 
 **Root Cause**: Sub-agents spawned via Task() don't have access to Shannon skills
-- Skills live in shannon-plugin/skills/
+- Skills live in skills/
 - Sub-agents spawn in clean environment  
 - Skill() tool requires skills to be in discovery system
 - Shannon plugin not active in sub-agent context
@@ -43,7 +43,7 @@ Task(
   prompt=f"""
   You have this skill available:
   
-  {read_file('shannon-plugin/skills/spec-analysis/SKILL.md')}
+  {read_file('skills/spec-analysis/SKILL.md')}
   
   Now use it to analyze: [specification]
   """

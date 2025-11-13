@@ -149,11 +149,11 @@ For EACH skill (functional-testing, using-shannon, context-preservation, etc.):
 
 **Process** (following plan's Task 22 exactly):
 1. Read ALL source documents:
-   - Read: shannon-plugin/USER_GUIDE.md (634 lines)
-   - Read: shannon-plugin/ARCHITECTURE.md (791 lines)
-   - Read: shannon-plugin/INSTALLATION.md (341 lines)
-   - Read: shannon-plugin/USAGE_EXAMPLES.md (717 lines)
-   - Read: shannon-plugin/TROUBLESHOOTING.md (497 lines)
+   - Read: USER_GUIDE.md (634 lines)
+   - Read: ARCHITECTURE.md (791 lines)
+   - Read: INSTALLATION.md (341 lines)
+   - Read: USAGE_EXAMPLES.md (717 lines)
+   - Read: TROUBLESHOOTING.md (497 lines)
    - Total: 2,980 lines to consolidate
 
 2. Plan structure (12 sections):
@@ -217,7 +217,7 @@ For EACH skill (functional-testing, using-shannon, context-preservation, etc.):
 - Document: Installation validation results
 
 **D3: Link Validation** (1 hour)
-- grep all markdown links: grep -r "\[.*\](.*\.md)" *.md shannon-plugin/
+- grep all markdown links: grep -r "\[.*\](.*\.md)" *.md 
 - Verify each linked file exists
 - Fix broken links
 - Document: Link validation report

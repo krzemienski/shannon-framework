@@ -999,7 +999,7 @@ A: No - restoration loads context into memory. Current files unchanged. You choo
 ---
 
 **Command**: /shannon:restore
-**Skill**: context-restoration (shannon-plugin/skills/context-restoration/SKILL.md)
+**Skill**: context-restoration (skills/context-restoration/SKILL.md)
 **Examples**: 10 comprehensive scenarios
 **Anti-Patterns**: 3 common mistakes
 **Integration**: Works with /shannon:restore, /shannon:prime

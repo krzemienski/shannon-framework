@@ -27,7 +27,7 @@
 **Key Resources**:
 - Python Agents SDK skill: Use via `@.claude/skills/testing-shannon-via-sdk/SKILL.md`
 - Test specs: All in `docs/ref/*.md`
-- Shannon plugin source: `shannon-plugin/` (what we're testing)
+- Shannon plugin source: `` (what we're testing)
 
 **First Command in New Session**:
 ```
@@ -161,7 +161,7 @@ Shannon Framework v5.0 adds **functional testing via Claude Agents SDK (Python)*
 
 ```
 shannon-framework/
-├── shannon-plugin/                   # Plugin source (v4.1)
+├──                    # Plugin source (v4.1)
 │   └── skills/testing-shannon-via-sdk/  # SDK testing skill (reference)
 │
 ├── docs/ref/                         # Test specifications
@@ -269,7 +269,7 @@ if __name__ == '__main__':
 - ✅ Remove shannon-cli artifacts (src/, pyproject.toml, etc.)
 - ✅ Create Python SDK testing skill
 - ✅ Install skill globally (~/.claude/skills/)
-- ✅ Copy skill locally (shannon-plugin/skills/)
+- ✅ Copy skill locally (skills/)
 - ✅ Verify docs/ref/ has 4 test specs
 
 **Status**: COMPLETE

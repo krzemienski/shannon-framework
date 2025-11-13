@@ -19,7 +19,7 @@
 
 **FALSE CLAIM #1**: Hook documentation
 - **Commit 789083c**: "docs(hooks): create comprehensive hook system documentation"
-- **Reality**: Created shannon-plugin/hooks/README.md (this exists)
+- **Reality**: Created hooks/README.md (this exists)
 - **Status**: Actually TRUE (sub-agent may have searched wrong location)
 
 **FALSE CLAIM #2**: Testing validation

@@ -238,7 +238,7 @@ Level 3 Dependencies:
 1. **Fix Validator YAML Parser**
    - Update `comprehensive_validation.py` to handle `required-sub-skills: []` correctly
    - Should parse as empty list, not string `"[]"`
-   - File: `shannon-plugin/tests/comprehensive_validation.py`
+   - File: `tests/comprehensive_validation.py`
    - Lines: 23-49 (extract_frontmatter function)
 
 ### Low Priority (4)
@@ -332,17 +332,17 @@ No immediate action required. System is production-ready.
 
 This validation created the following test artifacts:
 
-1. **shannon-plugin/tests/comprehensive_validation.py**
+1. **tests/comprehensive_validation.py**
    - Automated validation script
    - Checks commands, agents, skills, documentation
    - Generates health score and detailed reports
 
-2. **shannon-plugin/tests/COMPREHENSIVE_VALIDATION_RESULTS.md**
+2. **tests/COMPREHENSIVE_VALIDATION_RESULTS.md**
    - Full validation output with all details
    - Complete error and warning lists
    - Dependency graph visualization
 
-3. **shannon-plugin/tests/INTEGRATION_HEALTH_SUMMARY.md** (this file)
+3. **tests/INTEGRATION_HEALTH_SUMMARY.md** (this file)
    - Executive summary of validation
    - Analysis of all findings
    - Recommendations for improvements
@@ -392,12 +392,12 @@ The only issues found are:
 
 **Validation Command:**
 ```bash
-python3 shannon-plugin/tests/comprehensive_validation.py /Users/nick/Desktop/shannon-framework
+python3 tests/comprehensive_validation.py /Users/nick/Desktop/shannon-framework
 ```
 
 **Re-run after fixes:**
 ```bash
 # After fixing validator YAML parser
-python3 shannon-plugin/tests/comprehensive_validation.py /Users/nick/Desktop/shannon-framework
+python3 tests/comprehensive_validation.py /Users/nick/Desktop/shannon-framework
 # Expected: 100% health score
 ```

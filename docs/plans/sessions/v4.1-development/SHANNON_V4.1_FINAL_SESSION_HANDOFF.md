@@ -22,21 +22,21 @@
 
 ### Phase 1: Skill Enhancements (3 Skills - COMPLETE)
 
-**1. spec-analysis** (shannon-plugin/skills/spec-analysis/SKILL.md)
+**1. spec-analysis** (skills/spec-analysis/SKILL.md)
 - **Enhancement**: Performance benchmarks + 9-step execution walkthrough
 - **Lines Added**: +303 (1,242 → 1,545 lines)
 - **Validation**: RED test 0.47 → GREEN test 0.38 (**19% accuracy improvement**)
 - **Behavioral Change**: ✅ CONFIRMED - Walkthrough produces more accurate scores
 - **Commit**: 2d5eb6a
 
-**2. wave-orchestration** (shannon-plugin/skills/wave-orchestration/SKILL.md)
+**2. wave-orchestration** (skills/wave-orchestration/SKILL.md)
 - **Enhancement**: Performance benchmarks + wave generation walkthrough
 - **Lines Added**: +378 (1,204 → 1,582 lines)
 - **Validation**: RED 5 waves/1.76x → GREEN 5 waves/1.76x (**Identical outputs**)
 - **Behavioral Change**: ❌ None (educational value only)
 - **Commit**: d6aca7b
 
-**3. phase-planning** (shannon-plugin/skills/phase-planning/SKILL.md)
+**3. phase-planning** (skills/phase-planning/SKILL.md)
 - **Enhancement**: Performance benchmarks + adjustment calculation walkthrough
 - **Lines Added**: +294 (889 → 1,183 lines)
 - **Validation**: Clarifies additive adjustments ("+5%" = add 5 points, not multiply)
@@ -82,7 +82,7 @@
 - **6-Layer Hierarchy Mapped**: USER → ENFORCEMENT → ORCHESTRATION → SKILLS → AGENTS → INFRASTRUCTURE
 - **Commit**: 17488b3
 
-**2. shannon-plugin/hooks/README.md** (1,068 lines - **NEW**)
+**2. hooks/README.md** (1,068 lines - **NEW**)
 - **All 6 Hooks Comprehensively Documented**:
   - session_start.sh (loads using-shannon, establishes Iron Laws)
   - post_tool_use.py (blocks 13 mock patterns, real-time enforcement)
@@ -116,7 +116,7 @@
 ### Phase 3: Hook System Documentation (COMPLETE - Merged into Phase 2)
 
 **Original Plan**: Tasks 17-21 (5 individual hook documents)
-**Actual Delivery**: shannon-plugin/hooks/README.md (1,068 lines)
+**Actual Delivery**: hooks/README.md (1,068 lines)
 **Enhancement**: Unified comprehensive documentation superior to fragmented files
 
 **Exceeds Plan**: Single authoritative source for all hook documentation vs 5 separate files
@@ -213,22 +213,22 @@ d6aca7b enhance(skill): add benchmarks + walkthrough to wave-orchestration
 ### Files Created/Modified
 **Created** (8 new files):
 1. SHANNON_SYSTEM_ARCHITECTURE_SYNTHESIS.md (824 lines)
-2. shannon-plugin/hooks/README.md (1,068 lines)
+2. hooks/README.md (1,068 lines)
 3. README.md (restored, 716 lines)
-4. shannon-plugin/commands/guides/sh_spec_GUIDE.md (1,784 lines)
-5. shannon-plugin/commands/guides/sh_wave_GUIDE.md (1,482 lines)
-6. shannon-plugin/commands/guides/sh_checkpoint_GUIDE.md (705 lines)
-7. shannon-plugin/commands/guides/sh_restore_GUIDE.md (~700 lines)
-8. shannon-plugin/commands/guides/sh_test_GUIDE.md (~1,100 lines)
-9. shannon-plugin/commands/guides/FINAL_THREE_COMMANDS_REFERENCE.md (1,100 lines)
+4. commands/guides/sh_spec_GUIDE.md (1,784 lines)
+5. commands/guides/sh_wave_GUIDE.md (1,482 lines)
+6. commands/guides/sh_checkpoint_GUIDE.md (705 lines)
+7. commands/guides/sh_restore_GUIDE.md (~700 lines)
+8. commands/guides/sh_test_GUIDE.md (~1,100 lines)
+9. commands/guides/FINAL_THREE_COMMANDS_REFERENCE.md (1,100 lines)
 10. SHANNON_V4.1_WORK_COMPLETE_HANDOFF.md (handoff summary)
 11. SHANNON_V4.1_ENHANCEMENT_COMPLETION_SUMMARY.md (completion notes)
 12. SHANNON_V4.1_FINAL_SESSION_HANDOFF.md (this file)
 
 **Modified** (3 skill files):
-1. shannon-plugin/skills/spec-analysis/SKILL.md
-2. shannon-plugin/skills/wave-orchestration/SKILL.md
-3. shannon-plugin/skills/phase-planning/SKILL.md
+1. skills/spec-analysis/SKILL.md
+2. skills/wave-orchestration/SKILL.md
+3. skills/phase-planning/SKILL.md
 
 ---
 
@@ -545,22 +545,22 @@ WAVE_COORDINATOR (agent) - executes algorithm
 git pull origin main  # Get latest
 
 # Enhanced skills:
-- shannon-plugin/skills/spec-analysis/SKILL.md
-- shannon-plugin/skills/wave-orchestration/SKILL.md
-- shannon-plugin/skills/phase-planning/SKILL.md
+- skills/spec-analysis/SKILL.md
+- skills/wave-orchestration/SKILL.md
+- skills/phase-planning/SKILL.md
 
 # System documentation:
 - SHANNON_SYSTEM_ARCHITECTURE_SYNTHESIS.md (read this first!)
-- shannon-plugin/hooks/README.md
+- hooks/README.md
 - README.md
 
 # Command guides:
-- shannon-plugin/commands/guides/sh_spec_GUIDE.md
-- shannon-plugin/commands/guides/sh_wave_GUIDE.md
-- shannon-plugin/commands/guides/sh_checkpoint_GUIDE.md
-- shannon-plugin/commands/guides/sh_restore_GUIDE.md
-- shannon-plugin/commands/guides/sh_test_GUIDE.md
-- shannon-plugin/commands/guides/FINAL_THREE_COMMANDS_REFERENCE.md
+- commands/guides/sh_spec_GUIDE.md
+- commands/guides/sh_wave_GUIDE.md
+- commands/guides/sh_checkpoint_GUIDE.md
+- commands/guides/sh_restore_GUIDE.md
+- commands/guides/sh_test_GUIDE.md
+- commands/guides/FINAL_THREE_COMMANDS_REFERENCE.md
 ```
 
 ### To Continue Enhancements
@@ -583,7 +583,7 @@ git pull origin main  # Get latest
 **For Enhancement Questions**:
 - Reference: SHANNON_SYSTEM_ARCHITECTURE_SYNTHESIS.md (integration patterns)
 - Example: sh_spec_GUIDE.md (documentation pattern)
-- Hook development: shannon-plugin/hooks/README.md
+- Hook development: hooks/README.md
 
 ---
 

@@ -195,23 +195,23 @@ Warnings:               29 (24 documentation, 5 validator)
 
 ```bash
 # From shannon-framework root
-python3 shannon-plugin/tests/comprehensive_validation.py .
+python3 tests/comprehensive_validation.py .
 
 # With explicit path
-python3 shannon-plugin/tests/comprehensive_validation.py /path/to/shannon-framework
+python3 tests/comprehensive_validation.py /path/to/shannon-framework
 ```
 
 ### Check Specific Components
 
 ```bash
 # Check only commands
-grep -l "@skill" shannon-plugin/commands/*.md
+grep -l "@skill" commands/*.md
 
 # Check only agents
-grep -l "activated-by:" shannon-plugin/agents/*.md
+grep -l "activated-by:" agents/*.md
 
 # Check only skills
-find shannon-plugin/skills -name "SKILL.md"
+find skills -name "SKILL.md"
 
 # Check only docs
 find docs -name "*.md" -exec grep -l "@skill\|/shannon:" {} \;
@@ -221,11 +221,11 @@ find docs -name "*.md" -exec grep -l "@skill\|/shannon:" {} \;
 
 ```bash
 # Run validation and generate reports
-python3 shannon-plugin/tests/comprehensive_validation.py . > validation.log 2>&1
+python3 tests/comprehensive_validation.py . > validation.log 2>&1
 
 # Reports created:
-# - shannon-plugin/tests/COMPREHENSIVE_VALIDATION_RESULTS.md
-# - shannon-plugin/tests/INTEGRATION_HEALTH_SUMMARY.md (manual creation)
+# - tests/COMPREHENSIVE_VALIDATION_RESULTS.md
+# - tests/INTEGRATION_HEALTH_SUMMARY.md (manual creation)
 ```
 
 ---
@@ -316,7 +316,7 @@ python3 shannon-plugin/tests/comprehensive_validation.py . > validation.log 2>&1
 
 1. **Read:** DEPENDENCY_GRAPH.md → "Safe to Add Dependencies" section
 2. **Check:** Is my new skill Layer 0, 1, 2, or 3?
-3. **Validate:** Run `python3 shannon-plugin/tests/comprehensive_validation.py .`
+3. **Validate:** Run `python3 tests/comprehensive_validation.py .`
 4. **Verify:** Health score stays >= 95%
 
 ### Scenario: Modifying Existing Skill
@@ -363,8 +363,8 @@ python3 shannon-plugin/tests/comprehensive_validation.py . > validation.log 2>&1
 
 ### Plugin Documentation
 
-- **shannon-plugin/README.md** - Plugin overview
-- **shannon-plugin/.claude-plugin/plugin.json** - Plugin manifest
+- **README.md** - Plugin overview
+- **.claude-plugin/plugin.json** - Plugin manifest
 - **docs/PLUGIN_INSTALL.md** - Installation instructions
 
 ---
@@ -372,7 +372,7 @@ python3 shannon-plugin/tests/comprehensive_validation.py . > validation.log 2>&1
 ## Validation Tool Files
 
 ```
-shannon-plugin/tests/
+tests/
 ├── README.md                              ← Testing guide
 ├── VALIDATION_INDEX.md                    ← This file
 ├── INTEGRATION_HEALTH_SUMMARY.md          ← Executive summary
@@ -393,7 +393,7 @@ Want a quick health check without reading all docs?
 
 ```bash
 # Run validation
-python3 shannon-plugin/tests/comprehensive_validation.py . 2>&1 | tail -10
+python3 tests/comprehensive_validation.py . 2>&1 | tail -10
 
 # Look for:
 # Health Score: XX.XX%

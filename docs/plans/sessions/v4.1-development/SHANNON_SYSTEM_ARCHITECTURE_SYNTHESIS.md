@@ -122,7 +122,7 @@ Example from spec-analysis:
 
 **Enforcement Chain**:
 ```
-1. Core Document: shannon-plugin/core/TESTING_PHILOSOPHY.md (line 831 reference)
+1. Core Document: core/TESTING_PHILOSOPHY.md (line 831 reference)
    → Defines Iron Law: No mocks, no unit tests, no stubs
 
 2. functional-testing skill (RIGID type)
@@ -219,11 +219,11 @@ Results coordinated (spec-analysis → mcp-discovery uses domain %)
 
 ### Pattern 8: Hook Enforcement Layer
 
-**Discovery**: 6 hooks found in shannon-plugin/hooks/
+**Discovery**: 6 hooks found in hooks/
 
 **Hook Inventory**:
 ```bash
-shannon-plugin/hooks/
+hooks/
 ├── hooks.json              (2,205 bytes) - Configuration/registration
 ├── session_start.sh        (425 bytes)   - Skill auto-loading
 ├── post_tool_use.py        (4,530 bytes) - Mock violation detection
@@ -316,7 +316,7 @@ Puppeteer unavailable:
 
 ### Pattern 10: Hook Implementation Details (POST_TOOL_USE.PY Analysis)
 
-**Source**: shannon-plugin/hooks/post_tool_use.py (164 lines read)
+**Source**: hooks/post_tool_use.py (164 lines read)
 
 **Hook Lifecycle**:
 ```
@@ -572,7 +572,7 @@ Based on discoveries above:
 
 ### Pattern 13: Agent Layer Integration
 
-**Discovery**: 24 Shannon specialist agents discovered in shannon-plugin/agents/
+**Discovery**: 24 Shannon specialist agents discovered in agents/
 
 **Agent Categories**:
 ```
@@ -682,13 +682,13 @@ TEST_GUARDIAN agent:
 ## Shannon Framework: Complete Component Inventory
 
 ### Commands (48 total)
-- **Location**: shannon-plugin/commands/
+- **Location**: commands/
 - **Function**: User-facing entry points for Shannon workflows
 - **Examples**: /shannon:spec, /shannon:wave, /shannon:test, /shannon:checkpoint, /shannon:prime
 - **Integration**: Commands invoke skills via COMMAND_SKILL_MAP
 
 ### Skills (16 total - 16,740 lines)
-- **Location**: shannon-plugin/skills/
+- **Location**: skills/
 - **Types**:
   - QUANTITATIVE (2): spec-analysis (1544L), wave-orchestration (1581L)
   - PROTOCOL (4): phase-planning (1182L), context-preservation (562L), context-restoration (957L), skill-discovery (565L)
@@ -697,7 +697,7 @@ TEST_GUARDIAN agent:
 - **Enhancements**: 3 with performance benchmarks + execution walkthroughs
 
 ### Agents (24 total)
-- **Location**: shannon-plugin/agents/
+- **Location**: agents/
 - **Orchestrators**: WAVE_COORDINATOR, CONTEXT_GUARDIAN, PHASE_ARCHITECT, SPEC_ANALYZER, ARCHITECT
 - **Domain Builders**: FRONTEND, BACKEND, MOBILE_DEVELOPER, DATABASE_ARCHITECT, DEVOPS, API_DESIGNER, DATA_ENGINEER, SECURITY
 - **Quality**: TEST_GUARDIAN, QA, CODE_REVIEWER, REFACTORER, PERFORMANCE, ANALYZER
@@ -705,14 +705,14 @@ TEST_GUARDIAN agent:
 - **Configuration**: Each agent has YAML frontmatter with activation thresholds, MCP requirements, dependencies
 
 ### Hooks (6 total)
-- **Location**: shannon-plugin/hooks/
+- **Location**: hooks/
 - **Hooks**: session_start.sh, post_tool_use.py, precompact.py, stop.py, user_prompt_submit.py, hooks.json
 - **Function**: Automatic enforcement of Iron Laws
 - **Integration**: Intercept tool execution, block violations, trigger emergency saves
 - **Documentation Status**: ❌ NO comprehensive documentation (CRITICAL GAP)
 
 ### Core Patterns (9 documented)
-- **Location**: shannon-plugin/core/
+- **Location**: core/
 - **Examples**: TESTING_PHILOSOPHY.md, CONTEXT_MANAGEMENT.md, etc.
 - **Function**: Define Iron Laws and foundational principles
 
@@ -730,7 +730,7 @@ TEST_GUARDIAN agent:
 **Status**: 5 hooks exist (6,574 bytes total code) but no comprehensive documentation
 **Impact**: Users don't understand enforcement mechanisms
 **Priority**: HIGH
-**Location for docs**: shannon-plugin/hooks/README.md (doesn't exist)
+**Location for docs**: hooks/README.md (doesn't exist)
 **Content needed**:
 - Hook lifecycle and execution order
 - How each hook enforces specific Iron Laws

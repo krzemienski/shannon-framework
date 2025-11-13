@@ -56,7 +56,7 @@
    - 6-layer hierarchy (Commands→Hooks→Skills→Agents→Tools→MCPs)
    - First comprehensive system integration guide
 
-2. **shannon-plugin/hooks/README.md** (1,068 lines)
+2. **hooks/README.md** (1,068 lines)
    - All 6 hooks documented (lifecycle, enforcement, integration)
    - Hook development guide
    - Troubleshooting for hook failures
@@ -235,7 +235,7 @@ Example: NO MOCKS
 
 **Documentation** (9):
 - 17488b3: SHANNON_SYSTEM_ARCHITECTURE_SYNTHESIS.md
-- 789083c: shannon-plugin/hooks/README.md
+- 789083c: hooks/README.md
 - 661fc96: README.md restored
 - 797ce10: sh_spec_GUIDE.md
 - d324efc: sh_wave_GUIDE.md
@@ -471,20 +471,20 @@ Example: NO MOCKS
 ## Files Modified/Created
 
 **Modified** (3):
-- shannon-plugin/skills/spec-analysis/SKILL.md
-- shannon-plugin/skills/wave-orchestration/SKILL.md
-- shannon-plugin/skills/phase-planning/SKILL.md
+- skills/spec-analysis/SKILL.md
+- skills/wave-orchestration/SKILL.md
+- skills/phase-planning/SKILL.md
 
 **Created** (15):
 1. SHANNON_SYSTEM_ARCHITECTURE_SYNTHESIS.md
-2. shannon-plugin/hooks/README.md
-3. shannon-plugin/commands/guides/sh_spec_GUIDE.md
-4. shannon-plugin/commands/guides/sh_wave_GUIDE.md
-5. shannon-plugin/commands/guides/sh_checkpoint_GUIDE.md
-6. shannon-plugin/commands/guides/sh_restore_GUIDE.md
-7. shannon-plugin/commands/guides/sh_test_GUIDE.md
-8. shannon-plugin/commands/guides/FINAL_THREE_COMMANDS_REFERENCE.md
-9. shannon-plugin/skills/honest-reflections/SKILL.md
+2. hooks/README.md
+3. commands/guides/sh_spec_GUIDE.md
+4. commands/guides/sh_wave_GUIDE.md
+5. commands/guides/sh_checkpoint_GUIDE.md
+6. commands/guides/sh_restore_GUIDE.md
+7. commands/guides/sh_test_GUIDE.md
+8. commands/guides/FINAL_THREE_COMMANDS_REFERENCE.md
+9. skills/honest-reflections/SKILL.md
 10. CLAUDE_CODE_PLUGIN_SYSTEM_RESEARCH.md
 11. HONEST_GAP_ANALYSIS_AND_COMPLETION_PLAN.md
 12. COMPLETE_SKILL_AUDIT_RESULTS.md

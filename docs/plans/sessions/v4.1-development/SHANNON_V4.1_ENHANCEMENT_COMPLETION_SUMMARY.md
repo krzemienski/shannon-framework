@@ -50,7 +50,7 @@
 
 **Phase 2**: System Documentation
 - SHANNON_SYSTEM_ARCHITECTURE_SYNTHESIS.md: 824 lines
-- shannon-plugin/hooks/README.md: 1,068 lines
+- hooks/README.md: 1,068 lines
 - Root README.md: Now 3,842 lines (consolidated)
 
 **Phase 4**: Command Documentation

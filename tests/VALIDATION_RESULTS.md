@@ -7,7 +7,7 @@ November 4, 2025
 
 ### Skill Structure Validation
 
-**Command:** `python3 shannon-plugin/tests/validate_skills.py`
+**Command:** `python3 tests/validate_skills.py`
 
 **Result:** ⚠️ WARNINGS (Non-Blocking)
 
@@ -43,7 +43,7 @@ The validation script checks for complete documentation structure in SKILL.md fi
 
 **Status:** ⏳ PENDING
 
-**Location:** `shannon-plugin/tests/integration_test_suite.md`
+**Location:** `tests/integration_test_suite.md`
 
 **Tests to Execute:**
 1. Complete Workflow (spec → implementation)

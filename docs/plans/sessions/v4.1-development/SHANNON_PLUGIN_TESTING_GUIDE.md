@@ -178,7 +178,7 @@ Installation: /Users/yourname/projects/shannon-framework
 **Mode**: Fresh (no previous session detected)
 
 **Skills Discovered**: 17
-   Project: 17 (shannon-plugin/skills/)
+   Project: 17 (skills/)
    User: 0
    Plugin: 0
 
@@ -213,7 +213,7 @@ Next: Run /shannon:spec to analyze a specification
 ```
 
 **Expected Behavior**:
-1. Scans shannon-plugin/skills/ directory
+1. Scans skills/ directory
 2. Parses YAML frontmatter from each SKILL.md
 3. Builds skill catalog
 4. Reports results
@@ -223,7 +223,7 @@ Next: Run /shannon:spec to analyze a specification
 📚 Skill Discovery Complete
 
 **Skills Found**: 17 total
-├─ Project: 17 skills (shannon-plugin/skills/)
+├─ Project: 17 skills (skills/)
 ├─ User: 0 skills
 └─ Plugin: 0 skills
 
@@ -244,8 +244,8 @@ Next: Run /shannon:spec to analyze a specification
 - ✅ Cache saved to Serena
 
 **If Fails**:
-- Check: shannon-plugin/skills/*/SKILL.md files exist?
-- Run: ls shannon-plugin/skills/*/SKILL.md | wc -l (should show 17)
+- Check: skills/*/SKILL.md files exist?
+- Run: ls skills/*/SKILL.md | wc -l (should show 17)
 
 ---
 
@@ -380,7 +380,7 @@ Shannon enforces: "Did you run /shannon:spec first?" when trying to implement wi
 **If Fails**:
 - Check: hooks/session_start.sh exists and executable?
 - Check: hooks.json has SessionStart configuration?
-- Run: ls -la shannon-plugin/hooks/session_start.sh (should be -rwxr-xr-x)
+- Run: ls -la hooks/session_start.sh (should be -rwxr-xr-x)
 
 ---
 
@@ -447,7 +447,7 @@ Skill("spec-analysis")
 
 **If Fails**:
 - Skills might not be in correct location
-- Check: shannon-plugin/skills/*/SKILL.md pattern exists
+- Check: skills/*/SKILL.md pattern exists
 
 ---
 
@@ -497,7 +497,7 @@ Skill("spec-analysis")
 /plugin list
 
 # Check if commands directory exists
-ls shannon-plugin/commands/ | head -5
+ls commands/ | head -5
 ```
 
 **Resolution**:
@@ -538,7 +538,7 @@ ls shannon-plugin/commands/ | head -5
 ```
 
 **Resolution**:
-1. Check shannon-plugin/skills/ directory structure
+1. Check skills/ directory structure
 2. Verify SKILL.md files have YAML frontmatter
 3. Refresh skill cache: `/shannon:discover_skills --refresh`
 
@@ -551,13 +551,13 @@ ls shannon-plugin/commands/ | head -5
 **Diagnosis**:
 ```bash
 # Check hook files exist and executable
-ls -la shannon-plugin/hooks/*.py shannon-plugin/hooks/*.sh
+ls -la hooks/*.py hooks/*.sh
 
 # All should have -rwxr-xr-x permissions
 ```
 
 **Resolution**:
-1. Make hooks executable: `chmod +x shannon-plugin/hooks/*.{py,sh}`
+1. Make hooks executable: `chmod +x hooks/*.{py,sh}`
 2. Verify hooks.json is valid JSON
 3. Restart Claude Code
 4. Test: Try writing test with mocks (should block)

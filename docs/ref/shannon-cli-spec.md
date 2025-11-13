@@ -470,7 +470,7 @@ class SpecAnalyzer:
     """
     Implements Shannon's 8-dimensional complexity analysis
 
-    Based on: shannon-plugin/core/SPEC_ANALYSIS.md (1,786 lines)
+    Based on: core/SPEC_ANALYSIS.md (1,786 lines)
     """
 
     def __init__(self, logger: Optional[ShannonLogger] = None):
@@ -552,7 +552,7 @@ class WaveCoordinator:
     """
     Orchestrates parallel wave execution with true concurrency
 
-    Based on: shannon-plugin/core/WAVE_ORCHESTRATION.md (1,612 lines)
+    Based on: core/WAVE_ORCHESTRATION.md (1,612 lines)
     """
 
     def __init__(self, session: SessionManager, logger: Optional[ShannonLogger] = None):
@@ -1608,8 +1608,8 @@ grep "file_count:" structural.log
 **Purpose**: Implement Shannon's 8-dimensional complexity analysis algorithm
 
 **Based On**:
-- `shannon-plugin/core/SPEC_ANALYSIS.md` (1,786 lines)
-- `shannon-plugin/skills/spec-analysis/SKILL.md` (1,545 lines)
+- `core/SPEC_ANALYSIS.md` (1,786 lines)
+- `skills/spec-analysis/SKILL.md` (1,545 lines)
 
 **Complexity**: HIGH (algorithms, regex, validation)
 

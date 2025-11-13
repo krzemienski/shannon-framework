@@ -1418,8 +1418,8 @@ A: Docker PostgreSQL test instance (docker run... takes 30s to start). Use trans
 ---
 
 **Command**: /shannon:test
-**Skill**: functional-testing (shannon-plugin/skills/functional-testing/SKILL.md)
-**Agent**: TEST_GUARDIAN (shannon-plugin/agents/TEST_GUARDIAN.md)
+**Skill**: functional-testing (skills/functional-testing/SKILL.md)
+**Agent**: TEST_GUARDIAN (agents/TEST_GUARDIAN.md)
 **Examples**: 12 comprehensive scenarios
 **Anti-Patterns**: 3 common violations (mocks, in-memory DB, no cleanup)
 **Iron Law**: NO MOCKS - enforced by post_tool_use.py hook

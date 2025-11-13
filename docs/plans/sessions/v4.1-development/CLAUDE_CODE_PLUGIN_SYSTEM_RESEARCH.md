@@ -149,7 +149,7 @@ plugin-name/
 Shannon structure matches plugin standard:
 ```
 shannon-framework/
-├── shannon-plugin/              # This is the plugin root
+├──               # This is the plugin root
 │   ├── .claude-plugin/
 │   │   └── plugin.json ✓       # Has manifest
 │   ├── commands/               # 46 .md files

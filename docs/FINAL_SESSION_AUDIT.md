@@ -63,7 +63,7 @@
 - Status: Created, validated, working
 
 **2. plugin.json (simplified)**
-- Location: `shannon-plugin/.claude-plugin/plugin.json`
+- Location: `.claude-plugin/plugin.json`
 - Changes: Reduced from 78 lines to 13 lines
 - Fields: 9 (name, description, version, author, homepage, repo, license, keywords)
 - Status: Validated, working
@@ -180,7 +180,7 @@ shannon-framework/
 │   └── marketplace.json ⭐ NEW
 ├── CLAUDE.md (updated with SDK requirements)
 ├── README.md (2,861 lines)
-├── shannon-plugin/ (171 .md files)
+├──  (171 .md files)
 │   ├── .claude-plugin/plugin.json (simplified)
 │   ├── commands/ (14 + 6 guides)
 │   ├── skills/ (17 with SKILL.md)

@@ -210,7 +210,7 @@ How to verify this skill worked correctly:
 
 - Core Documentation: `shannon-plugin/core/[RELEVANT_DOC].md`
 - Related Skills: `@skill-name`, `@other-skill`
-- MCP Setup: See `/sh_check_mcps` for MCP configuration
+- MCP Setup: See `/shannon:check_mcps` for MCP configuration
 
 ---
 

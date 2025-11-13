@@ -67,7 +67,7 @@
 - Risk: Hooks might be broken, documentation might be wrong
 
 **Gap #27: Didn't Apply Shannon to Shannon**
-- Should Have: Run /sh_spec on the enhancement plan itself (38 tasks = probably 0.65 complexity), use wave-based execution
+- Should Have: Run /shannon:spec on the enhancement plan itself (38 tasks = probably 0.65 complexity), use wave-based execution
 - Actual: Sequential execution, no complexity analysis
 - Irony: Enhanced parallel framework using sequential execution
 
@@ -103,8 +103,8 @@
 - Test SessionStart hook: Fresh Claude session, verify using-shannon loads
 - Test PostToolUse hook: Write test with mocks, verify block
 - Test PreCompact: Approach context limit, verify checkpoint
-- Test /sh_spec: Run on sample spec, verify spec-analysis invokes
-- Test /sh_wave: Verify wave-orchestration skill interaction
+- Test /shannon:spec: Run on sample spec, verify spec-analysis invokes
+- Test /shannon:wave: Verify wave-orchestration skill interaction
 - Document: Test results, any failures found
 
 **A3: Fix Testing Methodology** (1 hour)
@@ -212,7 +212,7 @@ For EACH skill (functional-testing, using-shannon, context-preservation, etc.):
 
 **D2: Installation Testing** (1 hour)
 - Install Shannon in fresh Claude Code instance
-- Test: /sh_status, /shannon:prime, /sh_spec
+- Test: /shannon:status, /shannon:prime, /shannon:spec
 - Verify: All commands work end-to-end
 - Document: Installation validation results
 

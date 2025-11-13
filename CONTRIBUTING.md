@@ -51,7 +51,7 @@ Edit plugin files in root directory:
 # Restart Claude Code
 
 # Test your changes
-/sh_status  # Verify Shannon loads
+/shannon:status  # Verify Shannon loads
 /your_new_command  # Test new features
 ```
 
@@ -114,7 +114,7 @@ git push origin feature/your-feature-name
 
 **Follow Shannon Principles**:
 - Apply FORCED_READING_PROTOCOL to code you're changing
-- Use Shannon's own tools (run /sh_spec on your changes)
+- Use Shannon's own tools (run /shannon:spec on your changes)
 - Follow NO MOCKS for any tests you add
 - Document anti-rationalization patterns you discover
 
@@ -125,7 +125,7 @@ type(scope): description
 Examples:
 feat(skill): add performance-optimization skill
 fix(hooks): correct PreCompact checkpoint timing
-docs(commands): add /sh_wave comprehensive guide
+docs(commands): add /shannon:wave comprehensive guide
 test(skills): add pressure test for using-shannon
 ```
 

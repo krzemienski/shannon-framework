@@ -46,7 +46,7 @@ BUILD_CONFIG = {
 
 
 async def build_application(spec_text: str, output_dir: Path) -> tuple[bool, str]:
-    """Execute Shannon /sh_wave to build complete application"""
+    """Execute Shannon /shannon:wave to build complete application"""
     print(f"Building full-stack iOS application with Shannon...")
     print(f"Output directory: {output_dir}")
 
@@ -68,10 +68,10 @@ Work in: {output_dir.absolute()}
 Specification:
 {spec_text}
 
-Execute /sh_wave to build everything including mobile app, backend API, and database.
+Execute /shannon:wave to build everything including mobile app, backend API, and database.
 '''
 
-    print(f"\nExecuting /sh_wave (this will take 60-75 minutes)...")
+    print(f"\nExecuting /shannon:wave (this will take 60-75 minutes)...")
     print("Progress:")
 
     start_time = time.time()

@@ -19,7 +19,7 @@
 ### Critical (Need Creation)
 1. **CONTRIBUTING.md** - Referenced by 4 files
    - **Status**: ✅ CREATED
-   - Files referencing: agents/SCRIBE.md, commands/sc_document.md, commands/sh_scaffold.md
+   - Files referencing: agents/SCRIBE.md, commands/sc_document.md, commands/shannon:scaffold.md
 
 ### Non-Critical (Documentation References)
 2-11. Various ADR and summary files

@@ -18,7 +18,7 @@ This document provides comprehensive integration test scenarios for Shannon V4. 
 
 1. **Analyze Specification**
    ```bash
-   /sh_spec "Build REST API for task management with user authentication, CRUD operations, and real-time updates"
+   /shannon:spec "Build REST API for task management with user authentication, CRUD operations, and real-time updates"
    ```
 
    **Expected Output:**
@@ -30,7 +30,7 @@ This document provides comprehensive integration test scenarios for Shannon V4. 
 
 2. **Verify Analysis Storage**
    ```bash
-   /sh_status
+   /shannon:status
    ```
 
    **Expected Output:**
@@ -40,7 +40,7 @@ This document provides comprehensive integration test scenarios for Shannon V4. 
 
 3. **Plan Wave Execution**
    ```bash
-   /sh_wave 1 --plan
+   /shannon:wave 1 --plan
    ```
 
    **Expected Output:**
@@ -51,7 +51,7 @@ This document provides comprehensive integration test scenarios for Shannon V4. 
 
 4. **Execute Wave**
    ```bash
-   /sh_wave 1
+   /shannon:wave 1
    ```
 
    **Expected Output:**
@@ -62,7 +62,7 @@ This document provides comprehensive integration test scenarios for Shannon V4. 
 
 5. **Verify Completion**
    ```bash
-   /sh_status
+   /shannon:status
    ```
 
    **Expected Output:**
@@ -88,17 +88,17 @@ This document provides comprehensive integration test scenarios for Shannon V4. 
 
 1. **Initial Setup**
    ```bash
-   /sh_spec "Build mobile app with offline sync"
+   /shannon:spec "Build mobile app with offline sync"
    ```
 
 2. **Set North Star Goal**
    ```bash
-   /sh_north_star "Launch MVP to 100 beta users by end of Q1"
+   /shannon:north_star "Launch MVP to 100 beta users by end of Q1"
    ```
 
 3. **Create Checkpoint**
    ```bash
-   /sh_checkpoint "pre-implementation"
+   /shannon:checkpoint "pre-implementation"
    ```
 
    **Expected Output:**
@@ -108,7 +108,7 @@ This document provides comprehensive integration test scenarios for Shannon V4. 
 
 4. **Verify Checkpoint Saved**
    ```bash
-   /sh_status
+   /shannon:status
    ```
 
    **Expected Output:**
@@ -121,7 +121,7 @@ This document provides comprehensive integration test scenarios for Shannon V4. 
 
 6. **Restore Checkpoint**
    ```bash
-   /sh_restore "pre-implementation"
+   /shannon:restore "pre-implementation"
    ```
 
    **Expected Output:**
@@ -132,7 +132,7 @@ This document provides comprehensive integration test scenarios for Shannon V4. 
 
 7. **Verify Full Restoration**
    ```bash
-   /sh_status
+   /shannon:status
    ```
 
    **Expected Output:**
@@ -158,7 +158,7 @@ This document provides comprehensive integration test scenarios for Shannon V4. 
 
 1. **Request Web Tests**
    ```bash
-   /sh_test --create --platform web --feature "user login"
+   /shannon:test --create --platform web --feature "user login"
    ```
 
    **Expected Output:**
@@ -178,7 +178,7 @@ This document provides comprehensive integration test scenarios for Shannon V4. 
 
 3. **Request API Tests**
    ```bash
-   /sh_test --create --platform api --endpoint "/api/tasks"
+   /shannon:test --create --platform api --endpoint "/api/tasks"
    ```
 
    **Expected Output:**
@@ -214,14 +214,14 @@ This document provides comprehensive integration test scenarios for Shannon V4. 
 
 1. **Check MCP Status**
    ```bash
-   /sh_check_mcps
+   /shannon:check_mcps
    ```
 
    **Note:** Sequential MCP status
 
 2. **Analyze Complex Spec (Without Sequential)**
    ```bash
-   /sh_spec "Build distributed microservices architecture with event sourcing"
+   /shannon:spec "Build distributed microservices architecture with event sourcing"
    ```
 
    **Expected Behavior:**
@@ -240,7 +240,7 @@ This document provides comprehensive integration test scenarios for Shannon V4. 
 
 1. **Request Web Tests (Without Puppeteer)**
    ```bash
-   /sh_test --create --platform web
+   /shannon:test --create --platform web
    ```
 
    **Expected Behavior:**
@@ -254,7 +254,7 @@ This document provides comprehensive integration test scenarios for Shannon V4. 
 
 1. **Request Framework Pattern (Without Context7)**
    ```bash
-   /sh_scaffold --framework react
+   /shannon:scaffold --framework react
    ```
 
    **Expected Behavior:**
@@ -284,11 +284,11 @@ This document provides comprehensive integration test scenarios for Shannon V4. 
 
    ```bash
    # Original V3 commands should work identically
-   /sh_spec "Build app"
-   /sh_checkpoint "test"
-   /sh_restore "test"
-   /sh_status
-   /sh_north_star "Goal"
+   /shannon:spec "Build app"
+   /shannon:checkpoint "test"
+   /shannon:restore "test"
+   /shannon:status
+   /shannon:north_star "Goal"
    ```
 
 2. **Compare Output Formats**
@@ -304,9 +304,9 @@ This document provides comprehensive integration test scenarios for Shannon V4. 
 
    ```bash
    # V3 edge cases should work
-   /sh_spec ""  # Empty spec (should error)
-   /sh_restore "nonexistent"  # Missing checkpoint (should error)
-   /sh_checkpoint ""  # Empty name (should error)
+   /shannon:spec ""  # Empty spec (should error)
+   /shannon:restore "nonexistent"  # Missing checkpoint (should error)
+   /shannon:checkpoint ""  # Empty name (should error)
    ```
 
    **Expected:**

@@ -1,6 +1,6 @@
-# /sh_test Command - Complete Usage Guide
+# /shannon:test Command - Complete Usage Guide
 
-**Command**: `/sh_test`
+**Command**: `/shannon:test`
 **Purpose**: NO MOCKS functional testing orchestration with automatic platform detection
 **Skill**: Invokes functional-testing skill (1402 lines)
 **Agent**: Activates TEST_GUARDIAN for test generation and validation
@@ -10,7 +10,7 @@
 
 ## Overview
 
-The `/sh_test` command enforces Shannon's **NO MOCKS Iron Law** through automatic platform detection, test discovery, functional test execution with real dependencies, and test scaffold generation.
+The `/shannon:test` command enforces Shannon's **NO MOCKS Iron Law** through automatic platform detection, test discovery, functional test execution with real dependencies, and test scaffold generation.
 
 **Core Value**: Tests that validate REAL production behavior, not mock behavior.
 
@@ -22,11 +22,11 @@ The `/sh_test` command enforces Shannon's **NO MOCKS Iron Law** through automati
 
 **Usage**:
 ```bash
-/sh_test                                  # Discover and run all tests
-/sh_test [test_path]                      # Run specific test file
-/sh_test --platform web                   # Platform-specific testing
-/sh_test --create login-flow             # Generate test scaffold
-/sh_test --validate                       # Check NO MOCKS compliance
+/shannon:test                                  # Discover and run all tests
+/shannon:test [test_path]                      # Run specific test file
+/shannon:test --platform web                   # Platform-specific testing
+/shannon:test --create login-flow             # Generate test scaffold
+/shannon:test --validate                       # Check NO MOCKS compliance
 ```
 
 ---
@@ -37,7 +37,7 @@ The `/sh_test` command enforces Shannon's **NO MOCKS Iron Law** through automati
 
 **Input**:
 ```bash
-/sh_test
+/shannon:test
 ```
 
 **Process**:
@@ -118,15 +118,15 @@ Coverage Gaps - 22% Untested
 Missing Tests (Priority Components):
 ⚠️ SearchBar component (no tests)
    - Priority: HIGH
-   - Suggested: /sh_test --create search-flow --platform web
+   - Suggested: /shannon:test --create search-flow --platform web
 
 ⚠️ PasswordReset component (no tests)
    - Priority: MEDIUM
-   - Suggested: /sh_test --create password-reset --platform web
+   - Suggested: /shannon:test --create password-reset --platform web
 
 ⚠️ OrderHistory API (no tests)
    - Priority: MEDIUM
-   - Suggested: /sh_test --create order-api --platform api
+   - Suggested: /shannon:test --create order-api --platform api
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 NO MOCKS Compliance - 91%
@@ -159,7 +159,7 @@ Priority 1: Fix NO MOCKS violations (4 tests)
 Priority 2: Add tests for coverage gaps (3 components)
 Priority 3: Fix failing test (admin product management timeout)
 
-Next: /sh_test --validate (check compliance in detail)
+Next: /shannon:test --validate (check compliance in detail)
 ```
 
 **Key Learning**: Default mode discovers ALL tests, reports coverage, flags NO MOCKS violations.
@@ -170,7 +170,7 @@ Next: /sh_test --validate (check compliance in detail)
 
 **Input**:
 ```bash
-/sh_test tests/functional/checkout.spec.ts
+/shannon:test tests/functional/checkout.spec.ts
 ```
 
 **Output**:
@@ -235,7 +235,7 @@ Continue with confidence - checkout flow production-ready
 
 **Input**:
 ```bash
-/sh_test tests/app.test.ts --platform mobile
+/shannon:test tests/app.test.ts --platform mobile
 ```
 
 **Output**:
@@ -294,7 +294,7 @@ Network: Charles Proxy HAR file
 
 **Input**:
 ```bash
-/sh_test --create product-search --platform web
+/shannon:test --create product-search --platform web
 ```
 
 **Output**:
@@ -403,8 +403,8 @@ Next Steps
 
 1. Review: tests/functional/product-search.spec.ts
 2. Customize: Add your specific search scenarios
-3. Setup: Ensure Puppeteer MCP configured (/sh_check_mcps)
-4. Run: /sh_test tests/functional/product-search.spec.ts
+3. Setup: Ensure Puppeteer MCP configured (/shannon:check_mcps)
+4. Run: /shannon:test tests/functional/product-search.spec.ts
 5. Iterate: Add more test cases as needed
 ```
 
@@ -416,7 +416,7 @@ Next Steps
 
 **Input**:
 ```bash
-/sh_test tests/unit/payment.test.ts
+/shannon:test tests/unit/payment.test.ts
 ```
 
 **Process**:
@@ -488,13 +488,13 @@ test('createCharge with real Stripe', async () => {
 
 **Verify MCP**:
 ```bash
-/sh_check_mcps
+/shannon:check_mcps
 # Ensure Puppeteer configured for full checkout flow testing
 ```
 
 **Test Blocked**: Cannot execute until mocks removed
 **Refactor**: Update test to use real Stripe test mode
-**Re-run**: /sh_test tests/functional/payment.spec.ts (after refactor)
+**Re-run**: /shannon:test tests/functional/payment.spec.ts (after refactor)
 ```
 
 **Key Learning**: NO MOCKS violations caught automatically, detailed refactoring guidance provided.
@@ -505,7 +505,7 @@ test('createCharge with real Stripe', async () => {
 
 **Input**:
 ```bash
-/sh_test --create login-screen --platform mobile
+/shannon:test --create login-screen --platform mobile
 ```
 
 **Output**:
@@ -597,7 +597,7 @@ Shannon Mobile Test Patterns
 ✅ Assertions on real app behavior
 
 **MCP Required**: iOS Simulator MCP or xc-mcp
-**Setup**: /sh_check_mcps
+**Setup**: /shannon:check_mcps
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Next Steps
@@ -605,7 +605,7 @@ Next Steps
 
 1. Open in Xcode: tests/ios/LoginScreenTests.swift
 2. Add to test target
-3. Run: /sh_test tests/ios/LoginScreenTests.swift
+3. Run: /shannon:test tests/ios/LoginScreenTests.swift
 4. Or: xcodebuild test -scheme YourApp -destination 'platform=iOS Simulator,name=iPhone 15 Pro'
 ```
 
@@ -617,7 +617,7 @@ Next Steps
 
 **Input**:
 ```bash
-/sh_test --create user-api --platform api
+/shannon:test --create user-api --platform api
 ```
 
 **Output**:
@@ -737,7 +737,7 @@ Next Steps
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 1. Start backend: npm run dev
-2. Run test: /sh_test tests/api/user-api.test.ts
+2. Run test: /shannon:test tests/api/user-api.test.ts
 3. Add more API endpoint tests
 4. Ensure test database has seed data
 ```
@@ -750,7 +750,7 @@ Next Steps
 
 **Input**:
 ```bash
-/sh_test tests/db/migrations.test.ts --platform database
+/shannon:test tests/db/migrations.test.ts --platform database
 ```
 
 **Output**:
@@ -822,7 +822,7 @@ Database Health
 
 **Input**:
 ```bash
-/sh_test --coverage
+/shannon:test --coverage
 ```
 
 **Output**:
@@ -918,7 +918,7 @@ Recommendations
 
 **Input**:
 ```bash
-/sh_test --validate
+/shannon:test --validate
 ```
 
 **Output**:
@@ -997,7 +997,7 @@ Next Steps
 
 1. Review violations above
 2. Refactor tests to use real dependencies
-3. Re-run: /sh_test --validate
+3. Re-run: /shannon:test --validate
 4. Target: 100% NO MOCKS compliance
 ```
 
@@ -1009,7 +1009,7 @@ Next Steps
 
 **Input**:
 ```bash
-/sh_test --all-platforms
+/shannon:test --all-platforms
 ```
 
 **Output**:
@@ -1077,7 +1077,7 @@ Next Steps
 
 **Input**:
 ```bash
-/sh_test --benchmark performance
+/shannon:test --benchmark performance
 ```
 
 **Output**:
@@ -1156,7 +1156,7 @@ Performance Issues Identified
 **Recommended Actions**:
 1. Add full-text index: CREATE INDEX ON products USING GIN(to_tsvector(...))
 2. Optimize images: compress, webp format, lazy load
-3. Re-run: /sh_test --benchmark performance
+3. Re-run: /shannon:test --benchmark performance
 4. Target: All metrics GREEN
 ```
 
@@ -1326,12 +1326,12 @@ afterEach(async () => {
 
 ## Integration with Other Commands
 
-### /sh_spec → /sh_test Flow
+### /shannon:test → /shannon:test Flow
 
 **Workflow**:
 ```bash
 # Step 1: Analyze spec
-/sh_spec "Build e-commerce platform..."
+/shannon:test "Build e-commerce platform..."
 
 # Output includes:
 # Phase 4: Testing (15% timeline)
@@ -1343,30 +1343,30 @@ afterEach(async () => {
 [Development work...]
 
 # Step 3: Create tests
-/sh_test --create checkout-flow --platform web
+/shannon:test --create checkout-flow --platform web
 
 # Step 4: Run tests
-/sh_test tests/functional/checkout-flow.spec.ts
+/shannon:test tests/functional/checkout-flow.spec.ts
 
 # Step 5: Validate compliance
-/sh_test --validate
+/shannon:test --validate
 ```
 
 ---
 
-### /sh_wave → /sh_test Integration
+### /shannon:test → /shannon:test Integration
 
 **Wave 4 (Testing Phase)**:
 ```bash
 # Wave orchestration includes testing wave
-/sh_wave
+/shannon:test
 
 # Wave 4 automatically:
 1. Activates TEST_GUARDIAN agent
-2. TEST_GUARDIAN runs: /sh_test --validate
+2. TEST_GUARDIAN runs: /shannon:test --validate
 3. Identifies NO MOCKS violations
 4. Refactors tests to Shannon compliance
-5. Runs: /sh_test (full suite)
+5. Runs: /shannon:test (full suite)
 6. Reports results in wave synthesis
 ```
 
@@ -1393,7 +1393,7 @@ afterEach(async () => {
   run: docker run -d -p 5432:5432 postgres:15
 
 - name: Run tests
-  run: /sh_test --all-platforms
+  run: /shannon:test --all-platforms
 ```
 
 ---
@@ -1417,7 +1417,7 @@ A: Docker PostgreSQL test instance (docker run... takes 30s to start). Use trans
 
 ---
 
-**Command**: /sh_test
+**Command**: /shannon:test
 **Skill**: functional-testing (shannon-plugin/skills/functional-testing/SKILL.md)
 **Agent**: TEST_GUARDIAN (shannon-plugin/agents/TEST_GUARDIAN.md)
 **Examples**: 12 comprehensive scenarios

@@ -213,7 +213,7 @@ Wave State Storage:
 
 Session State:
 - Current wave → in-memory (lost on session end)
-- Active agents → in-memory (restored from Serena on /sh_restore)
+- Active agents → in-memory (restored from Serena on /shannon:restore)
 ```
 
 **Conventions**:

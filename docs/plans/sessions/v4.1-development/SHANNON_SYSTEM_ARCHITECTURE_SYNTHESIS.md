@@ -190,19 +190,19 @@ Complexity >= 0.85 (Critical):
 **Mapping Table**:
 ```python
 COMMAND_SKILL_MAP = {
-  '/sh_spec': ['spec-analysis', 'confidence-check', 'mcp-discovery'],
-  '/sh_analyze': ['shannon-analysis', 'project-indexing', 'confidence-check'],
-  '/sh_wave': ['wave-orchestration', 'sitrep-reporting', 'context-preservation'],
-  '/sh_test': ['functional-testing'],
-  '/sh_checkpoint': ['context-preservation'],
-  '/sh_restore': ['context-restoration'],
+  '/shannon:spec': ['spec-analysis', 'confidence-check', 'mcp-discovery'],
+  '/shannon:analyze': ['shannon-analysis', 'project-indexing', 'confidence-check'],
+  '/shannon:wave': ['wave-orchestration', 'sitrep-reporting', 'context-preservation'],
+  '/shannon:test': ['functional-testing'],
+  '/shannon:checkpoint': ['context-preservation'],
+  '/shannon:restore': ['context-restoration'],
   '/shannon:prime': ['skill-discovery', 'mcp-discovery', 'context-restoration'],
 }
 ```
 
 **Execution Flow**:
 ```
-User types: /sh_spec "Build auth system"
+User types: /shannon:spec "Build auth system"
 ↓
 Command dispatcher reads COMMAND_SKILL_MAP
 ↓
@@ -310,8 +310,8 @@ Puppeteer unavailable:
 - [x] Are there other hooks? → YES: user_prompt_submit.py, stop.py (need investigation)
 
 **Commands** (ANSWERED):
-- [x] How do /sh_* commands relate to skills? → COMMAND_SKILL_MAP triggers skill auto-loading
-- [x] Does /sh_spec invoke spec-analysis skill? → YES + confidence-check + mcp-discovery
+- [x] How do /shannon:* commands relate to skills? → COMMAND_SKILL_MAP triggers skill auto-loading
+- [x] Does /shannon:spec invoke spec-analysis skill? → YES + confidence-check + mcp-discovery
 - [x] What's the relationship? → Commands trigger skills, skills do work
 
 ### Pattern 10: Hook Implementation Details (POST_TOOL_USE.PY Analysis)
@@ -381,7 +381,7 @@ test_indicators = [
   1. Remove all mock usage
   2. Implement functional test using Puppeteer MCP
 
-  **Quick Start**: Run /sh_check_mcps"
+  **Quick Start**: Run /shannon:check_mcps"
 }
 ```
 
@@ -505,7 +505,7 @@ Based on discoveries above:
 ```
 ┌─────────────────────────────────────────────────┐
 │             USER INTERACTION LAYER               │
-│  Commands: /sh_spec, /sh_wave, /sh_test        │
+│  Commands: /shannon:spec, /shannon:wave, /shannon:test        │
 └─────────────────┬───────────────────────────────┘
                   │
                   ▼
@@ -541,11 +541,11 @@ Based on discoveries above:
 └─────────────────────────────────────────────────┘
 ```
 
-**Data Flow Example** (User runs /sh_spec):
+**Data Flow Example** (User runs /shannon:spec):
 ```
-1. USER: "/sh_spec Build todo app"
+1. USER: "/shannon:spec Build todo app"
    ↓
-2. COMMAND: /sh_spec triggers spec-analysis via COMMAND_SKILL_MAP
+2. COMMAND: /shannon:spec triggers spec-analysis via COMMAND_SKILL_MAP
    ↓
 3. ENFORCEMENT: session_start hook already loaded using-shannon (Iron Laws active)
    ↓
@@ -684,7 +684,7 @@ TEST_GUARDIAN agent:
 ### Commands (48 total)
 - **Location**: shannon-plugin/commands/
 - **Function**: User-facing entry points for Shannon workflows
-- **Examples**: /sh_spec, /sh_wave, /sh_test, /sh_checkpoint, /shannon:prime
+- **Examples**: /shannon:spec, /shannon:wave, /shannon:test, /shannon:checkpoint, /shannon:prime
 - **Integration**: Commands invoke skills via COMMAND_SKILL_MAP
 
 ### Skills (16 total - 16,740 lines)
@@ -815,7 +815,7 @@ TEST_GUARDIAN agent:
 ## Next Investigation Areas
 
 1. **Hook System**: How enforcement actually works
-2. **Command-Skill Mapping**: /sh_spec → spec-analysis relationship
+2. **Command-Skill Mapping**: /shannon:spec → spec-analysis relationship
 3. **Agent-Skill Loading**: Do wave agents auto-load skills?
 4. **MCP Integration Matrix**: Which skills need which MCPs and why
 

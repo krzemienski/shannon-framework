@@ -274,10 +274,10 @@
    - "/sc_analyze, /sc_implement, /sc_build, /sc_test, and 20 more"
    - None of these exist
 
-8. shannon-plugin/commands/sh_status.md
+8. shannon-plugin/commands/shannon:status.md
    - Lists sc_* commands as available
 
-9. shannon-plugin/commands/sh_analyze.md
+9. shannon-plugin/commands/shannon:analyze.md
    - Compares to sc_analyze
 
 **ISSUE**: These SuperClaude (sc_*) commands were planned but never implemented. All references should be removed.
@@ -409,8 +409,8 @@ Root level: 7 files
    - shannon-plugin/ARCHITECTURE.md
    - shannon-plugin/TROUBLESHOOTING.md
    - shannon-plugin/README.md
-   - shannon-plugin/commands/sh_status.md
-   - shannon-plugin/commands/sh_analyze.md
+   - shannon-plugin/commands/shannon:status.md
+   - shannon-plugin/commands/shannon:analyze.md
    - All test files
 
 2. **Clarify** Shannon is standalone (not SuperClaude enhancement)
@@ -713,8 +713,8 @@ shannon-framework/
    - [ ] shannon-plugin/ARCHITECTURE.md
    - [ ] shannon-plugin/TROUBLESHOOTING.md
    - [ ] shannon-plugin/README.md
-   - [ ] shannon-plugin/commands/sh_status.md
-   - [ ] shannon-plugin/commands/sh_analyze.md
+   - [ ] shannon-plugin/commands/shannon:status.md
+   - [ ] shannon-plugin/commands/shannon:analyze.md
    - [ ] All test files
 
 ### Phase 2: Structure Reorganization (Medium Priority)

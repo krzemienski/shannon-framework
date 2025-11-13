@@ -2,7 +2,7 @@
 """
 Shannon v5.0 - Tier 1 Verification: Analysis Only
 
-Tests /sh_spec on all 4 specifications without building.
+Tests /shannon:spec on all 4 specifications without building.
 Validates 8D complexity analysis, domain normalization, tech detection.
 
 Usage: python tests/tier1_verify_analysis.py
@@ -201,8 +201,8 @@ async def test_spec_analysis(spec_config: dict) -> bool:
         ]
     )
 
-    # Execute /sh_spec command
-    print(f"\nExecuting /sh_spec...")
+    # Execute /shannon:sh_spec (namespaced command per SDK docs)
+    print(f"\nExecuting /shannon:sh_spec...")
 
     start_time = time.time()
     messages = []
@@ -211,7 +211,7 @@ async def test_spec_analysis(spec_config: dict) -> bool:
     cost = 0.0
 
     try:
-        async for message in query(prompt=f'/sh_spec "{spec_text}"', options=options):
+        async for message in query(prompt=f'/shannon:spec "{spec_text}"', options=options):
             # AssistantMessage - Claude's responses with content blocks
             if isinstance(message, AssistantMessage):
                 for block in message.content:
@@ -298,7 +298,7 @@ async def main():
     print("Specification Analysis (No Building)")
     print("="*80)
 
-    print("\nTesting Shannon's /sh_spec command on 4 real specifications:")
+    print("\nTesting Shannon's /shannon:spec command on 4 real specifications:")
     print("1. PRD Creator (18KB)")
     print("2. Claude Code Expo (81KB)")
     print("3. Repo Nexus (87KB)")

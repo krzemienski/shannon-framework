@@ -15,7 +15,7 @@
 
 ### 2. Tier 1: Analysis Tests (Fast, Cheap)
 - **tests/tier1_verify_analysis.py** (317 lines)
-  - Tests /sh_spec on all 4 specifications
+  - Tests /shannon:spec on all 4 specifications
   - Validates 8D complexity analysis
   - Verifies domain normalization (sum to 100%)
   - Checks technology detection

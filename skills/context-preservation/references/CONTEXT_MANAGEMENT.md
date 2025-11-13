@@ -23,7 +23,7 @@ Create checkpoints at these critical moments:
 - **Content**: Wave results, decisions, files created
 
 **3. Manual Checkpoint**
-- **Trigger**: User types `/sh_checkpoint`
+- **Trigger**: User types `/shannon:checkpoint`
 - **Frequency**: On-demand (before risky operations, end of day)
 - **Content**: Current work state, pending tasks
 
@@ -368,7 +368,7 @@ if __name__ == "__main__":
 │ - Restores context automatically               │
 │                                                 │
 │ Option B: Manual Restoration                   │
-│ - User types: /sh_restore                      │
+│ - User types: /shannon:restore                      │
 │ - restore.md command activates                 │
 │ - Full context restoration                     │
 │                                                 │
@@ -507,7 +507,7 @@ for key in old_sessions:
 
 ### Cleanup Execution
 
-**Cleanup Command**: `/sh_cleanup_context` or automatic
+**Cleanup Command**: `/shannon:cleanup_context` or automatic
 
 ```python
 def cleanup_context(cleanup_type, project_id=None):

@@ -261,7 +261,7 @@ jq . shannon-plugin/skills/mcp-discovery/mappings/domain-mcp-matrix.json
 
 ### Integration Testing
 1. Test with `spec-analysis` skill (sub-skill invocation)
-2. Test with `/sh_check_mcps` command (command delegation)
+2. Test with `/shannon:check_mcps` command (command delegation)
 3. Verify Serena MCP integration
 
 ### Documentation

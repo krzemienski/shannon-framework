@@ -1,22 +1,22 @@
 # Final Three Commands: Comprehensive Reference Guide
 
-**Commands**: `/sh_analyze`, `/sh_check_mcps`, `/shannon:prime`
+**Commands**: `/shannon:analyze`, `/shannon:check_mcps`, `/shannon:prime`
 **Purpose**: Complete usage documentation for Shannon's remaining core commands
 **Format**: Consolidated comprehensive reference (all 3 commands, 8-10 examples each)
 
 ---
 
-## Part 1: /sh_analyze Command
+## Part 1: /shannon:analyze Command
 
 **Purpose**: Shannon-aware codebase analysis with quantitative complexity assessment
 **Skill**: shannon-analysis (1255 lines)
-**When to use**: Analyzing existing code (vs /sh_spec for specifications)
+**When to use**: Analyzing existing code (vs /shannon:analyze for specifications)
 
 ### Core Examples
 
 **Example 1: Full Project Analysis**
 ```bash
-/sh_analyze
+/shannon:analyze
 
 # Outputs: Architecture pattern, complexity 0.62, tech stack, technical debt score 68/100
 # Recommendations: Fix 2 vulnerable deps (CRITICAL), refactor complex functions
@@ -24,7 +24,7 @@
 
 **Example 2: Component-Specific Analysis**
 ```bash
-/sh_analyze authentication
+/shannon:analyze authentication
 
 # Focuses on auth module
 # Outputs: Auth complexity 0.58, patterns (JWT), security issues, test coverage 60%
@@ -32,7 +32,7 @@
 
 **Example 3: Technical Debt Assessment**
 ```bash
-/sh_analyze --deep
+/shannon:analyze --deep
 
 # Uses Sequential MCP for 100-200 step analysis
 # Outputs: Detailed debt scoring, hot spots ranked, refactor prioritization
@@ -40,15 +40,15 @@
 
 **Example 4: Compare with Specification**
 ```bash
-# After /sh_spec calculated 0.45, analyze actual codebase
-/sh_analyze
+# After /shannon:analyze calculated 0.45, analyze actual codebase
+/shannon:analyze
 
 # Outputs: Codebase complexity 0.58 vs spec 0.45 = scope creep (+0.13)
 ```
 
 **Example 5: Architecture Pattern Detection**
 ```bash
-/sh_analyze architecture
+/shannon:analyze architecture
 
 # Detects: Monolithic vs Microservices, API patterns, database patterns
 # Outputs: Pattern strengths/weaknesses, migration recommendations
@@ -56,7 +56,7 @@
 
 **Example 6: Framework Analysis**
 ```bash
-/sh_analyze frameworks
+/shannon:analyze frameworks
 
 # Detects all frameworks: Next.js 14, Express 4, PostgreSQL 15
 # Outputs: Version currency, upgrade paths, compatibility issues
@@ -64,7 +64,7 @@
 
 **Example 7: Dependency Audit**
 ```bash
-/sh_analyze dependencies
+/shannon:analyze dependencies
 
 # Scans package.json, yarn.lock
 # Outputs: 156 total, 12 outdated, 2 vulnerable (CRITICAL security)
@@ -73,16 +73,16 @@
 
 **Example 8: Test Coverage Analysis**
 ```bash
-/sh_analyze tests
+/shannon:analyze tests
 
 # Analyzes test structure
 # Outputs: 45% coverage, NO MOCKS compliance 91%, missing test areas
-# Integrates with /sh_test output
+# Integrates with /shannon:test output
 ```
 
 **Example 9: Performance Hotspot Detection**
 ```bash
-/sh_analyze performance
+/shannon:analyze performance
 
 # Static analysis of complexity
 # Outputs: Functions >200 lines, cyclomatic complexity >20, nested loops
@@ -91,7 +91,7 @@
 
 **Example 10: Historical Analysis (with Serena)**
 ```bash
-/sh_analyze --historical
+/shannon:analyze --historical
 
 # Compares current vs previous analyses
 # Outputs: Complexity trend (0.52 → 0.58 over 2 weeks), debt accumulation
@@ -111,12 +111,12 @@
 - Shannon response: Query Serena first for previous analyses
 
 ### Integration
-- **/sh_analyze → /sh_spec**: Compare codebase vs specification complexity
-- **/sh_wave → /sh_analyze**: Analyze after wave completion for quality validation
+- **/shannon:analyze → /shannon:analyze**: Compare codebase vs specification complexity
+- **/shannon:analyze → /shannon:analyze**: Analyze after wave completion for quality validation
 
 ---
 
-## Part 2: /sh_check_mcps Command
+## Part 2: /shannon:check_mcps Command
 
 **Purpose**: Verify MCP server configuration and provide setup guidance
 **Skill**: mcp-discovery (726 lines)
@@ -126,7 +126,7 @@
 
 **Example 1: Full MCP Health Check**
 ```bash
-/sh_check_mcps
+/shannon:check_mcps
 
 # Outputs:
 # ✅ Serena MCP: Connected (v2.1.0)
@@ -140,8 +140,8 @@
 
 **Example 2: Project-Specific MCP Recommendations**
 ```bash
-# After /sh_spec identified domains
-/sh_check_mcps
+# After /shannon:analyze identified domains
+/shannon:check_mcps
 
 # Reads spec_analysis from Serena
 # Outputs tier-based recommendations:
@@ -152,7 +152,7 @@
 
 **Example 3: Install Guide Mode**
 ```bash
-/sh_check_mcps --install-guide
+/shannon:check_mcps --install-guide
 
 # Outputs step-by-step setup for ALL recommended MCPs:
 # 1. Serena MCP Installation
@@ -164,7 +164,7 @@
 
 **Example 4: Interactive Fix Mode**
 ```bash
-/sh_check_mcps --fix
+/shannon:check_mcps --fix
 
 # Interactive troubleshooting:
 # "Serena MCP connection failed"
@@ -175,7 +175,7 @@
 
 **Example 5: Domain-Based Filtering**
 ```bash
-/sh_check_mcps --domains frontend,backend
+/shannon:check_mcps --domains frontend,backend
 
 # Filters to only frontend/backend MCPs:
 # Frontend: Magic MCP, Puppeteer MCP
@@ -185,7 +185,7 @@
 
 **Example 6: Critical MCPs Only**
 ```bash
-/sh_check_mcps --critical
+/shannon:check_mcps --critical
 
 # Shows only Tier 1 (MANDATORY) and Tier 2 (PRIMARY):
 # ✅ Serena MCP (Tier 1) - Connected
@@ -196,7 +196,7 @@
 
 **Example 7: MCP Health Monitoring**
 ```bash
-/sh_check_mcps --health
+/shannon:check_mcps --health
 
 # Tests each MCP's actual functionality:
 # Serena: list_memories() → ✅ Works
@@ -209,7 +209,7 @@
 
 **Example 8: Fallback Chain Discovery**
 ```bash
-/sh_check_mcps --fallbacks
+/shannon:check_mcps --fallbacks
 
 # For each missing MCP, shows fallback chain:
 # Puppeteer MCP: Not installed
@@ -221,7 +221,7 @@
 
 **Example 9: Setup Priority Ordering**
 ```bash
-/sh_check_mcps --priority-order
+/shannon:check_mcps --priority-order
 
 # Orders MCPs by setup priority:
 # 1. Serena MCP (MANDATORY - install FIRST)
@@ -234,7 +234,7 @@
 **Example 10: Post-Installation Validation**
 ```bash
 # After installing MCPs
-/sh_check_mcps --validate
+/shannon:check_mcps --validate
 
 # Comprehensive validation:
 # Tests each MCP with sample operation
@@ -254,8 +254,8 @@
 - Cannot run Shannon without Serena
 
 ### Integration
-- **/sh_spec → /sh_check_mcps**: Spec analysis recommends MCPs, check verifies them
-- **/sh_wave → /sh_check_mcps**: Wave execution requires MCPs, check ensures available
+- **/shannon:analyze → /shannon:check_mcps**: Spec analysis recommends MCPs, check verifies them
+- **/shannon:analyze → /shannon:check_mcps**: Wave execution requires MCPs, check ensures available
 
 ---
 
@@ -278,7 +278,7 @@
 # 2. mcp-discovery: Generic recommendations (no project context yet)
 # 3. context-restoration: No checkpoint found (fresh start)
 # Duration: 35 seconds
-# Output: Skills cataloged, MCPs listed, ready for /sh_spec
+# Output: Skills cataloged, MCPs listed, ready for /shannon:analyze
 ```
 
 **Example 2: Resume Session Prime**
@@ -384,9 +384,9 @@
 ❌ **Anti-Pattern 1**: Manual multi-command priming (old V4.0 way)
 ```bash
 # OLD WAY (15-20 minutes):
-/sh_discover_skills
-/sh_check_mcps
-/sh_restore
+/shannon:discover_skills
+/shannon:check_mcps
+/shannon:analyze
 /list_memories
 /read_memory spec_analysis
 /read_memory phase_plan
@@ -405,8 +405,8 @@
 - Only use --fresh for genuinely new unrelated projects
 
 ### Integration
-- **/shannon:prime → /sh_spec**: Prime loads context, then analyze new spec
-- **/sh_checkpoint → /shannon:prime --resume**: Checkpoint saves, prime restores
+- **/shannon:prime → /shannon:analyze**: Prime loads context, then analyze new spec
+- **/shannon:analyze → /shannon:prime --resume**: Checkpoint saves, prime restores
 
 ### Performance Comparison
 
@@ -425,13 +425,13 @@
 
 | Command | Primary Skill | Examples in Guide | Anti-Patterns | Lines | Status |
 |---------|--------------|-------------------|---------------|-------|--------|
-| /sh_spec | spec-analysis | 15 | 5 | 1,784 | ✅ Complete |
-| /sh_wave | wave-orchestration | 15 | 5 | 1,482 | ✅ Complete |
-| /sh_checkpoint | context-preservation | 10 | 3 | 705 | ✅ Complete |
-| /sh_restore | context-restoration | 10 | 3 | ~700 | ✅ Complete |
-| /sh_test | functional-testing | 12 | 3 | ~1,100 | ✅ Complete |
-| /sh_analyze | shannon-analysis | 10 | 3 | This file | ✅ Complete |
-| /sh_check_mcps | mcp-discovery | 10 | 3 | This file | ✅ Complete |
+| /shannon:analyze | spec-analysis | 15 | 5 | 1,784 | ✅ Complete |
+| /shannon:analyze | wave-orchestration | 15 | 5 | 1,482 | ✅ Complete |
+| /shannon:analyze | context-preservation | 10 | 3 | 705 | ✅ Complete |
+| /shannon:analyze | context-restoration | 10 | 3 | ~700 | ✅ Complete |
+| /shannon:test | functional-testing | 12 | 3 | ~1,100 | ✅ Complete |
+| /shannon:analyze | shannon-analysis | 10 | 3 | This file | ✅ Complete |
+| /shannon:check_mcps | mcp-discovery | 10 | 3 | This file | ✅ Complete |
 | /shannon:prime | Multiple skills | 10 | 3 | This file | ✅ Complete |
 
 **Total**: 8/8 commands comprehensively documented
@@ -449,20 +449,20 @@
 /shannon:prime
 
 # Step 2: Analyze specification
-/sh_spec "Build inventory system..."
+/shannon:analyze "Build inventory system..."
 
 # Step 3: Verify MCPs
-/sh_check_mcps
+/shannon:check_mcps
 # Install any missing Tier 1-2 MCPs
 
 # Step 4: Execute
-/sh_wave  # if complexity >=0.50
+/shannon:analyze  # if complexity >=0.50
 
 # Step 5: Test
-/sh_test --validate
+/shannon:test --validate
 
 # Step 6: Checkpoint
-/sh_checkpoint "MVP complete"
+/shannon:analyze "MVP complete"
 ```
 
 ### Workflow 2: Resume Existing Project
@@ -472,39 +472,39 @@
 /shannon:prime --resume
 
 # Step 2: Verify state
-/sh_analyze
+/shannon:analyze
 # Check if codebase matches checkpoint
 
 # Step 3: Continue work
 # (Based on restored next actions)
 
 # Step 4: Periodic checkpoints
-/sh_checkpoint "End of day"
+/shannon:analyze "End of day"
 ```
 
 ### Workflow 3: Technical Debt Assessment
 
 ```bash
 # Step 1: Analyze current state
-/sh_analyze --deep
+/shannon:analyze --deep
 
 # Step 2: Assess complexity
 # If debt high, create refactor spec
 
 # Step 3: Plan refactor
-/sh_spec "Refactor products.ts to reduce complexity from 45 to <15"
+/shannon:analyze "Refactor products.ts to reduce complexity from 45 to <15"
 
 # Step 4: Execute refactor
-/sh_wave --plan  # Preview refactor waves
+/shannon:analyze --plan  # Preview refactor waves
 
 # Step 5: Safety checkpoint
-/sh_checkpoint "Before refactor - rollback point"
+/shannon:analyze "Before refactor - rollback point"
 
 # Step 6: Execute
-/sh_wave
+/shannon:analyze
 
 # Step 7: Validate improvement
-/sh_analyze products.ts
+/shannon:analyze products.ts
 # Verify complexity reduced
 ```
 
@@ -514,13 +514,13 @@
 
 | From Command | To Command | Data Flow | Purpose |
 |--------------|------------|-----------|---------|
-| /sh_spec | /sh_wave | complexity_score | Determines wave execution |
-| /sh_spec | /sh_check_mcps | domain_percentages | MCP recommendations |
-| /sh_analyze | /sh_spec | codebase_complexity | Compare spec vs actual |
-| /sh_wave | /sh_checkpoint | wave_results | Auto-checkpoints |
-| /sh_checkpoint | /sh_restore | checkpoint_id | Recovery |
-| /sh_restore | /shannon:prime | Auto-integrated | Unified priming |
-| /sh_test | /sh_analyze | test_coverage | Analyze test completeness |
+| /shannon:analyze | /shannon:analyze | complexity_score | Determines wave execution |
+| /shannon:analyze | /shannon:check_mcps | domain_percentages | MCP recommendations |
+| /shannon:analyze | /shannon:analyze | codebase_complexity | Compare spec vs actual |
+| /shannon:analyze | /shannon:analyze | wave_results | Auto-checkpoints |
+| /shannon:analyze | /shannon:analyze | checkpoint_id | Recovery |
+| /shannon:analyze | /shannon:prime | Auto-integrated | Unified priming |
+| /shannon:test | /shannon:analyze | test_coverage | Analyze test completeness |
 | /shannon:prime | ALL | session_context | Prepares for any command |
 
 ---
@@ -534,7 +534,7 @@
 **Resolution**:
 ```bash
 # 1. Check Serena
-/sh_check_mcps --critical
+/shannon:check_mcps --critical
 
 # 2. If missing, install:
 # [Serena installation steps]
@@ -545,14 +545,14 @@
 # 4. Retry command
 ```
 
-### Issue: "Checkpoint restore fails after /sh_spec"
+### Issue: "Checkpoint restore fails after /shannon:analyze"
 
 **Cause**: spec_analysis not saved to Serena
 
 **Resolution**:
 ```bash
 # Ensure --save flag (default true)
-/sh_spec "..." --save
+/shannon:analyze "..." --save
 
 # Verify save:
 /list_memories | grep spec_analysis
@@ -565,22 +565,22 @@
 ## FAQ
 
 **Q: Which command do I start with?**
-A: /shannon:prime (primes session) → /sh_spec (analyze spec) → others as needed
+A: /shannon:prime (primes session) → /shannon:analyze (analyze spec) → others as needed
 
-**Q: Difference between /sh_spec and /sh_analyze?**
-A: /sh_spec analyzes SPECIFICATIONS (requirements)
-   /sh_analyze analyzes CODEBASE (existing code)
+**Q: Difference between /shannon:analyze and /shannon:analyze?**
+A: /shannon:analyze analyzes SPECIFICATIONS (requirements)
+   /shannon:analyze analyzes CODEBASE (existing code)
 
-**Q: When to use /sh_wave?**
-A: When complexity >=0.50 (Complex or higher) from /sh_spec
+**Q: When to use /shannon:analyze?**
+A: When complexity >=0.50 (Complex or higher) from /shannon:analyze
 
-**Q: How often to /sh_checkpoint?**
+**Q: How often to /shannon:analyze?**
 A: Every 2-3 hours, after waves, before risky changes
 
 **Q: Can I skip /shannon:prime?**
 A: Yes, but manual priming takes 15-20 min vs <60s with /shannon:prime
 
-**Q: What if /sh_check_mcps shows missing MCPs?**
+**Q: What if /shannon:check_mcps shows missing MCPs?**
 A: Install Tier 1 (MANDATORY) first, then Tier 2 (PRIMARY), Tier 3-4 optional
 
 ---
@@ -589,13 +589,13 @@ A: Install Tier 1 (MANDATORY) first, then Tier 2 (PRIMARY), Tier 3-4 optional
 
 | Command | Duration | Output Size | Serena Writes | Complexity |
 |---------|----------|-------------|---------------|------------|
-| /sh_spec | 1-8 min | 1-2 KB | 1 (spec_analysis) | Medium |
-| /sh_wave | 6-20h (execution) | 10-100 KB | N (per wave) | Very High |
-| /sh_checkpoint | 30s | 50-150 KB | 1 (checkpoint) | Low |
-| /sh_restore | 2-5s | 0 KB (reads only) | 0 | Low |
-| /sh_test | 10s-10min | 5-50 KB | 1 (test_results) | Medium |
-| /sh_analyze | 2-10 min | 5-20 KB | 1 (analysis) | Medium |
-| /sh_check_mcps | 5-30s | 2-10 KB | 0 | Low |
+| /shannon:analyze | 1-8 min | 1-2 KB | 1 (spec_analysis) | Medium |
+| /shannon:analyze | 6-20h (execution) | 10-100 KB | N (per wave) | Very High |
+| /shannon:analyze | 30s | 50-150 KB | 1 (checkpoint) | Low |
+| /shannon:analyze | 2-5s | 0 KB (reads only) | 0 | Low |
+| /shannon:test | 10s-10min | 5-50 KB | 1 (test_results) | Medium |
+| /shannon:analyze | 2-10 min | 5-20 KB | 1 (analysis) | Medium |
+| /shannon:check_mcps | 5-30s | 2-10 KB | 0 | Low |
 | /shannon:prime | 30-60s | 1-5 KB | 0 (reads only) | Low |
 
 ---
@@ -606,21 +606,21 @@ When starting Shannon project, ensure:
 
 **Initial Setup**:
 - [ ] /shannon:prime (session primed)
-- [ ] /sh_check_mcps (Serena verified)
-- [ ] /sh_spec "..." (specification analyzed)
+- [ ] /shannon:check_mcps (Serena verified)
+- [ ] /shannon:analyze "..." (specification analyzed)
 
 **During Development**:
-- [ ] /sh_wave (if complexity >=0.50)
-- [ ] /sh_test (validate NO MOCKS compliance)
-- [ ] /sh_checkpoint (every 2-3 hours)
+- [ ] /shannon:analyze (if complexity >=0.50)
+- [ ] /shannon:test (validate NO MOCKS compliance)
+- [ ] /shannon:analyze (every 2-3 hours)
 
 **Quality Gates**:
-- [ ] /sh_test --validate (100% NO MOCKS compliance)
-- [ ] /sh_analyze (technical debt <70/100)
-- [ ] /sh_checkpoint (milestone preserved)
+- [ ] /shannon:test --validate (100% NO MOCKS compliance)
+- [ ] /shannon:analyze (technical debt <70/100)
+- [ ] /shannon:analyze (milestone preserved)
 
 **Session Management**:
-- [ ] /sh_checkpoint (before ending session)
+- [ ] /shannon:analyze (before ending session)
 - [ ] /shannon:prime --resume (next session)
 
 ---

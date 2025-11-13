@@ -1,7 +1,7 @@
 ---
-name: sh_memory
+name: memory
 description: Track and analyze memory coordination patterns and evolution
-usage: /sh_memory [track|pattern|visualize|optimize|stats] [entity_name]
+usage: /shannon:memory [track|pattern|visualize|optimize|stats] [entity_name]
 ---
 
 # Memory Coordination Command
@@ -16,7 +16,7 @@ Transform memory from passive storage into active intelligence by tracking usage
 
 ## Prerequisites
 
-- Serena MCP available (check with `/sh_check_mcps`)
+- Serena MCP available (check with `/shannon:check_mcps`)
 - Shannon entities in knowledge graph (created by Shannon commands/skills)
 
 ## Workflow
@@ -254,27 +254,27 @@ Health Status: ✅ HEALTHY
 
 **Track Specific Entity:**
 ```bash
-/sh_memory track authentication
+/shannon:memory track authentication
 ```
 
 **Analyze Patterns:**
 ```bash
-/sh_memory pattern
+/shannon:memory pattern
 ```
 
 **Visualize Graph:**
 ```bash
-/sh_memory visualize
+/shannon:memory visualize
 ```
 
 **Get Optimization Recommendations:**
 ```bash
-/sh_memory optimize
+/shannon:memory optimize
 ```
 
 **Display Statistics:**
 ```bash
-/sh_memory stats
+/shannon:memory stats
 ```
 
 ## When to Use
@@ -287,6 +287,6 @@ Health Status: ✅ HEALTHY
 
 ## Related Commands
 
-- `/sh_status` - Shows memory health in session context
-- `/sh_checkpoint` - Creates checkpoint with memory snapshot
-- `/sh_restore` - Restores memory state from checkpoint
+- `/shannon:\1` - Shows memory health in session context
+- `/shannon:\1` - Creates checkpoint with memory snapshot
+- `/shannon:\1` - Restores memory state from checkpoint

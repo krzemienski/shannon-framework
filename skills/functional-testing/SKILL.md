@@ -75,7 +75,7 @@ DO NOT use when:
    - Output: Platform type (web/ios/api/database/cli)
 
 2. **Check Available MCPs**
-   - Action: Query installed MCPs via `/sh_check_mcps` or MCP discovery
+   - Action: Query installed MCPs via `/shannon:check_mcps` or MCP discovery
    - Tool: MCP server discovery
    - Output: List of available testing MCPs
 

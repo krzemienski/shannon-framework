@@ -371,7 +371,7 @@ if current_wave_status == "in_progress":
 elif current_wave_status == "complete":
     print(f"\nWave {current_wave} is complete.")
     print(f"Ready to start Wave {current_wave + 1}: {next_wave_name}")
-    print("\nType /sh_wave to begin next wave")
+    print("\nType /shannon:wave to begin next wave")
 ```
 
 ---
@@ -618,7 +618,7 @@ if detect_context_loss():
 
 **Restoration**:
 ```python
-# User: /sh_restore precompact_checkpoint_20250930T120000Z
+# User: /shannon:restore precompact_checkpoint_20250930T120000Z
 
 checkpoint_id = "precompact_checkpoint_20250930T120000Z"
 
@@ -712,7 +712,7 @@ def handle_missing_checkpoint(checkpoint_id):
             print(f"  - {key} ({timestamp})")
     else:
         print("\n⚠️  No checkpoints available")
-        print("Consider running /sh_checkpoint to create one")
+        print("Consider running /shannon:checkpoint to create one")
 ```
 
 ### Corrupted Checkpoint

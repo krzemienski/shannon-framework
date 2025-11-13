@@ -1,7 +1,7 @@
 ---
-name: sh_north_star
+name: north_star
 description: Set and manage North Star goals with progress tracking
-usage: /sh_north_star [goal] [--update] [--history]
+usage: /shannon:north_star [goal] [--update] [--history]
 ---
 
 # North Star Goal Management Command
@@ -12,7 +12,7 @@ Manages Shannon Framework's North Star goal system through delegation to the goa
 
 ## Prerequisites
 
-- Serena MCP available (check with `/sh_check_mcps`)
+- Serena MCP available (check with `/shannon:check_mcps`)
 - Goal text provided for setting new goals
 
 ## Workflow
@@ -38,7 +38,7 @@ Delegate to `@skill goal-management` with appropriate mode:
 - Input:
   * mode: "set"
   * goal_text: "{user's goal description}"
-  * priority: "north-star" (default for /sh_north_star)
+  * priority: "north-star" (default for /shannon:north_star)
 - Output: goal_result
 ```
 
@@ -98,13 +98,13 @@ Format skill output for user display:
    Criteria: {completion_criteria}
 
 💾 Saved to Serena MCP
-🔄 Restore: /sh_restore {checkpoint_id}
+🔄 Restore: /shannon:restore {checkpoint_id}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 **Next Steps**:
-- Track progress: /sh_north_star
-- Update progress: /sh_north_star --update
+- Track progress: /shannon:north_star
+- Update progress: /shannon:north_star --update
 - Create waves: @skill wave-orchestration
 ```
 
@@ -146,7 +146,7 @@ Other Goals:
 
 {if progress >= 100}
 🎉 Goal appears complete!
-   Run: /sh_north_star complete {goal_id}
+   Run: /shannon:north_star complete {goal_id}
 {end if}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

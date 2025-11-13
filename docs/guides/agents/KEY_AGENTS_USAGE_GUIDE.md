@@ -21,8 +21,8 @@ Shannon's agent system includes 24 specialized agents. Three are CRITICAL orches
 ### When It Activates
 
 **Automatic** (Priority: CRITICAL):
-- Complexity ≥ 0.7 (from /sh_spec)
-- User runs /sh_wave command
+- Complexity ≥ 0.7 (from /shannon:spec)
+- User runs /shannon:wave command
 - Phase plan identifies parallel opportunities
 - Keywords: "wave", "parallel", "coordinate", "multi-agent"
 
@@ -44,18 +44,18 @@ Shannon's agent system includes 24 specialized agents. Three are CRITICAL orches
 
 ### How to Use It
 
-**Step 1**: Run /sh_spec to get complexity score
-**Step 2**: If complexity ≥0.50, run /sh_wave
+**Step 1**: Run /shannon:spec to get complexity score
+**Step 2**: If complexity ≥0.50, run /shannon:wave
 **Step 3**: WAVE_COORDINATOR activates automatically
 **Step 4**: Coordinator spawns agents, waits for completion
 **Step 5**: Review synthesis, approve to continue
 
 **Example Flow**:
 ```
-User: /sh_spec "Build e-commerce platform..."
+User: /shannon:spec "Build e-commerce platform..."
 Output: Complexity 0.75 → Wave execution recommended
 
-User: /sh_wave
+User: /shannon:wave
 WAVE_COORDINATOR: "Spawning Wave 1: 3 agents in parallel..."
 
 [Agents execute simultaneously]
@@ -118,7 +118,7 @@ Agents execute ONE AT A TIME
 
 **Manual**:
 ```
-/sh_test --create
+/shannon:test --create
 ```
 
 ### What It Does
@@ -213,7 +213,7 @@ test('fetch users', async ({page}) => {
 
 **Manual**:
 ```
-/sh_checkpoint "milestone-name"
+/shannon:checkpoint "milestone-name"
 ```
 
 ### What It Does
@@ -231,7 +231,7 @@ test('fetch users', async ({page}) => {
 
 **Checkpoint Creation**:
 ```
-User: /sh_checkpoint "wave-2-complete"
+User: /shannon:checkpoint "wave-2-complete"
 CONTEXT_GUARDIAN: Activates, creates checkpoint
 Output: "✅ CHECKPOINT SAVED: shannon_checkpoint_20251109_HHMMSS"
 ```
@@ -239,7 +239,7 @@ Output: "✅ CHECKPOINT SAVED: shannon_checkpoint_20251109_HHMMSS"
 **Context Restoration**:
 ```
 [After auto-compact]
-User: /sh_restore
+User: /shannon:restore
 CONTEXT_GUARDIAN: Activates, loads latest checkpoint
 Output: "✅ CONTEXT RESTORED: 12 memories loaded, Wave 2 of 4, ready to continue"
 ```
@@ -324,10 +324,10 @@ Throughout: CONTEXT_GUARDIAN
 ### Agent Coordination Example
 
 ```
-User: /sh_spec "Build marketplace..."
+User: /shannon:spec "Build marketplace..."
 Complexity: 0.78 (HIGH)
 
-User: /sh_wave
+User: /shannon:wave
 → WAVE_COORDINATOR: "Spawning Wave 1: 4 agents..."
   [Agents execute in parallel]
 → CONTEXT_GUARDIAN: Creates wave_1_complete checkpoint

@@ -25,9 +25,9 @@ Shannon's forced reading protocol activates automatically for:
 - **All files >=3000 lines** (large files most likely to be skimmed)
 
 ### Command Contexts
-- **/sh_spec** - Specifications MUST be read completely before analysis
-- **/sh_analyze** - Analysis targets MUST be read completely
-- **/sh_wave** - Wave plans MUST be read completely before execution
+- **/shannon:spec** - Specifications MUST be read completely before analysis
+- **/shannon:analyze** - Analysis targets MUST be read completely
+- **/shannon:wave** - Wave plans MUST be read completely before execution
 
 ### Manual Override Available
 - **/sh_read_normal <file>** - Disables enforcement for legitimate quick lookups
@@ -340,7 +340,7 @@ File: `.shannon/reading-enforcement.json`
 
 ### Enhanced Commands (Enforce Complete Reading)
 
-**/sh_spec** - Specifications:
+**/shannon:spec** - Specifications:
 ```markdown
 ## FORCED READING ENFORCEMENT
 
@@ -352,7 +352,7 @@ Before analyzing specification:
 5. THEN present 8D analysis
 ```
 
-**/sh_analyze** - Analysis Targets:
+**/shannon:analyze** - Analysis Targets:
 ```markdown
 ## FORCED READING ENFORCEMENT
 
@@ -364,7 +364,7 @@ Before analyzing codebase/files:
 5. THEN synthesize findings
 ```
 
-**/sh_wave** - Wave Execution:
+**/shannon:wave** - Wave Execution:
 ```markdown
 ## FORCED READING ENFORCEMENT
 

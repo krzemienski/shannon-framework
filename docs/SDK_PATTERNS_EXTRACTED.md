@@ -891,7 +891,7 @@ async def test_shannon_plugin():
     spec_text = spec_file.read_text()
 
     print(f"\nSpec: {spec_file.name} ({len(spec_text):,} bytes)")
-    print("Executing: /sh_spec\n")
+    print("Executing: /shannon:spec\n")
 
     # STEP 5: Execute command and track everything
     text_output = []
@@ -901,7 +901,7 @@ async def test_shannon_plugin():
     session_id = None
     plugins_loaded = []
 
-    async for message in query(prompt=f'/sh_spec "{spec_text}"', options=options):
+    async for message in query(prompt=f'/shannon:spec "{spec_text}"', options=options):
         # Handle SystemMessage (init)
         if isinstance(message, SystemMessage):
             if message.subtype == 'init':
@@ -914,7 +914,7 @@ async def test_shannon_plugin():
                 print(f"Commands available: {len(commands)}")
 
                 # Verify Shannon loaded
-                shannon_commands = [c for c in commands if c.startswith('/sh_') or c.startswith('/shannon:')]
+                shannon_commands = [c for c in commands if c.startswith('/shannon:')]
                 print(f"Shannon commands: {len(shannon_commands)}")
                 print()
 

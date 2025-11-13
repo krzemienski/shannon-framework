@@ -12,7 +12,7 @@
 
 This specification provides COMPLETE implementation details for Shannon CLI Agent, a standalone Python command-line tool that replicates Shannon Framework's capabilities using Claude Agents SDK.
 
-**Intended Audience**: Shannon Framework agents executing via `/sh_spec` and `/sh_wave` commands
+**Intended Audience**: Shannon Framework agents executing via `/shannon:spec` and `/shannon:wave` commands
 
 **Completeness Level**: MAXIMUM - Every algorithm, formula, logging requirement, validation criterion fully specified
 
@@ -4916,5 +4916,5 @@ shannon status <session_id>
 
 **Total Specification Size**: ~15,000 words, ~100 KB, ~6,000 lines
 **Completeness**: MAXIMUM (every algorithm, formula, logging requirement specified)
-**Ready For**: Shannon Framework execution via `/sh_spec @TECHNICAL_SPEC.md`
+**Ready For**: Shannon Framework execution via `/shannon:spec @TECHNICAL_SPEC.md`
 

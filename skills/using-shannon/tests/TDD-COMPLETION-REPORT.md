@@ -68,7 +68,7 @@ overrides, emergencies).
 
 Contains:
 1. ❌ VIOLATION 1: "Straightforward CRUD doesn't need analysis"
-   - Counter: ⚠️ STOP. Run /sh_spec. "Straightforward" is opinion, not metric.
+   - Counter: ⚠️ STOP. Run /shannon:spec. "Straightforward" is opinion, not metric.
 
 2. ❌ VIOLATION 2: "30 minutes justifies mocks"
    - Counter: ⚠️ STOP. Time pressure ≠ valid override. Use Puppeteer MCP.
@@ -89,7 +89,7 @@ Contains:
 
 | Scenario | Baseline Status | GREEN Status | Prevention Mechanism |
 |----------|----------------|--------------|---------------------|
-| 1: Skip analysis | ❌ FAILED | ✅ PASS | Keyword detection + mandatory /sh_spec |
+| 1: Skip analysis | ❌ FAILED | ✅ PASS | Keyword detection + mandatory /shannon:spec |
 | 2: Mock usage | ❌ FAILED | ✅ PASS | Time pressure rejected + Puppeteer |
 | 3: Skip checkpoints | ❌ FAILED | ✅ PASS | "Excessive" detected + automatic explanation |
 | 4: Subjective scoring | ❌ FAILED | ✅ PASS | User estimate triggers algorithm |

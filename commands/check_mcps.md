@@ -1,7 +1,7 @@
 ---
-name: sh_check_mcps
+name: check_mcps
 description: Verify MCP configuration and provide setup guidance
-usage: /sh_check_mcps [--install-guide] [--fix]
+usage: /shannon:check_mcps [--install-guide] [--fix]
 ---
 
 # MCP Server Configuration Checker Command
@@ -166,7 +166,7 @@ Secondary:    {secondary_available}/{secondary_total} available
 ✅ ALL SYSTEMS OPERATIONAL
 {end if}
 
-💡 After configuring MCPs, run /sh_status to verify full Shannon functionality
+💡 After configuring MCPs, run /shannon:\1 to verify full Shannon functionality
 
 ═══════════════════════════════════════════════════════════════
 ```
@@ -185,7 +185,7 @@ Serena MCP is MANDATORY for Shannon Framework.
 1. Install: {installation_command}
 2. Configure: Add to Claude Code settings
 3. Restart: Claude Code
-4. Verify: /sh_check_mcps
+4. Verify: /shannon:check_mcps
 
 Without Serena, Shannon commands will fail.
 ```
@@ -203,7 +203,7 @@ Missing Primary MCPs affect core functionality:
 Setup Order:
 1. Install missing Primary MCPs
 2. Verify each: {health_check_command}
-3. Confirm: /sh_check_mcps
+3. Confirm: /shannon:check_mcps
 ```
 
 ## Backward Compatibility
@@ -233,7 +233,7 @@ None (this command helps establish MCP dependencies)
 
 **Issue: "Tool not found" errors**
 - Cause: Required MCP not configured
-- Solution: Run /sh_check_mcps, follow setup instructions
+- Solution: Run /shannon:check_mcps, follow setup instructions
 
 **Issue: "Serena connection failed"**
 - Cause: Serena MCP configured but not responding

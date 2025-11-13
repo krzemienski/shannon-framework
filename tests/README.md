@@ -64,7 +64,7 @@ Validates documentation references to skills and commands.
 **Checks:**
 - All markdown files in `docs/`
 - `@skill` references validity
-- `/sh_*` and `/sc_*` command references
+- `/shannon:*` command references
 - File path references (informational)
 
 ## Understanding Results

@@ -496,7 +496,7 @@ DevOps: (6 / 35) × 100 = 17.1%
 ## Next Steps
 1. ⚠️ **CRITICAL**: Use wave-based execution (complexity 0.72 >= 0.50)
 2. Configure 11 recommended MCPs (prioritize Tier 1-2)
-3. Run /sh_wave to generate wave plan (expect 3-5 waves, 8-15 agents)
+3. Run /shannon:wave to generate wave plan (expect 3-5 waves, 8-15 agents)
 4. Use Sequential MCP for Phase 1 CRDT architecture (200-500 reasoning steps)
 5. Enforce functional testing (Puppeteer for real-time sync, NO MOCKS)
 6. Establish wave coordination protocol (SITREP recommended for HIGH complexity)

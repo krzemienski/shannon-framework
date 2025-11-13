@@ -223,7 +223,7 @@ def test_reject_vague_quantification():
 **Scenario**:
 ```
 Drift detected: 50% expansion
-Alert: "Update goal with /sh_north_star update"
+Alert: "Update goal with /shannon:north_star update"
 
 Agent thinks: "I'll update later, keep working"
 [Continues without goal update]

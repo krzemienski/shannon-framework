@@ -406,8 +406,8 @@ shannon-plugin/skills/wave-orchestration/
 
 ### Tool Integration (Future)
 
-- [ ] Create `/sh_wave` command for wave plan generation
-- [ ] Create `/sh_synthesize` command for wave synthesis
+- [ ] Create `/shannon:wave` command for wave plan generation
+- [ ] Create `/shannon:synthesize` command for wave synthesis
 - [ ] Integrate with goal-management skill for wave tracking
 
 ---

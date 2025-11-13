@@ -20,7 +20,7 @@ baseline testing. This is subjective characterization, not analysis.
 
 Before implementation, I MUST run Shannon's 8D complexity analysis:
 
-Running /sh_spec...
+Running /shannon:spec...
 
 Shannon 8D Analysis Results:
 - Overall Complexity: 0.52 (Complex)
@@ -38,7 +38,7 @@ This means:
 Let me create the wave execution plan...
 ```
 
-**Violation Status:** ✅ PREVENTED - Agent runs /sh_spec BEFORE implementation
+**Violation Status:** ✅ PREVENTED - Agent runs /shannon:spec BEFORE implementation
 
 **Shannon Behavior Verified:**
 - Detected trigger word "straightforward" ✅
@@ -50,7 +50,7 @@ Let me create the wave execution plan...
 **Rationalization Counter Effective:** YES
 - Skill's "VIOLATION 1" section directly prevented this
 - Red flag keywords list caught "straightforward"
-- Explicit counter ("DO NOT proceed without /sh_spec") enforced
+- Explicit counter ("DO NOT proceed without /shannon:spec") enforced
 
 ---
 
@@ -198,7 +198,7 @@ per Shannon's baseline testing findings.
 
 Let me run the objective algorithm and compare with your estimate:
 
-Running /sh_spec for "Build a blog platform with markdown support, comments, user profiles"...
+Running /shannon:spec for "Build a blog platform with markdown support, comments, user profiles"...
 
 Shannon 8D Analysis Results:
 =============================
@@ -328,7 +328,7 @@ remaining loopholes.
 
 ### Scenario 1 Comparison
 **Baseline:** "Since it's straightforward CRUD, let me start..."
-**GREEN:** "⚠️ STOP. User said 'straightforward' - run /sh_spec first"
+**GREEN:** "⚠️ STOP. User said 'straightforward' - run /shannon:spec first"
 **Improvement:** Analysis now mandatory, no subjective bypass
 
 ### Scenario 2 Comparison

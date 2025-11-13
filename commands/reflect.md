@@ -1,7 +1,7 @@
 ---
-name: sh_reflect
+name: reflect
 description: Honest gap analysis before claiming work complete - prevents premature completion
-usage: /sh_reflect [--scope plan|project|session] [--min-thoughts 100]
+usage: /shannon:reflect [--scope plan|project|session] [--min-thoughts 100]
 ---
 
 # Honest Reflection Command
@@ -80,20 +80,20 @@ The honest-reflections skill will:
 
 ```bash
 # Before declaring phase complete
-/sh_reflect
+/shannon:reflect
 
 # Deep reflection with 150 thoughts
-/sh_reflect --min-thoughts 150
+/shannon:reflect --min-thoughts 150
 
 # Analyze against specific plan
-/sh_reflect --scope plan docs/plans/enhancement-plan.md
+/shannon:reflect --scope plan docs/plans/enhancement-plan.md
 ```
 
 ## Integration
 
-- **Before git commit "complete"**: Run /sh_reflect
-- **After major phase**: Run /sh_reflect
-- **Weekly on long projects**: Run /sh_reflect
+- **Before git commit "complete"**: Run /shannon:reflect
+- **After major phase**: Run /shannon:reflect
+- **Weekly on long projects**: Run /shannon:reflect
 
 ## Skill Dependencies
 

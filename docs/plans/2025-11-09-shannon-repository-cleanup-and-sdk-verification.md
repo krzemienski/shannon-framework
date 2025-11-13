@@ -292,8 +292,8 @@ Shannon Framework is a Claude Code plugin that:
 ### Interactive Claude Code:
 ```
 /plugin install shannon@shannon-framework
-/sh_spec "Build a web app..."
-/sh_wave 1
+/shannon:spec "Build a web app..."
+/shannon:wave 1
 ```
 
 ### Via SDK (Python):
@@ -306,7 +306,7 @@ options = ClaudeAgentOptions(
     permission_mode="bypassPermissions"
 )
 
-async for msg in query("/sh_spec '...'", options):
+async for msg in query("/shannon:spec '...'", options):
     # Process messages
 ```
 
@@ -431,7 +431,7 @@ options = ClaudeAgentOptions(
 python tests/tier1_verify_analysis.py
 ```
 
-Expected: Shannon commands now available, /sh_spec produces output
+Expected: Shannon commands now available, /shannon:spec produces output
 
 **Step 3: Commit if working**
 

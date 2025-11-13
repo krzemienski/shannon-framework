@@ -31,10 +31,10 @@ Shannon V4 represents a complete architectural evolution while maintaining 100% 
 - Wave recommendations based on complexity
 
 #### New Commands
-- `/sh_check_mcps` - Check MCP status and installation guidance
-- `/sh_analyze` - Deep project analysis
-- `/sh_test` - Generate functional tests (NO MOCKS)
-- `/sh_scaffold` - Generate project scaffolding
+- `/shannon:check_mcps` - Check MCP status and installation guidance
+- `/shannon:analyze` - Deep project analysis
+- `/shannon:test` - Generate functional tests (NO MOCKS)
+- `/shannon:scaffold` - Generate project scaffolding
 
 #### Documentation
 - Complete User Guide
@@ -147,8 +147,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Repository-level plugin configuration support for teams
 
 #### New Commands
-- `/sh_status` - Framework status, MCP servers, and configuration health check
-- `/sh_check_mcps` - Comprehensive MCP server verification with setup guidance
+- `/shannon:status` - Framework status, MCP servers, and configuration health check
+- `/shannon:check_mcps` - Comprehensive MCP server verification with setup guidance
 - SessionStart hook notification for user awareness
 
 #### Enhanced Documentation
@@ -253,7 +253,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 1. Remove Shannon @-references from CLAUDE.md
 2. Install Shannon plugin via marketplace
 3. Configure Serena MCP if not already configured
-4. Verify installation with `/sh_status`
+4. Verify installation with `/shannon:status`
 
 **No Code Changes**: Your projects and workflows remain unchanged. Only installation method changes.
 

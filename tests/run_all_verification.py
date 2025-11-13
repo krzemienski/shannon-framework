@@ -26,7 +26,7 @@ TIER1_TESTS = [
     {
         'name': 'Tier 1: Analysis Only',
         'script': 'tier1_verify_analysis.py',
-        'description': 'Test /sh_spec on 4 specifications',
+        'description': 'Test /shannon:spec on 4 specifications',
         'cost': '$2-3',
         'duration': '5-10 min',
     }

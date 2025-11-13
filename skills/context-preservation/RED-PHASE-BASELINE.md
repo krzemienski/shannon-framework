@@ -44,7 +44,7 @@
 - Substantial work completed
 
 **Expected Rationalization**:
-> "User didn't ask for checkpoints. They can just re-run /sh_spec if context is lost.
+> "User didn't ask for checkpoints. They can just re-run /shannon:spec if context is lost.
 > I should focus on implementation, not administrative tasks."
 
 **Violation**: Context loss → user repeats entire specification → wasted time

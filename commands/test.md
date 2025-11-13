@@ -1,7 +1,7 @@
 ---
-name: sh_test
+name: test
 description: NO MOCKS functional testing orchestration with platform detection
-usage: /sh_test [test_path] [--platform web|mobile|api] [--create]
+usage: /shannon:test [test_path] [--platform web|mobile|api] [--create]
 ---
 
 # Functional Testing Command (V4)
@@ -141,7 +141,7 @@ Missing Tests:
 {for each gap}
 ⚠️  {component_name}
    - Priority: {priority}
-   - Suggested: /sh_test --create {component_name}
+   - Suggested: /shannon:test --create {component_name}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Test Health
@@ -237,7 +237,7 @@ Next Steps
 {else}
 ⚠️  Test failures detected
 - Review failure details above
-- Fix issues and re-run: /sh_test {test_path}
+- Fix issues and re-run: /shannon:test {test_path}
 - Check screenshot artifacts if available
 {end if}
 ```
@@ -275,7 +275,7 @@ Next Steps
 
 1. Review generated test: {created_test_path}
 2. Customize test steps for your use case
-3. Run test: /sh_test {created_test_path}
+3. Run test: /shannon:test {created_test_path}
 4. Iterate until passing
 ```
 
@@ -339,7 +339,7 @@ See Step 3 presentation templates above.
 ### Example 1: Discover All Tests
 
 ```bash
-/sh_test
+/shannon:test
 ```
 
 Scans project, finds all functional tests, reports coverage.
@@ -347,7 +347,7 @@ Scans project, finds all functional tests, reports coverage.
 ### Example 2: Run Specific Test
 
 ```bash
-/sh_test tests/functional/login.test.js
+/shannon:test tests/functional/login.test.js
 ```
 
 Executes login test with real browser.
@@ -355,7 +355,7 @@ Executes login test with real browser.
 ### Example 3: Run with Platform Override
 
 ```bash
-/sh_test tests/api/auth.test.js --platform api
+/shannon:test tests/api/auth.test.js --platform api
 ```
 
 Forces API platform detection (if auto-detect ambiguous).
@@ -363,7 +363,7 @@ Forces API platform detection (if auto-detect ambiguous).
 ### Example 4: Create New Web Test
 
 ```bash
-/sh_test --create checkout-flow --platform web
+/shannon:test --create checkout-flow --platform web
 ```
 
 Generates Puppeteer test scaffold for checkout flow.
@@ -371,7 +371,7 @@ Generates Puppeteer test scaffold for checkout flow.
 ### Example 5: Create Mobile Test
 
 ```bash
-/sh_test --create login-screen --platform mobile
+/shannon:test --create login-screen --platform mobile
 ```
 
 Generates iOS Simulator test scaffold for login screen.

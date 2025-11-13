@@ -155,7 +155,7 @@
 - Confidence in memory (skip discovery temptation)
 
 **Options Presented**:
-- A) Run /sh_discover_skills systematic discovery
+- A) Run /shannon:discover_skills systematic discovery
 - B) Immediately use remembered agents
 - C) Ask user which skills they want
 

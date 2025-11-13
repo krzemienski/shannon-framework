@@ -701,7 +701,7 @@ Successfully implemented goal-management skill using RED-GREEN-REFACTOR TDD meth
 **Recommendation**: Integrate into Shannon V4 Wave 2 deployment.
 
 **Next Steps**:
-1. Update /sh_north_star command to use this skill
+1. Update /shannon:north_star command to use this skill
 2. Integrate with context-preservation for checkpoint metadata
 3. Add to Shannon V4 documentation
 4. Monitor usage patterns in production

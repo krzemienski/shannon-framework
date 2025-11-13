@@ -107,7 +107,7 @@ claude plugin install shannon-plugin@shannon-framework
 **Results**:
 - ✅ Shannon plugin loads (8 plugins total)
 - ✅ 37 Shannon commands available
-- ✅ Commands execute: `/shannon-plugin:sh_spec`
+- ✅ Commands execute: `/shannon:sh_spec`
 - ✅ Output received correctly
 - ✅ Cost: $0.45 per command
 
@@ -120,7 +120,7 @@ claude plugin install shannon-plugin@shannon-framework
 - Clarified command namespacing
 
 **Updated**: `tests/tier1_verify_analysis.py`
-- Changed `/sh_spec` → `/shannon-plugin:sh_spec`
+- Changed `/shannon:spec` → `/shannon:sh_spec`
 - Now uses correct namespace
 
 ---
@@ -139,8 +139,8 @@ Found in: agent-sdk-skills.md line 16, multiple other docs
 ### 2. Command Namespacing
 
 Shannon commands are namespaced with plugin name:
-- `/shannon-plugin:sh_spec` (correct)
-- `/sh_spec` (incorrect - won't work)
+- `/shannon:sh_spec` (correct)
+- `/shannon:spec` (incorrect - won't work)
 
 ### 3. Plugin Installation Required
 

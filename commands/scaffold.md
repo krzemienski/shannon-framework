@@ -1,7 +1,7 @@
 ---
-name: sh_scaffold
+name: scaffold
 description: Generate Shannon-optimized project structure with functional test scaffolding
-usage: /sh_scaffold <project_type> [--template <name>]
+usage: /shannon:scaffold <project_type> [--template <name>]
 ---
 
 # Project Scaffolding Command (V4)
@@ -203,7 +203,7 @@ Tier 2 - PRIMARY:
 {for each primary_mcp}
 {index}. {mcp_name}
    Purpose: {purpose}
-   Setup: /sh_check_mcps --setup {mcp_name}
+   Setup: /shannon:check_mcps --setup {mcp_name}
 
 Tier 3 - SECONDARY:
 {for each secondary_mcp}
@@ -221,13 +221,13 @@ Next Steps
    {install_command}
 
 3. Configure MCPs:
-   /sh_check_mcps
+   /shannon:check_mcps
 
 4. Set North Star goal:
-   /sh_north_star "Your project goal"
+   /shannon:north_star "Your project goal"
 
 5. Run example tests:
-   /sh_test
+   /shannon:\1
 
 6. Start development:
    {start_command}
@@ -239,7 +239,7 @@ Scaffold Metadata
 {if saved_to_serena}
 💾 Scaffold metadata saved to Serena MCP
 Key: {scaffold_key}
-Retrieve: /sh_restore {timestamp}
+Retrieve: /shannon:restore {timestamp}
 {else}
 ⚠️  Metadata not saved (Serena MCP unavailable)
 {end if}
@@ -389,7 +389,7 @@ shannon-plugin/templates/{template-name}/
 ### Example 1: Web Application
 
 ```bash
-/sh_scaffold web-app
+/shannon:scaffold web-app
 ```
 
 Generates React SPA with Puppeteer tests.
@@ -397,7 +397,7 @@ Generates React SPA with Puppeteer tests.
 ### Example 2: REST API
 
 ```bash
-/sh_scaffold api
+/shannon:scaffold api
 ```
 
 Generates Express API with functional API tests.
@@ -405,7 +405,7 @@ Generates Express API with functional API tests.
 ### Example 3: Fullstack with Template
 
 ```bash
-/sh_scaffold fullstack --template nextjs
+/shannon:scaffold fullstack --template nextjs
 ```
 
 Generates Next.js fullstack app using nextjs template.
@@ -413,7 +413,7 @@ Generates Next.js fullstack app using nextjs template.
 ### Example 4: Mobile App
 
 ```bash
-/sh_scaffold mobile-app --template ios-swiftui
+/shannon:scaffold mobile-app --template ios-swiftui
 ```
 
 Generates iOS app with SwiftUI and XCUITest scaffolds.
@@ -421,7 +421,7 @@ Generates iOS app with SwiftUI and XCUITest scaffolds.
 ### Example 5: Microservice
 
 ```bash
-/sh_scaffold microservice --template nodejs-grpc
+/shannon:scaffold microservice --template nodejs-grpc
 ```
 
 Generates Node.js microservice with gRPC and Docker.

@@ -1,5 +1,5 @@
 ---
-name: shannon_prime
+name: prime
 description: Unified session priming command - one command for complete context restoration
 usage: /shannon:prime [--fresh|--resume|--quick|--full]
 ---
@@ -73,7 +73,7 @@ END IF
 
 **Execute**:
 ```
-/sh_discover_skills --cache
+/shannon:discover_skills --cache
 ```
 
 **Integration**: Uses skill-discovery skill to find all SKILL.md files
@@ -91,7 +91,7 @@ END IF
 
 **Execute**:
 ```
-/sh_check_mcps
+/shannon:check_mcps
 ```
 
 **Checks**:
@@ -116,7 +116,7 @@ END IF
 **IF mode == "auto-resume" OR mode == "resume" THEN**:
 
 ```
-/sh_restore --latest
+/shannon:restore --latest
 ```
 
 **Restores**:
@@ -376,7 +376,7 @@ display_forced_reading_status()
 
 **Options**:
 1. Continue in fresh mode (no restoration)
-2. Connect Serena MCP: /sh_check_mcps --setup serena
+2. Connect Serena MCP: /shannon:check_mcps --setup serena
 3. Exit and connect Serena before priming
 
 **Recommendation**: Connect Serena MCP for full Shannon capabilities
@@ -400,7 +400,7 @@ display_forced_reading_status()
 
 **Enhancement #1 (Forced Reading)**:
 - Step 8 activates reading enforcement
-- All subsequent /sh_spec, /sh_analyze commands enforce complete reading
+- All subsequent /shannon:spec, /shannon:analyze commands enforce complete reading
 
 **Enhancement #2 (Skill Discovery)**:
 - Step 2 discovers all skills
@@ -434,9 +434,9 @@ Shannon:
 **Session resumption should be one command, not six.**
 
 Before Shannon Prime:
-1. /sh_restore <checkpoint>
-2. /sh_status
-3. /sh_check_mcps
+1. /shannon:restore <checkpoint>
+2. /shannon:status
+3. /shannon:check_mcps
 4. Manually load memories
 5. Manually reload spec/plan
 6. Manually verify state

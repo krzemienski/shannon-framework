@@ -245,7 +245,7 @@ DO NOT rationalize skipping goal-alignment because:
 - If expansion > 20%:
   - Alert: "⚠️ Scope expanded by X% ([count] new features detected)"
   - List: New features not in goal
-  - Recommendation: "Update goal with /sh_north_star update"
+  - Recommendation: "Update goal with /shannon:north_star update"
 
 **Step 6: Recommend Action**
 - Options:
@@ -602,7 +602,7 @@ If you find yourself thinking:
   "new_features_count": 1,
   "recommendation": "UPDATE_GOAL",
   "alert": "⚠️ Scope expanded by 33% (1 new feature detected)",
-  "action": "Run /sh_north_star update to add new milestone"
+  "action": "Run /shannon:north_star update to add new milestone"
 }
 ```
 
@@ -942,7 +942,7 @@ How to verify this skill worked correctly:
 - Core Documentation: `shannon-plugin/core/PHASE_PLANNING.md`
 - Related Skills: `@goal-management` (REQUIRED), `@wave-orchestration`
 - MCP Setup: N/A (uses Serena MCP via goal-management)
-- Commands: `/sh_wave` (validates pre-wave), `/sh_north_star` (validates goal changes)
+- Commands: `/shannon:wave` (validates pre-wave), `/shannon:north_star` (validates goal changes)
 
 ---
 

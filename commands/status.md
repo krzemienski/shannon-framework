@@ -1,7 +1,7 @@
 ---
-name: sh_status
+name: status
 description: Display Shannon Framework status, version, MCP servers, and configuration
-usage: /sh_status [--mcps] [--goals] [--verbose]
+usage: /shannon:status [--mcps] [--goals] [--verbose]
 ---
 
 # Shannon Framework Status Command
@@ -70,7 +70,7 @@ RECOMMENDED:
 CONDITIONAL:
   ✅ shadcn-ui MCP    Connected | React UI components ready
 
-💡 Run /sh_check_mcps for detailed MCP configuration guidance
+💡 Run /shannon:check_mcps for detailed MCP configuration guidance
 ```
 
 ### Step 3: Display Available Commands & Agents
@@ -83,7 +83,7 @@ Show Shannon components:
 ───────────────────────────────────────────────────────────────
 
 Shannon Commands (6):
-  /sh_spec, /sh_checkpoint, /sh_restore, /sh_status, /sh_check_mcps
+  /shannon:check_mcps, /shannon:check_mcps, /shannon:restore, /shannon:status, /shannon:check_mcps
 
 Enhanced SuperClaude Commands (25):
   /sc_analyze, /sc_implement, /sc_build, /sc_test, and 21 more...
@@ -208,22 +208,22 @@ STATUS: ✅ ACTIVE | Installation: Plugin System
 
 **Standard Status:**
 ```bash
-/sh_status
+/shannon:status
 ```
 
 **Status with MCP Check:**
 ```bash
-/sh_status --mcps
+/shannon:status --mcps
 ```
 
 **Status with Goals:**
 ```bash
-/sh_status --goals
+/shannon:status --goals
 ```
 
 **Full Status Report:**
 ```bash
-/sh_status --mcps --goals --verbose
+/shannon:status --mcps --goals --verbose
 ```
 
 ## When to Use
@@ -236,7 +236,7 @@ STATUS: ✅ ACTIVE | Installation: Plugin System
 
 ## Related Commands
 
-- `/sh_check_mcps` - Detailed MCP setup guidance
+- `/shannon:check_mcps` - Detailed MCP setup guidance
 - `/help` - Full command catalog
 - `/agents` - Agent capabilities
 
@@ -245,10 +245,10 @@ STATUS: ✅ ACTIVE | Installation: Plugin System
 If status shows issues:
 
 **Serena Not Connected**:
-1. Run /sh_check_mcps for setup instructions
+1. Run /shannon:check_mcps for setup instructions
 2. Configure Serena in Claude Code settings
 3. Restart Claude Code
-4. Run /sh_status again to verify
+4. Run /shannon:status again to verify
 
 **Commands Not Showing**:
 1. Verify plugin installed: /plugin

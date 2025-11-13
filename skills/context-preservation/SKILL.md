@@ -47,7 +47,7 @@ Use this skill in these situations:
 **MANDATORY (Must Use)**:
 - Before any wave transition (Wave 1 → Wave 2, etc.)
 - When PreCompact hook triggers (automatic, emergency save)
-- When user explicitly requests checkpoint (`/sh_checkpoint`)
+- When user explicitly requests checkpoint (`/shannon:checkpoint`)
 - At end of session before closing Claude Code
 - After completing significant milestones (MVP, release, major feature)
 
@@ -177,7 +177,7 @@ DO NOT rationalize skipping checkpoints because:
 ### Phase 4: Confirmation & User Notification
 
 **Step 17: Generate Restoration Command**
-- Format: `/sh_restore {checkpoint_id}`
+- Format: `/shannon:restore {checkpoint_id}`
 
 **Step 18: Calculate Checkpoint Size**
 - Method: Count JSON string bytes, display in KB/MB
@@ -307,7 +307,7 @@ Structured output object:
   "size_kb": "44.6 KB",
   "compression": "gzip",
   "storage_location": "serena://shannon/checkpoints/SHANNON-W2-20251103T143000",
-  "restore_command": "/sh_restore SHANNON-W2-20251103T143000",
+  "restore_command": "/shannon:restore SHANNON-W2-20251103T143000",
   "retention_days": 30,
   "expires_at": "2025-12-03T14:30:00.000Z",
   "integrity_hash": "sha256:a7f2b3d4e5f6...",
@@ -446,7 +446,7 @@ User request is not required for mandatory checkpoints.
   "label": "mvp-feature-complete",
   "type": "checkpoint",
   "size_kb": "52.3 KB",
-  "restore_command": "/sh_restore SHANNON-W3-20251103T163000",
+  "restore_command": "/shannon:restore SHANNON-W3-20251103T163000",
   "summary": {
     "wave": 3,
     "tasks_completed": 42,
@@ -554,7 +554,7 @@ How to verify this skill worked correctly:
 
 - Core Documentation: `shannon-plugin/core/CONTEXT_MANAGEMENT.md`
 - Related Skills: `@context-restoration`, `@goal-management`, `@wave-orchestration`
-- MCP Setup: `/sh_check_mcps` for Serena MCP configuration
+- MCP Setup: `/shannon:check_mcps` for Serena MCP configuration
 - Hook: `.claude-plugin/hooks/pre_compact.py`
 
 ---

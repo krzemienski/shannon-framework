@@ -1,7 +1,7 @@
 ---
-name: sh_spec
+name: spec
 description: Analyze specification using Shannon 8D complexity framework
-usage: /sh_spec "specification text" [--mcps] [--save]
+usage: /shannon:spec "specification text" [--mcps] [--save]
 ---
 
 # Specification Analysis Command
@@ -13,7 +13,7 @@ Performs comprehensive specification analysis using Shannon's 8-dimensional comp
 ## Prerequisites
 
 - Specification text provided (minimum 20 words)
-- Serena MCP available for saving results (check with `/sh_check_mcps`)
+- Serena MCP available for saving results (check with `/shannon:check_mcps`)
 
 ## Workflow
 
@@ -81,29 +81,29 @@ Required:
 {for each required MCP}
   ✅ {mcp_name}
      Purpose: {purpose}
-     Setup: /sh_check_mcps --setup {mcp_name}
+     Setup: /shannon:check_mcps --setup {mcp_name}
 
 Recommended:
 {for each recommended MCP}
   📦 {mcp_name}
      Purpose: {purpose}
-     Setup: /sh_check_mcps --setup {mcp_name}
+     Setup: /shannon:check_mcps --setup {mcp_name}
 
 Conditional:
 {for each conditional MCP}
   ⚙️  {mcp_name}
      Trigger: {trigger_condition}
-     Setup: /sh_check_mcps --setup {mcp_name}
+     Setup: /shannon:check_mcps --setup {mcp_name}
 {end if}
 
 {if saved_to_serena}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 💾 Analysis saved to Serena MCP
 Key: {serena_key}
-Restore: /sh_restore {timestamp}
+Restore: /shannon:restore {timestamp}
 {else}
 ⚠️  Analysis not saved (Serena MCP unavailable)
-Run: /sh_check_mcps for setup instructions
+Run: /shannon:check_mcps for setup instructions
 {end if}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -111,7 +111,7 @@ Run: /sh_check_mcps for setup instructions
 Next Steps:
 {if complexity < 30}
 - Proceed with direct implementation
-- Run /sh_test to create functional tests
+- Run /shannon:test to create functional tests
 
 {else if complexity < 50}
 - Generate implementation plan: @skill phase-planning
@@ -121,7 +121,7 @@ Next Steps:
 - Generate phase plan: @skill phase-planning
 - Generate wave plan: @skill wave-orchestration
 - Multi-agent execution recommended
-- Create checkpoint: /sh_checkpoint before-implementation
+- Create checkpoint: /shannon:checkpoint before-implementation
 {end if}
 ```
 

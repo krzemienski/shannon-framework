@@ -1,6 +1,6 @@
-# /sh_spec Command - Complete Usage Guide
+# /shannon:spec Command - Complete Usage Guide
 
-**Command**: `/sh_spec`
+**Command**: `/shannon:spec`
 **Purpose**: Analyze specifications using Shannon's 8-dimensional complexity framework
 **Skill**: Invokes spec-analysis skill (1544 lines)
 **Output**: Quantitative complexity score, domain breakdown, MCP recommendations, 5-phase plan
@@ -9,16 +9,16 @@
 
 ## Overview
 
-The `/sh_spec` command is Shannon's **entry point** for specification-driven development. It transforms subjective assessments ("this looks simple") into objective quantitative analysis using an 8-dimensional scoring framework.
+The `/shannon:spec` command is Shannon's **entry point** for specification-driven development. It transforms subjective assessments ("this looks simple") into objective quantitative analysis using an 8-dimensional scoring framework.
 
 **Core Value**: Prevents the #1 cause of project failures - under-estimating complexity.
 
 **Usage**:
 ```bash
-/sh_spec "specification text"
-/sh_spec "specification text" --mcps
-/sh_spec "specification text" --save
-/sh_spec "specification text" --deep
+/shannon:spec "specification text"
+/shannon:spec "specification text" --mcps
+/shannon:spec "specification text" --save
+/shannon:spec "specification text" --deep
 ```
 
 **Flags**:
@@ -34,7 +34,7 @@ The `/sh_spec` command is Shannon's **entry point** for specification-driven dev
 
 **Input**:
 ```bash
-/sh_spec "Build a simple todo list app. Users can add tasks, mark them complete, and delete them. Store in localStorage."
+/shannon:spec "Build a simple todo list app. Users can add tasks, mark them complete, and delete them. Store in localStorage."
 ```
 
 **Output**:
@@ -87,7 +87,7 @@ The `/sh_spec` command is Shannon's **entry point** for specification-driven dev
 
 **Input**:
 ```bash
-/sh_spec "Build a weather dashboard that fetches data from OpenWeather API and displays current conditions, 5-day forecast, and weather alerts. React frontend with chart visualization. Deploy to Netlify."
+/shannon:spec "Build a weather dashboard that fetches data from OpenWeather API and displays current conditions, 5-day forecast, and weather alerts. React frontend with chart visualization. Deploy to Netlify."
 ```
 
 **Output**:
@@ -128,7 +128,7 @@ Phase 5: Deploy (5% - 30min) - Netlify
 
 **Input**:
 ```bash
-/sh_spec "Build an inventory management system for retail stores.
+/shannon:spec "Build an inventory management system for retail stores.
 
 Features:
 - Product catalog with search and barcode scanning
@@ -197,7 +197,7 @@ Phase 4: Deployment (10% - 2h) - Pilot store deployment
 
 **Input**:
 ```bash
-/sh_spec "Build a real-time collaborative document editor (Google Docs clone).
+/shannon:spec "Build a real-time collaborative document editor (Google Docs clone).
 
 Frontend:
 - React with TypeScript
@@ -297,7 +297,7 @@ Total: 15h parallel vs 28h sequential = 1.9x speedup
 ```
 
 ## Next Steps
-1. ⚠️ RUN /sh_wave to generate detailed wave plan
+1. ⚠️ RUN /shannon:spec to generate detailed wave plan
 2. Configure 9 recommended MCPs (prioritize Tier 1-2)
 3. Use Sequential MCP for CRDT architecture decisions
 4. MANDATORY: Puppeteer tests for real-time sync (NO MOCKS)
@@ -311,7 +311,7 @@ Total: 15h parallel vs 28h sequential = 1.9x speedup
 
 **Input**:
 ```bash
-/sh_spec "URGENT: Build high-frequency trading system.
+/shannon:spec "URGENT: Build high-frequency trading system.
 
 Requirements:
 - Sub-millisecond order matching (<500μs p99)
@@ -448,7 +448,7 @@ Risk: Still aggressive - recommend 20-25 day timeline
 
 **Input**:
 ```bash
-/sh_spec "Build a social media dashboard for influencers.
+/shannon:spec "Build a social media dashboard for influencers.
 
 Features:
 - Multi-account management (Instagram, Twitter, TikTok, YouTube)
@@ -520,7 +520,7 @@ Phase 5: Deploy (5% - 1h)
 
 **Input**:
 ```bash
-/sh_spec "Build a multi-tenant SaaS billing platform.
+/shannon:spec "Build a multi-tenant SaaS billing platform.
 
 Backend:
 - Stripe subscription management
@@ -618,7 +618,7 @@ Phase 5: Deployment (5% - 2h)
 
 **Input**:
 ```bash
-/sh_spec "Build a customer support ticketing system.
+/shannon:spec "Build a customer support ticketing system.
 
 Frontend:
 - React dashboard for support agents
@@ -677,7 +677,7 @@ Total: 11h (vs 16h sequential = 1.45x speedup)
 
 **Input**:
 ```bash
-/sh_spec "Build a fitness tracking mobile app.
+/shannon:spec "Build a fitness tracking mobile app.
 
 Features:
 - Native iOS and Android apps
@@ -752,7 +752,7 @@ Total: 16h (vs 24h sequential = 1.5x speedup)
 
 **Input**:
 ```bash
-/sh_spec "See attached specification document for requirements" @project_spec.pdf
+/shannon:spec "See attached specification document for requirements" @project_spec.pdf
 ```
 
 **Output**:
@@ -790,7 +790,7 @@ Total: 16h (vs 24h sequential = 1.5x speedup)
 
 **Input**:
 ```bash
-/sh_spec "Build REST API for blog platform with Express and MongoDB" --mcps
+/shannon:spec "Build REST API for blog platform with Express and MongoDB" --mcps
 ```
 
 **Output**:
@@ -862,7 +862,7 @@ Total: 16h (vs 24h sequential = 1.5x speedup)
 ## Setup Verification Script
 ```bash
 # Run all health checks
-/sh_check_mcps
+/shannon:check_mcps
 
 # Expected output:
 # ✅ Serena MCP: Connected
@@ -881,7 +881,7 @@ Total: 16h (vs 24h sequential = 1.5x speedup)
 
 **Input**:
 ```bash
-/sh_spec "Build inventory system" --save
+/shannon:spec "Build inventory system" --save
 ```
 
 **Process**:
@@ -913,7 +913,7 @@ Total: 16h (vs 24h sequential = 1.5x speedup)
 
 7. **CONFIRM TO USER**:
    "✅ Analysis saved to Serena MCP
-    Restore with: /sh_restore spec_analysis_inventory_20251108
+    Restore with: /shannon:restore spec_analysis_inventory_20251108
     OR: Auto-restored via /shannon:prime in future sessions"
 ```
 
@@ -922,7 +922,7 @@ Total: 16h (vs 24h sequential = 1.5x speedup)
 ## Analysis Saved ✅
 
 **Serena Key**: spec_analysis_inventory_20251108
-**Restore Command**: `/sh_restore spec_analysis_inventory_20251108`
+**Restore Command**: `/shannon:restore spec_analysis_inventory_20251108`
 **Auto-Restore**: /shannon:prime (future sessions)
 
 **Saved Data**:
@@ -941,7 +941,7 @@ Total: 16h (vs 24h sequential = 1.5x speedup)
 
 **Input**:
 ```bash
-/sh_spec "Build distributed microservices platform with service mesh, observability, and multi-cloud deployment" --deep
+/shannon:spec "Build distributed microservices platform with service mesh, observability, and multi-cloud deployment" --deep
 ```
 
 **Process**:
@@ -1010,7 +1010,7 @@ Total: 11 days parallel vs 35 days sequential = 3.2x speedup
 
 **Input**:
 ```bash
-/sh_spec "Change button color to blue"
+/shannon:spec "Change button color to blue"
 ```
 
 **Output**:
@@ -1023,10 +1023,10 @@ Total: 11 days parallel vs 35 days sequential = 3.2x speedup
 
 **Recommendation**:
 This appears to be a task, not a specification. For tasks:
-- Just implement directly (no /sh_spec needed)
+- Just implement directly (no /shannon:spec needed)
 - Use: "Change button color to blue in src/components/Button.tsx"
 
-**When to Use /sh_spec**:
+**When to Use /shannon:spec**:
 - Projects with 5+ features
 - Specifications with 3+ paragraphs
 - Multi-component systems
@@ -1037,7 +1037,7 @@ This appears to be a task, not a specification. For tasks:
 - Minimum 50 words recommended for accurate 8D analysis
 ```
 
-**Key Learning**: /sh_spec validates input, rejects specs <20 words, guides users to proper command.
+**Key Learning**: /shannon:spec validates input, rejects specs <20 words, guides users to proper command.
 
 ---
 
@@ -1045,7 +1045,7 @@ This appears to be a task, not a specification. For tasks:
 
 **Input**:
 ```bash
-/sh_spec "Build enterprise resource planning (ERP) system with:
+/shannon:spec "Build enterprise resource planning (ERP) system with:
 - Inventory management
 - Order processing
 - Customer relationship management
@@ -1124,7 +1124,7 @@ Timeline Formula:
 **Shannon will not proceed until timeline conflict resolved.**
 ```
 
-**Key Learning**: /sh_spec detects timeline conflicts, forces explicit risk acknowledgment before proceeding.
+**Key Learning**: /shannon:spec detects timeline conflicts, forces explicit risk acknowledgment before proceeding.
 
 ---
 
@@ -1134,7 +1134,7 @@ Timeline Formula:
 
 **Symptom**:
 ```bash
-/sh_spec "Build a good app"
+/shannon:spec "Build a good app"
 ```
 
 **Why It Fails**:
@@ -1161,7 +1161,7 @@ Timeline Formula:
 - Basic timeline indicator
 
 **Example Improvement**:
-/sh_spec "Build a task management app (React frontend, Node.js backend, PostgreSQL database) with:
+/shannon:spec "Build a task management app (React frontend, Node.js backend, PostgreSQL database) with:
 - User authentication
 - Task creation and editing
 - Task assignment to team members
@@ -1170,7 +1170,7 @@ Timeline Formula:
 Timeline: 2 weeks"
 ```
 
-**Recommendation**: Add features, tech stack, timeline → Re-run /sh_spec
+**Recommendation**: Add features, tech stack, timeline → Re-run /shannon:spec
 
 ---
 
@@ -1178,7 +1178,7 @@ Timeline: 2 weeks"
 
 **Symptom**:
 ```bash
-/sh_spec "React app with login"
+/shannon:spec "React app with login"
 ```
 
 **Why It Fails**:
@@ -1206,7 +1206,7 @@ Complexity: ~0.30 (guess based on minimal info)
 Note: This score has LOW CONFIDENCE due to vague specification
 ```
 
-**Recommendation**: Expand to 100+ words with complete feature list → Re-run /sh_spec
+**Recommendation**: Expand to 100+ words with complete feature list → Re-run /shannon:spec
 
 ---
 
@@ -1230,7 +1230,7 @@ Agent: "Your 40/100 assessment seems reasonable..."
 **User's Assessment**: 40/100 (subjective)
 **Action**: Running objective 8D analysis...
 
-[Runs /sh_spec...]
+[Runs /shannon:spec...]
 
 **Algorithm Result**: 0.58 / 1.0 = 58/100 (quantitative)
 
@@ -1247,7 +1247,7 @@ Agent: "Your 40/100 assessment seems reasonable..."
 **Proceeding with**: 0.58 (algorithm's objective score)
 ```
 
-**Recommendation**: ALWAYS run /sh_spec when user provides estimate. Compare results, explain differences.
+**Recommendation**: ALWAYS run /shannon:spec when user provides estimate. Compare results, explain differences.
 
 ---
 
@@ -1269,7 +1269,7 @@ Agent: "You're right, let's start implementing..."
 ⚠️ STOP. "Straightforward" is subjective, not quantitative.
 
 **Required Action**:
-1. Run /sh_spec anyway (takes 30 seconds)
+1. Run /shannon:spec anyway (takes 30 seconds)
 2. Let algorithm decide if actually simple
 
 **Running Analysis...**
@@ -1294,7 +1294,7 @@ Agent: "You're right, let's start implementing..."
 - 2-3 days (not "few hours")
 ```
 
-**Recommendation**: using-shannon skill blocks "straightforward" rationalization. Run /sh_spec regardless of subjective assessment.
+**Recommendation**: using-shannon skill blocks "straightforward" rationalization. Run /shannon:spec regardless of subjective assessment.
 
 ---
 
@@ -1302,7 +1302,7 @@ Agent: "You're right, let's start implementing..."
 
 **Symptom**:
 ```bash
-/sh_spec "Build a platform for X" [no mention of tech stack, frontend, backend, database]
+/shannon:spec "Build a platform for X" [no mention of tech stack, frontend, backend, database]
 ```
 
 **Why It Fails**:
@@ -1328,7 +1328,7 @@ Agent: "You're right, let's start implementing..."
 - Phase plan will lack domain-specific guidance
 
 **Better Specification**:
-/sh_spec "Build a platform for X with:
+/shannon:spec "Build a platform for X with:
 - React frontend with TypeScript
 - Express backend with Node.js
 - PostgreSQL database
@@ -1344,19 +1344,19 @@ Agent: "You're right, let's start implementing..."
 
 ## Integration with Other Commands
 
-### /sh_spec → /sh_wave Integration
+### /shannon:spec → /shannon:spec Integration
 
 **Workflow**:
 ```bash
 # Step 1: Analyze specification
-/sh_spec "Build e-commerce platform..."
+/shannon:spec "Build e-commerce platform..."
 
 # Output includes:
 # Complexity: 0.68 (COMPLEX)
 # Execution Strategy: WAVE-BASED
 
 # Step 2: Generate wave structure
-/sh_wave
+/shannon:spec
 
 # This reads spec_analysis from Serena
 # Generates wave structure based on complexity 0.68
@@ -1364,29 +1364,29 @@ Agent: "You're right, let's start implementing..."
 
 **Data Flow**:
 ```
-/sh_spec
+/shannon:spec
   ↓
 spec-analysis skill calculates complexity
   ↓
 Saves to Serena: write_memory("spec_analysis_ID", {...})
   ↓
-/sh_wave
+/shannon:spec
   ↓
 wave-orchestration skill reads: read_memory("spec_analysis_ID")
   ↓
 Uses complexity score to allocate agents (0.68 → 8-12 agents)
 ```
 
-**Key**: /sh_spec must run BEFORE /sh_wave (waves need complexity score).
+**Key**: /shannon:spec must run BEFORE /shannon:spec (waves need complexity score).
 
 ---
 
-### /sh_spec → /sh_check_mcps Integration
+### /shannon:spec → /shannon:check_mcps Integration
 
 **Workflow**:
 ```bash
 # Step 1: Get MCP recommendations
-/sh_spec "Build React + Express app..."
+/shannon:spec "Build React + Express app..."
 
 # Output includes:
 # Recommended MCPs:
@@ -1394,7 +1394,7 @@ Uses complexity score to allocate agents (0.68 → 8-12 agents)
 # - Magic, Puppeteer, Context7 (Tier 2)
 
 # Step 2: Verify MCPs configured
-/sh_check_mcps
+/shannon:check_mcps
 
 # This cross-references recommendations with installed MCPs
 # Shows: Installed vs Missing
@@ -1402,9 +1402,9 @@ Uses complexity score to allocate agents (0.68 → 8-12 agents)
 
 **Data Flow**:
 ```
-/sh_spec → MCP recommendations generated
+/shannon:spec → MCP recommendations generated
   ↓
-/sh_check_mcps reads spec_analysis
+/shannon:check_mcps reads spec_analysis
   ↓
 Compares recommended vs installed
   ↓
@@ -1413,21 +1413,21 @@ Generates setup guide for missing PRIMARY/MANDATORY MCPs
 
 ---
 
-### /sh_spec → /sh_analyze Integration
+### /shannon:spec → /shannon:spec Integration
 
 **Workflow**:
 ```bash
 # Scenario: User has existing codebase, wants complexity assessment
 
 # Step 1: Analyze codebase (not specification)
-/sh_analyze
+/shannon:spec
 
 # shannon-analysis skill:
 # - Scans codebase (file counts, domain detection from file types)
 # - Generates complexity estimate
 
 # Step 2: User provides specification for comparison
-/sh_spec "Original specification was..."
+/shannon:spec "Original specification was..."
 
 # Step 3: Compare
 # Codebase analysis: 0.55 (what was built)
@@ -1448,7 +1448,7 @@ Generates setup guide for missing PRIMARY/MANDATORY MCPs
 /shannon:prime
 
 # Step 2: Analyze specification
-/sh_spec "[your specification]"
+/shannon:spec "[your specification]"
 
 # Step 3: Review output, install MCPs
 # Based on recommendations
@@ -1457,10 +1457,10 @@ Generates setup guide for missing PRIMARY/MANDATORY MCPs
 If complexity < 0.50:
   → Just start implementing (sequential)
 Else:
-  → /sh_wave (parallel execution)
+  → /shannon:spec (parallel execution)
 
 # Step 5: Checkpoint progress
-/sh_checkpoint "Phase 2 complete"
+/shannon:spec "Phase 2 complete"
 ```
 
 ---
@@ -1472,10 +1472,10 @@ Else:
 /shannon:prime --resume
 
 # Step 2: Check if spec analysis exists
-/sh_status
+/shannon:spec
 
 # If spec analysis NOT in memory:
-/sh_spec "[reconstruct specification from memory/docs]"
+/shannon:spec "[reconstruct specification from memory/docs]"
 
 # If spec analysis EXISTS:
 # Continue from where you left off
@@ -1487,14 +1487,14 @@ Else:
 
 ```bash
 # Initial vague spec
-/sh_spec "Build marketplace app"
+/shannon:spec "Build marketplace app"
 
 # Output:
 # ⚠️ SPECIFICATION TOO VAGUE
 # Complexity: ~0.50 (LOW CONFIDENCE)
 
 # Refine based on feedback
-/sh_spec "Build two-sided marketplace connecting freelancers with clients.
+/shannon:spec "Build two-sided marketplace connecting freelancers with clients.
 
 Freelancer side:
 - Profile creation with portfolio
@@ -1567,7 +1567,7 @@ Timeline: 4 weeks"
 
 **Example**:
 ```bash
-/sh_spec "Build a system to manage inventory"
+/shannon:spec "Build a system to manage inventory"
 # No React, Express, PostgreSQL mentioned
 # Result: Generic domain percentages, no specific MCP recommendations
 ```
@@ -1575,7 +1575,7 @@ Timeline: 4 weeks"
 **Resolution**:
 ```bash
 # Add tech stack details
-/sh_spec "Build inventory management system with React frontend, Express backend, PostgreSQL database..."
+/shannon:spec "Build inventory management system with React frontend, Express backend, PostgreSQL database..."
 
 # Now domain detection works:
 # Frontend 35% (React mentioned) → Magic MCP, Puppeteer MCP
@@ -1623,7 +1623,7 @@ Timeline: 4 weeks"
 
 ```bash
 # Analyze new version of spec
-/sh_spec "Build auth system v2..."
+/shannon:spec "Build auth system v2..."
 
 # Query Serena for previous analysis
 /list_memories
@@ -1647,7 +1647,7 @@ Timeline: 4 weeks"
 **Scenario**: Specification has high uncertainty
 
 ```bash
-/sh_spec "Build ML-powered recommendation system.
+/shannon:spec "Build ML-powered recommendation system.
 
 - Collaborative filtering OR content-based filtering (TBD)
 - Real-time OR batch processing (TBD)
@@ -1761,7 +1761,7 @@ A: Minimum 50 words, recommended 100-500 words. Include:
    - Scale/user estimates
 
 **Q: Can I analyze an existing codebase instead?**
-A: Use /sh_analyze for codebase analysis. /sh_spec is for specifications (requirements, not code).
+A: Use /shannon:spec for codebase analysis. /shannon:spec is for specifications (requirements, not code).
 
 **Q: What if I don't have a written spec?**
 A: Describe verbally what you want to build (50+ words). Shannon will structure it.
@@ -1777,8 +1777,8 @@ A: Shannon will warn and present options (extend timeline, reduce scope, accept 
 
 ---
 
-**Command**: /sh_spec
+**Command**: /shannon:spec
 **Skill**: spec-analysis (shannon-plugin/skills/spec-analysis/SKILL.md)
 **Examples**: 15 comprehensive scenarios
 **Anti-Patterns**: 5 common mistakes + corrections
-**Integration**: Links to /sh_wave, /sh_check_mcps, /sh_analyze
+**Integration**: Links to /shannon:spec, /shannon:check_mcps, /shannon:spec

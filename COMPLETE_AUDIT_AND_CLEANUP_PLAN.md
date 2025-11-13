@@ -77,8 +77,8 @@
 2. shannon-plugin/ARCHITECTURE.md - Remove "35 enhanced commands" section
 3. shannon-plugin/TROUBLESHOOTING.md - Remove sc_* FAQ
 4. shannon-plugin/README.md - Remove sc_* command list
-5. shannon-plugin/commands/sh_status.md - Remove sc_* from status output
-6. shannon-plugin/commands/sh_analyze.md - Remove sc_analyze comparison
+5. shannon-plugin/commands/shannon:status.md - Remove sc_* from status output
+6. shannon-plugin/commands/shannon:analyze.md - Remove sc_analyze comparison
 7-15. All test files with sc_* references
 
 **Action**: Search/replace to remove ALL mentions of:
@@ -213,8 +213,8 @@ shannon-framework/
 - [ ] Remove from shannon-plugin/ARCHITECTURE.md
 - [ ] Remove from shannon-plugin/TROUBLESHOOTING.md
 - [ ] Remove from shannon-plugin/README.md
-- [ ] Remove from shannon-plugin/commands/sh_status.md
-- [ ] Remove from shannon-plugin/commands/sh_analyze.md
+- [ ] Remove from shannon-plugin/commands/shannon:status.md
+- [ ] Remove from shannon-plugin/commands/shannon:analyze.md
 - [ ] Remove from all test files
 - [ ] Commit: "docs: remove all phantom sc_* command references"
 
@@ -284,7 +284,7 @@ cat .claude-plugin/marketplace.json | grep source
 claude plugin uninstall shannon-plugin@shannon-framework
 claude plugin marketplace add .
 claude plugin install shannon-plugin@shannon-framework
-claude --print -- "/shannon-plugin:sh_status"
+claude --print -- "/shannon:sh_status"
 # Should work
 
 # Verify counts

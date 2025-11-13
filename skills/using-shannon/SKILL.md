@@ -55,11 +55,11 @@ observed and provides explicit counters.
 ⚠️  STOP. User said "straightforward" - this is subjective characterization, not analysis.
 
 REQUIRED ACTION:
-1. Run /sh_spec to get objective 8D score
+1. Run /shannon:spec to get objective 8D score
 2. "Straightforward CRUD" often scores 0.40-0.60 (Moderate to Complex)
 3. THEN decide implementation approach based on quantitative score
 
-DO NOT proceed without /sh_spec. "Straightforward" is an opinion, not a complexity metric.
+DO NOT proceed without /shannon:spec. "Straightforward" is an opinion, not a complexity metric.
 ```
 
 ### ❌ VIOLATION 2: "30 minutes justifies mocks"
@@ -130,7 +130,7 @@ REALITY CHECK:
 
 REQUIRED ACTION:
 1. Politely acknowledge user's estimate
-2. Run /sh_spec anyway to get quantitative score
+2. Run /shannon:spec anyway to get quantitative score
 3. Compare: "You estimated 25/100, algorithm calculated 52/100"
 4. Explain difference: [list complexity dimensions user missed]
 5. Use algorithm's score for planning
@@ -189,7 +189,7 @@ The skill establishes behavioral patterns that activate based on:
 - **Checkpoint triggers**: PreCompact hook triggers automatic context preservation
 
 **No direct inputs required** - Shannon workflows activate automatically when:
-- User provides specification (triggers /sh_spec)
+- User provides specification (triggers /shannon:spec)
 - Complexity >= 0.50 detected (triggers wave-based execution)
 - Context near limit (triggers PreCompact checkpoint)
 - Testing phase begins (enforces NO MOCKS principle)
@@ -201,7 +201,7 @@ The skill establishes behavioral patterns that activate based on:
 **This skill produces behavioral changes, not direct outputs.**
 
 Expected behavioral modifications:
-- **Before implementation**: Agent MUST run 8D analysis via /sh_spec
+- **Before implementation**: Agent MUST run 8D analysis via /shannon:spec
 - **During implementation**: Agent enforces functional testing (NO MOCKS)
 - **For complexity >= 0.50**: Agent uses wave-based execution
 - **Before context loss**: Agent auto-checkpoints to Serena MCP
@@ -249,7 +249,7 @@ Expected behavioral modifications:
 **REQUIRED SEQUENCE**:
 ```
 1. User provides specification/requirements
-2. YOU MUST: Run /sh_spec (or invoke spec-analysis skill)
+2. YOU MUST: Run /shannon:spec (or invoke spec-analysis skill)
 3. Review 8D complexity score (0.0-1.0)
 4. If complexity >=0.50: Plan wave-based execution
 5. If complexity >=0.70: Use SITREP protocol for coordination
@@ -269,7 +269,7 @@ You: "Let me start coding the React components..."
 ✅ CORRECT:
 User: "Build a task manager"
 You: "Let me analyze this specification with Shannon's 8D framework first..."
-[Runs /sh_spec]
+[Runs /shannon:spec]
 [Reviews complexity: 0.33 (Moderate)]
 [Plans execution accordingly]
 [THEN implements]
@@ -315,7 +315,7 @@ await browser.close();
 2. context-preservation skill auto-invokes
 3. Checkpoint saved to Serena MCP
 4. Context compacts safely
-5. Resume anytime with /sh_restore
+5. Resume anytime with /shannon:restore
 ```
 
 **Failure Mode**: Manual checkpoint attempts after compaction
@@ -330,7 +330,7 @@ If you catch yourself thinking ANY of these thoughts, STOP. You are about to vio
 
 | Rationalization | Reality | Shannon Response |
 |-----------------|---------|------------------|
-| ❌ "Specification is simple, skip 8D analysis" | Your subjective "simple" is often 0.50-0.70 (Complex) quantitatively | ALWAYS run /sh_spec - let quantitative scoring decide |
+| ❌ "Specification is simple, skip 8D analysis" | Your subjective "simple" is often 0.50-0.70 (Complex) quantitatively | ALWAYS run /shannon:spec - let quantitative scoring decide |
 | ❌ "Unit tests are faster than functional tests" | Unit tests with mocks test mock behavior, not production | Use Puppeteer MCP for real browser tests |
 | ❌ "Wave execution is overkill for this project" | Wave execution provides 3.5x speedup for complexity >=0.50 | Trust the 8D score - if >=0.50, use waves |
 | ❌ "Manual testing is fine, automation later" | Manual tests aren't repeatable, miss regressions | Functional automation from day 1 |
@@ -362,7 +362,7 @@ These thoughts mean you're about to violate Shannon workflows:
 
 ## When to Use Shannon Commands
 
-### /sh_spec - Specification Analysis
+### /shannon:spec - Specification Analysis
 **Trigger When**:
 - User provides ANY specification, requirements, or project description
 - Starting new feature or project
@@ -373,7 +373,7 @@ These thoughts mean you're about to violate Shannon workflows:
 
 **Output**: 8D scores, domain breakdown, MCP recommendations, phase plan, wave plan (if >=0.50), checkpoint
 
-### /sh_wave - Wave Orchestration
+### /shannon:wave - Wave Orchestration
 **Trigger When**:
 - Executing project with complexity >=0.50
 - Need parallel sub-agent coordination
@@ -383,7 +383,7 @@ These thoughts mean you're about to violate Shannon workflows:
 
 **Output**: Wave execution plan, agent allocation, synthesis checkpoints
 
-### /sh_checkpoint - Manual Checkpoint
+### /shannon:checkpoint - Manual Checkpoint
 **Trigger When**:
 - Before long-running task
 - User wants to save progress explicitly
@@ -393,7 +393,7 @@ These thoughts mean you're about to violate Shannon workflows:
 
 **Output**: Checkpoint ID, Serena URI
 
-### /sh_restore - Restore Session
+### /shannon:restore - Restore Session
 **Trigger When**:
 - Resuming after context loss
 - Continuing from previous session
@@ -403,7 +403,7 @@ These thoughts mean you're about to violate Shannon workflows:
 
 **Output**: Restored context, ready to continue
 
-### /sh_status - Framework Status
+### /shannon:status - Framework Status
 **Trigger When**:
 - Want to see Shannon framework health
 - Check MCP connections
@@ -414,7 +414,7 @@ These thoughts mean you're about to violate Shannon workflows:
 
 **Output**: Status display, optional SITREP
 
-### /sh_check_mcps - MCP Validation
+### /shannon:check_mcps - MCP Validation
 **Trigger When**:
 - Before starting Shannon workflows
 - Debugging MCP connection issues
@@ -434,7 +434,7 @@ Shannon V4 works alongside your existing skills:
 
 ```
 1. Use brainstorming skill for design refinement
-2. Once design complete, use /sh_spec for quantitative analysis
+2. Once design complete, use /shannon:spec for quantitative analysis
 3. Shannon provides 8D scores + wave plan
 4. Execute via Shannon's wave-orchestration skill
 5. Functional testing enforced throughout
@@ -456,7 +456,7 @@ Shannon V4 works alongside your existing skills:
 
 **Execution**:
 ```
-1. Run /sh_spec "Build a todo app with React"
+1. Run /shannon:spec "Build a todo app with React"
 2. Receive: Complexity 0.28 (Simple)
 3. Decision: Sequential execution (no waves needed)
 4. Implement with functional tests
@@ -470,10 +470,10 @@ Shannon V4 works alongside your existing skills:
 
 **Execution**:
 ```
-1. Run /sh_spec "Build real-time..."
+1. Run /shannon:spec "Build real-time..."
 2. Receive: Complexity 0.72 (High)
 3. Decision: Wave-based execution (3-7 agents recommended)
-4. Run /sh_wave to generate wave plan
+4. Run /shannon:wave to generate wave plan
 5. Execute waves with SITREP coordination
 6. Functional tests per wave (Puppeteer for frontend)
 7. Checkpoints between waves (automatic)
@@ -482,20 +482,20 @@ Shannon V4 works alongside your existing skills:
 **Output**: Complex platform delivered in 2-3 days with proven 3.5x speedup vs sequential
 
 ### Example 3: Violation Recovery (What Happens When You Skip)
-**Input**: Developer starts coding without /sh_spec
+**Input**: Developer starts coding without /shannon:spec
 
 **Execution**:
 ```
 1. Developer: "Let me build this task manager..."
-2. Shannon (if active): "⚠️  Did you run /sh_spec first?"
+2. Shannon (if active): "⚠️  Did you run /shannon:spec first?"
 3. Developer: "It's simple, I can estimate"
 4. 20 minutes later: Realizes needs authentication, database, deployment
-5. Restarts with /sh_spec
+5. Restarts with /shannon:spec
 6. Complexity: 0.55 (Complex) - should have used waves
 7. 20 minutes wasted
 ```
 
-**Output**: Time wasted, could have been prevented with mandatory /sh_spec workflow
+**Output**: Time wasted, could have been prevented with mandatory /shannon:spec workflow
 
 ---
 
@@ -555,15 +555,15 @@ def validate_shannon_active(session_context):
 ## Common Pitfalls
 
 ### Pitfall 1: "This is too simple for 8D analysis"
-**Problem**: Developer estimates project is "simple" based on initial description, skips /sh_spec
+**Problem**: Developer estimates project is "simple" based on initial description, skips /shannon:spec
 
 **Why It Fails**: Simple-looking specs often hide complexity:
 - "Build a task manager" → Needs auth, persistence, deployment, error handling
 - Subjective "simple" averages 0.45-0.65 (Moderate to Complex) when scored quantitatively
 
-**Solution**: ALWAYS run /sh_spec. 3-5 minutes investment prevents hours of rework. Let quantitative scoring decide, not intuition.
+**Solution**: ALWAYS run /shannon:spec. 3-5 minutes investment prevents hours of rework. Let quantitative scoring decide, not intuition.
 
-**Prevention**: Make /sh_spec mandatory first step (enforced by this skill)
+**Prevention**: Make /shannon:spec mandatory first step (enforced by this skill)
 
 ### Pitfall 2: "Unit tests with mocks are faster"
 **Problem**: Developer writes unit tests with mocked dependencies instead of functional tests
@@ -585,7 +585,7 @@ def validate_shannon_active(session_context):
 - Complexity >=0.50 triggers wave threshold for a reason (parallelization benefits outweigh coordination overhead at this point)
 - Sequential execution for Complex projects = 3.5x slower
 
-**Solution**: Trust the quantitative threshold. If complexity >=0.50, use /sh_wave for wave-based execution.
+**Solution**: Trust the quantitative threshold. If complexity >=0.50, use /shannon:wave for wave-based execution.
 
 **Prevention**: using-shannon skill establishes >=0.50 as mandatory wave threshold
 
@@ -623,21 +623,21 @@ def validate_shannon_active(session_context):
 - Difficult to debug multi-agent issues
 - Synthesis checkpoints unclear
 
-**Solution**: Use /sh_wave with --sitrep flag for complexity >=0.70. SITREP provides structure for multi-agent coordination that prevents common coordination failures.
+**Solution**: Use /shannon:wave with --sitrep flag for complexity >=0.70. SITREP provides structure for multi-agent coordination that prevents common coordination failures.
 
 **Prevention**: wave-orchestration skill auto-enables SITREP for High/Critical complexity
 
 ### Pitfall 7: "Estimate complexity by feel, analysis is overkill"
-**Problem**: Developer estimates based on intuition instead of running /sh_spec
+**Problem**: Developer estimates based on intuition instead of running /shannon:spec
 
 **Why It Fails**:
 - Human intuition systematically biased toward under-estimation
 - Complexity dimensions interact non-linearly (8D captures this, intuition doesn't)
 - Resource allocation based on wrong estimate → project failure
 
-**Solution**: Shannon's 8D algorithm removes bias. Always run /sh_spec for quantitative assessment. 3-5 minute investment prevents days of rework.
+**Solution**: Shannon's 8D algorithm removes bias. Always run /shannon:spec for quantitative assessment. 3-5 minute investment prevents days of rework.
 
-**Prevention**: using-shannon skill makes /sh_spec mandatory first step
+**Prevention**: using-shannon skill makes /shannon:spec mandatory first step
 
 ### Pitfall 8: "Tests after implementation achieve same result"
 **Problem**: Developer writes working code, then writes tests to verify it
@@ -660,15 +660,15 @@ def validate_shannon_active(session_context):
 
 1. **Check framework loaded**:
    ```
-   /sh_status
+   /shannon:status
    # Expected: "Shannon Framework v4.0.0 active"
    # Expected: "🟢 Serena MCP connected" (required)
    ```
 
 2. **Check workflows enforced**:
    ```
-   # Try to start implementation without /sh_spec
-   # Shannon should remind: "Did you run /sh_spec first?"
+   # Try to start implementation without /shannon:spec
+   # Shannon should remind: "Did you run /shannon:spec first?"
    ```
 
 3. **Check functional testing enforced**:

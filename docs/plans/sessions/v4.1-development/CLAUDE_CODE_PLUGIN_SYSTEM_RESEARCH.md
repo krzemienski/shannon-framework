@@ -46,12 +46,12 @@ plugin-name/
 **Discovery Mechanism**:
 - Claude Code scans `commands/` directory
 - Each `.md` file becomes a slash command
-- Filename determines command name: `sh_spec.md` → `/sh_spec`
+- Filename determines command name: `sh_spec.md` → `/shannon:spec`
 - YAML frontmatter defines: name, description, usage
 
 **Execution**:
-- User types `/sh_spec "specification"`
-- Claude Code loads `commands/sh_spec.md`
+- User types `/shannon:spec "specification"`
+- Claude Code loads `commands/shannon:spec.md`
 - Content is **injected into system prompt**
 - Claude **reads the markdown** and **executes the workflow**
 
@@ -176,12 +176,12 @@ shannon-framework/
 
 **Step 4**: Verify installation
 ```bash
-/sh_status  # Should work if Shannon loaded
+/shannon:status  # Should work if Shannon loaded
 /help       # Should show Shannon commands
 ```
 
 **Step 5**: Test components
-- Commands: Try /sh_spec, /sh_wave, /sh_checkpoint
+- Commands: Try /shannon:spec, /shannon:wave, /shannon:checkpoint
 - Skills: Use Skill tool to load shannon skills
 - Hooks: Should auto-load (SessionStart triggers using-shannon)
 
@@ -189,7 +189,7 @@ shannon-framework/
 
 ## Questions Still Unanswered
 
-1. **Command Execution**: When `/sh_spec` fires, does Claude Code:
+1. **Command Execution**: When `/shannon:spec` fires, does Claude Code:
    - Load the .md into system prompt?
    - Parse the YAML frontmatter?
    - Execute the "Workflow" section as instructions?
@@ -217,7 +217,7 @@ shannon-framework/
 1. ✅ Read documentation (done above)
 2. **Actually install Shannon locally** (proper /plugin commands in chat)
 3. **Test each component** works (commands, skills, hooks, agents)
-4. **Trace actual execution paths** (what happens when /sh_spec fires?)
+4. **Trace actual execution paths** (what happens when /shannon:spec fires?)
 5. **Document with evidence** (not theory, actual observed behavior)
 6. **Use this understanding** to complete remaining enhancements properly
 

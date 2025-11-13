@@ -250,8 +250,8 @@ Addresses all 6 RED phase violations:
 **Optional Sub-Skills**: wave-orchestration
 
 **Commands Using This Skill**:
-- `/sh_wave` - Pre-wave validation
-- `/sh_north_star` - Goal change validation
+- `/shannon:wave` - Pre-wave validation
+- `/shannon:north_star` - Goal change validation
 
 **MCP Integration**: Via goal-management (Serena MCP for goal storage)
 
@@ -308,7 +308,7 @@ Addresses all 6 RED phase violations:
 
 ### Command Integration
 
-**Pre-Wave Validation** (in /sh_wave):
+**Pre-Wave Validation** (in /shannon:wave):
 ```markdown
 1. @skill goal-alignment --mode=validate
    - Input: wave_plan.deliverables
@@ -316,7 +316,7 @@ Addresses all 6 RED phase violations:
    - Action: Halt if RED, proceed if GREEN
 ```
 
-**Post-Wave Verification** (in /sh_wave):
+**Post-Wave Verification** (in /shannon:wave):
 ```markdown
 5. @skill goal-alignment --mode=verify
    - Input: actual_deliverables
@@ -324,7 +324,7 @@ Addresses all 6 RED phase violations:
    - Action: Update goal progress
 ```
 
-**Goal Change Validation** (in /sh_north_star):
+**Goal Change Validation** (in /shannon:north_star):
 ```markdown
 1. @skill goal-alignment --mode=detect-drift
    - Check: Scope expansion ratio

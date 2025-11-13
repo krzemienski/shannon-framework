@@ -10,19 +10,19 @@
 ═══════════════════════════════════════════════════════════
 
 ### Commands (14 files, 3,884 lines)
-1. `commands/sh_analyze.md`
-2. `commands/sh_check_mcps.md`
-3. `commands/sh_checkpoint.md`
-4. `commands/sh_discover_skills.md`
-5. `commands/sh_memory.md`
-6. `commands/sh_north_star.md`
-7. `commands/sh_reflect.md`
-8. `commands/sh_restore.md`
-9. `commands/sh_scaffold.md`
-10. `commands/sh_spec.md`
-11. `commands/sh_status.md`
-12. `commands/sh_test.md`
-13. `commands/sh_wave.md`
+1. `commands/shannon:analyze.md`
+2. `commands/shannon:check_mcps.md`
+3. `commands/shannon:checkpoint.md`
+4. `commands/shannon:discover_skills.md`
+5. `commands/shannon:memory.md`
+6. `commands/shannon:north_star.md`
+7. `commands/shannon:reflect.md`
+8. `commands/shannon:restore.md`
+9. `commands/shannon:scaffold.md`
+10. `commands/shannon:spec.md`
+11. `commands/shannon:status.md`
+12. `commands/shannon:test.md`
+13. `commands/shannon:wave.md`
 14. `commands/shannon_prime.md`
 
 **Plus 6 guides:**
@@ -187,7 +187,7 @@
 ### Test Scripts (18 files, 3,698 lines)
 
 **Verification Tiers (5 files):**
-1. `tests/tier1_verify_analysis.py` - Test /sh_spec on 4 specs
+1. `tests/tier1_verify_analysis.py` - Test /shannon:spec on 4 specs
 2. `tests/tier2_build_prd_creator.py` - Build web app
 3. `tests/tier2_build_mobile_expo.py` - Build mobile app
 4. `tests/tier2_build_repo_nexus.py` - Build iOS app
@@ -338,8 +338,8 @@ tests/
 - `core/FORCED_READING_PROTOCOL.md` - Complete reading enforcement (814 lines)
 
 ### Critical Commands
-- `commands/sh_spec.md` - Specification analysis (159 lines)
-- `commands/sh_wave.md` - Wave execution (420 lines)
+- `commands/shannon:spec.md` - Specification analysis (159 lines)
+- `commands/shannon:wave.md` - Wave execution (420 lines)
 - `commands/shannon_prime.md` - Session priming (449 lines)
 
 ### Critical Skills

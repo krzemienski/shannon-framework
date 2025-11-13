@@ -214,7 +214,7 @@ grep -l "activated-by:" shannon-plugin/agents/*.md
 find shannon-plugin/skills -name "SKILL.md"
 
 # Check only docs
-find docs -name "*.md" -exec grep -l "@skill\|/sh_\|/sc_" {} \;
+find docs -name "*.md" -exec grep -l "@skill\|/shannon:" {} \;
 ```
 
 ### Generate Reports

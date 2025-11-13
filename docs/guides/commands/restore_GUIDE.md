@@ -1,6 +1,6 @@
-# /sh_restore Command - Complete Usage Guide
+# /shannon:restore Command - Complete Usage Guide
 
-**Command**: `/sh_restore`
+**Command**: `/shannon:restore`
 **Purpose**: Restore complete project state from Serena MCP checkpoints
 **Skill**: Invokes context-restoration skill (957 lines)
 **Output**: Full context restoration with wave/phase/goal/task state rebuilt
@@ -9,16 +9,16 @@
 
 ## Overview
 
-The `/sh_restore` command enables **perfect session resumption** by loading comprehensive checkpoints from Serena MCP. Restores ALL context: specification analysis, wave progress, phase state, North Star goals, architectural decisions, and next actions.
+The `/shannon:restore` command enables **perfect session resumption** by loading comprehensive checkpoints from Serena MCP. Restores ALL context: specification analysis, wave progress, phase state, North Star goals, architectural decisions, and next actions.
 
 **Core Value**: Zero context loss - resume exactly where you left off, no re-explanation needed.
 
 **Usage**:
 ```bash
-/sh_restore                               # Auto-load most recent checkpoint
-/sh_restore {checkpoint_id}               # Load specific checkpoint
-/sh_restore --goals                       # Include goal restoration
-/sh_restore --verbose                     # Detailed restoration report
+/shannon:restore                               # Auto-load most recent checkpoint
+/shannon:restore {checkpoint_id}               # Load specific checkpoint
+/shannon:restore --goals                       # Include goal restoration
+/shannon:restore --verbose                     # Detailed restoration report
 ```
 
 ---
@@ -31,7 +31,7 @@ The `/sh_restore` command enables **perfect session resumption** by loading comp
 
 **Input**:
 ```bash
-/sh_restore
+/shannon:restore
 ```
 
 **Process**:
@@ -125,7 +125,7 @@ The `/sh_restore` command enables **perfect session resumption** by loading comp
 
 **Input**:
 ```bash
-/sh_restore shannon_milestone_20251107_180000
+/shannon:restore shannon_milestone_20251107_180000
 ```
 
 **Output**:
@@ -173,7 +173,7 @@ This rollback will lose recent progress. Confirm?
 
 **Input**:
 ```bash
-/sh_restore --goals
+/shannon:restore --goals
 ```
 
 **Output**:
@@ -220,7 +220,7 @@ Priority 2: Test page load times (SECONDARY validation)
 
 **Input**:
 ```bash
-/sh_restore --verbose
+/shannon:restore --verbose
 ```
 
 **Output**:
@@ -343,7 +343,7 @@ Presentation: instant
 **Input**:
 ```bash
 # Week later, new session
-/sh_restore
+/shannon:restore
 ```
 
 **Output**:
@@ -424,7 +424,7 @@ Build e-commerce platform with:
 
 **Input**:
 ```bash
-/sh_restore shannon_checkpoint_20251106_140000
+/shannon:restore shannon_checkpoint_20251106_140000
 ```
 
 **Output**:
@@ -467,7 +467,7 @@ Build e-commerce platform with:
 **Option 1: Rebuild Missing Context**
 ```bash
 # Analyze codebase to infer Wave 2 work
-/sh_analyze --waves
+/shannon:analyze --waves
 
 # Creates wave_2_inferred from filesystem analysis
 ```
@@ -483,9 +483,9 @@ ls src/
 
 **Option 3: Rollback to Earlier Complete Checkpoint**
 ```bash
-/sh_checkpoint --list
+/shannon:restore --list
 # Find earlier checkpoint with 100% restoration
-/sh_restore {earlier_checkpoint_id}
+/shannon:restore {earlier_checkpoint_id}
 ```
 
 ## Proceeding with Option 1 (Rebuild Missing)
@@ -510,7 +510,7 @@ git checkout -b experiment
 
 # Restore to main branch approach
 git checkout main
-/sh_restore shannon_checkpoint_main_20251108
+/shannon:restore shannon_checkpoint_main_20251108
 ```
 
 **Output**:
@@ -554,7 +554,7 @@ Saved experiment notes to:
 
 **Input**:
 ```bash
-/sh_restore --goals
+/shannon:restore --goals
 ```
 
 **Output**:
@@ -618,7 +618,7 @@ Recent work aligns well with goals.
 # New session starts
 
 /shannon:prime --resume
-# (Internally uses /sh_restore with most recent precompact)
+# (Internally uses /shannon:restore with most recent precompact)
 ```
 
 **Output**:
@@ -675,7 +675,7 @@ Continue Wave 4 synthesis, get user approval, begin Wave 5
 
 **Input**:
 ```bash
-/sh_restore --compare shannon_checkpoint_20251107 shannon_checkpoint_20251108
+/shannon:restore --compare shannon_checkpoint_20251107 shannon_checkpoint_20251108
 ```
 
 **Output**:
@@ -758,7 +758,7 @@ Continue Wave 4 synthesis, get user approval, begin Wave 5
 
 **Symptom**:
 ```bash
-/sh_restore some_checkpoint_id
+/shannon:restore some_checkpoint_id
 # Checkpoint doesn't exist
 # Error: Not found
 ```
@@ -771,7 +771,7 @@ Continue Wave 4 synthesis, get user approval, begin Wave 5
 **Search Results**: 0 matches in Serena
 
 **Available Checkpoints**:
-Run /sh_checkpoint --list to see available checkpoints
+Run /shannon:restore --list to see available checkpoints
 
 **Common Causes**:
 1. Typo in checkpoint ID
@@ -780,12 +780,12 @@ Run /sh_checkpoint --list to see available checkpoints
 4. Serena MCP was not configured when checkpoint created
 
 **Resolution**:
-1. List checkpoints: /sh_checkpoint --list
+1. List checkpoints: /shannon:restore --list
 2. Copy exact ID from list
-3. Retry: /sh_restore {correct_id}
+3. Retry: /shannon:restore {correct_id}
 ```
 
-**Recommendation**: Use /sh_checkpoint --list first to see available checkpoints.
+**Recommendation**: Use /shannon:restore --list first to see available checkpoints.
 
 ---
 
@@ -793,7 +793,7 @@ Run /sh_checkpoint --list to see available checkpoints
 
 **Symptom**:
 ```bash
-/sh_restore
+/shannon:restore
 # [Reads restoration output but doesn't review details]
 # Starts working on wrong task (not what checkpoint indicated)
 ```
@@ -837,7 +837,7 @@ Wave 3 cannot be marked complete with incomplete work
 **Symptom**:
 ```bash
 # Serena MCP not configured
-/sh_restore
+/shannon:restore
 
 # Error: Serena MCP unavailable
 ```
@@ -851,7 +851,7 @@ Wave 3 cannot be marked complete with incomplete work
 
 **Check MCP Status**:
 ```bash
-/sh_check_mcps
+/shannon:check_mcps
 ```
 
 **If Serena Missing**:
@@ -867,35 +867,35 @@ Wave 3 cannot be marked complete with incomplete work
 
 3. Retry restoration:
    ```bash
-   /sh_restore
+   /shannon:restore
    ```
 
 **Cannot restore without Serena MCP** (checkpoints live there)
 ```
 
-**Recommendation**: Run /sh_check_mcps first to verify Serena available.
+**Recommendation**: Run /shannon:check_mcps first to verify Serena available.
 
 ---
 
 ## Integration with Other Commands
 
-### /sh_checkpoint → /sh_restore Flow
+### /shannon:restore → /shannon:restore Flow
 
 **Complete Workflow**:
 ```bash
 # Session 1: Create checkpoint
-/sh_checkpoint "Phase 3 complete"
+/shannon:restore "Phase 3 complete"
 
 # [Context compaction or session end]
 
 # Session 2: Restore
-/sh_restore
+/shannon:restore
 # Auto-loads most recent checkpoint
 ```
 
 ---
 
-### /shannon:prime → /sh_restore (V4.1)
+### /shannon:prime → /shannon:restore (V4.1)
 
 **Unified Priming**:
 ```bash
@@ -905,9 +905,9 @@ Wave 3 cannot be marked complete with incomplete work
 # Internally executes:
 1. Detect mode: resume (vs fresh)
 2. Find most recent checkpoint
-3. Execute: /sh_restore {checkpoint_id}
-4. Execute: /sh_discover_skills
-5. Execute: /sh_check_mcps
+3. Execute: /shannon:restore {checkpoint_id}
+4. Execute: /shannon:discover_skills
+5. Execute: /shannon:check_mcps
 6. Load: Spec analysis + phase plan
 7. Result: Complete session primed (<60s)
 ```
@@ -925,14 +925,14 @@ Wave 3 cannot be marked complete with incomplete work
 **Resolution**:
 ```bash
 # List all checkpoints
-/sh_checkpoint --list
+/shannon:restore --list
 
 # Try earlier checkpoint
-/sh_restore {earlier_checkpoint_id}
+/shannon:restore {earlier_checkpoint_id}
 
 # If quality still low:
 # Manually rebuild context:
-1. /sh_analyze (infer from codebase)
+1. /shannon:analyze (infer from codebase)
 2. Review git log (see recent decisions)
 3. Reconstruct manually
 ```
@@ -946,10 +946,10 @@ Wave 3 cannot be marked complete with incomplete work
 **Resolution**:
 ```bash
 # List checkpoints with project filter
-/sh_checkpoint --list | grep project_name
+/shannon:restore --list | grep project_name
 
 # Restore specific project checkpoint
-/sh_restore shannon_checkpoint_{project_name}_*
+/shannon:restore shannon_checkpoint_{project_name}_*
 ```
 
 ---
@@ -968,7 +968,7 @@ Wave 3 cannot be marked complete with incomplete work
 
 # Recovery:
 1. Restore from latest checkpoint that DOES work
-2. Or: Analyze codebase to infer state (/sh_analyze)
+2. Or: Analyze codebase to infer state (/shannon:analyze)
 3. Or: Manual context reconstruction
 ```
 
@@ -985,7 +985,7 @@ A: Depends on retention policy:
    - Safety checkpoints: 7 days
 
 **Q: What if I want to restore goal but not code state?**
-A: Use /sh_restore --goals (restores goals only, keeps current code state)
+A: Use /shannon:restore --goals (restores goals only, keeps current code state)
 
 **Q: Can I restore to a checkpoint from a different computer?**
 A: Yes, if Serena MCP synced (cloud-based Serena) or if .serena/ directory copied
@@ -998,8 +998,8 @@ A: No - restoration loads context into memory. Current files unchanged. You choo
 
 ---
 
-**Command**: /sh_restore
+**Command**: /shannon:restore
 **Skill**: context-restoration (shannon-plugin/skills/context-restoration/SKILL.md)
 **Examples**: 10 comprehensive scenarios
 **Anti-Patterns**: 3 common mistakes
-**Integration**: Works with /sh_checkpoint, /shannon:prime
+**Integration**: Works with /shannon:restore, /shannon:prime

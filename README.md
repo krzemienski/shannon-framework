@@ -2818,7 +2818,7 @@ A: Fresh mode: 10-20s, Resume mode: 30-60s, Full mode: 60-120s
 A: Yes! Simple projects (complexity <0.50) use direct implementation. Waves only for complexity >=0.50.
 
 **Q: What commands does Shannon provide?**
-A: Shannon provides 14 commands (11 core + 3 V4.1 enhancements). All commands use the /shannon:* namespace
+A: Shannon provides 15 commands (11 core + 3 V4.1 + 1 V5.0 NEW). All commands use the /shannon:* namespace
 
 **Q: How do I know which skills are active?**
 A: Use /shannon:discover_skills to see all available. Skills auto-load contextually based on task.

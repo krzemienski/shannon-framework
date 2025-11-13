@@ -1475,8 +1475,8 @@ A: No. Dependencies must be satisfied. Cannot skip waves.
 ---
 
 **Command**: /shannon:wave
-**Skill**: wave-orchestration (shannon-plugin/skills/wave-orchestration/SKILL.md)
-**Agent**: WAVE_COORDINATOR (shannon-plugin/agents/WAVE_COORDINATOR.md)
+**Skill**: wave-orchestration (skills/wave-orchestration/SKILL.md)
+**Agent**: WAVE_COORDINATOR (agents/WAVE_COORDINATOR.md)
 **Examples**: 15 comprehensive scenarios
 **Anti-Patterns**: 5 common mistakes + corrections
 **Integration**: Links to /shannon:wave (prerequisite), /shannon:wave (recovery)

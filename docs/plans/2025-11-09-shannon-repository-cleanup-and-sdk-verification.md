@@ -104,16 +104,16 @@ Enables offline reference and prevents re-fetching documentation."
 ### Task 2.1: Verify and Update plugin.json
 
 **Files:**
-- Read: `shannon-plugin/.claude-plugin/plugin.json`
-- Modify: `shannon-plugin/.claude-plugin/plugin.json` (if needed)
+- Read: `.claude-plugin/plugin.json`
+- Modify: `.claude-plugin/plugin.json` (if needed)
 
 **Step 1: Check current command/skill/agent counts**
 
 ```bash
 # Count actual files
-ls shannon-plugin/commands/*.md | wc -l  # Should be 14
-ls shannon-plugin/skills/*/SKILL.md | wc -l  # Should be 17
-ls shannon-plugin/agents/*.md | wc -l  # Should be 24
+ls commands/*.md | wc -l  # Should be 14
+ls skills/*/SKILL.md | wc -l  # Should be 17
+ls agents/*.md | wc -l  # Should be 24
 ```
 
 **Step 2: Compare with plugin.json**
@@ -131,7 +131,7 @@ If counts wrong, update metadata sections.
 **Step 4: Commit if changed**
 
 ```bash
-git add shannon-plugin/.claude-plugin/plugin.json
+git add .claude-plugin/plugin.json
 git commit -m "fix: update plugin.json metadata after sc_* removal"
 ```
 

@@ -430,7 +430,7 @@ To add new scenarios or improve existing ones:
 
 ## Related Documentation
 
-- [Shannon Framework README](../../shannon-plugin/README.md)
+- [Shannon Framework README](../../README.md)
 - [Shannon V4.1 Summary](../../SHANNON_V4.1_FINAL_SUMMARY.md)
 - [Shannon V5 Plan](../../SHANNON_V5_FUNCTIONAL_TESTING_PLAN.md)
 

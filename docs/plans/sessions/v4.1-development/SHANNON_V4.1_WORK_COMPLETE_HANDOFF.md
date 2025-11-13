@@ -25,21 +25,21 @@ Successfully completed core Shannon V4.1 enhancements with focus on:
 
 **3 Core Skills Enhanced**:
 
-1. **spec-analysis** (shannon-plugin/skills/spec-analysis/SKILL.md)
+1. **spec-analysis** (skills/spec-analysis/SKILL.md)
    - Added: Performance Benchmarks table (timing by spec size)
    - Added: Complete Execution Walkthrough (9-step process with calculations)
    - Lines: +303 (1,242 → 1,545)
    - Validation: RED 0.47 → GREEN 0.38 (19% accuracy improvement)
    - Commit: 2d5eb6a
 
-2. **wave-orchestration** (shannon-plugin/skills/wave-orchestration/SKILL.md)
+2. **wave-orchestration** (skills/wave-orchestration/SKILL.md)
    - Added: Performance Benchmarks (speedup metrics by wave size)
    - Added: Complete Execution Walkthrough (dependency graph → wave generation)
    - Lines: +378 (1,204 → 1,582)
    - Validation: Identical RED/GREEN (educational, no behavioral change)
    - Commit: d6aca7b
 
-3. **phase-planning** (shannon-plugin/skills/phase-planning/SKILL.md)
+3. **phase-planning** (skills/phase-planning/SKILL.md)
    - Added: Performance Benchmarks (timing by complexity)
    - Added: Complete Execution Walkthrough (adjustment calculation methodology)
    - Lines: +294 (889 → 1,183)
@@ -65,7 +65,7 @@ Successfully completed core Shannon V4.1 enhancements with focus on:
    - Complete component inventory (48 commands, 16 skills, 24 agents, 6 hooks)
    - Commit: 17488b3
 
-2. **shannon-plugin/hooks/README.md** (1,068 lines)
+2. **hooks/README.md** (1,068 lines)
    - All 6 hooks documented (session_start, post_tool_use, precompact, stop, user_prompt_submit, hooks.json)
    - Hook lifecycle and execution order
    - post_tool_use.py detailed analysis (13 mock patterns, real-time blocking)
@@ -235,17 +235,17 @@ Example (NO MOCKS):
 ## Files Modified/Created
 
 ### Modified (3):
-- shannon-plugin/skills/spec-analysis/SKILL.md
-- shannon-plugin/skills/wave-orchestration/SKILL.md
-- shannon-plugin/skills/phase-planning/SKILL.md
+- skills/spec-analysis/SKILL.md
+- skills/wave-orchestration/SKILL.md
+- skills/phase-planning/SKILL.md
 
 ### Created (7):
 - SHANNON_SYSTEM_ARCHITECTURE_SYNTHESIS.md
-- shannon-plugin/hooks/README.md
+- hooks/README.md
 - README.md (restored from backup + enhanced)
-- shannon-plugin/commands/guides/sh_spec_GUIDE.md
-- shannon-plugin/commands/guides/sh_wave_GUIDE.md
-- shannon-plugin/commands/guides/sh_checkpoint_GUIDE.md
+- commands/guides/sh_spec_GUIDE.md
+- commands/guides/sh_wave_GUIDE.md
+- commands/guides/sh_checkpoint_GUIDE.md
 - SHANNON_V4.1_WORK_COMPLETE_HANDOFF.md (this file)
 
 ---
@@ -346,9 +346,9 @@ Example (NO MOCKS):
 
 **To use enhancements**:
 1. Skill walkthroughs available in spec-analysis, wave-orchestration, phase-planning
-2. Hook system explained in shannon-plugin/hooks/README.md
+2. Hook system explained in hooks/README.md
 3. Quick start in README.md
-4. Command guides in shannon-plugin/commands/guides/
+4. Command guides in commands/guides/
 
 **Questions/Issues**:
 - File issues at: https://github.com/krzemienski/shannon-framework/issues

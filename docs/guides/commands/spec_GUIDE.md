@@ -1778,7 +1778,7 @@ A: Shannon will warn and present options (extend timeline, reduce scope, accept 
 ---
 
 **Command**: /shannon:spec
-**Skill**: spec-analysis (shannon-plugin/skills/spec-analysis/SKILL.md)
+**Skill**: spec-analysis (skills/spec-analysis/SKILL.md)
 **Examples**: 15 comprehensive scenarios
 **Anti-Patterns**: 5 common mistakes + corrections
 **Integration**: Links to /shannon:spec, /shannon:check_mcps, /shannon:spec

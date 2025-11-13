@@ -36,7 +36,7 @@
 
 ### Test: Skill Structure Validation
 
-**Command:** `python3 shannon-plugin/tests/validate_skills.py`
+**Command:** `python3 tests/validate_skills.py`
 
 **Results:** ⚠️ **PARTIAL PASS** - 13 skills have documentation completeness issues
 
@@ -81,7 +81,7 @@
 ✅ **PASS** - All 13 skills verified:
 
 ```bash
-shannon-plugin/skills/
+skills/
 ├── TEMPLATE.md (221 lines) ✅
 ├── using-shannon/SKILL.md (670 lines) ✅
 ├── spec-analysis/SKILL.md (850+ lines) ✅
@@ -239,7 +239,7 @@ Available MCPs:
 The mcp-discovery skill logic can be validated by checking the domain-mcp-matrix.json:
 
 ```bash
-cat shannon-plugin/skills/mcp-discovery/mappings/domain-mcp-matrix.json
+cat skills/mcp-discovery/mappings/domain-mcp-matrix.json
 ```
 
 **Result:** ✅ **PASS** - Matrix properly configured with frontend/backend/mobile/database/devops mappings
@@ -267,7 +267,7 @@ cat shannon-plugin/skills/mcp-discovery/mappings/domain-mcp-matrix.json
 
 ### Test: Validation Infrastructure ✅
 
-**Command:** `python3 shannon-plugin/tests/validate_skills.py`
+**Command:** `python3 tests/validate_skills.py`
 
 **Result:** ✅ **FUNCTIONAL** - Validator works, correctly identifies missing sections
 

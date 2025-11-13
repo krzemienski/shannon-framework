@@ -140,7 +140,7 @@ claude-code-complete-documentation/
 **Files Updated**:
 - CLAUDE.md - Added SDK testing section
 - tests/tier1_verify_analysis.py - Fixed namespace + tools
-- shannon-plugin/.claude-plugin/plugin.json - Simplified
+- .claude-plugin/plugin.json - Simplified
 
 **Files Removed**:
 - Old SDK skill (incorrect patterns)
@@ -249,7 +249,7 @@ Missing any → command hangs waiting for permission
 **Configuration**:
 - `.claude-plugin/marketplace.json`
 - Updated `CLAUDE.md`
-- Updated `shannon-plugin/.claude-plugin/plugin.json`
+- Updated `.claude-plugin/plugin.json`
 
 **Tests**:
 - Fixed `tests/tier1_verify_analysis.py`

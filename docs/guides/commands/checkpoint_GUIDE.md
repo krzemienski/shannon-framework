@@ -699,7 +699,7 @@ A: Checkpoints fail. Serena is MANDATORY for Shannon. Install before using /shan
 ---
 
 **Command**: /shannon:checkpoint
-**Skill**: context-preservation (shannon-plugin/skills/context-preservation/SKILL.md)
+**Skill**: context-preservation (skills/context-preservation/SKILL.md)
 **Examples**: 10 comprehensive scenarios
 **Anti-Patterns**: 3 common mistakes
 **Integration**: Auto-checkpoints from /shannon:checkpoint, restoration via /shannon:checkpoint

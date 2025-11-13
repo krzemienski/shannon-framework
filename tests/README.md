@@ -8,13 +8,13 @@ This directory contains automated tests and validation tools for Shannon V4 comp
 
 ```bash
 # From shannon-framework root
-python3 shannon-plugin/tests/comprehensive_validation.py .
+python3 tests/comprehensive_validation.py .
 
 # Or with explicit path
-python3 shannon-plugin/tests/comprehensive_validation.py /path/to/shannon-framework
+python3 tests/comprehensive_validation.py /path/to/shannon-framework
 ```
 
-**Output:** Generates two reports in `shannon-plugin/tests/`:
+**Output:** Generates two reports in `tests/`:
 - `COMPREHENSIVE_VALIDATION_RESULTS.md` - Detailed validation output
 - `INTEGRATION_HEALTH_SUMMARY.md` - Executive summary (read this first)
 
@@ -30,9 +30,9 @@ python3 shannon-plugin/tests/comprehensive_validation.py /path/to/shannon-framew
 Validates that all `@skill` references in command files point to existing skills.
 
 **Checks:**
-- All commands in `shannon-plugin/commands/`
+- All commands in `commands/`
 - Extracts `@skill <skill-name>` patterns
-- Verifies each skill exists in `shannon-plugin/skills/`
+- Verifies each skill exists in `skills/`
 - Reports broken references
 
 ### Test 2: Agent Definitions
@@ -40,7 +40,7 @@ Validates that all `@skill` references in command files point to existing skills
 Validates agent structure and documentation completeness.
 
 **Checks:**
-- All agents in `shannon-plugin/agents/`
+- All agents in `agents/`
 - Frontmatter presence
 - SITREP protocol mentions
 - Serena MCP integration mentions
@@ -51,7 +51,7 @@ Validates agent structure and documentation completeness.
 Validates skill dependency graph integrity.
 
 **Checks:**
-- All skills in `shannon-plugin/skills/`
+- All skills in `skills/`
 - `required-sub-skills` references
 - Circular dependency detection
 - Dependency graph generation
@@ -126,11 +126,11 @@ Add to `.git/hooks/pre-commit`:
 ```bash
 #!/bin/bash
 echo "Running Shannon V4 integration validation..."
-python3 shannon-plugin/tests/comprehensive_validation.py .
+python3 tests/comprehensive_validation.py .
 
 if [ $? -ne 0 ]; then
     echo "❌ Validation failed. Commit blocked."
-    echo "Review: shannon-plugin/tests/COMPREHENSIVE_VALIDATION_RESULTS.md"
+    echo "Review: tests/COMPREHENSIVE_VALIDATION_RESULTS.md"
     exit 1
 fi
 
@@ -148,12 +148,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run validation
-        run: python3 shannon-plugin/tests/comprehensive_validation.py .
+        run: python3 tests/comprehensive_validation.py .
       - name: Upload report
         uses: actions/upload-artifact@v3
         with:
           name: validation-report
-          path: shannon-plugin/tests/COMPREHENSIVE_VALIDATION_RESULTS.md
+          path: tests/COMPREHENSIVE_VALIDATION_RESULTS.md
 ```
 
 ## Adding New Tests
@@ -219,10 +219,10 @@ Should be addressed but don't block deployment.
 python3 --version
 
 # Check file permissions
-chmod +x shannon-plugin/tests/comprehensive_validation.py
+chmod +x tests/comprehensive_validation.py
 
 # Run with verbose output
-python3 -v shannon-plugin/tests/comprehensive_validation.py .
+python3 -v tests/comprehensive_validation.py .
 ```
 
 ### False Positives

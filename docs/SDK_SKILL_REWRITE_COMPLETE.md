@@ -181,17 +181,17 @@ for block in message.content:  # Correct
 - `tests/sdk-examples/*.py` (6 files)
 - `tests/test_shannon_command_execution.py`
 - `tests/debug_*.py` (2 files)
-- `shannon-plugin/commands/test.md`
-- `shannon-plugin/.claude-plugin/plugin.json.backup`
+- `commands/test.md`
+- `.claude-plugin/plugin.json.backup`
 
 **Modified files** (3):
 - `CLAUDE.md` - Added SDK testing section
-- `shannon-plugin/.claude-plugin/plugin.json` - Simplified
+- `.claude-plugin/plugin.json` - Simplified
 - `tests/tier1_verify_analysis.py` - Fixed namespace
 
 **Deleted**:
 - Old incorrect SDK skill (replaced with new one)
-- .bak files from shannon-plugin/commands/
+- .bak files from commands/
 
 ---
 

@@ -5,7 +5,7 @@
   },
   "plugins": [
     {
-      "name": "shannon-plugin",
+      "name": "shannon",
       "source": "./",
       "description": "Shannon Framework for mission-critical AI development"
     }

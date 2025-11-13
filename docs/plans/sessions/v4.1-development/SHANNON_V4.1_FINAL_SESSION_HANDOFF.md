@@ -131,13 +131,13 @@
 - **15 Examples**: Minimal (0.22) → Simple (0.35) → Moderate (0.48) → Complex (0.68) → Critical (0.92)
 - **Specialized**: Frontend-heavy, Backend-heavy, Full-stack, Mobile app, PDF attachment, --mcps flag, --save flag, --deep flag, minimal edge case, timeline conflict
 - **5 Anti-Patterns**: Vague specs, too short, accepting user scores, skipping analysis, missing domains
-- **Integration**: 3 workflows (/sh_spec → /sh_wave, /sh_check_mcps, /sh_analyze)
+- **Integration**: 3 workflows (/shannon:spec → /shannon:wave, /shannon:check_mcps, /shannon:analyze)
 - **Commit**: 797ce10
 
 **2. sh_wave_GUIDE.md** (1,482 lines)
 - **15 Examples**: Basic post-spec, planning mode, dry-run, 2-wave simple, 5-wave complex, dependency chain, partial parallelism, maximum parallelism, token-constrained, mid-wave recovery, dynamic adjustment, existing plan, SITREP protocol, abort & restart, single-wave
-- **5 Anti-Patterns**: Running without /sh_spec, expecting speedup for sequential, skipping checkpoints, sequential spawning, under-allocating agents
-- **Integration**: /sh_spec prerequisite, /sh_checkpoint recovery
+- **5 Anti-Patterns**: Running without /shannon:spec, expecting speedup for sequential, skipping checkpoints, sequential spawning, under-allocating agents
+- **Integration**: /shannon:spec prerequisite, /shannon:checkpoint recovery
 - **Iron Laws**: All 5 documented with enforcement examples
 - **Commit**: d324efc
 
@@ -145,28 +145,28 @@
 - **10 Examples**: Basic manual, custom-labeled, list checkpoints, wave boundary (auto), precompact emergency (auto), milestone, before risky changes, periodic work, comparison, cross-project patterns
 - **3 Anti-Patterns**: Not checkpointing for "quick" tasks, relying only on PreCompact, vague labels
 - **Checkpoint Types**: 5 types (manual, wave, precompact, milestone, safety) with retention policies
-- **Integration**: /sh_checkpoint → /sh_restore, /sh_wave auto-checkpoints
+- **Integration**: /shannon:checkpoint → /shannon:restore, /shannon:wave auto-checkpoints
 - **Commit**: 6581204
 
 **4. sh_restore_GUIDE.md** (~700 lines)
 - **10 Examples**: Auto-restore, specific checkpoint, with goals, verbose, after long break, partial restoration, branch switch, goal-only, precompact emergency, comparison
 - **3 Anti-Patterns**: Assuming checkpoint exists, ignoring restoration report, not verifying Serena
 - **Restoration Quality**: Metrics, validation, recovery options
-- **Integration**: /sh_checkpoint creates, /shannon:prime uses
+- **Integration**: /shannon:checkpoint creates, /shannon:prime uses
 - **Commit**: e00aa5f
 
 **5. sh_test_GUIDE.md** (~1,100 lines)
 - **12 Examples**: Discover all, specific test, platform override, create scaffold, NO MOCKS detection, mobile test, API test, database test, coverage report, validation, multi-platform, performance benchmarks
 - **3 Anti-Patterns**: Using mocks, in-memory database, no cleanup
 - **NO MOCKS Enforcement**: 13 patterns detected by post_tool_use.py hook
-- **Integration**: /sh_spec → /sh_test, /sh_wave includes testing
+- **Integration**: /shannon:spec → /shannon:test, /shannon:wave includes testing
 - **Commit**: e00aa5f
 
 **Consolidated Reference** (3 commands):
 
 **6-8. FINAL_THREE_COMMANDS_REFERENCE.md** (1,100 lines)
-- **/sh_analyze**: 10 examples (full project, component, deep, comparison, architecture, frameworks, dependencies, tests, performance, historical)
-- **/sh_check_mcps**: 10 examples (health check, project-specific, install guide, interactive fix, filtering, critical only, monitoring, fallbacks, priority, validation)
+- **/shannon:analyze**: 10 examples (full project, component, deep, comparison, architecture, frameworks, dependencies, tests, performance, historical)
+- **/shannon:check_mcps**: 10 examples (health check, project-specific, install guide, interactive fix, filtering, critical only, monitoring, fallbacks, priority, validation)
 - **/shannon:prime**: 10 examples (fresh, resume, deep, force fresh, filter, verify, specific checkpoint, goals, minimal, diagnostic)
 - **9 Anti-Patterns Total**: Across all 3 commands
 - **Integration Matrix**: 8 cross-command data flows
@@ -198,9 +198,9 @@
 ```
 1bd8900 docs(commands): add consolidated reference for final 3 commands
 e00aa5f docs(commands): add sh_restore and sh_test guides
-6581204 docs(commands): add /sh_checkpoint guide
-d324efc docs(commands): add /sh_wave guide
-797ce10 docs(commands): add /sh_spec guide
+6581204 docs(commands): add /shannon:checkpoint guide
+d324efc docs(commands): add /shannon:wave guide
+797ce10 docs(commands): add /shannon:spec guide
 661fc96 docs: restore and enhance root README
 789083c docs(hooks): create comprehensive hook system documentation
 17488b3 docs: create Shannon system architecture synthesis
@@ -284,13 +284,13 @@ All agents (TEST_GUARDIAN, WAVE_COORDINATOR) subject to hook enforcement
 - Integration Workflows: 12 cross-command flows
 
 **Coverage**:
-- /sh_spec: Specification analysis (15 examples)
-- /sh_wave: Wave execution (15 examples)
-- /sh_checkpoint: Session checkpointing (10 examples)
-- /sh_restore: Context restoration (10 examples)
-- /sh_test: NO MOCKS testing (12 examples)
-- /sh_analyze: Codebase analysis (10 examples)
-- /sh_check_mcps: MCP verification (10 examples)
+- /shannon:spec: Specification analysis (15 examples)
+- /shannon:wave: Wave execution (15 examples)
+- /shannon:checkpoint: Session checkpointing (10 examples)
+- /shannon:restore: Context restoration (10 examples)
+- /shannon:test: NO MOCKS testing (12 examples)
+- /shannon:analyze: Codebase analysis (10 examples)
+- /shannon:check_mcps: MCP verification (10 examples)
 - /shannon:prime: Unified priming (10 examples)
 
 ### 4. Hook System Explained
@@ -392,7 +392,7 @@ All agents (TEST_GUARDIAN, WAVE_COORDINATOR) subject to hook enforcement
 
 **Example**:
 ```
-/sh_wave (command)
+/shannon:wave (command)
   ↓
 wave-orchestration (skill) - defines algorithm
   ↓

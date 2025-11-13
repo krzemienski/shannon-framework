@@ -144,7 +144,7 @@ stop.py executes (timeout: 2s)
    - Any pending critical work?
    ↓
    IF mid-wave without synthesis:
-      → Warning: "Wave [N] incomplete - recommend /sh_checkpoint before exiting"
+      → Warning: "Wave [N] incomplete - recommend /shannon:checkpoint before exiting"
       → Allow exit (warning only)
    ELSE:
       → Clean exit allowed
@@ -286,7 +286,7 @@ test_indicators = [
 1. Remove all mock usage
 2. Implement functional test using Puppeteer MCP (real browser)
 
-**Quick Start**: Run /sh_check_mcps to verify Puppeteer configured
+**Quick Start**: Run /shannon:check_mcps to verify Puppeteer configured
 ```
 
 **Integration**:
@@ -382,7 +382,7 @@ Auto-compaction proceeds safely
 **Troubleshooting**:
 - **Logs**: ~/.claude/shannon-logs/precompact/
 - **Check Serena**: Verify .serena/ directory exists in project
-- **Test**: Manually trigger with /sh_checkpoint to verify Serena working
+- **Test**: Manually trigger with /shannon:checkpoint to verify Serena working
 
 **Performance**: Generates instructions in <100ms (checkpoint save by Claude takes 10-30s for comprehensive state)
 
@@ -480,8 +480,8 @@ def execute():
                 **Risk**: Progress may be lost without wave synthesis
 
                 **Recommended**:
-                1. Complete wave synthesis: /sh_wave_synthesis
-                2. OR create manual checkpoint: /sh_checkpoint
+                1. Complete wave synthesis: /shannon:wave_synthesis
+                2. OR create manual checkpoint: /shannon:checkpoint
                 3. Then exit safely
 
                 **Allow exit anyway?** (Progress may be incomplete)"
@@ -491,7 +491,7 @@ def execute():
 
 **Integration**:
 - wave-orchestration skill → stop.py (enforces synthesis checkpoint protocol)
-- context-preservation skill → stop.py (recommends /sh_checkpoint)
+- context-preservation skill → stop.py (recommends /shannon:checkpoint)
 
 **User Impact**: Warns before data loss, but doesn't BLOCK exit (user choice)
 
@@ -974,7 +974,7 @@ Retry Write → Hook allows (no mocks) → Success
 
 **Commands don't bypass hooks**:
 ```
-User: /sh_test
+User: /shannon:test
   ↓
 Command invokes functional-testing skill
   ↓

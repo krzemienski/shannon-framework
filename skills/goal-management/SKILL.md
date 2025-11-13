@@ -287,7 +287,7 @@ DO NOT rationalize skipping goal management because:
 
 **Step 5: Check Completion**
 - If progress >= 100: Prompt user to mark complete
-- Display: "Goal appears complete. Run /sh_goal complete {goal_id}?"
+- Display: "Goal appears complete. Run /shannon:goal complete {goal_id}?"
 
 ### Mode: COMPLETE - Mark Goal Complete
 
@@ -623,7 +623,7 @@ def validate_goal_management(goal_id):
 2. Compare: Current features vs original milestone list
 3. Count: New features not in original milestones
 4. Threshold: 2+ additions = scope creep alert
-5. Recommend: "Update goal scope explicitly with /sh_goal update" OR "Split into new goal"
+5. Recommend: "Update goal scope explicitly with /shannon:goal update" OR "Split into new goal"
 
 **Example**:
 - Original Goal: "Build auth system" (1 milestone: email/password)
@@ -836,8 +836,8 @@ How to verify this skill worked correctly:
 
 - Core Documentation: `shannon-plugin/core/PROJECT_MEMORY.md`
 - Related Skills: `@context-preservation`, `@wave-orchestration`, `@phase-planning`
-- MCP Setup: `/sh_check_mcps` for Serena MCP configuration
-- Commands: `/sh_north_star`, `/sh_checkpoint` (both use this skill)
+- MCP Setup: `/shannon:check_mcps` for Serena MCP configuration
+- Commands: `/shannon:north_star`, `/shannon:checkpoint` (both use this skill)
 
 ---
 

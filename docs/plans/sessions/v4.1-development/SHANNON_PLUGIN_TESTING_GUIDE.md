@@ -84,7 +84,7 @@ Should show shannon@shannon in installed plugins.
 
 **Command**:
 ```bash
-/sh_status
+/shannon:status
 ```
 
 **Expected Output**:
@@ -100,7 +100,7 @@ Hooks: 6 active
 Installation: /Users/yourname/projects/shannon-framework
 ```
 
-**If /sh_status not recognized**:
+**If /shannon:status not recognized**:
 - Plugin not loaded → restart Claude Code again
 - Check: /help should list Shannon commands
 
@@ -108,11 +108,11 @@ Installation: /Users/yourname/projects/shannon-framework
 
 ## Command Testing
 
-### Test 1: /sh_spec (Specification Analysis)
+### Test 1: /shannon:spec (Specification Analysis)
 
 **Command**:
 ```bash
-/sh_spec "Build a simple todo app with React frontend, Node.js backend, and PostgreSQL database. Features: add tasks, mark complete, delete tasks, filter by status."
+/shannon:spec "Build a simple todo app with React frontend, Node.js backend, and PostgreSQL database. Features: add tasks, mark complete, delete tasks, filter by status."
 ```
 
 **Expected Behavior**:
@@ -190,7 +190,7 @@ Installation: /Users/yourname/projects/shannon-framework
    Duration: <60 seconds
    Ready for commands
 
-Next: Run /sh_spec to analyze a specification
+Next: Run /shannon:spec to analyze a specification
 ```
 
 **Validation Checks**:
@@ -200,16 +200,16 @@ Next: Run /sh_spec to analyze a specification
 - ✅ Ready for next command
 
 **If Fails**:
-- Check: skill-discovery skill working? (/sh_discover_skills should work)
+- Check: skill-discovery skill working? (/shannon:discover_skills should work)
 - Check: Serena connection? (required for Shannon)
 
 ---
 
-### Test 3: /sh_discover_skills (V4.1 Auto-Discovery)
+### Test 3: /shannon:discover_skills (V4.1 Auto-Discovery)
 
 **Command**:
 ```bash
-/sh_discover_skills
+/shannon:discover_skills
 ```
 
 **Expected Behavior**:
@@ -249,11 +249,11 @@ Next: Run /sh_spec to analyze a specification
 
 ---
 
-### Test 4: /sh_checkpoint (Context Preservation)
+### Test 4: /shannon:checkpoint (Context Preservation)
 
 **Command**:
 ```bash
-/sh_checkpoint "test-checkpoint"
+/shannon:checkpoint "test-checkpoint"
 ```
 
 **Expected Behavior**:
@@ -276,7 +276,7 @@ Next: Run /sh_spec to analyze a specification
    - [Other metadata...]
 
 💾 Storage: Serena MCP
-🔄 Restore: /sh_restore shannon_checkpoint_20251109_HHMMSS
+🔄 Restore: /shannon:restore shannon_checkpoint_20251109_HHMMSS
 ```
 
 **Validation Checks**:
@@ -290,11 +290,11 @@ Next: Run /sh_spec to analyze a specification
 
 ---
 
-### Test 5: /sh_restore (Context Restoration)
+### Test 5: /shannon:restore (Context Restoration)
 
 **Command**:
 ```bash
-/sh_restore shannon_checkpoint_20251109_HHMMSS
+/shannon:restore shannon_checkpoint_20251109_HHMMSS
 ```
 
 (Use checkpoint ID from previous test)
@@ -325,11 +325,11 @@ Next: Run /sh_spec to analyze a specification
 
 ---
 
-### Test 6: /sh_check_mcps (MCP Verification)
+### Test 6: /shannon:check_mcps (MCP Verification)
 
 **Command**:
 ```bash
-/sh_check_mcps
+/shannon:check_mcps
 ```
 
 **Expected Behavior**:
@@ -372,10 +372,10 @@ RECOMMENDED:
 
 **Verification**:
 1. Look for system message about SessionStart hook
-2. Try skipping /sh_spec before implementing → Should get Shannon reminder
+2. Try skipping /shannon:spec before implementing → Should get Shannon reminder
 
 **Expected**:
-Shannon enforces: "Did you run /sh_spec first?" when trying to implement without analysis
+Shannon enforces: "Did you run /shannon:spec first?" when trying to implement without analysis
 
 **If Fails**:
 - Check: hooks/session_start.sh exists and executable?
@@ -461,16 +461,16 @@ Skill("spec-analysis")
 /shannon:prime
 
 # 2. Analyze specification
-/sh_spec "Build contact form with name, email, message. Send to API endpoint."
+/shannon:spec "Build contact form with name, email, message. Send to API endpoint."
 
 # 3. Create checkpoint
-/sh_checkpoint "after-spec-analysis"
+/shannon:checkpoint "after-spec-analysis"
 
 # 4. Verify MCP status
-/sh_check_mcps
+/shannon:check_mcps
 
 # 5. Restore checkpoint
-/sh_restore "after-spec-analysis"
+/shannon:restore "after-spec-analysis"
 ```
 
 **Expected Behavior**:
@@ -489,7 +489,7 @@ Skill("spec-analysis")
 
 ### Issue: Commands Not Found
 
-**Symptoms**: `/sh_spec` shows "Unknown slash command"
+**Symptoms**: `/shannon:spec` shows "Unknown slash command"
 
 **Diagnosis**:
 ```bash
@@ -503,7 +503,7 @@ ls shannon-plugin/commands/ | head -5
 **Resolution**:
 1. Verify plugin installed: `/plugin install shannon@shannon`
 2. Restart Claude Code completely
-3. Verify installation: `/sh_status`
+3. Verify installation: `/shannon:status`
 
 ---
 
@@ -521,7 +521,7 @@ ls shannon-plugin/commands/ | head -5
 1. Install Serena MCP (follow Serena documentation)
 2. Configure in Claude Code settings
 3. Restart Claude Code
-4. Verify: `/sh_check_mcps`
+4. Verify: `/shannon:check_mcps`
 
 ---
 
@@ -532,7 +532,7 @@ ls shannon-plugin/commands/ | head -5
 **Diagnosis**:
 ```bash
 # Test skill discovery
-/sh_discover_skills
+/shannon:discover_skills
 
 # Should find 17 skills
 ```
@@ -540,7 +540,7 @@ ls shannon-plugin/commands/ | head -5
 **Resolution**:
 1. Check shannon-plugin/skills/ directory structure
 2. Verify SKILL.md files have YAML frontmatter
-3. Refresh skill cache: `/sh_discover_skills --refresh`
+3. Refresh skill cache: `/shannon:discover_skills --refresh`
 
 ---
 
@@ -569,19 +569,19 @@ ls -la shannon-plugin/hooks/*.py shannon-plugin/hooks/*.sh
 After installation and testing, verify all components:
 
 ### Commands (11 core + 2 V4.1)
-- [ ] /sh_spec works (analyzes specifications)
-- [ ] /sh_wave works (if complexity >=0.50)
-- [ ] /sh_checkpoint works (creates checkpoints)
-- [ ] /sh_restore works (restores from checkpoints)
-- [ ] /sh_status works (shows Shannon status)
-- [ ] /sh_check_mcps works (verifies MCPs)
-- [ ] /sh_analyze works (analyzes codebase)
-- [ ] /sh_test works (generates functional tests)
-- [ ] /sh_memory works (manages Serena memories)
-- [ ] /sh_north_star works (manages goals)
-- [ ] /sh_scaffold works (generates scaffolding)
+- [ ] /shannon:spec works (analyzes specifications)
+- [ ] /shannon:wave works (if complexity >=0.50)
+- [ ] /shannon:checkpoint works (creates checkpoints)
+- [ ] /shannon:restore works (restores from checkpoints)
+- [ ] /shannon:status works (shows Shannon status)
+- [ ] /shannon:check_mcps works (verifies MCPs)
+- [ ] /shannon:analyze works (analyzes codebase)
+- [ ] /shannon:test works (generates functional tests)
+- [ ] /shannon:memory works (manages Serena memories)
+- [ ] /shannon:north_star works (manages goals)
+- [ ] /shannon:scaffold works (generates scaffolding)
 - [ ] /shannon:prime works (V4.1 - unified priming)
-- [ ] /sh_discover_skills works (V4.1 - skill discovery)
+- [ ] /shannon:discover_skills works (V4.1 - skill discovery)
 
 ### Skills (17 total)
 - [ ] spec-analysis invokes correctly
@@ -636,12 +636,12 @@ Shannon Framework V4.1.0: FULLY OPERATIONAL
 | Command | Expected Duration | Acceptable Range |
 |---------|------------------|------------------|
 | /shannon:prime | 30-60s | <90s |
-| /sh_spec (small spec) | 30-60s | <2min |
-| /sh_spec (large spec) | 1-3min | <8min |
-| /sh_discover_skills | <100ms (cached) | <500ms |
-| /sh_checkpoint | 5-10s | <30s |
-| /sh_restore | 10-20s | <60s |
-| /sh_check_mcps | 5-10s | <30s |
+| /shannon:spec (small spec) | 30-60s | <2min |
+| /shannon:spec (large spec) | 1-3min | <8min |
+| /shannon:discover_skills | <100ms (cached) | <500ms |
+| /shannon:checkpoint | 5-10s | <30s |
+| /shannon:restore | 10-20s | <60s |
+| /shannon:check_mcps | 5-10s | <30s |
 
 **If Performance Outside Acceptable Range**:
 - Check: Serena MCP performance (slow database?)
@@ -657,8 +657,8 @@ Shannon Framework V4.1.0: FULLY OPERATIONAL
 When testing Shannon, collect evidence:
 
 **1. Screenshots**:
-- `/sh_status` output
-- `/sh_spec` analysis results
+- `/shannon:status` output
+- `/shannon:spec` analysis results
 - `/shannon:prime` readiness report
 - Any error messages
 
@@ -678,7 +678,7 @@ When testing Shannon, collect evidence:
 
 **5. Performance Metrics**:
 - Time for /shannon:prime to complete
-- Time for /sh_spec analysis
+- Time for /shannon:spec analysis
 - Token usage if measurable
 
 ---
@@ -706,7 +706,7 @@ When testing Shannon, collect evidence:
    - Label: bug, testing
 
 **Example Issue Title**:
-- "[Commands] /sh_spec not recognized after installation"
+- "[Commands] /shannon:spec not recognized after installation"
 - "[Hooks] PostToolUse hook not blocking mock usage"
 - "[Skills] spec-analysis skill not loading"
 
@@ -717,11 +717,11 @@ When testing Shannon, collect evidence:
 Shannon plugin is working correctly if:
 
 ✅ **All 13 commands recognized** and execute
-✅ **17 skills discovered** via /sh_discover_skills
+✅ **17 skills discovered** via /shannon:discover_skills
 ✅ **Serena MCP connected** (mandatory)
 ✅ **Hooks firing correctly** (SessionStart, PostToolUse at minimum)
 ✅ **/shannon:prime completes** in <60 seconds
-✅ **/sh_spec produces** 8D analysis with domain percentages
+✅ **/shannon:spec produces** 8D analysis with domain percentages
 ✅ **Checkpoints save and restore** successfully
 
 **If ANY of above fail**: Shannon is not fully operational, needs troubleshooting
@@ -736,12 +736,12 @@ Shannon plugin is working correctly if:
 
 **Commands**:
 ```bash
-/sh_spec "Build e-commerce platform with products, cart, checkout, orders, admin, analytics..."
+/shannon:spec "Build e-commerce platform with products, cart, checkout, orders, admin, analytics..."
 
 # Should recommend wave-based execution
 
-/sh_wave --plan  # Generate wave plan
-/sh_wave         # Execute waves (requires user interaction for synthesis)
+/shannon:wave --plan  # Generate wave plan
+/shannon:wave         # Execute waves (requires user interaction for synthesis)
 ```
 
 **Expected**: Wave structure generated, WAVE_COORDINATOR agent activates
@@ -768,8 +768,8 @@ What do you do?
 
 **Minimum Viable Testing**:
 1. Install Shannon
-2. Run /sh_status (verify)
-3. Run /sh_spec (test core functionality)
+2. Run /shannon:status (verify)
+3. Run /shannon:spec (test core functionality)
 4. Run /shannon:prime (test V4.1 feature)
 5. Check Serena MCP (verify integration)
 

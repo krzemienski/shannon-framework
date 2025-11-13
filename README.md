@@ -136,7 +136,7 @@ Mission-critical domains where AI hallucinations are unacceptable:
 
 **Verification**:
 ```bash
-/sh_status
+/shannon:status
 
 # Expected output:
 # 🎯 Shannon Framework V4.1.0
@@ -170,7 +170,7 @@ cd shannon-framework
 
 **Verification**:
 ```bash
-/sh_status
+/shannon:status
 
 # Should show:
 # Shannon Framework V4.1.0 ✅
@@ -189,7 +189,7 @@ cd shannon-framework
 # Restart Claude Code to load changes
 
 # Test changes:
-/sh_status
+/shannon:status
 /your_new_command  # Test your additions
 ```
 
@@ -236,7 +236,7 @@ Completely quit and restart Claude Code for MCP configuration to take effect.
 
 **Step 3: Verify Connection**
 ```bash
-/sh_check_mcps
+/shannon:check_mcps
 
 # Expected:
 # ✅ Serena MCP - Connected
@@ -246,8 +246,8 @@ Completely quit and restart Claude Code for MCP configuration to take effect.
 
 **Step 4: Test Checkpoint**
 ```bash
-/sh_checkpoint "test-checkpoint"
-/sh_restore "test-checkpoint"
+/shannon:checkpoint "test-checkpoint"
+/shannon:restore "test-checkpoint"
 
 # If successful: Serena MCP properly configured
 ```
@@ -302,7 +302,7 @@ Shannon requires and recommends several MCP servers for full functionality. This
 **Health Check**:
 ```bash
 # In Claude Code:
-/sh_check_mcps
+/shannon:check_mcps
 
 # Expected:
 # ✅ Serena MCP - Connected
@@ -322,7 +322,7 @@ Shannon requires and recommends several MCP servers for full functionality. This
 **Purpose**: Enhanced multi-step reasoning with 100-500 thought chains for complex analysis
 **Package**: @modelcontextprotocol/server-sequential-thinking
 **Shannon Requirement**: **RECOMMENDED** - Required for deep analysis, V4.1 FORCED_READING_PROTOCOL synthesis
-**Used by**: /sh_spec --deep, /sh_analyze --deep, FORCED_READING_PROTOCOL (200+ thoughts)
+**Used by**: /shannon:spec --deep, /shannon:analyze --deep, FORCED_READING_PROTOCOL (200+ thoughts)
 
 **Installation**:
 
@@ -365,7 +365,7 @@ Restart Claude Code completely.
 **Purpose**: Real browser automation for functional testing (Shannon's NO MOCKS philosophy)
 **Package**: @modelcontextprotocol/server-puppeteer
 **Shannon Requirement**: **RECOMMENDED** - Required for NO MOCKS web functional testing
-**Used by**: /sh_test, TEST_GUARDIAN agent, functional-testing skill
+**Used by**: /shannon:test, TEST_GUARDIAN agent, functional-testing skill
 
 **Installation**:
 
@@ -394,7 +394,7 @@ Restart Claude Code completely.
 **Health Check**:
 ```bash
 # Shannon will report:
-/sh_check_mcps
+/shannon:check_mcps
 
 # Should show:
 # ✅ Puppeteer MCP - Connected
@@ -554,7 +554,7 @@ These MCPs enhance specific workflows but are not required for Shannon core func
 **After configuration**:
 1. Save file
 2. Restart Claude Code completely
-3. Verify: `/sh_check_mcps` should show all 4 connected
+3. Verify: `/shannon:check_mcps` should show all 4 connected
 
 ---
 
@@ -562,7 +562,7 @@ These MCPs enhance specific workflows but are not required for Shannon core func
 
 **Step 1: Check Shannon Status**
 ```bash
-/sh_status
+/shannon:status
 ```
 
 **Expected Output**:
@@ -590,7 +590,7 @@ Ready for specification-driven development
 **Step 2: Test Core Commands**
 ```bash
 # Test specification analysis:
-/sh_spec "Build a simple web form with email validation"
+/shannon:spec "Build a simple web form with email validation"
 
 # Should output:
 # - Complexity score (e.g., 0.30 SIMPLE)
@@ -599,7 +599,7 @@ Ready for specification-driven development
 # - MCP recommendations
 
 # Test skill discovery (V4.1 NEW):
-/sh_discover_skills
+/shannon:discover_skills
 
 # Should output:
 # - Total skills found (typically 104+)
@@ -613,7 +613,7 @@ Ready for specification-driven development
 
 **Step 3: Verify MCP Connections**
 ```bash
-/sh_check_mcps
+/shannon:check_mcps
 ```
 
 **Expected Output**:
@@ -651,7 +651,7 @@ Shannon requires ONLY Serena MCP. Others enhance functionality.
 
 ```bash
 # Analyze a specification:
-/sh_spec "Build a task management web app with React, Node.js, and PostgreSQL"
+/shannon:spec "Build a task management web app with React, Node.js, and PostgreSQL"
 
 # Shannon outputs:
 # 📊 Complexity: 0.58 (COMPLEX)
@@ -709,7 +709,7 @@ Shannon requires ONLY Serena MCP. Others enhance functionality.
 # - Fast session resumption configured
 
 # Discover available skills (Enhancement #2):
-/sh_discover_skills
+/shannon:discover_skills
 
 # Output:
 # 📚 Skill Discovery Complete
@@ -735,7 +735,7 @@ Shannon requires ONLY Serena MCP. Others enhance functionality.
 # For projects with complexity <0.50 (Simple to Moderate):
 
 # 1. Analyze specification
-/sh_spec "Build contact form with name, email, message, validation. Send to API endpoint. Show success/error messages."
+/shannon:spec "Build contact form with name, email, message, validation. Send to API endpoint. Show success/error messages."
 
 # Output: Complexity 0.35 (SIMPLE)
 # Recommendation: Direct implementation (no waves needed)
@@ -744,7 +744,7 @@ Shannon requires ONLY Serena MCP. Others enhance functionality.
 # [Implement React form, validation, API integration]
 
 # 3. Generate functional tests
-/sh_test --create --platform web --feature "contact form"
+/shannon:test --create --platform web --feature "contact form"
 
 # Shannon generates:
 # - Puppeteer test (real browser, NO MOCKS)
@@ -766,14 +766,14 @@ npm test
 /shannon:prime
 
 # 2. Analyze specification
-/sh_spec "Build e-commerce platform with products, cart, checkout, orders, inventory, admin, analytics"
+/shannon:spec "Build e-commerce platform with products, cart, checkout, orders, inventory, admin, analytics"
 
 # Output: Complexity 0.75 (VERY COMPLEX)
 # Recommendation: 4 waves
 # Timeline: 4-8 weeks
 
 # 3. Set North Star goal
-/sh_north_star "Process $10k revenue within first month"
+/shannon:north_star "Process $10k revenue within first month"
 
 # 4. Review wave structure
 # Wave 1: Commerce core (products, cart, checkout)
@@ -782,26 +782,26 @@ npm test
 # Wave 4: Optimization (performance, deployment)
 
 # 5. Create initial checkpoint
-/sh_checkpoint "project-start"
+/shannon:checkpoint "project-start"
 
 # 6. Execute waves
-/sh_wave 1 --plan  # Review before executing
-/sh_wave 1         # Execute Wave 1
-/sh_checkpoint "wave-1-complete"
+/shannon:wave 1 --plan  # Review before executing
+/shannon:wave 1         # Execute Wave 1
+/shannon:checkpoint "wave-1-complete"
 
-/sh_wave 2
-/sh_checkpoint "wave-2-complete"
+/shannon:wave 2
+/shannon:checkpoint "wave-2-complete"
 
 # If context compaction occurs:
 # PreCompact hook auto-saves checkpoint
 # Resume with: /shannon:prime --resume
 
 # 7. Continue remaining waves
-/sh_wave 3
-/sh_wave 4
+/shannon:wave 3
+/shannon:wave 4
 
 # 8. Final production checkpoint
-/sh_checkpoint "production-ready"
+/shannon:checkpoint "production-ready"
 ```
 
 ---
@@ -991,14 +991,14 @@ Full context restored (100% - zero information loss)
 **Manual Checkpoints**:
 ```bash
 # Before major milestones:
-/sh_checkpoint "wave-2-complete"
-/sh_checkpoint "mvp-launch"
+/shannon:checkpoint "wave-2-complete"
+/shannon:checkpoint "mvp-launch"
 
 # After risky changes:
-/sh_checkpoint "before-refactor"
+/shannon:checkpoint "before-refactor"
 
 # Periodic (every 2-3 hours):
-/sh_checkpoint "end-of-day"
+/shannon:checkpoint "end-of-day"
 ```
 
 **Restoration**:
@@ -1007,10 +1007,10 @@ Full context restored (100% - zero information loss)
 /shannon:prime --resume
 
 # Restore specific:
-/sh_restore "mvp-launch"
+/shannon:restore "mvp-launch"
 
 # List available:
-/sh_checkpoint --list
+/shannon:checkpoint --list
 ```
 
 ---
@@ -1024,7 +1024,7 @@ Shannon operates as 6-layer behavioral framework:
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    LAYER 1: USER INTERFACE                  │
-│  Commands: /sh_spec, /sh_wave, /sh_test, /shannon:prime    │
+│  Commands: /shannon:spec, /shannon:wave, /shannon:test, /shannon:prime    │
 │  Purpose: User-facing entry points for Shannon workflows   │
 └───────────────────────────┬─────────────────────────────────┘
                             ↓
@@ -1069,11 +1069,11 @@ Shannon operates as 6-layer behavioral framework:
 └─────────────────────────────────────────────────────────────┘
 ```
 
-**Data Flow Example** (/sh_spec execution):
+**Data Flow Example** (/shannon:spec execution):
 ```
-1. USER types: /sh_spec "Build auth system"
+1. USER types: /shannon:spec "Build auth system"
 2. ENFORCEMENT: session_start hook ensures using-shannon loaded (Iron Laws active)
-3. COMMAND: /sh_spec validates input, checks for forced reading trigger
+3. COMMAND: /shannon:spec validates input, checks for forced reading trigger
 4. ORCHESTRATION: Command invokes spec-analysis skill (auto via COMMAND_SKILL_MAP)
 5. SPECIALIST: spec-analysis calculates 8D score, detects domains, recommends MCPs
 6. INFRASTRUCTURE: Serena MCP saves results (write_memory("spec_analysis_{id}", ...))
@@ -1086,8 +1086,8 @@ Shannon operates as 6-layer behavioral framework:
 ### Component Architecture
 
 **14 Commands** (commands/):
-- **Shannon Core** (11): /sh_spec, /sh_wave, /sh_checkpoint, /sh_restore, /sh_status, /sh_check_mcps, /sh_memory, /sh_north_star, /sh_analyze, /sh_test, /sh_scaffold
-- **V4.1 NEW** (3): /sh_discover_skills, /sh_reflect, /shannon:prime
+- **Shannon Core** (11): /shannon:spec, /shannon:wave, /shannon:checkpoint, /shannon:restore, /shannon:status, /shannon:check_mcps, /shannon:memory, /shannon:north_star, /shannon:analyze, /shannon:test, /shannon:scaffold
+- **V4.1 NEW** (3): /shannon:discover_skills, /shannon:reflect, /shannon:prime
 
 **17 Skills** (skills/):
 - **Core**: spec-analysis (1,544L), wave-orchestration (1,581L), phase-planning (1,182L)
@@ -1127,10 +1127,10 @@ Shannon operates as 6-layer behavioral framework:
 
 ### Data Flow Architecture
 
-**Typical /sh_spec Flow**:
+**Typical /shannon:spec Flow**:
 ```
 1. User Input:
-   /sh_spec "Build e-commerce platform"
+   /shannon:spec "Build e-commerce platform"
 
 2. Command Layer (sh_spec.md):
    - Validates input (minimum 20 words)
@@ -1185,7 +1185,7 @@ Shannon operates as 6-layer behavioral framework:
 ```
 Agent needs to read critical file
 ↓
-FORCED_READING_PROTOCOL activated (via /sh_spec, /sh_analyze, /sh_wave)
+FORCED_READING_PROTOCOL activated (via /shannon:spec, /shannon:analyze, /shannon:wave)
 ↓
 Step 1: PRE-COUNT
 ├─ Count total lines: wc -l returns 2,000
@@ -1222,7 +1222,7 @@ Step 4: SEQUENTIAL SYNTHESIS
 
 **How It Works**:
 ```
-Session Start or /sh_discover_skills
+Session Start or /shannon:discover_skills
 ↓
 Step 1: SCAN DIRECTORIES
 ├─ Project: ./skills/*/SKILL.md
@@ -1260,10 +1260,10 @@ Step 5: COMPLIANCE VERIFICATION
 
 **Example**:
 ```
-User: /sh_spec "Build authentication system"
+User: /shannon:spec "Build authentication system"
 
 skill-discovery calculates:
-  spec-analysis: confidence 0.85 (trigger match: "system", command: /sh_spec)
+  spec-analysis: confidence 0.85 (trigger match: "system", command: /shannon:spec)
   mcp-discovery: confidence 0.72 (context: "authentication")
   confidence-check: confidence 0.65 (below 0.70 threshold)
 
@@ -1287,9 +1287,9 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 **Old Workflow**:
 ```bash
 # Pre-V4.1 manual priming (15-20 minutes):
-/sh_discover_skills          # 3-4 min (scan + parse skills)
-/sh_check_mcps              # 2-3 min (verify MCP connections)
-/sh_restore latest-checkpoint  # 5-8 min (load checkpoint, restore state)
+/shannon:discover_skills          # 3-4 min (scan + parse skills)
+/shannon:check_mcps              # 2-3 min (verify MCP connections)
+/shannon:restore latest-checkpoint  # 5-8 min (load checkpoint, restore state)
 /list_memories              # 1-2 min (list Serena memories)
 /read_memory spec_analysis  # 1-2 min (load specification)
 /read_memory phase_plan     # 1-2 min (load phase plan)
@@ -1304,9 +1304,9 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 
 # Executes 8 steps automatically:
 # 1. Mode Detection: Auto-detect fresh vs resume (checks for checkpoints <24h)
-# 2. Skill Inventory: Run /sh_discover_skills (Enhancement #2, finds 104 skills)
+# 2. Skill Inventory: Run /shannon:discover_skills (Enhancement #2, finds 104 skills)
 # 3. MCP Verification: Check Serena (required), Sequential, Context7, Puppeteer
-# 4. Context Restoration: If resume, run /sh_restore {latest_checkpoint}
+# 4. Context Restoration: If resume, run /shannon:restore {latest_checkpoint}
 # 5. Memory Loading: Load relevant Serena memories (spec, plan, progress - 8-15 keys)
 # 6. Spec/Plan Restoration: Restore specification ID, current phase, next actions
 # 7. Thinking Preparation: Prepare Sequential MCP for deep analysis if available
@@ -1331,11 +1331,11 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 
 ## Commands Reference
 
-### Shannon Core Commands (11)
+### Shannon Core Commands (12)
 
-#### /sh_spec
+#### /shannon:spec
 **Purpose**: Analyze specification using 8D complexity framework
-**Syntax**: `/sh_spec "specification text" [--mcps] [--save] [--deep]`
+**Syntax**: `/shannon:spec "specification text" [--mcps] [--save] [--deep]`
 **Invokes**: spec-analysis skill (primary), confidence-check, mcp-discovery
 **Output**: Complexity score (0.0-1.0), 8D breakdown, domain percentages, MCP recommendations, 5-phase plan, timeline estimate
 
@@ -1346,7 +1346,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 
 **Example**:
 ```bash
-/sh_spec "Build REST API with auth, CRUD operations for users/products, PostgreSQL database, JWT tokens, rate limiting"
+/shannon:spec "Build REST API with auth, CRUD operations for users/products, PostgreSQL database, JWT tokens, rate limiting"
 
 # Output:
 # Complexity: 0.52 (COMPLEX)
@@ -1355,11 +1355,11 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 # Timeline: 5-7 days
 ```
 
-**See**: commands/guides/sh_spec_GUIDE.md (15 comprehensive examples)
+**See**: commands/guides/shannon:spec_GUIDE.md (15 comprehensive examples)
 
-#### /sh_wave
+#### /shannon:wave
 **Purpose**: Execute wave-based development with parallel agent coordination
-**Syntax**: `/sh_wave [wave_number] [--plan] [--dry-run] [--resume]`
+**Syntax**: `/shannon:wave [wave_number] [--plan] [--dry-run] [--resume]`
 **Invokes**: wave-orchestration skill, context-preservation (checkpoints)
 **Agent**: Activates WAVE_COORDINATOR for parallel execution
 
@@ -1370,7 +1370,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 
 **Example**:
 ```bash
-/sh_wave 1
+/shannon:wave 1
 
 # WAVE_COORDINATOR spawns agents in parallel:
 # - FRONTEND (React components)
@@ -1380,34 +1380,34 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 # Parallel execution: 5h vs 15h sequential = 3x speedup
 ```
 
-**See**: commands/guides/sh_wave_GUIDE.md (15 comprehensive examples)
+**See**: commands/guides/shannon:wave_GUIDE.md (15 comprehensive examples)
 
-#### /sh_checkpoint
+#### /shannon:checkpoint
 **Purpose**: Create comprehensive checkpoint of session state
-**Syntax**: `/sh_checkpoint ["checkpoint-label"] [--list] [--load checkpoint_id]`
+**Syntax**: `/shannon:checkpoint ["checkpoint-label"] [--list] [--load checkpoint_id]`
 **Invokes**: context-preservation skill
 **Storage**: Serena MCP
 
 **Usage**:
 ```bash
 # Auto-labeled:
-/sh_checkpoint
+/shannon:checkpoint
 
 # Custom label:
-/sh_checkpoint "mvp-complete"
+/shannon:checkpoint "mvp-complete"
 
 # List available:
-/sh_checkpoint --list
+/shannon:checkpoint --list
 
 # Load specific:
-/sh_checkpoint --load shannon_checkpoint_20251108
+/shannon:checkpoint --load shannon_checkpoint_20251108
 ```
 
-**See**: commands/guides/sh_checkpoint_GUIDE.md (10 comprehensive examples)
+**See**: commands/guides/shannon:checkpoint_GUIDE.md (10 comprehensive examples)
 
-#### /sh_restore
+#### /shannon:restore
 **Purpose**: Restore complete project state from checkpoint
-**Syntax**: `/sh_restore [checkpoint_id] [--goals] [--verbose]`
+**Syntax**: `/shannon:restore [checkpoint_id] [--goals] [--verbose]`
 **Invokes**: context-restoration skill
 
 **Flags**:
@@ -1417,20 +1417,20 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 **Example**:
 ```bash
 # Auto-restore latest:
-/sh_restore
+/shannon:restore
 
 # Restore specific:
-/sh_restore shannon_checkpoint_20251107
+/shannon:restore shannon_checkpoint_20251107
 
 # With goals:
-/sh_restore --goals
+/shannon:restore --goals
 ```
 
-**See**: commands/guides/sh_restore_GUIDE.md (10 comprehensive examples)
+**See**: commands/guides/shannon:restore_GUIDE.md (10 comprehensive examples)
 
-#### /sh_test
+#### /shannon:test
 **Purpose**: NO MOCKS functional testing orchestration
-**Syntax**: `/sh_test [test_path] [--platform web|mobile|api|database] [--create] [--validate]`
+**Syntax**: `/shannon:test [test_path] [--platform web|mobile|api|database] [--create] [--validate]`
 **Invokes**: functional-testing skill
 **Agent**: TEST_GUARDIAN for test generation
 
@@ -1442,46 +1442,46 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 **Example**:
 ```bash
 # Discover all tests:
-/sh_test
+/shannon:test
 
 # Run specific:
-/sh_test tests/functional/auth.spec.ts
+/shannon:test tests/functional/auth.spec.ts
 
 # Create new:
-/sh_test --create checkout-flow --platform web
+/shannon:test --create checkout-flow --platform web
 
 # Validate compliance:
-/sh_test --validate
+/shannon:test --validate
 ```
 
-**See**: commands/guides/sh_test_GUIDE.md (12 comprehensive examples)
+**See**: commands/guides/shannon:test_GUIDE.md (12 comprehensive examples)
 
-#### /sh_analyze
+#### /shannon:analyze
 **Purpose**: Shannon-aware codebase analysis with complexity assessment
-**Syntax**: `/sh_analyze [component] [--deep] [--confidence]`
+**Syntax**: `/shannon:analyze [component] [--deep] [--confidence]`
 **Invokes**: shannon-analysis skill (orchestrator), project-indexing, confidence-check
 
 **Example**:
 ```bash
 # Full project:
-/sh_analyze
+/shannon:analyze
 
 # Specific component:
-/sh_analyze authentication
+/shannon:analyze authentication
 
 # With confidence check:
-/sh_analyze --confidence
+/shannon:analyze --confidence
 ```
 
 **See**: commands/guides/FINAL_THREE_COMMANDS_REFERENCE.md
 
-#### /sh_status
+#### /shannon:status
 **Purpose**: Display Shannon framework status and health
-**Syntax**: `/sh_status [--mcps] [--goals] [--verbose]`
+**Syntax**: `/shannon:status [--mcps] [--goals] [--verbose]`
 
 **Example**:
 ```bash
-/sh_status
+/shannon:status
 
 # Output:
 # 🎯 Shannon Framework V4.1.0
@@ -1491,14 +1491,14 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 # North Star: "Launch Q1 2025" (75% progress)
 ```
 
-#### /sh_check_mcps
+#### /shannon:check_mcps
 **Purpose**: Verify MCP server configuration and health
-**Syntax**: `/sh_check_mcps [--install-guide] [--fix]`
+**Syntax**: `/shannon:check_mcps [--install-guide] [--fix]`
 **Invokes**: mcp-discovery skill
 
 **Example**:
 ```bash
-/sh_check_mcps
+/shannon:check_mcps
 
 # Output:
 # REQUIRED:
@@ -1511,48 +1511,83 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 
 **See**: commands/guides/FINAL_THREE_COMMANDS_REFERENCE.md
 
-#### /sh_memory
+#### /shannon:memory
 **Purpose**: Manage Serena MCP memories
-**Syntax**: `/sh_memory [--list|--search <query>|--pattern <name>]`
+**Syntax**: `/shannon:memory [--list|--search <query>|--pattern <name>]`
 
 **Example**:
 ```bash
 # List all:
-/sh_memory --list
+/shannon:memory --list
 
 # Search:
-/sh_memory --search "authentication"
+/shannon:memory --search "authentication"
 
 # Pattern analysis:
-/sh_memory --pattern wave-execution
+/shannon:memory --pattern wave-execution
 ```
 
-#### /sh_north_star
+#### /shannon:north_star
 **Purpose**: Set and manage project North Star goal
-**Syntax**: `/sh_north_star "goal description" [--update] [--history]`
+**Syntax**: `/shannon:north_star "goal description" [--update] [--history]`
 **Invokes**: goal-management skill
 
 **Example**:
 ```bash
-/sh_north_star "Launch MVP to 100 beta users by Q1 2025"
+/shannon:north_star "Launch MVP to 100 beta users by Q1 2025"
 
 # Progress updates automatically via goal-management
 ```
 
-#### /sh_scaffold
+#### /shannon:scaffold
 **Purpose**: Generate Shannon-optimized project scaffolding
-**Syntax**: `/sh_scaffold <framework> [--template <name>]`
+**Syntax**: `/shannon:scaffold <framework> [--template <name>]`
 
 **Example**:
 ```bash
-/sh_scaffold react --template dashboard
+/shannon:scaffold react --template dashboard
 ```
 
-### V4.1 NEW Commands (3)
+### V4.1 NEW Commands (4)
 
-#### /sh_discover_skills ⭐
+#### /shannon:task ⭐ NEW
+**Purpose**: Automated spec → wave → prime workflow for complete task execution
+**Syntax**: `/shannon:task "specification" [--auto] [--plan-only]`
+**Invokes**: /shannon:spec → /shannon:wave → /shannon:prime (orchestrated)
+
+**Workflow**: One-command automation from specification to ready-to-develop state
+
+**Flags**:
+- `--auto`: Fully automated (no prompts, execute all waves)
+- `--plan-only`: Generate plan without executing
+
+**Example**:
+```bash
+# Interactive mode (recommended):
+/shannon:task "Build REST API with authentication and CRUD operations"
+
+# Automated mode:
+/shannon:task "Build login form with validation" --auto
+
+# Planning mode:
+/shannon:task "Build microservices architecture" --plan-only
+```
+
+**What happens**:
+1. Runs `/shannon:spec` → analyzes complexity
+2. Shows results, asks to proceed
+3. Runs `/shannon:wave` → executes implementation
+4. Asks between waves → user controls flow
+5. Runs `/shannon:prime` → prepares session
+6. Complete → ready for development
+
+**Performance**: Eliminates manual command coordination, auto-manages checkpoints
+
+**See**: commands/task.md for complete documentation
+
+#### /shannon:discover_skills ⭐
 **Purpose**: Auto-discover all available skills on system
-**Syntax**: `/sh_discover_skills [--cache|--refresh|--filter <pattern>]`
+**Syntax**: `/shannon:discover_skills [--cache|--refresh|--filter <pattern>]`
 **Invokes**: skill-discovery skill (V4.1)
 
 **Flags**:
@@ -1563,7 +1598,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 **Example**:
 ```bash
 # Discover all:
-/sh_discover_skills
+/shannon:discover_skills
 
 # Output:
 # 📚 Skill Discovery Complete
@@ -1573,7 +1608,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 # └─ Plugin: 0
 
 # Search specific:
-/sh_discover_skills --filter authentication
+/shannon:discover_skills --filter authentication
 
 # Output:
 # Found 3 skills matching "authentication":
@@ -1611,15 +1646,15 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 
 **See**: commands/guides/FINAL_THREE_COMMANDS_REFERENCE.md
 
-#### /sh_reflect ⭐
+#### /shannon:reflect ⭐
 **Purpose**: Honest gap analysis before claiming work complete
-**Syntax**: `/sh_reflect [--scope plan|project|session] [--min-thoughts 100]`
+**Syntax**: `/shannon:reflect [--scope plan|project|session] [--min-thoughts 100]`
 **Invokes**: honest-reflections skill (NEW)
 
 **Example**:
 ```bash
 # Before declaring "complete":
-/sh_reflect
+/shannon:reflect
 
 # Performs 100+ sequential thoughts:
 # - Compares plan vs delivery
@@ -1664,7 +1699,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 - **Purpose**: Checkpoint creation with comprehensive state capture
 - **Process**: Collect project metadata → Build checkpoint structure (11 sections) → Save to Serena MCP → Verify save
 - **Outputs**: Checkpoint ID for restoration, size in KB, expiration date
-- **Integration**: Automatic via PreCompact hook, manual via /sh_checkpoint
+- **Integration**: Automatic via PreCompact hook, manual via /shannon:checkpoint
 
 **context-restoration** (PROTOCOL - 957 lines):
 - **Purpose**: Full project state restoration from checkpoints
@@ -1742,7 +1777,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 - **Purpose**: Systematic gap analysis before completion claims
 - **Process**: 7 phases (plan analysis → delivery inventory → 100+ thoughts gap identification → rationalization detection → completion calculation → prioritization → reporting)
 - **Validation**: Prevents premature "100% complete" on 32% work (proven in testing)
-- **Command**: /sh_reflect
+- **Command**: /shannon:reflect
 
 ---
 
@@ -1792,19 +1827,19 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 
 ```bash
 # 1. Analyze
-/sh_spec "Contact form: name, email, message fields. Email validation. Send to /api/contact. Success/error messages."
+/shannon:spec "Contact form: name, email, message fields. Email validation. Send to /api/contact. Success/error messages."
 
 # Output: Complexity 0.35 (SIMPLE)
 # Recommendation: Direct implementation
 
 # 2. Set goal (optional)
-/sh_north_star "Deploy contact form today"
+/shannon:north_star "Deploy contact form today"
 
 # 3. Implement
 # [React form + validation + API]
 
 # 4. Test (Shannon enforces NO MOCKS)
-/sh_test --create --platform web
+/shannon:test --create --platform web
 
 # Generated Puppeteer test (real browser):
 # - Real form interaction
@@ -1818,7 +1853,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 
 ```bash
 # 1. Analyze
-/sh_spec "Task management: auth (JWT), CRUD tasks, statuses (todo/in-progress/done), due dates, priorities, filtering, dashboard with statistics"
+/shannon:spec "Task management: auth (JWT), CRUD tasks, statuses (todo/in-progress/done), due dates, priorities, filtering, dashboard with statistics"
 
 # Output:
 # Complexity: 0.58 (COMPLEX)
@@ -1827,14 +1862,14 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 # Timeline: 1-2 weeks
 
 # 2. Set North Star
-/sh_north_star "Launch beta to 20 users end of month"
+/shannon:north_star "Launch beta to 20 users end of month"
 
 # 3. Checkpoint
-/sh_checkpoint "project-start"
+/shannon:checkpoint "project-start"
 
 # 4. Execute Wave 1
-/sh_wave 1 --plan  # Preview
-/sh_wave 1         # Execute
+/shannon:wave 1 --plan  # Preview
+/shannon:wave 1         # Execute
 
 # WAVE_COORDINATOR spawns:
 # - BACKEND (auth, CRUD API)
@@ -1843,13 +1878,13 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 # - SECURITY (JWT implementation)
 
 # 5. Checkpoint after Wave 1
-/sh_checkpoint "wave-1-complete"
+/shannon:checkpoint "wave-1-complete"
 
 # 6. Execute Wave 2
-/sh_wave 2
+/shannon:wave 2
 
 # 7. Final checkpoint
-/sh_checkpoint "mvp-complete"
+/shannon:checkpoint "mvp-complete"
 ```
 
 ### Example 3: Complex Project (Complexity >=0.70)
@@ -1858,7 +1893,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 
 ```bash
 # 1. Analyze
-/sh_spec "E-commerce: product catalog (search, filters, categories), shopping cart (add/remove, quantities), checkout (Stripe integration, shipping, tax calculation), order management, inventory tracking, admin dashboard, customer accounts, order history, email notifications (SendGrid), analytics dashboard"
+/shannon:spec "E-commerce: product catalog (search, filters, categories), shopping cart (add/remove, quantities), checkout (Stripe integration, shipping, tax calculation), order management, inventory tracking, admin dashboard, customer accounts, order history, email notifications (SendGrid), analytics dashboard"
 
 # Output:
 # Complexity: 0.75 (VERY COMPLEX)
@@ -1868,7 +1903,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 # SITREP protocol: REQUIRED (complexity >=0.70)
 
 # 2. Set ambitious North Star
-/sh_north_star "Process $10k revenue first month"
+/shannon:north_star "Process $10k revenue first month"
 
 # 3. Review wave breakdown
 # Wave 1: Commerce core (products, cart, checkout) - 1-2 weeks
@@ -1877,10 +1912,10 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 # Wave 4: Optimization (performance, monitoring, deployment) - 1 week
 
 # 4. Initial checkpoint
-/sh_checkpoint "project-init"
+/shannon:checkpoint "project-init"
 
 # 5. Execute waves with SITREP
-/sh_wave 1
+/shannon:wave 1
 
 # WAVE_COORDINATOR with SITREP protocol:
 # Each agent reports:
@@ -1891,12 +1926,12 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 # NEXT: Complete filters (2h), then testing
 
 # 6. Continue
-/sh_wave 2
-/sh_wave 3
-/sh_wave 4
+/shannon:wave 2
+/shannon:wave 3
+/shannon:wave 4
 
 # 7. Production checkpoint
-/sh_checkpoint "production-ready"
+/shannon:checkpoint "production-ready"
 ```
 
 ### Example 4: V4.1 Forced Reading
@@ -1908,7 +1943,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 /shannon:prime
 
 # 2. Analyze large spec
-/sh_spec @path/to/large-spec.md
+/shannon:spec @path/to/large-spec.md
 
 # Shannon enforces (FORCED_READING_PROTOCOL):
 # ┌─ Step 1: Count lines
@@ -1947,12 +1982,12 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 # Output: 104 skills found and cataloged
 
 # 2. Execute command
-/sh_spec "Build authentication system"
+/shannon:spec "Build authentication system"
 
 # Shannon auto-invokes (skill-discovery calculates confidence):
 # 🎯 spec-analysis (confidence: 0.85) - AUTO-INVOKED
 #    Triggers matched: "system", "build", "authentication"
-#    Command compat: /sh_spec → spec-analysis mapping exists
+#    Command compat: /shannon:spec → spec-analysis mapping exists
 #    Context relevance: authentication domain detected
 #
 # 🎯 mcp-discovery (confidence: 0.72) - AUTO-INVOKED
@@ -1973,9 +2008,9 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 
 **Before V4.1** (6 commands, 15-20 minutes):
 ```bash
-/sh_restore latest-checkpoint           # 5-8 min
-/sh_status                              # 1 min
-/sh_check_mcps                          # 2 min
+/shannon:restore latest-checkpoint           # 5-8 min
+/shannon:status                              # 1 min
+/shannon:check_mcps                          # 2 min
 /list_memories                          # 1 min
 /read_memory spec_analysis_project      # 2 min
 /read_memory phase_plan_project         # 2 min
@@ -2024,7 +2059,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 # [Code written...]
 
 # 2. Generate tests
-/sh_test --create --platform web --feature "authentication"
+/shannon:test --create --platform web --feature "authentication"
 
 # Shannon generates (functional-testing skill):
 # File: tests/functional/auth.spec.ts
@@ -2056,13 +2091,13 @@ npm test
 
 ```bash
 # 1. Analyze
-/sh_spec "Add real-time collaboration: WebSocket connections, operational transformation (CRDT), presence indicators, cursor tracking, collaborative editing"
+/shannon:spec "Add real-time collaboration: WebSocket connections, operational transformation (CRDT), presence indicators, cursor tracking, collaborative editing"
 
 # Complexity: 0.68 (COMPLEX)
 # Recommendation: 2 waves
 
 # 2. Execute Wave 1 (Foundation)
-/sh_wave 1
+/shannon:wave 1
 
 # WAVE_COORDINATOR spawns agents IN PARALLEL (one message):
 # ┌─ BACKEND
@@ -2091,7 +2126,7 @@ npm test
 # Validation gate: User approves before Wave 2
 
 # 4. Execute Wave 2 (Advanced features)
-/sh_wave 2
+/shannon:wave 2
 
 # Spawns:
 # ├─ BACKEND: Operational transformation algorithm
@@ -2108,13 +2143,13 @@ npm test
 
 ```bash
 # 1. Analyze
-/sh_spec "Microservices platform: 5 services, API gateway, service mesh, monitoring, distributed tracing"
+/shannon:spec "Microservices platform: 5 services, API gateway, service mesh, monitoring, distributed tracing"
 
 # Complexity: 0.82 (CRITICAL)
 # SITREP protocol: MANDATORY
 
 # 2. Execute with SITREP
-/sh_wave 1
+/shannon:wave 1
 
 # Each agent reports military-style status:
 
@@ -2165,7 +2200,7 @@ npm test
 
 ```bash
 # 1. Set North Star
-/sh_north_star "Launch MVP to 100 beta users by Q1 2025"
+/shannon:north_star "Launch MVP to 100 beta users by Q1 2025"
 
 # 2. During development, decision point
 # Agent: "Should I build admin dashboard or user analytics first?"
@@ -2196,11 +2231,11 @@ npm test
 
 ```bash
 # Week 1: Project start
-/sh_spec "Large specification..."  # Complexity 0.75
-/sh_checkpoint "week-1-start"
-/sh_wave 1  # Execute first wave
-/sh_wave 2  # Execute second wave
-/sh_checkpoint "week-1-complete"
+/shannon:spec "Large specification..."  # Complexity 0.75
+/shannon:checkpoint "week-1-start"
+/shannon:wave 1  # Execute first wave
+/shannon:wave 2  # Execute second wave
+/shannon:checkpoint "week-1-complete"
 
 # Context compaction happens (conversation >1M tokens)
 # PreCompact hook fires automatically:
@@ -2222,7 +2257,7 @@ npm test
 # ✅ All architectural decisions (8 decisions preserved)
 
 # 3. Continue where left off
-/sh_wave 3  # NO re-explanation needed
+/shannon:wave 3  # NO re-explanation needed
 
 # Result: Zero information loss despite context compaction
 ```
@@ -2236,7 +2271,7 @@ npm test
 # [Code written...]
 
 # 2. Run confidence check
-/sh_analyze --confidence
+/shannon:analyze --confidence
 
 # Shannon checks (confidence-check skill):
 # ┌─ Specification Coverage: 95% ✅
@@ -2261,7 +2296,7 @@ npm test
 # Focus: Error handling + edge case testing
 
 # 4. Re-check
-/sh_analyze --confidence
+/shannon:analyze --confidence
 
 # Overall Confidence: 92% (HIGH - ready for deployment ✅)
 ```
@@ -2272,7 +2307,7 @@ npm test
 
 ```bash
 # 1. Analyze with --mcps flag
-/sh_spec --mcps "Real-time collaboration: WebSockets, video calls (WebRTC), screen sharing, chat, presence tracking"
+/shannon:spec --mcps "Real-time collaboration: WebSockets, video calls (WebRTC), screen sharing, chat, presence tracking"
 
 # Shannon recommends (mcp-discovery skill):
 #
@@ -2307,7 +2342,7 @@ npm test
 # [Install WebRTC MCP, Socket.io MCP, etc.]
 
 # 3. Verify
-/sh_check_mcps
+/shannon:check_mcps
 
 # Output:
 # ✅ Serena MCP: Connected
@@ -2322,11 +2357,11 @@ npm test
 
 ```bash
 # 1. Without indexing (expensive):
-/sh_analyze large-project/
+/shannon:analyze large-project/
 # Reads all 200 files: ~150,000 tokens consumed
 
 # 2. With project-indexing (efficient):
-/sh_analyze large-project/ --index
+/shannon:analyze large-project/ --index
 
 # Shannon uses project-indexing skill:
 # ├─ Scans 200 files
@@ -2365,7 +2400,7 @@ npm test
 # ✅ Ready in 42 seconds
 
 # Step 2: Analyze new feature (Enhancement #1: Forced Reading)
-/sh_spec @path/to/new-feature-spec.md  # 2,500 lines
+/shannon:spec @path/to/new-feature-spec.md  # 2,500 lines
 
 # Shannon enforces:
 # - Counts: 2,500 lines total
@@ -2382,7 +2417,7 @@ npm test
 # 🎯 phase-planning (0.85) ✅
 
 # Step 4: Execute with all enhancements active
-/sh_wave 3  # Continue from Wave 2
+/shannon:wave 3  # Continue from Wave 2
 
 # Wave 3 execution with:
 # ✅ Complete reading of wave plan (Enhancement #1)
@@ -2434,7 +2469,7 @@ Shannon requires Serena MCP for context preservation
 **Solution**:
 ```bash
 # 1. Check status
-/sh_check_mcps
+/shannon:check_mcps
 
 # 2. Configure Serena MCP
 # Edit ~/.claude/settings.json and add to mcpServers section:
@@ -2459,14 +2494,14 @@ Shannon requires Serena MCP for context preservation
 # 4. Restart Claude Code completely
 
 # 5. Verify
-/sh_check_mcps
+/shannon:check_mcps
 # Should show: ✅ Serena MCP - Connected
 ```
 
 #### "Commands not available after install"
 
 **Symptoms**:
-- `/sh_spec` command not recognized
+- `/shannon:spec` command not recognized
 - `/shannon:prime` not found
 
 **Diagnosis**: Plugin not loaded (needs restart)
@@ -2481,13 +2516,13 @@ Shannon requires Serena MCP for context preservation
 # (Not just close window - full quit and reopen)
 
 # 3. Verify
-/sh_status
+/shannon:status
 # Should show: Shannon Framework V4.1.0 ACTIVE
 ```
 
 ### Command Issues
 
-#### "/sh_spec gives incomplete analysis"
+#### "/shannon:spec gives incomplete analysis"
 
 **Symptoms**:
 - Missing 8D breakdown
@@ -2499,10 +2534,10 @@ Shannon requires Serena MCP for context preservation
 **Solution**:
 ```bash
 # Provide detailed specification (minimum 50-100 words):
-/sh_spec "Build web application with React frontend (user dashboard, product catalog, shopping cart), Node.js backend (RESTful API, JWT authentication, role-based access control), PostgreSQL database (users, products, orders tables), and Docker deployment to AWS"
+/shannon:spec "Build web application with React frontend (user dashboard, product catalog, shopping cart), Node.js backend (RESTful API, JWT authentication, role-based access control), PostgreSQL database (users, products, orders tables), and Docker deployment to AWS"
 
 # vs insufficient:
-/sh_spec "Build web app"  # Too vague, <10 words
+/shannon:spec "Build web app"  # Too vague, <10 words
 ```
 
 #### "/shannon:prime fails or takes too long"
@@ -2525,14 +2560,14 @@ Priming takes >5 minutes
 /shannon:prime --fresh
 
 # Or restore manually first:
-/sh_restore specific-checkpoint-name
+/shannon:restore specific-checkpoint-name
 /shannon:prime --quick
 
 # Check available checkpoints:
-/sh_memory --list
+/shannon:memory --list
 ```
 
-#### "/sh_discover_skills finds no skills"
+#### "/shannon:discover_skills finds no skills"
 
 **Symptoms**:
 ```
@@ -2544,7 +2579,7 @@ Priming takes >5 minutes
 **Solution**:
 ```bash
 # Force refresh:
-/sh_discover_skills --refresh
+/shannon:discover_skills --refresh
 
 # Verify directories exist:
 ls skills/
@@ -2558,17 +2593,17 @@ ls ~/.claude/skills/
 
 #### "Skill not auto-invoked when expected"
 
-**Symptoms**: spec-analysis not loading for /sh_spec
+**Symptoms**: spec-analysis not loading for /shannon:spec
 
 **Diagnosis**: Skill discovery cache outdated or confidence <0.70
 
 **Solution**:
 ```bash
 # 1. Refresh discovery:
-/sh_discover_skills --refresh
+/shannon:discover_skills --refresh
 
 # 2. Check skill status (when implemented):
-/sh_skill_status
+/shannon:skill_status
 
 # 3. Manually invoke if needed:
 Skill("spec-analysis")
@@ -2586,9 +2621,9 @@ Skill("spec-analysis")
 cat core/FORCED_READING_PROTOCOL.md
 
 # 2. Use enforcing commands:
-/sh_spec  # Auto-enforces for specifications
-/sh_analyze  # Auto-enforces for analysis
-/sh_wave  # Auto-enforces for wave plans
+/shannon:spec  # Auto-enforces for specifications
+/shannon:analyze  # Auto-enforces for analysis
+/shannon:wave  # Auto-enforces for wave plans
 
 # 3. For manual files, enforce manually:
 # - Count: wc -l file.md
@@ -2616,7 +2651,7 @@ cat core/FORCED_READING_PROTOCOL.md
 
 ```bash
 # Verify which MCPs are actually required:
-/sh_check_mcps
+/shannon:check_mcps
 
 # Output clearly shows:
 # REQUIRED: Serena only
@@ -2635,7 +2670,7 @@ cat core/FORCED_READING_PROTOCOL.md
 ```bash
 # Shannon has automatic PreCompact checkpointing
 # But verify it worked:
-/sh_memory --list | grep precompact
+/shannon:memory --list | grep precompact
 
 # Should show: shannon_precompact_{timestamp}
 
@@ -2643,7 +2678,7 @@ cat core/FORCED_READING_PROTOCOL.md
 /shannon:prime --resume
 
 # Or manually:
-/sh_restore shannon_precompact_20251108
+/shannon:restore shannon_precompact_20251108
 ```
 
 #### "Wave execution lost state mid-wave"
@@ -2655,18 +2690,18 @@ cat core/FORCED_READING_PROTOCOL.md
 **Solution**:
 ```bash
 # Check last checkpoint:
-/sh_memory --list
+/shannon:memory --list
 
 # Restore to pre-wave checkpoint:
-/sh_restore checkpoint-before-wave-3
+/shannon:restore checkpoint-before-wave-3
 
 # Resume wave:
-/sh_wave 3 --resume
+/shannon:wave 3 --resume
 ```
 
 ### Performance Issues
 
-#### "/sh_spec takes >5 minutes"
+#### "/shannon:spec takes >5 minutes"
 
 **Symptoms**: Specification analysis very slow
 
@@ -2678,30 +2713,30 @@ cat core/FORCED_READING_PROTOCOL.md
 **Solution**:
 ```bash
 # 1. Break into sections:
-/sh_spec "Section 1: Frontend requirements..."
-/sh_spec "Section 2: Backend requirements..."
+/shannon:spec "Section 1: Frontend requirements..."
+/shannon:spec "Section 2: Backend requirements..."
 
 # 2. Install Sequential MCP (speeds up large specs)
 
 # 3. Use quick mode (when available):
-/sh_spec "..." --quick
+/shannon:spec "..." --quick
 ```
 
 #### "Skill discovery slow (>1 minute)"
 
-**Symptoms**: /sh_discover_skills takes long time
+**Symptoms**: /shannon:discover_skills takes long time
 
 **Diagnosis**: Large user skills directory (>100 skills), cold cache
 
 **Solution**:
 ```bash
 # Use cache (default, 1 hour TTL):
-/sh_discover_skills --cache
+/shannon:discover_skills --cache
 
 # Subsequent calls: <10ms (10x-100x faster)
 
 # If cache corrupted:
-/sh_discover_skills --refresh
+/shannon:discover_skills --refresh
 ```
 
 ---
@@ -2713,7 +2748,7 @@ cat core/FORCED_READING_PROTOCOL.md
 Override auto-generated wave plans:
 
 ```bash
-/sh_wave 1 --custom --phases 4
+/shannon:wave 1 --custom --phases 4
 
 # Define custom phases within wave
 ```
@@ -2722,7 +2757,7 @@ Override auto-generated wave plans:
 
 ```bash
 # Discover specific skills:
-/sh_discover_skills --filter authentication
+/shannon:discover_skills --filter authentication
 
 # Manually invoke:
 Skill("spec-analysis")
@@ -2733,7 +2768,7 @@ Skill("functional-testing")
 
 ```bash
 # Ultra-thorough specification analysis:
-/sh_spec --deep --mcps --save "..."
+/shannon:spec --deep --mcps --save "..."
 
 # Enables:
 # - Deep domain analysis (10+ domains detected)
@@ -2747,9 +2782,9 @@ Skill("functional-testing")
 ```bash
 # Feature branch workflow:
 git checkout -b feature/new-feature
-/sh_spec "feature requirements"
-/sh_wave 1
-/sh_checkpoint "feature-complete"
+/shannon:spec "feature requirements"
+/shannon:wave 1
+/shannon:checkpoint "feature-complete"
 git add . && git commit -m "feat: implement feature"
 ```
 
@@ -2757,13 +2792,13 @@ git add . && git commit -m "feat: implement feature"
 
 ```bash
 # Pre-deployment validation:
-/sh_analyze --confidence
+/shannon:analyze --confidence
 # Must reach >=90% before deploy
 
-/sh_test --verify
+/shannon:test --verify
 # All functional tests must pass (NO MOCKS)
 
-/sh_checkpoint "pre-deploy-$(date +%Y%m%d)"
+/shannon:checkpoint "pre-deploy-$(date +%Y%m%d)"
 ```
 
 ---
@@ -2774,7 +2809,7 @@ git add . && git commit -m "feat: implement feature"
 A: No. Serena is MANDATORY for Shannon's context preservation and checkpointing.
 
 **Q: Is forced reading automatic?**
-A: Commands like /sh_spec, /sh_analyze, /sh_wave instruct agents to use forced reading protocol. Future: automatic enforcement hooks.
+A: Commands like /shannon:spec, /shannon:analyze, /shannon:wave instruct agents to use forced reading protocol. Future: automatic enforcement hooks.
 
 **Q: How long does /shannon:prime take?**
 A: Fresh mode: 10-20s, Resume mode: 30-60s, Full mode: 60-120s
@@ -2783,10 +2818,10 @@ A: Fresh mode: 10-20s, Resume mode: 30-60s, Full mode: 60-120s
 A: Yes! Simple projects (complexity <0.50) use direct implementation. Waves only for complexity >=0.50.
 
 **Q: What commands does Shannon provide?**
-A: Shannon provides 14 commands (11 core + 3 V4.1 enhancements). All commands start with /sh_* or /shannon:*
+A: Shannon provides 14 commands (11 core + 3 V4.1 enhancements). All commands use the /shannon:* namespace
 
 **Q: How do I know which skills are active?**
-A: Use /sh_discover_skills to see all available. Skills auto-load contextually based on task.
+A: Use /shannon:discover_skills to see all available. Skills auto-load contextually based on task.
 
 **Q: What if I don't have optional MCPs?**
 A: Shannon works with Serena alone. Optional MCPs enhance functionality but aren't required.
@@ -2816,7 +2851,7 @@ Shannon Framework is open source. Contributions welcome!
    /plugin marketplace add /path/to/shannon-framework
    /plugin install shannon@shannon
    # Restart Claude Code
-   /sh_status  # Verify
+   /shannon:status  # Verify
    ```
 5. **Commit**: Follow conventional commits
 6. **Submit PR**: Include testing evidence

@@ -47,7 +47,7 @@ BUILD_CONFIG = {
 
 
 async def build_application(spec_text: str, output_dir: Path) -> tuple[bool, str]:
-    """Execute Shannon /sh_wave to build Shannon CLI"""
+    """Execute Shannon /shannon:wave to build Shannon CLI"""
     print(f"Building Shannon CLI with Shannon (meta-circular)...")
     print(f"Output directory: {output_dir}")
 
@@ -69,13 +69,13 @@ Work in: {output_dir.absolute()}
 Specification:
 {spec_text}
 
-Execute /sh_wave to build everything.
+Execute /shannon:wave to build everything.
 
 Note: This is meta-circular - you're building a Shannon CLI tool that implements
 the same 8D complexity analysis algorithm you're using right now.
 '''
 
-    print(f"\nExecuting /sh_wave (this will take 90-120 minutes)...")
+    print(f"\nExecuting /shannon:wave (this will take 90-120 minutes)...")
     print("Progress:")
 
     start_time = time.time()

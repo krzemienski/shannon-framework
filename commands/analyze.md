@@ -1,7 +1,7 @@
 ---
-name: sh_analyze
+name: analyze
 description: Shannon-aware project analysis with complexity assessment and confidence validation
-usage: /sh_analyze [aspect] [--deep]
+usage: /shannon:analyze [aspect] [--deep]
 ---
 
 # Project Analysis Command (V4)
@@ -162,7 +162,7 @@ Low Priority:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 💾 Analysis saved to Serena MCP
 Key: {analysis_key}
-Retrieve: /sh_restore {timestamp}
+Retrieve: /shannon:restore {timestamp}
 {else}
 ⚠️  Analysis not saved (Serena MCP unavailable)
 {end if}
@@ -171,14 +171,14 @@ Retrieve: /sh_restore {timestamp}
 
 Next Steps:
 {if complexity_score >= 0.70}
-- Run /sh_spec to create implementation plan
+- Run /shannon:wave to create implementation plan
 - Consider wave-based execution for refactoring
-- Create checkpoint: /sh_checkpoint before-refactor
+- Create checkpoint: /shannon:wave before-refactor
 
 {else if technical_debt_score >= 0.60}
 - Address high-priority technical debt items
 - Run functional tests to validate improvements
-- Create checkpoint: /sh_checkpoint debt-baseline
+- Create checkpoint: /shannon:wave debt-baseline
 
 {else}
 - Codebase in good health
@@ -238,7 +238,7 @@ See Step 4 presentation template above.
 ### Example 1: Full Project Analysis
 
 ```bash
-/sh_analyze
+/shannon:analyze
 ```
 
 Analyzes entire project with standard depth.
@@ -246,7 +246,7 @@ Analyzes entire project with standard depth.
 ### Example 2: Component-Specific Analysis
 
 ```bash
-/sh_analyze authentication
+/shannon:analyze authentication
 ```
 
 Focuses on authentication component/module.
@@ -254,7 +254,7 @@ Focuses on authentication component/module.
 ### Example 3: Deep Analysis with Confidence Check
 
 ```bash
-/sh_analyze --deep
+/shannon:analyze --deep
 ```
 
 Performs thorough analysis with confidence validation.
@@ -262,7 +262,7 @@ Performs thorough analysis with confidence validation.
 ### Example 4: Deep Component Analysis
 
 ```bash
-/sh_analyze api-layer --deep
+/shannon:analyze api-layer --deep
 ```
 
 Deep analysis of API layer with confidence scoring.

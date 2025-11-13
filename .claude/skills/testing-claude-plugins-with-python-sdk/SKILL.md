@@ -906,10 +906,10 @@ from claude_agent_sdk import (
 )
 
 async def test_shannon_spec_command():
-    """Test /sh_spec command with specification."""
+    """Test /shannon:spec command with specification."""
 
     print("=" * 80)
-    print("Testing Shannon /sh_spec Command")
+    print("Testing Shannon /shannon:spec Command")
     print("=" * 80)
 
     # Read specification
@@ -936,7 +936,7 @@ async def test_shannon_spec_command():
         cwd=str(Path.cwd())
     )
 
-    print("⏳ Executing /sh_spec...")
+    print("⏳ Executing /shannon:spec...")
 
     # Track everything
     text_output = []
@@ -946,13 +946,13 @@ async def test_shannon_spec_command():
     plugins_loaded = []
     shannon_commands = []
 
-    async for message in query(prompt=f'/sh_spec "{spec_text}"', options=options):
+    async for message in query(prompt=f'/shannon:spec "{spec_text}"', options=options):
         # System init
         if isinstance(message, SystemMessage) and message.subtype == 'init':
             plugins_loaded = message.data.get('plugins', [])
             commands = message.data.get('slash_commands', [])
             shannon_commands = [c for c in commands
-                               if c.startswith('/sh_') or c.startswith('/shannon:')]
+                               if c.startswith('/shannon:')]
 
             print(f"\n✅ Session initialized")
             print(f"   Plugins: {len(plugins_loaded)}")

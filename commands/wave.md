@@ -1,7 +1,7 @@
 ---
-name: sh_wave
+name: wave
 description: Execute wave-based planning and execution with skill orchestration
-usage: /sh_wave [request] [--plan] [--dry-run]
+usage: /shannon:wave [request] [--plan] [--dry-run]
 ---
 
 # Wave Execution Command
@@ -12,7 +12,7 @@ Orchestrates complex wave-based execution through skill invocation. Manages pre-
 
 ## Prerequisites
 
-- Active specification context (run `/sh_spec` first)
+- Active specification context (run `/shannon:spec` first)
 - Serena MCP available for checkpoints
 - Complexity ≥ 0.50 for optimal wave benefits
 
@@ -208,7 +208,7 @@ Format and display wave execution summary:
 Next Steps:
 {if all_complete}
 - Project complete! Review deliverables
-- Run /sh_status for final validation
+- Run /shannon:status for final validation
 {else}
 - Continue with remaining waves
 - Review wave results in Serena
@@ -220,7 +220,7 @@ Next Steps:
 ### --plan
 Generate wave execution plan without executing:
 ```bash
-/sh_wave Build full-stack app --plan
+/shannon:wave Build full-stack app --plan
 ```
 
 Shows:
@@ -234,7 +234,7 @@ Does NOT execute - just planning.
 ### --dry-run
 Generate detailed execution plan with impact analysis:
 ```bash
-/sh_wave Implement microservices --dry-run
+/shannon:wave Implement microservices --dry-run
 ```
 
 Shows everything from --plan PLUS:
@@ -249,7 +249,7 @@ Does NOT execute - comprehensive planning only.
 
 ### Example 1: Basic Wave Execution
 ```bash
-/sh_wave Build authentication system with JWT and OAuth
+/shannon:wave Build authentication system with JWT and OAuth
 ```
 
 **What happens:**
@@ -263,7 +263,7 @@ Does NOT execute - comprehensive planning only.
 
 ### Example 2: Planning Mode
 ```bash
-/sh_wave Implement dashboard with analytics --plan
+/shannon:wave Implement dashboard with analytics --plan
 ```
 
 **What happens:**
@@ -275,7 +275,7 @@ Does NOT execute - comprehensive planning only.
 
 ### Example 3: Dry Run
 ```bash
-/sh_wave Build microservices architecture --dry-run
+/shannon:wave Build microservices architecture --dry-run
 ```
 
 **What happens:**
@@ -319,7 +319,7 @@ The wave-orchestration skill automatically selects strategy:
 **V3 Compatibility:** ✅ Maintained
 
 **Same from V3:**
-- Command syntax: `/sh_wave [request]`
+- Command syntax: `/shannon:wave [request]`
 - Required arguments: Wave request text
 - Strategy auto-selection
 - Serena MCP integration
@@ -405,16 +405,16 @@ Wave execution succeeds when:
 
 ## Related Commands
 
-**Before /sh_wave:**
-- `/sh_spec` - Analyze specification (required)
-- `/sh_north_star` - Set guiding goal (recommended)
-- `/sh_check_mcps` - Verify MCP availability
+**Before /shannon:wave:**
+- `/shannon:spec` - Analyze specification (required)
+- `/shannon:north_star` - Set guiding goal (recommended)
+- `/shannon:check_mcps` - Verify MCP availability
 
-**During /sh_wave:**
-- `/sh_checkpoint` - Manual checkpoint (automatic in wave execution)
-- `/sh_status wave` - Check wave progress
+**During /shannon:wave:**
+- `/shannon:checkpoint` - Manual checkpoint (automatic in wave execution)
+- `/shannon:status wave` - Check wave progress
 
-**After /sh_wave:**
-- `/sh_memory pattern` - Analyze wave patterns
-- `/sh_restore` - Restore from checkpoint if needed
-- `/sh_status` - Verify completion
+**After /shannon:wave:**
+- `/shannon:memory pattern` - Analyze wave patterns
+- `/shannon:restore` - Restore from checkpoint if needed
+- `/shannon:status` - Verify completion

@@ -106,7 +106,7 @@ Successfully completed core Shannon V4.1 enhancements with focus on:
    - Speedup scenarios (1.0x → 4.0x)
    - 5 anti-patterns with Iron Law documentation
    - Error recovery, dynamic adjustment, token constraints
-   - Integration with /sh_spec, /sh_checkpoint
+   - Integration with /shannon:spec, /shannon:checkpoint
    - Commit: d324efc
 
 3. **sh_checkpoint_GUIDE.md** (705 lines)
@@ -114,7 +114,7 @@ Successfully completed core Shannon V4.1 enhancements with focus on:
    - Checkpoint types (5: manual, wave, precompact, milestone, safety)
    - 3 anti-patterns
    - Retention policies
-   - Integration with /sh_restore, /sh_wave
+   - Integration with /shannon:restore, /shannon:wave
    - Commit: 6581204
 
 **Total**: 3,971 lines of command documentation
@@ -149,9 +149,9 @@ Successfully completed core Shannon V4.1 enhancements with focus on:
 
 **Recent Commits**:
 ```
-6581204 docs(commands): add /sh_checkpoint comprehensive usage guide
-d324efc docs(commands): add comprehensive /sh_wave usage guide  
-797ce10 docs(commands): add comprehensive /sh_spec usage guide
+6581204 docs(commands): add /shannon:checkpoint comprehensive usage guide
+d324efc docs(commands): add comprehensive /shannon:wave usage guide  
+797ce10 docs(commands): add comprehensive /shannon:spec usage guide
 789083c docs(hooks): create comprehensive hook system documentation
 661fc96 docs: restore and enhance root README
 17488b3 docs: create comprehensive Shannon system architecture synthesis

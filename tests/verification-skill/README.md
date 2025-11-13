@@ -24,7 +24,7 @@ shannon-execution-verifier/
 │   ├── repo_nexus.yaml        # iOS app (React Native + FastAPI + PostgreSQL + Redis)
 │   └── shannon_cli.yaml       # CLI tool (Python + Click + Claude SDK)
 └── flow-specs/                 # Expected execution flows
-    └── sh_wave_flow.yaml      # Shannon /sh_wave command flow specification
+    └── sh_wave_flow.yaml      # Shannon /shannon:wave command flow specification
 ```
 
 ## Scenario Files
@@ -141,7 +141,7 @@ Flow specifications define **expected execution patterns** for Shannon commands.
 
 #### 1. Shannon Wave Flow (`sh_wave_flow.yaml`)
 
-Defines the complete execution flow for the `/sh_wave` command:
+Defines the complete execution flow for the `/shannon:wave` command:
 
 **Phases:**
 1. **Initialization** (2-5 min) - Load spec, prime session, discover skills
@@ -350,7 +350,7 @@ validation_criteria:
 
 Shannon Framework will automatically invoke this skill when:
 
-- User requests verification: `/sh_verify`
+- User requests verification: `/shannon:verify`
 - Shannon Wave completes with `--verify` flag
 - Quality gates are configured in session
 

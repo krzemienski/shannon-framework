@@ -127,10 +127,10 @@ Found in: agent-sdk-skills.md line 16, repeated across 5+ docs
 Plugin commands use namespace:
 ```python
 # Correct
-prompt="/shannon-plugin:sh_spec ..."
+prompt="/shannon:sh_spec ..."
 
 # Incorrect (won't work)
-prompt="/sh_spec ..."
+prompt="/shannon:spec ..."
 ```
 
 ### 3. Tools Must Match Requirements
@@ -280,7 +280,7 @@ cd shannon-framework
 claude plugin marketplace list | grep shannon-framework
 
 # Test via CLI
-claude --output-format stream-json --print -- "/shannon-plugin:sh_status"
+claude --output-format stream-json --print -- "/shannon:sh_status"
 
 # Test via SDK
 python tests/test_shannon_command_execution.py

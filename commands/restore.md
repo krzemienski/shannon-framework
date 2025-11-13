@@ -1,7 +1,7 @@
 ---
-name: sh_restore
+name: restore
 description: Restore project state from Serena MCP checkpoint
-usage: /sh_restore [checkpoint_id] [--goals] [--verbose]
+usage: /shannon:restore [checkpoint_id] [--goals] [--verbose]
 ---
 
 # Project State Restoration Command
@@ -12,8 +12,8 @@ Restores complete project state from Serena MCP checkpoints, enabling zero conte
 
 ## Prerequisites
 
-- Serena MCP available (check with `/sh_check_mcps`)
-- Valid checkpoint exists (created by `/sh_checkpoint` or PreCompact hook)
+- Serena MCP available (check with `/shannon:check_mcps`)
+- Valid checkpoint exists (created by `/shannon:checkpoint` or PreCompact hook)
 
 ## Workflow
 
@@ -155,20 +155,20 @@ Format and display results:
 
 **Default Restoration (Latest Checkpoint):**
 ```bash
-/sh_restore
+/shannon:restore
 ```
 
 **Restore Specific Checkpoint:**
 ```bash
-/sh_restore SHANNON-W2-20251103T143000
+/shannon:restore SHANNON-W2-20251103T143000
 ```
 
 **Restore with Goals:**
 ```bash
-/sh_restore --goals
+/shannon:restore --goals
 ```
 
 **Verbose Restoration:**
 ```bash
-/sh_restore --verbose
+/shannon:restore --verbose
 ```

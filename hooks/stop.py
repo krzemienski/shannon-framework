@@ -53,7 +53,7 @@ def main():
 **Required Actions**:
 1. Present wave synthesis to user
 2. Request explicit approval: "Wave X approved" or "Continue to next wave"
-3. Create checkpoint: /sh_checkpoint
+3. Create checkpoint: /shannon:checkpoint
 4. Mark validation complete
 
 **Do not proceed until user has reviewed and approved wave results.**
@@ -79,7 +79,7 @@ To bypass (not recommended): Remove .serena/wave_validation_pending file"""
 1. Complete all critical tasks before finishing
 2. Or explicitly mark them as deferred with user approval
 
-Run /sh_status to see current task state."""
+Run /shannon:status to see current task state."""
             }
 
             print(json.dumps(output))

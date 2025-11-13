@@ -40,7 +40,7 @@ This skill provides systematic discovery of ALL available skills on the system, 
 
 **Trigger Conditions**:
 - Session start (via SessionStart hook)
-- User requests skill inventory (/sh_discover_skills)
+- User requests skill inventory (/shannon:discover_skills)
 - Before command execution (check applicable skills)
 - When updating skill catalog after adding new skills
 
@@ -162,7 +162,7 @@ skill_catalog = {
 **Cache Strategy**:
 - Store catalog in Serena MCP (if available): `skill_catalog_session_{id}`
 - Cache TTL: 1 hour (skills don't change often during session)
-- Cache invalidation: Manual refresh via `/sh_discover_skills --refresh`
+- Cache invalidation: Manual refresh via `/shannon:discover_skills --refresh`
 
 **Performance Benefit**:
 - Cold discovery: ~50-100ms (scanning directories, parsing files)
@@ -181,7 +181,7 @@ skill_catalog = {
 └─ Plugin: 0 skills
 
 **Cache**: Saved to Serena MCP (expires in 1 hour)
-**Next**: Use /sh_skill_status to see invocation history
+**Next**: Use /shannon:skill_status to see invocation history
 ```
 
 ---
@@ -209,12 +209,12 @@ WHERE:
 
 **Example**:
 ```
-Context: /sh_spec "Build authentication system"
+Context: /shannon:spec "Build authentication system"
 
 Skill: spec-analysis
 - Triggers: [specification, analysis, complexity, system]
 - trigger_match: 3/4 = 0.75
-- command_compat: 1.0 (/sh_spec → spec-analysis mapping)
+- command_compat: 1.0 (/shannon:spec → spec-analysis mapping)
 - context_match: 2/4 = 0.50 (authentication, system)
 - deps_satisfied: 1.0 (Serena available)
 
@@ -240,12 +240,12 @@ confidence = (0.75×0.40) + (1.0×0.30) + (0.50×0.20) + (1.0×0.10)
 
 ```python
 COMMAND_SKILL_MAP = {
-  '/sh_spec': ['spec-analysis', 'confidence-check', 'mcp-discovery'],
-  '/sh_analyze': ['shannon-analysis', 'project-indexing', 'confidence-check'],
-  '/sh_wave': ['wave-orchestration', 'sitrep-reporting', 'context-preservation'],
-  '/sh_test': ['functional-testing'],
-  '/sh_checkpoint': ['context-preservation'],
-  '/sh_restore': ['context-restoration'],
+  '/shannon:spec': ['spec-analysis', 'confidence-check', 'mcp-discovery'],
+  '/shannon:analyze': ['shannon-analysis', 'project-indexing', 'confidence-check'],
+  '/shannon:wave': ['wave-orchestration', 'sitrep-reporting', 'context-preservation'],
+  '/shannon:test': ['functional-testing'],
+  '/shannon:checkpoint': ['context-preservation'],
+  '/shannon:restore': ['context-restoration'],
   '/shannon:prime': ['skill-discovery', 'mcp-discovery', 'context-restoration'],
 }
 ```
@@ -298,7 +298,7 @@ load_meta_skill "using-shannon"
 
 # NEW: Run skill discovery
 echo "🔍 Discovering available skills..."
-/sh_discover_skills --cache
+/shannon:discover_skills --cache
 
 echo "📚 Skills discovered and cataloged"
 echo "   Skills will be auto-invoked based on command context"
@@ -398,7 +398,7 @@ for skill in high_confidence:
 **Execution**:
 ```bash
 # Triggered automatically by SessionStart hook
-/sh_discover_skills --cache
+/shannon:discover_skills --cache
 
 # Step 1: Scan directories
 Glob("skills/*/SKILL.md") → 16 files
@@ -455,7 +455,7 @@ write_memory("skill_catalog_session_20251108", skill_catalog)
 
 **Execution**:
 ```bash
-/sh_discover_skills --filter testing
+/shannon:discover_skills --filter testing
 
 # Step 1-3: Discovery (use cache if <1 hour old)
 Retrieved from cache: 104 skills
@@ -500,11 +500,11 @@ Filtered: 4/104 skills matching "testing"
 
 ### Example 3: Auto-Invocation with Command Execution
 
-**Scenario**: User runs /sh_spec, skills auto-invoked
+**Scenario**: User runs /shannon:spec, skills auto-invoked
 
 **Execution**:
 ```bash
-User: /sh_spec "Build authentication system with OAuth"
+User: /shannon:spec "Build authentication system with OAuth"
 
 # PreCommand hook triggers skill selection:
 
@@ -514,7 +514,7 @@ Step 1: Get skill catalog (from cache)
 Step 2: Calculate confidence for each skill
 spec-analysis:
   - trigger_match: 0.75 (spec, authentication, system)
-  - command_compat: 1.0 (/sh_spec maps to spec-analysis)
+  - command_compat: 1.0 (/shannon:spec maps to spec-analysis)
   - context_match: 0.50
   - deps_satisfied: 1.0
   - confidence: 0.80 ✅ (>= 0.70 threshold)
@@ -528,7 +528,7 @@ mcp-discovery:
 
 functional-testing:
   - trigger_match: 0.20
-  - command_compat: 0.0 (not mapped to /sh_spec)
+  - command_compat: 0.0 (not mapped to /shannon:spec)
   - context_match: 0.30
   - deps_satisfied: 1.0
   - confidence: 0.18 ❌ (< 0.70 threshold)
@@ -538,7 +538,7 @@ Invoking: spec-analysis (0.80)
 Invoking: mcp-discovery (0.72)
 
 Step 4: Load skill content into context
-Step 5: Execute /sh_spec with skills active
+Step 5: Execute /shannon:spec with skills active
 ```
 
 **Output** (visible to user):

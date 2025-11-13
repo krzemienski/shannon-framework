@@ -281,14 +281,14 @@ Milestones:
 ✅ Product Catalog (35%)
 ✅ Payment Processing (30%)
 
-Recommendation: Mark goal complete with /sh_goal complete GOAL-20251103T140000
+Recommendation: Mark goal complete with /shannon:goal complete GOAL-20251103T140000
 ```
 
 ### User Marks Complete
 
 **User Input**:
 ```
-/sh_goal complete GOAL-20251103T140000
+/shannon:goal complete GOAL-20251103T140000
 ```
 
 **Skill Activation**: @goal-management (complete mode)
@@ -312,7 +312,7 @@ Waves: 3 waves executed
 Velocity: 24 hours per milestone
 Quality: All functional tests passing (NO MOCKS)
 
-Goal archived to history. Visible with /sh_goal history.
+Goal archived to history. Visible with /shannon:goal history.
 
 Next Action: Consider promoting secondary goal (GOAL-20251103T160000)
 to North Star, or set new goal.
@@ -326,7 +326,7 @@ to North Star, or set new goal.
 
 **User Input**:
 ```
-/sh_goal history
+/shannon:goal history
 ```
 
 **Skill Activation**: @goal-management (history mode)

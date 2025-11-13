@@ -1,6 +1,6 @@
-# /sh_checkpoint Command - Complete Usage Guide
+# /shannon:checkpoint Command - Complete Usage Guide
 
-**Command**: `/sh_checkpoint`
+**Command**: `/shannon:checkpoint`
 **Purpose**: Create and manage session checkpoints for zero-context-loss workflows
 **Skill**: Invokes context-preservation skill (562 lines)
 **Output**: Comprehensive checkpoint saved to Serena MCP with restoration command
@@ -9,7 +9,7 @@
 
 ## Overview
 
-The `/sh_checkpoint` command creates **comprehensive session snapshots** that preserve ALL project state (wave progress, goals, decisions, files, tests) enabling seamless restoration after context loss.
+The `/shannon:checkpoint` command creates **comprehensive session snapshots** that preserve ALL project state (wave progress, goals, decisions, files, tests) enabling seamless restoration after context loss.
 
 **Core Value**: Insurance against context compaction - no information loss ever.
 
@@ -22,10 +22,10 @@ The `/sh_checkpoint` command creates **comprehensive session snapshots** that pr
 
 **Usage**:
 ```bash
-/sh_checkpoint                            # Auto-labeled checkpoint
-/sh_checkpoint "Phase 2 complete"         # Custom label
-/sh_checkpoint --list                     # Show all checkpoints
-/sh_checkpoint --load {checkpoint_id}     # Restore specific checkpoint
+/shannon:checkpoint                            # Auto-labeled checkpoint
+/shannon:checkpoint "Phase 2 complete"         # Custom label
+/shannon:checkpoint --list                     # Show all checkpoints
+/shannon:checkpoint --load {checkpoint_id}     # Restore specific checkpoint
 ```
 
 ---
@@ -36,7 +36,7 @@ The `/sh_checkpoint` command creates **comprehensive session snapshots** that pr
 
 **Input**:
 ```bash
-/sh_checkpoint
+/shannon:checkpoint
 ```
 
 **Output**:
@@ -55,7 +55,7 @@ The `/sh_checkpoint` command creates **comprehensive session snapshots** that pr
    - North Star alignment: 0.85
 
 💾 Storage: Serena MCP
-🔄 Restore: /sh_checkpoint --load shannon_checkpoint_20251108_213000
+🔄 Restore: /shannon:checkpoint --load shannon_checkpoint_20251108_213000
 ⏰ Expires: 2025-12-08 (30 days)
 
 **Next Actions**:
@@ -71,7 +71,7 @@ The `/sh_checkpoint` command creates **comprehensive session snapshots** that pr
 
 **Input**:
 ```bash
-/sh_checkpoint "MVP launch - all features complete, tests passing"
+/shannon:checkpoint "MVP launch - all features complete, tests passing"
 ```
 
 **Output**:
@@ -91,7 +91,7 @@ The `/sh_checkpoint` command creates **comprehensive session snapshots** that pr
    - Goal: "Launch MVP to 100 beta users" - 100% complete
 
 💾 Storage: Serena MCP
-🔄 Restore: /sh_checkpoint --load shannon_checkpoint_20251108_213500
+🔄 Restore: /shannon:checkpoint --load shannon_checkpoint_20251108_213500
 
 **Milestone Significance**:
 This checkpoint marks production-ready state. Can roll back to this point if post-launch issues occur.
@@ -105,7 +105,7 @@ This checkpoint marks production-ready state. Can roll back to this point if pos
 
 **Input**:
 ```bash
-/sh_checkpoint --list
+/shannon:checkpoint --list
 ```
 
 **Output**:
@@ -150,8 +150,8 @@ This checkpoint marks production-ready state. Can roll back to this point if pos
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**Restore**: /sh_checkpoint --load {checkpoint_id}
-**Most Recent**: shannon_precompact_20251108_220000 (auto-selected by /sh_restore)
+**Restore**: /shannon:checkpoint --load {checkpoint_id}
+**Most Recent**: shannon_precompact_20251108_220000 (auto-selected by /shannon:checkpoint)
 ```
 
 **Key Learning**: --list shows ALL checkpoint types (manual, wave, precompact, milestone).
@@ -171,7 +171,7 @@ Wave 2 agents complete → WAVE_COORDINATOR synthesizes → Checkpoint auto-crea
 ```
 1. wave-orchestration skill detects Wave 2 complete
 2. Invokes context-preservation automatically:
-   /sh_checkpoint "Wave 2 complete"
+   /shannon:checkpoint "Wave 2 complete"
 
 3. Checkpoint captures:
    - Wave 2 deliverables (files created, components built)
@@ -202,10 +202,10 @@ Wave 2 agents complete → WAVE_COORDINATOR synthesizes → Checkpoint auto-crea
    - Search functionality
 
 💾 Auto-saved to Serena MCP
-🔄 Restore: /sh_restore wave_2_complete_20251108_214000
+🔄 Restore: /shannon:checkpoint wave_2_complete_20251108_214000
 ```
 
-**Key Learning**: Wave checkpoints auto-created by wave-orchestration (user doesn't call /sh_checkpoint explicitly).
+**Key Learning**: Wave checkpoints auto-created by wave-orchestration (user doesn't call /shannon:checkpoint explicitly).
 
 ---
 
@@ -222,7 +222,7 @@ PreCompact event fires
 precompact.py hook generates instructions
   ↓
 CONTEXT_GUARDIAN invokes context-preservation:
-  /sh_checkpoint "PreCompact emergency" (automatic)
+  /shannon:checkpoint "PreCompact emergency" (automatic)
   ↓
 Comprehensive checkpoint saved (11 sections)
   ↓
@@ -265,7 +265,7 @@ Checkpoint ensures ZERO information loss
 
 **Input**:
 ```bash
-/sh_checkpoint "🎉 Version 1.0 Released to Production"
+/shannon:checkpoint "🎉 Version 1.0 Released to Production"
 ```
 
 **Output**:
@@ -286,7 +286,7 @@ Checkpoint ensures ZERO information loss
    - North Star: "Launch v1.0" - 100% ACHIEVED 🎉
 
 💾 Tagged: production-v1.0
-🔄 Rollback: /sh_restore shannon_milestone_20251108_220500
+🔄 Rollback: /shannon:checkpoint shannon_milestone_20251108_220500
    (If production issues, restore to this state)
 
 ⏰ Retention: Permanent (milestone checkpoints never expire)
@@ -308,7 +308,7 @@ Checkpoint ensures ZERO information loss
 **Input**:
 ```bash
 # Before major refactor
-/sh_checkpoint "Before database schema migration - rollback point"
+/shannon:checkpoint "Before database schema migration - rollback point"
 ```
 
 **Output**:
@@ -328,7 +328,7 @@ Checkpoint ensures ZERO information loss
 
 🔄 Rollback Available:
    If migration fails:
-   1. /sh_restore shannon_checkpoint_20251108_221000
+   1. /shannon:checkpoint shannon_checkpoint_20251108_221000
    2. Revert migration: git reset --hard {commit_sha}
    3. Database: restore from checkpoint state
 
@@ -347,7 +347,7 @@ Checkpoint ensures you can restore if schema migration causes issues.
 **Input**:
 ```bash
 # After 2.5 hours of work
-/sh_checkpoint "End of day progress - partial Wave 3"
+/shannon:checkpoint "End of day progress - partial Wave 3"
 ```
 
 **Output**:
@@ -389,7 +389,7 @@ Checkpoint ensures you can restore if schema migration causes issues.
 
 **Input**:
 ```bash
-/sh_checkpoint --compare shannon_checkpoint_20251107 shannon_checkpoint_20251108
+/shannon:checkpoint --compare shannon_checkpoint_20251107 shannon_checkpoint_20251108
 ```
 
 **Output**:
@@ -442,7 +442,7 @@ Checkpoint ensures you can restore if schema migration causes issues.
 
 **Input**:
 ```bash
-/sh_checkpoint --pattern analysis
+/shannon:checkpoint --pattern analysis
 ```
 
 **Output**:
@@ -531,7 +531,7 @@ User: "This is just a quick fix, no need to checkpoint"
 
 **Symptom**:
 ```
-User never runs /sh_checkpoint manually
+User never runs /shannon:checkpoint manually
 Only PreCompact auto-checkpoints exist
 ```
 
@@ -561,14 +561,14 @@ Only PreCompact auto-checkpoints exist
 
 **Symptom**:
 ```bash
-/sh_checkpoint "checkpoint 1"
-/sh_checkpoint "checkpoint 2"
-/sh_checkpoint "done"
+/shannon:checkpoint "checkpoint 1"
+/shannon:checkpoint "checkpoint 2"
+/shannon:checkpoint "done"
 ```
 
 **Later**:
 ```bash
-/sh_checkpoint --list
+/shannon:checkpoint --list
 
 # Output shows:
 1. checkpoint 1
@@ -581,9 +581,9 @@ Only PreCompact auto-checkpoints exist
 
 **Better Labels**:
 ```bash
-/sh_checkpoint "Wave 2 complete - auth working, before payment integration"
-/sh_checkpoint "Payment integration complete - Stripe test mode passing"
-/sh_checkpoint "Production-ready - all tests passing, deployment validated"
+/shannon:checkpoint "Wave 2 complete - auth working, before payment integration"
+/shannon:checkpoint "Payment integration complete - Stripe test mode passing"
+/shannon:checkpoint "Production-ready - all tests passing, deployment validated"
 ```
 
 **Recommendation**: Descriptive labels (what was accomplished + what's next).
@@ -592,34 +592,34 @@ Only PreCompact auto-checkpoints exist
 
 ## Integration with Other Commands
 
-### /sh_checkpoint → /sh_restore
+### /shannon:checkpoint → /shannon:checkpoint
 
 **Recovery Workflow**:
 ```bash
 # Session 1: Create checkpoint
-/sh_checkpoint "Phase 3 complete, all features implemented"
+/shannon:checkpoint "Phase 3 complete, all features implemented"
 
 # [Session ends or context compaction occurs]
 
 # Session 2: Restore
-/sh_restore  # Auto-loads most recent
+/shannon:checkpoint  # Auto-loads most recent
 # OR
-/sh_restore shannon_checkpoint_20251108_213000  # Specific checkpoint
+/shannon:checkpoint shannon_checkpoint_20251108_213000  # Specific checkpoint
 ```
 
 ---
 
-### /sh_wave → /sh_checkpoint (Automatic)
+### /shannon:checkpoint → /shannon:checkpoint (Automatic)
 
 **Integration**:
 ```
 Wave execution automatically creates checkpoints:
 
-Wave 1 complete → /sh_checkpoint "Wave 1 complete" (automatic)
-Wave 2 complete → /sh_checkpoint "Wave 2 complete" (automatic)
+Wave 1 complete → /shannon:checkpoint "Wave 1 complete" (automatic)
+Wave 2 complete → /shannon:checkpoint "Wave 2 complete" (automatic)
 ...
 
-User doesn't call /sh_checkpoint manually during waves
+User doesn't call /shannon:checkpoint manually during waves
 ```
 
 ---
@@ -629,7 +629,7 @@ User doesn't call /sh_checkpoint manually during waves
 ### Issue: "Checkpoint save failed"
 
 **Symptoms**:
-- /sh_checkpoint runs but no confirmation
+- /shannon:checkpoint runs but no confirmation
 - Serena MCP errors
 
 **Diagnosis**:
@@ -669,7 +669,7 @@ ls .serena/
 # - precompact_*
 
 # Restore manually:
-/sh_restore {full_checkpoint_id}
+/shannon:checkpoint {full_checkpoint_id}
 ```
 
 ---
@@ -694,12 +694,12 @@ A:
 A: Yes, via Serena MCP directly (delete_entities). Not recommended for milestones.
 
 **Q: What if Serena MCP unavailable?**
-A: Checkpoints fail. Serena is MANDATORY for Shannon. Install before using /sh_checkpoint.
+A: Checkpoints fail. Serena is MANDATORY for Shannon. Install before using /shannon:checkpoint.
 
 ---
 
-**Command**: /sh_checkpoint
+**Command**: /shannon:checkpoint
 **Skill**: context-preservation (shannon-plugin/skills/context-preservation/SKILL.md)
 **Examples**: 10 comprehensive scenarios
 **Anti-Patterns**: 3 common mistakes
-**Integration**: Auto-checkpoints from /sh_wave, restoration via /sh_restore
+**Integration**: Auto-checkpoints from /shannon:checkpoint, restoration via /shannon:checkpoint

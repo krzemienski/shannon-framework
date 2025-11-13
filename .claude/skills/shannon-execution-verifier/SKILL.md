@@ -6,7 +6,7 @@ description: |
   inspection), and Functional Verification (runtime testing). Verifies Shannon built production-ready
   applications across all domains (Frontend, Backend, Database, Mobile, DevOps). Ensures NO MOCKS
   compliance, cross-platform functionality, and complete integration. Use after: Shannon builds any
-  application via /sh_wave, need to verify build quality, production readiness assessment.
+  application via /shannon:wave, need to verify build quality, production readiness assessment.
 
 skill-type: PROTOCOL
 version: "5.0.0"
@@ -46,7 +46,7 @@ Verify that Shannon Framework successfully built production-ready applications b
 ## When to Use
 
 Use this skill when:
-- Shannon completed building an application via /sh_wave
+- Shannon completed building an application via /shannon:wave
 - Need to verify build quality and completeness
 - Validating Shannon's cross-domain integration
 - Testing NO MOCKS compliance in generated tests
@@ -84,7 +84,7 @@ from inspection_lib.trace_analyzer import analyze_execution_trace
 
 # Capture Shannon execution
 trace = []
-async for msg in query("/sh_wave 1", options):
+async for msg in query("/shannon:wave 1", options):
     trace.append(msg)
 
 # Verify flow
@@ -473,7 +473,7 @@ options = ClaudeAgentOptions(
 print("Executing Shannon build...")
 
 execution_trace = []
-async for msg in query(prompt="/sh_wave 1", options=options):
+async for msg in query(prompt="/shannon:wave 1", options=options):
     execution_trace.append(msg)
 
     if msg.type == 'tool_call':
@@ -824,7 +824,7 @@ SHANNON BUILD VERIFICATION REPORT
 
 Scenario: PRD Creator Web Application
 Spec: docs/ref/prd-creator-spec.md (18KB)
-Command: /sh_wave 1 + /sh_wave 2
+Command: /shannon:wave 1 + /shannon:wave 2
 Duration: 45 minutes
 Cost: $67.50
 Shannon Version: 4.1.0
@@ -1060,7 +1060,7 @@ async def main():
         prompt="""
         Build the PRD Creator application from specification.
 
-        /sh_spec @docs/ref/prd-creator-spec.md
+        /shannon:spec @docs/ref/prd-creator-spec.md
 
         Then execute all waves to build complete application.
         """,
@@ -1140,12 +1140,12 @@ User approved: "You may begin and keep executing. You don't necessarily need to 
 - tests/verify_shannon_cli.py
 
 **Step 3**: Execute Tier 1 - Analysis Verification
-- Run /sh_spec on all 4 specifications
+- Run /shannon:spec on all 4 specifications
 - Verify execution flows
 - Document results to Serena
 
 **Step 4**: Execute Tier 2 - Build PRD Creator
-- Run /sh_wave to build complete application
+- Run /shannon:wave to build complete application
 - Verify with shannon-execution-verifier
 - Document results to Serena
 - Fix any bugs found

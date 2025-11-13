@@ -153,7 +153,7 @@ User completes Wave 2 of e-commerce platform implementation, needs checkpoint be
     "conversation_summary": "Completed Wave 2: Backend API implementation with JWT auth, product CRUD, cart management, and checkout workflow. All tests passing (23/23). Ready for Wave 3: Frontend integration.",
     "user_intent": "Build e-commerce platform MVP by end of month",
     "current_phase": "implementation",
-    "active_command": "/sh_wave 2"
+    "active_command": "/shannon:wave 2"
   },
 
   "project": {
@@ -352,7 +352,7 @@ serena.add_observations([
 - Files: 4 modified
 - Size: 44.6 KB
 
-🔄 To restore: /sh_restore SHANNON-W2-20251103T140000
+🔄 To restore: /shannon:restore SHANNON-W2-20251103T140000
 
 📍 Storage: Serena MCP (shannon/checkpoints/SHANNON-W2-20251103T140000)
 ⏱️  Retention: 30 days (expires 2025-12-03)
@@ -377,7 +377,7 @@ serena.add_observations([
   "size_kb": "44.6 KB",
   "compression": "gzip",
   "storage_location": "serena://shannon/checkpoints/SHANNON-W2-20251103T140000",
-  "restore_command": "/sh_restore SHANNON-W2-20251103T140000",
+  "restore_command": "/shannon:restore SHANNON-W2-20251103T140000",
   "retention_days": 30,
   "expires_at": "2025-12-03T14:00:00.000Z",
   "integrity_hash": "sha256:a7f2b3d4e5f6...",
@@ -406,7 +406,7 @@ serena.add_observations([
 To verify checkpoint works:
 ```bash
 # Restore checkpoint
-/sh_restore SHANNON-W2-20251103T140000
+/shannon:restore SHANNON-W2-20251103T140000
 
 # Expected: Full context restored
 # - Project: E-Commerce Platform

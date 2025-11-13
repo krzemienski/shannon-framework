@@ -102,7 +102,7 @@ Document all 5 hooks with purpose, rationale, architectural context, and enforce
 - [ ] Why: Prevent information loss during compaction
 - [ ] How: Activates CONTEXT_GUARDIAN agent
 - [ ] What it preserves: Spec, analysis, goals, progress, decisions
-- [ ] Integration with /sh_restore and /shannon:prime
+- [ ] Integration with /shannon:restore and /shannon:prime
 - [ ] Examples
 
 **3.3 Document PostToolUse Hook**
@@ -220,7 +220,7 @@ Create in-depth usage guides for priority commands with 10-15 examples each
 
 ### Priority Commands (Start with these)
 
-**5.1 /sh_spec Usage Guide** (10-15 examples)
+**5.1 /shannon:spec Usage Guide** (10-15 examples)
 - Simple specifications
 - Medium specifications
 - Complex specifications
@@ -236,14 +236,14 @@ Create in-depth usage guides for priority commands with 10-15 examples each
 - Anti-patterns
 - Integration with workflow
 
-**5.3 /sh_wave Usage Guide** (10-15 examples)
+**5.3 /shannon:wave Usage Guide** (10-15 examples)
 - Wave planning
 - Wave execution
 - Multi-wave coordination
 - SITREP usage
 - Anti-patterns
 
-**5.4 /sh_discover_skills Usage Guide** (10-15 examples)
+**5.4 /shannon:discover_skills Usage Guide** (10-15 examples)
 - Discovery scenarios
 - Filter usage
 - Cache management

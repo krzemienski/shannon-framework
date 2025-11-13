@@ -56,9 +56,9 @@ This makes skill content available without requiring Skill() tool.
 
 Instead of testing skills in isolation, test actual Shannon commands:
 - Commands ARE available (they're .md files that Claude reads)
-- Test: Does /sh_spec produce 8D analysis?
-- Test: Does /sh_wave coordinate agents?
-- Test: Does /sh_checkpoint save to Serena?
+- Test: Does /shannon:spec produce 8D analysis?
+- Test: Does /shannon:wave coordinate agents?
+- Test: Does /shannon:checkpoint save to Serena?
 
 ## What Must Be Re-Done
 

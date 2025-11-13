@@ -527,7 +527,7 @@ Structured analysis object:
 **Activation Trigger**:
 - Complexity preliminary estimate >=0.60 (requires deep analysis)
 - Specification >2000 words (too large for single-pass analysis)
-- User explicitly requests "/sh_spec --deep"
+- User explicitly requests "/shannon:spec --deep"
 
 **Behavior**:
 - Uses Sequential MCP for 100-500 step systematic analysis
@@ -804,7 +804,7 @@ Step 9: Validation: ✅ Quality score: 1.0
 ## Next Steps
 1. ⚠️  **CRITICAL**: Use wave-based execution (complexity 0.72 >= 0.50)
 2. Configure 9 recommended MCPs (prioritize Tier 1-2)
-3. Run /sh_wave to generate wave plan (expect 3-5 waves, 8-15 agents)
+3. Run /shannon:wave to generate wave plan (expect 3-5 waves, 8-15 agents)
 4. Use Sequential MCP for Phase 2 architecture design
 5. Enforce functional testing (Puppeteer for real-time sync, NO MOCKS)
 ```
@@ -975,7 +975,7 @@ Step 9: Validation: ✅ Quality score: 1.0
 ## Next Steps
 1. 🚨 **IMMEDIATE**: Escalate timeline risk to stakeholders
 2. Configure ALL 13 recommended MCPs (no optional - all needed for CRITICAL)
-3. Run /sh_wave with --critical flag (expect 15-25 agents, 5-8 waves)
+3. Run /shannon:wave with --critical flag (expect 15-25 agents, 5-8 waves)
 4. Use Sequential MCP for Phase 1 risk analysis (200-500 reasoning steps)
 5. Establish SITREP daily coordination protocol
 6. Begin vendor approval process IMMEDIATELY (parallel to analysis)
@@ -1215,7 +1215,7 @@ if (!verify) throw Error("Serena save failed - analysis not persisted")
 - Complexity >=0.60 (needs deep algorithm details)
 - Domain percentages unclear (consult domain-patterns.md)
 - MCP recommendations ambiguous (consult full MCP matrix)
-- User requests "/sh_spec --deep" (deep analysis mode)
+- User requests "/shannon:spec --deep" (deep analysis mode)
 - Validation failures (debug with full algorithm)
 
 ---

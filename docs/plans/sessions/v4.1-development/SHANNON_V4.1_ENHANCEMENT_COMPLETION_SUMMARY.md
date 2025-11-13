@@ -59,7 +59,7 @@
 
 **New**: honest-reflections Skill
 - Created: 1,200-line skill for gap analysis
-- Command: /sh_reflect
+- Command: /shannon:reflect
 - Validated: Detects 32% actual vs 100% claimed completion
 
 ---
@@ -98,7 +98,7 @@
 - Fresh Claude Code installation test
 - Test all 48 commands load
 - Verify /shannon:prime works
-- Verify /sh_spec produces analysis
+- Verify /shannon:spec produces analysis
 - Smoke test complete workflow
 
 **Total Remaining**: 14-19 hours

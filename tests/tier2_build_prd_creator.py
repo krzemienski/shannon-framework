@@ -47,7 +47,7 @@ BUILD_CONFIG = {
 
 async def build_application(spec_text: str, output_dir: Path) -> tuple[bool, str]:
     """
-    Execute Shannon /sh_wave to build complete application
+    Execute Shannon /shannon:wave to build complete application
 
     Returns: (success: bool, output: str)
     """
@@ -75,11 +75,11 @@ Work in: {output_dir.absolute()}
 Specification:
 {spec_text}
 
-Execute /sh_wave to build everything.
+Execute /shannon:wave to build everything.
 '''
 
     # Execute build
-    print(f"\nExecuting /sh_wave (this will take 30-45 minutes)...")
+    print(f"\nExecuting /shannon:wave (this will take 30-45 minutes)...")
     print("Progress:")
 
     start_time = time.time()

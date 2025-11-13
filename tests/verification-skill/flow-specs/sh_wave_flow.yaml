@@ -1,8 +1,8 @@
-# Shannon /sh_wave Command - Expected Execution Flow
+# Shannon /shannon:wave Command - Expected Execution Flow
 # Defines expected behavior and verification points for Shannon Framework execution
 
 metadata:
-  command: /sh_wave
+  command: /shannon:wave
   description: "Execute Shannon Framework with full orchestration and verification"
   version: "5.0.0"
   last_updated: "2025-01-09"
@@ -478,25 +478,25 @@ success_criteria:
 
 example_invocations:
   basic:
-    command: "/sh_wave spec.yaml"
+    command: "/shannon:wave spec.yaml"
     description: "Execute with specification file"
 
   interactive:
-    command: "/sh_wave --interactive"
+    command: "/shannon:wave --interactive"
     description: "Launch specification wizard"
 
   dry_run:
-    command: "/sh_wave spec.yaml --dry-run"
+    command: "/shannon:wave spec.yaml --dry-run"
     description: "Show execution plan without running"
 
   selective_phases:
-    command: "/sh_wave spec.yaml --phases analysis,implementation"
+    command: "/shannon:wave spec.yaml --phases analysis,implementation"
     description: "Execute only specified phases"
 
   no_verification:
-    command: "/sh_wave spec.yaml --verify=false --test=false"
+    command: "/shannon:wave spec.yaml --verify=false --test=false"
     description: "Skip runtime verification and testing"
 
   custom_output:
-    command: "/sh_wave spec.yaml --output ./my-project"
+    command: "/shannon:wave spec.yaml --output ./my-project"
     description: "Generate artifacts in custom directory"

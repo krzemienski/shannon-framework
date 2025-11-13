@@ -52,7 +52,7 @@ async def test_plugin_loading():
 
             # Check for Shannon commands
             shannon_commands = [c for c in commands_available
-                               if c.startswith('/sh_') or c.startswith('/shannon:')]
+                               if c.startswith('/shannon:')]
             print(f"  Shannon commands: {len(shannon_commands)}")
 
             if shannon_commands:

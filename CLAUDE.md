@@ -35,16 +35,16 @@ Complete documentation is in the plugin:
 
 ```bash
 # Verify installation
-/sh_status
+/shannon:status
 
 # Analyze a specification
-/sh_spec "Build a web app with React and Node.js"
+/shannon:spec "Build a web app with React and Node.js"
 
 # Prime a session (V4.1)
 /shannon:prime
 
 # Discover skills (V4.1)
-/sh_discover_skills
+/shannon:discover_skills
 ```
 
 ---
@@ -67,14 +67,14 @@ Working on Shannon Framework itself? You're in the right place.
 ```bash
 # In Claude Code:
 /plugin marketplace add /path/to/shannon-framework
-/plugin uninstall shannon-plugin@shannon-framework  # If already installed
-/plugin install shannon-plugin@shannon-framework
+/plugin uninstall shannon@shannon-framework  # If already installed
+/plugin install shannon@shannon-framework
 
 # Restart Claude Code
 
 # Test your changes
-/shannon-plugin:sh_status
-/shannon-plugin:shannon_prime
+/shannon:status
+/shannon:shannon_prime
 ```
 
 ### Testing via SDK (Programmatic)
@@ -87,7 +87,7 @@ Working on Shannon Framework itself? You're in the right place.
 claude plugin marketplace add /path/to/shannon-framework
 
 # Step 3: Install plugin
-claude plugin install shannon-plugin@shannon-framework
+claude plugin install shannon@shannon-framework
 
 # Step 4: Restart Claude Code (if running)
 ```
@@ -104,7 +104,7 @@ options = ClaudeAgentOptions(
 
 # Use namespaced commands
 async for message in query(
-    prompt="/shannon-plugin:sh_spec \"specification text\"",
+    prompt="/shannon:spec \"specification text\"",
     options=options
 ):
     print(message)
@@ -112,7 +112,7 @@ async for message in query(
 
 **Key requirements:**
 - `setting_sources=["user", "project"]` required for plugin loading
-- Commands are namespaced: `/shannon-plugin:sh_spec` (not `/sh_spec`)
+- Commands are namespaced: `/shannon:spec` (not `/shannon:spec`)
 - Plugin must be installed via marketplace (cannot load from local path directly)
 
 ### Development Workflow

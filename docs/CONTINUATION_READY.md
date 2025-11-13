@@ -144,7 +144,7 @@ Quick verification that everything works:
 
 ```bash
 # Test via CLI
-claude --print -- "/shannon-plugin:sh_status"
+claude --print -- "/shannon:sh_status"
 
 # Test via SDK
 python tests/test_shannon_command_execution.py
@@ -227,7 +227,7 @@ options = ClaudeAgentOptions(
     allowed_tools=[...],  # Include all tools skills need
 )
 
-prompt = "/shannon-plugin:sh_spec ..."  # Use namespace!
+prompt = "/shannon:sh_spec ..."  # Use namespace!
 ```
 
 ### Tier1 Test Issue

@@ -140,7 +140,7 @@ def main():
    - **Mobile**: iOS Simulator or Android Emulator
 
 **Quick Start**:
-- Run `/sh_check_mcps` to ensure Puppeteer MCP is configured
+- Run `/shannon:check_mcps` to ensure Puppeteer MCP is configured
 - See TEST_GUARDIAN agent for functional test patterns
 - Reference: shannon-plugin/core/TESTING_PHILOSOPHY.md
 

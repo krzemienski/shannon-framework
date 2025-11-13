@@ -1,7 +1,7 @@
 ---
-name: sh_discover_skills
+name: discover_skills
 description: Discover and catalog all available skills on system
-usage: /sh_discover_skills [--cache|--refresh|--filter <pattern>]
+usage: /shannon:discover_skills [--cache|--refresh|--filter <pattern>]
 ---
 
 # Skill Discovery Command
@@ -182,7 +182,7 @@ Use --filter to search skills
 
 **Fallback**: Using in-memory catalog (will not persist across context loss)
 
-**Recovery**: Check Serena MCP connection with /sh_check_mcps
+**Recovery**: Check Serena MCP connection with /shannon:check_mcps
 ```
 
 ---
@@ -191,7 +191,7 @@ Use --filter to search skills
 
 **This command is part of the auto-invocation system**:
 
-1. **SessionStart hook**: Runs `/sh_discover_skills --cache` automatically
+1. **SessionStart hook**: Runs `/shannon:discover_skills --cache` automatically
 2. **Skills discovered**: Made available for selection
 3. **PreCommand hook**: Selects applicable skills before command execution
 4. **Skills invoked**: Auto-loaded into agent context
@@ -210,7 +210,7 @@ Use --filter to search skills
 ### Basic Discovery
 
 ```bash
-/sh_discover_skills
+/shannon:discover_skills
 
 → Discovers all skills, uses cache if available
 → Displays count and summary
@@ -219,7 +219,7 @@ Use --filter to search skills
 ### Force Fresh Discovery
 
 ```bash
-/sh_discover_skills --refresh
+/shannon:discover_skills --refresh
 
 → Ignores cache, scans all directories
 → Useful after installing new skills
@@ -228,7 +228,7 @@ Use --filter to search skills
 ### Search for Specific Skills
 
 ```bash
-/sh_discover_skills --filter testing
+/shannon:discover_skills --filter testing
 
 → Shows only skills matching "testing"
 → Example: functional-testing, testing-anti-patterns
@@ -237,7 +237,7 @@ Use --filter to search skills
 ### Discovery + Detailed List
 
 ```bash
-/sh_discover_skills --refresh --verbose
+/shannon:discover_skills --refresh --verbose
 
 → Fresh scan with complete skill catalog displayed
 → Shows all metadata for each skill

@@ -702,7 +702,7 @@ Missing: ["OSS reference (0/15)"]
 1. Report critical gaps:
    - Example: "Missing architecture alignment (0/25) AND OSS reference (0/15) = 60% confidence"
 2. Recommend alternatives:
-   - "Suggest running /sh_spec for deeper analysis"
+   - "Suggest running /shannon:spec for deeper analysis"
    - "Consider spike/research task before implementation"
    - "Revise specification to address unknowns"
 3. DO NOT proceed to implementation
@@ -1185,7 +1185,7 @@ User: "Fix the memory leak in the dashboard"
     "  2. Heap snapshot showing leak growth over time",
     "  3. Reproduction steps (actions that trigger leak)",
     "  4. Browser console warnings/errors",
-    "Alternative: Run /sh_spec for deeper analysis phase",
+    "Alternative: Run /shannon:spec for deeper analysis phase",
     "Agent: Re-run confidence check after diagnostic evidence provided"
   ]
 }

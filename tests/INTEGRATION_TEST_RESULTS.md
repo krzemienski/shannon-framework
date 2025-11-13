@@ -167,7 +167,7 @@ shannon-plugin/skills/
 
 **Status:** ⏸️ **BLOCKED** - Requires Shannon plugin to be installed
 
-**Reason:** Commands like `/sh_spec`, `/sh_wave` only work when Shannon is installed as a plugin in Claude Code. Currently in development mode.
+**Reason:** Commands like `/shannon:spec`, `/shannon:wave` only work when Shannon is installed as a plugin in Claude Code. Currently in development mode.
 
 **To Execute:**
 1. Install Shannon V4 as local plugin: `/plugin install shannon@/Users/nick/Desktop/shannon-framework/shannon-plugin`
@@ -183,7 +183,7 @@ shannon-plugin/skills/
 **Status:** ⏸️ **BLOCKED** - Requires plugin installation + Serena MCP integration
 
 **Reason:** Checkpoint/restore functionality requires:
-- Shannon plugin active (for /sh_checkpoint and /sh_restore commands)
+- Shannon plugin active (for /shannon:checkpoint and /shannon:restore commands)
 - Serena MCP storing checkpoint data
 - New conversation to simulate context loss
 
@@ -201,11 +201,11 @@ shannon-plugin/skills/
 
 **Status:** ⏸️ **BLOCKED** - Requires plugin installation
 
-**Reason:** `/sh_test` command requires plugin to be active
+**Reason:** `/shannon:test` command requires plugin to be active
 
 **To Execute:**
 1. Install plugin
-2. Run: `/sh_test --create --platform web`
+2. Run: `/shannon:test --create --platform web`
 3. Inspect generated test code
 4. Verify NO mock frameworks imported
 
@@ -348,15 +348,15 @@ a7e7ae9 chore(plugin): update manifest to v4.0.0
 ### ⏸️ Requires Plugin Installation
 
 1. **Complete Workflow Test** (Test 1)
-   - Needs: `/sh_spec`, `/sh_wave` commands active
+   - Needs: `/shannon:spec`, `/shannon:wave` commands active
    - Blocks: Plugin must be installed
 
 2. **Context Preservation Test** (Test 2)
-   - Needs: `/sh_checkpoint`, `/sh_restore` commands active
+   - Needs: `/shannon:checkpoint`, `/shannon:restore` commands active
    - Blocks: Plugin + new conversation simulation
 
 3. **NO MOCKS Enforcement** (Test 3)
-   - Needs: `/sh_test` command active
+   - Needs: `/shannon:test` command active
    - Blocks: Plugin must be installed
 
 4. **Backward Compatibility** (Test 5)

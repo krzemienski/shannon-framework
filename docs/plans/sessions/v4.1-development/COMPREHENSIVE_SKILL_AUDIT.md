@@ -125,7 +125,7 @@
 - **Purpose**: Gap analysis before completion claims
 - **Process**: 7 phases, 100+ sequential thoughts
 - **Validation**: Sub-agent test revealed 32% actual vs 100% claimed
-- **Command**: /sh_reflect
+- **Command**: /shannon:reflect
 - **Value**: Prevents premature completion claims (proven effective)
 
 ---

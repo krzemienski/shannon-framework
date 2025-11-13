@@ -58,7 +58,7 @@ Shannon Framework v5.0 adds **functional testing via Claude Agents SDK (Python)*
 
 **Testing Approach**:
 - Load Shannon plugin programmatically via SDK
-- Execute Shannon commands (/sh_spec, /sh_wave, /shannon:prime, etc.)
+- Execute Shannon commands (/shannon:spec, /shannon:wave, /shannon:prime, etc.)
 - Validate outputs against expected results
 - Test on 4 REAL specifications (not toy examples)
 - Monitor long-running operations in real-time
@@ -218,7 +218,7 @@ from claude_agent_sdk import query, ClaudeAgentOptions
 
 async def main():
     print("=" * 80)
-    print("TEST: Shannon /sh_spec Command")
+    print("TEST: Shannon /shannon:spec Command")
     print("=" * 80)
 
     # Load Shannon plugin
@@ -230,7 +230,7 @@ async def main():
     spec_text = Path("docs/ref/prd-creator-spec.md").read_text()
 
     messages = []
-    async for msg in query(prompt=f'/sh_spec "{spec_text}"', options=options):
+    async for msg in query(prompt=f'/shannon:spec "{spec_text}"', options=options):
         if msg.type == 'assistant':
             messages.append(msg.content)
             print(".", end="", flush=True)  # Progress
@@ -439,14 +439,14 @@ def validate_contains(output: str, patterns: list, name: str = "Output") -> bool
 
 ### Phase 3: Core Command Tests (6-8 hours)
 
-#### Task 3.1: Test /sh_spec Command
+#### Task 3.1: Test /shannon:spec Command
 
 **File**: `tests/commands/test_sh_spec.py`
 
 ```python
 #!/usr/bin/env python3
 """
-Test Shannon's /sh_spec command on 4 real specifications
+Test Shannon's /shannon:spec command on 4 real specifications
 Validates 8D complexity analysis
 """
 
@@ -505,13 +505,13 @@ async def test_spec(spec_config: dict) -> bool:
         model="claude-sonnet-4-5"
     )
 
-    # Execute /sh_spec
-    print("Executing /sh_spec...")
+    # Execute /shannon:spec
+    print("Executing /shannon:spec...")
 
     messages = []
     tool_count = 0
 
-    async for msg in query(prompt=f'/sh_spec "{spec_text}"', options=options):
+    async for msg in query(prompt=f'/shannon:spec "{spec_text}"', options=options):
         if msg.type == 'assistant':
             messages.append(msg.content)
             print(".", end="", flush=True)
@@ -553,7 +553,7 @@ async def main():
     """Test all 4 specifications"""
 
     print("=" * 80)
-    print("SHANNON /sh_spec TEST: 4 Real Specifications")
+    print("SHANNON /shannon:spec TEST: 4 Real Specifications")
     print("=" * 80)
 
     total = len(TEST_SPECS)
@@ -669,24 +669,24 @@ if __name__ == '__main__':
 
 ---
 
-#### Task 3.3: Test /sh_wave Command
+#### Task 3.3: Test /shannon:wave Command
 
 **File**: `tests/commands/test_sh_wave.py`
 
 Tests wave planning (NOT execution - too expensive):
 - Load spec
-- Run /sh_spec then /sh_wave
+- Run /shannon:spec then /shannon:wave
 - Validate wave plan generated
 - Check wave count reasonable for complexity
 
 ---
 
-#### Task 3.4: Test /sh_discover_skills
+#### Task 3.4: Test /shannon:discover_skills
 
 **File**: `tests/commands/test_sh_discover_skills.py`
 
 Validates skill discovery works:
-- Execute /sh_discover_skills
+- Execute /shannon:discover_skills
 - Verify ~104 skills found
 - Check skill categories (Project, User, Plugin)
 - Validate specific Shannon skills mentioned
@@ -708,8 +708,8 @@ Validates skill discovery works:
 
 Complete Shannon workflow:
 1. /shannon:prime
-2. /sh_spec on PRD Creator
-3. /sh_wave (generate plan)
+2. /shannon:spec on PRD Creator
+3. /shannon:wave (generate plan)
 4. Validate complete workflow works
 
 **NOT executing waves** (too expensive for automated test)
@@ -795,9 +795,9 @@ class ProgressMonitor:
         print("-" * 80)
 
 # Usage
-monitor = ProgressMonitor("/sh_spec")
+monitor = ProgressMonitor("/shannon:spec")
 
-async for msg in query(prompt="/sh_spec ...", options=options):
+async for msg in query(prompt="/shannon:spec ...", options=options):
     monitor.update(msg)
 
 monitor.summary()
@@ -898,7 +898,7 @@ Tests validate Shannon on 4 real specifications:
 
 - 8D complexity analysis accuracy
 - Domain normalization (sum to 100%)
-- Command functionality (/sh_spec, /sh_wave, /shannon:prime)
+- Command functionality (/shannon:spec, /shannon:wave, /shannon:prime)
 - Skill discovery
 - Wave planning
 
@@ -1064,11 +1064,11 @@ Shannon Framework v5.0 is complete when:
 - [ ] Shannon CLI analyzed correctly (0.72-0.78)
 
 ### 3. Commands Functional
-- [ ] /sh_spec works (tested on 4 specs)
+- [ ] /shannon:spec works (tested on 4 specs)
 - [ ] /shannon:prime works (<60s)
-- [ ] /sh_wave works (generates valid plans)
-- [ ] /sh_discover_skills works (~104 skills found)
-- [ ] /sh_checkpoint works
+- [ ] /shannon:wave works (generates valid plans)
+- [ ] /shannon:discover_skills works (~104 skills found)
+- [ ] /shannon:checkpoint works
 
 ### 4. Quality Metrics
 - [ ] 100% test pass rate

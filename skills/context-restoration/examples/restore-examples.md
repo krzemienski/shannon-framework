@@ -71,7 +71,7 @@ print("""
 
 **User Command**:
 ```
-User: /sh_restore precompact_checkpoint_20250930T120000Z
+User: /shannon:restore precompact_checkpoint_20250930T120000Z
 ```
 
 **Restoration Process**:
@@ -135,7 +135,7 @@ Current state:
   Wave 2 of 5 - Backend API (complete)
   Ready to start Wave 3 - Database Integration
 
-Type /sh_wave to begin Wave 3.
+Type /shannon:wave to begin Wave 3.
 """)
 ```
 
@@ -290,7 +290,7 @@ Current Project: {target_project}
 ▶️  Ready to continue {target_project} work.
 
 To switch back to {current_project}, use:
-   /sh_restore {checkpoint_key}
+   /shannon:restore {checkpoint_key}
 """)
 ```
 
@@ -430,7 +430,7 @@ Options:
   2. Re-run specification analysis
   3. Start fresh project context
 
-Recommended: Re-run /sh_spec to regenerate analysis
+Recommended: Re-run /shannon:spec to regenerate analysis
 """)
     exit()
 

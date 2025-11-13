@@ -185,8 +185,8 @@ Must use marketplace system:
 ### Discovery 2: Command Namespacing
 
 Installed plugins namespace commands:
-- `/shannon-plugin:sh_spec` (correct)
-- `/sh_spec` (won't work)
+- `/shannon:sh_spec` (correct)
+- `/shannon:spec` (won't work)
 
 ### Discovery 3: setting_sources Mandatory
 

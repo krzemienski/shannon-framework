@@ -1,7 +1,7 @@
 ---
-name: sh_checkpoint
+name: checkpoint
 description: Create, load, or manage execution checkpoints for recovery
-usage: /sh_checkpoint [label] [--load checkpoint_id] [--list]
+usage: /shannon:checkpoint [label] [--load checkpoint_id] [--list]
 ---
 
 # Checkpoint Management Command
@@ -12,7 +12,7 @@ Creates and manages Shannon Framework checkpoints through delegation to the cont
 
 ## Prerequisites
 
-- Serena MCP available (check with `/sh_check_mcps`)
+- Serena MCP available (check with `/shannon:check_mcps`)
 
 ## Workflow
 
@@ -104,7 +104,7 @@ Format skill output for user display:
    - North Star alignment: {alignment_score}
 
 💾 Storage: Serena MCP
-🔄 Restore: /sh_checkpoint --load {checkpoint_id}
+🔄 Restore: /shannon:checkpoint --load {checkpoint_id}
 ⏰ Expires: {expires_at} ({retention_days} days)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -131,8 +131,8 @@ Format skill output for user display:
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**Restore**: /sh_checkpoint --load {checkpoint_id}
-**Compare**: /sh_checkpoint --compare {id1} {id2}
+**Restore**: /shannon:checkpoint --load {checkpoint_id}
+**Compare**: /shannon:checkpoint --compare {id1} {id2}
 ```
 
 **For LOAD mode:**

@@ -1,6 +1,6 @@
-# /sh_wave Command - Complete Usage Guide
+# /shannon:wave Command - Complete Usage Guide
 
-**Command**: `/sh_wave`
+**Command**: `/shannon:wave`
 **Purpose**: Orchestrate parallel multi-agent execution using wave-based coordination
 **Skill**: Invokes wave-orchestration skill (1581 lines)
 **Agent**: Activates WAVE_COORDINATOR for parallel execution
@@ -10,7 +10,7 @@
 
 ## Overview
 
-The `/sh_wave` command implements Shannon's **signature parallel execution system** achieving 3.5x average speedup through true multi-agent parallelism. It analyzes dependencies, groups independent work into waves, spawns agents in parallel, and manages synthesis checkpoints.
+The `/shannon:wave` command implements Shannon's **signature parallel execution system** achieving 3.5x average speedup through true multi-agent parallelism. It analyzes dependencies, groups independent work into waves, spawns agents in parallel, and manages synthesis checkpoints.
 
 **Core Value**: Transforms 16-hour sequential work into 5-hour parallel execution.
 
@@ -22,23 +22,23 @@ The `/sh_wave` command implements Shannon's **signature parallel execution syste
 
 **Usage**:
 ```bash
-/sh_wave                           # Execute waves (uses existing plan or creates new)
-/sh_wave [request]                 # Execute specific wave request
-/sh_wave --plan                    # Generate plan only (don't execute)
-/sh_wave --dry-run                 # Detailed planning with risk analysis
+/shannon:wave                           # Execute waves (uses existing plan or creates new)
+/shannon:wave [request]                 # Execute specific wave request
+/shannon:wave --plan                    # Generate plan only (don't execute)
+/shannon:wave --dry-run                 # Detailed planning with risk analysis
 ```
 
 ---
 
 ## The 15 Usage Examples
 
-### Example 1: Basic Wave Execution (Post /sh_spec)
+### Example 1: Basic Wave Execution (Post /shannon:wave)
 
-**Context**: Already ran `/sh_spec`, complexity = 0.58
+**Context**: Already ran `/shannon:wave`, complexity = 0.58
 
 **Input**:
 ```bash
-/sh_wave
+/shannon:wave
 ```
 
 **Process**:
@@ -106,7 +106,7 @@ Total: 8h parallel vs 14h sequential = 1.75x speedup
 
 **Input**:
 ```bash
-/sh_wave Build multi-tenant SaaS platform --plan
+/shannon:wave Build multi-tenant SaaS platform --plan
 ```
 
 **Output**:
@@ -187,13 +187,13 @@ Total: 14h
 
 **To Execute This Plan**:
 ```bash
-/sh_wave   # Run without --plan flag
+/shannon:wave   # Run without --plan flag
 ```
 
 **To Modify Plan**:
 - Adjust agent allocation (if resource constraints)
 - Change wave grouping (if different dependencies)
-- Update and re-run /sh_wave --plan
+- Update and re-run /shannon:wave --plan
 
 **Plan Saved**:
 ✓ Serena MCP: wave_execution_plan_20251108
@@ -208,7 +208,7 @@ Total: 14h
 
 **Input**:
 ```bash
-/sh_wave Build real-time collaboration platform --dry-run
+/shannon:wave Build real-time collaboration platform --dry-run
 ```
 
 **Output**:
@@ -280,7 +280,7 @@ Remaining: 78K tokens (safe - 39% buffer)
 
 To execute:
 ```bash
-/sh_wave  # Run without --dry-run flag
+/shannon:wave  # Run without --dry-run flag
 ```
 
 To revise plan:
@@ -297,7 +297,7 @@ To revise plan:
 
 **Input**:
 ```bash
-/sh_wave Implement user dashboard and admin panel
+/shannon:wave Implement user dashboard and admin panel
 ```
 
 **Context**: Complexity 0.52 (Complex), two independent components
@@ -381,7 +381,7 @@ Result: 6h parallel vs 12h sequential = 2x speedup
 
 **Input**:
 ```bash
-/sh_wave Build complete e-commerce platform
+/shannon:wave Build complete e-commerce platform
 ```
 
 **Context**: Complexity 0.76 (HIGH), multiple domains, complex dependencies
@@ -448,7 +448,7 @@ Iron Law: Cannot skip synthesis checkpoints
 
 **Input**:
 ```bash
-/sh_wave Implement authentication system
+/shannon:wave Implement authentication system
 ```
 
 **Context**: Auth has strict dependencies (each step depends on previous)
@@ -512,7 +512,7 @@ Shannon detected dependencies and created optimal structure.
 
 **Input**:
 ```bash
-/sh_wave Build blog platform with CMS
+/shannon:wave Build blog platform with CMS
 ```
 
 **Wave Structure**:
@@ -562,7 +562,7 @@ Savings: 27h - 13h = 14 hours (52% time reduction)
 
 **Input**:
 ```bash
-/sh_wave Build microservices for user service, product service, order service, notification service
+/shannon:wave Build microservices for user service, product service, order service, notification service
 ```
 
 **Context**: 4 independent microservices (maximum parallelism opportunity)
@@ -610,7 +610,7 @@ NOT: 6+6+6+6 = 24h
 
 **Input**:
 ```bash
-/sh_wave Implement 12 dashboard widgets
+/shannon:wave Implement 12 dashboard widgets
 ```
 
 **Context**: 12 independent widgets, but token budget limits agents/wave
@@ -642,7 +642,7 @@ Total: 12h vs 48h sequential = 4x speedup
 
 **Input**:
 ```bash
-/sh_wave Continue Wave 2
+/shannon:wave Continue Wave 2
 ```
 
 **Context**: Wave 2 had partial failure (2 agents succeeded, 1 failed)
@@ -690,7 +690,7 @@ All deliverables now present, proceeding to Wave 3
 
 **Input**:
 ```bash
-/sh_wave Build payment processing system
+/shannon:wave Build payment processing system
 ```
 
 **Initial Plan**: 3 waves
@@ -742,9 +742,9 @@ Wave 3b: PCI Compliance (2 agents, 4h)
 
 **Input**:
 ```bash
-# Context: Previously ran /sh_wave --plan
+# Context: Previously ran /shannon:wave --plan
 
-/sh_wave
+/shannon:wave
 ```
 
 **Process**:
@@ -794,7 +794,7 @@ Executing existing plan...
 
 **Input**:
 ```bash
-/sh_wave Build enterprise resource planning system
+/shannon:wave Build enterprise resource planning system
 ```
 
 **Context**: Complexity 0.82 (HIGH), requires SITREP coordination protocol
@@ -878,7 +878,7 @@ After EACH wave synthesis:
 # Mid-wave discovery: Wrong approach
 User: "Stop Wave 2, the architecture is wrong"
 
-/sh_wave --abort
+/shannon:wave --abort
 ```
 
 **Process**:
@@ -894,7 +894,7 @@ User: "Stop Wave 2, the architecture is wrong"
 3. User addresses architecture issue
 
 4. Restart with corrected approach:
-   /sh_wave --restart-from wave-1
+   /shannon:wave --restart-from wave-1
 
 5. Re-execute from Wave 1 with new architecture
 ```
@@ -917,7 +917,7 @@ User: "Stop Wave 2, the architecture is wrong"
 **Next Steps**:
 1. Address architectural issues
 2. Update architecture in Serena
-3. Restart: /sh_wave --restart-from wave-1
+3. Restart: /shannon:wave --restart-from wave-1
 
 **Time Lost**: 3h (Wave 2 partial work)
 **Time Saved by Early Abort**: 18h (vs discovering issue in Wave 5)
@@ -931,7 +931,7 @@ User: "Stop Wave 2, the architecture is wrong"
 
 **Input**:
 ```bash
-/sh_wave Add analytics dashboard
+/shannon:wave Add analytics dashboard
 ```
 
 **Context**: Complexity 0.51 (just above 0.50 threshold)
@@ -975,11 +975,11 @@ Speedup: 3.0x
 
 ## Anti-Patterns
 
-### ❌ Anti-Pattern 1: Running Waves Without /sh_spec First
+### ❌ Anti-Pattern 1: Running Waves Without /shannon:wave First
 
 **Symptom**:
 ```bash
-/sh_wave Build app  # No /sh_spec run first
+/shannon:wave Build app  # No /shannon:wave run first
 ```
 
 **Why It Fails**:
@@ -996,11 +996,11 @@ Speedup: 3.0x
 **Missing**: spec_analysis not found in Serena
 
 **Action Required**:
-1. Run /sh_spec first:
-   /sh_spec "Build app with [features]"
+1. Run /shannon:wave first:
+   /shannon:wave "Build app with [features]"
 
-2. Then run /sh_wave:
-   /sh_wave
+2. Then run /shannon:wave:
+   /shannon:wave
 
 **Why**: Wave structure depends on:
 - Complexity score (determines agent count)
@@ -1010,7 +1010,7 @@ Speedup: 3.0x
 **Cannot proceed without spec analysis.**
 ```
 
-**Recommendation**: ALWAYS run /sh_spec before /sh_wave. Exception: Resuming existing waves.
+**Recommendation**: ALWAYS run /shannon:wave before /shannon:wave. Exception: Resuming existing waves.
 
 ---
 
@@ -1205,32 +1205,32 @@ With 3 agents (user suggestion):
 
 ## Integration with Other Commands
 
-### Workflow: /sh_spec → /sh_wave
+### Workflow: /shannon:wave → /shannon:wave
 
 **Complete Flow**:
 ```bash
 # Step 1: Analyze specification
-/sh_spec "Build marketplace platform..."
+/shannon:wave "Build marketplace platform..."
 
 # Output:
 # Complexity: 0.68 (COMPLEX)
-# Execution Strategy: WAVE-BASED ← Triggers /sh_wave
+# Execution Strategy: WAVE-BASED ← Triggers /shannon:wave
 
 # Step 2: Execute waves
-/sh_wave
+/shannon:wave
 
 # This reads spec_analysis and generates waves
 ```
 
 **Data Flow**:
 ```
-/sh_spec
+/shannon:wave
   ↓
 spec-analysis calculates complexity: 0.68
   ↓
 Saves: write_memory("spec_analysis_ID", {complexity: 0.68, domains: {...}})
   ↓
-/sh_wave
+/shannon:wave
   ↓
 wave-orchestration reads: read_memory("spec_analysis_ID")
   ↓
@@ -1239,7 +1239,7 @@ Uses complexity 0.68 to allocate: 8-12 agents across 3-5 waves
 
 ---
 
-### Workflow: /sh_checkpoint → /sh_wave --resume
+### Workflow: /shannon:wave → /shannon:wave --resume
 
 **Recovery Scenario**:
 ```bash
@@ -1248,10 +1248,10 @@ Uses complexity 0.68 to allocate: 8-12 agents across 3-5 waves
 # Step 1: Context lost (auto-compact or session break)
 
 # Step 2: Restore
-/sh_restore  # Or /shannon:prime
+/shannon:wave  # Or /shannon:prime
 
 # Step 3: Resume wave execution
-/sh_wave --resume
+/shannon:wave --resume
 
 # This detects incomplete wave, continues from last checkpoint
 ```
@@ -1269,7 +1269,7 @@ Uses complexity 0.68 to allocate: 8-12 agents across 3-5 waves
 # Should show: spec_analysis_[id]
 
 # If missing:
-❌ Run /sh_spec first
+❌ Run /shannon:wave first
 
 # Check Serena MCP
 /list_memories
@@ -1348,7 +1348,7 @@ Estimated: 20-30 minutes for 10 agents
 
 **Input**:
 ```bash
-/sh_wave Build frontend in 2 parallel tracks: components in Wave 1, pages in Wave 2
+/shannon:wave Build frontend in 2 parallel tracks: components in Wave 1, pages in Wave 2
 ```
 
 **Process**:
@@ -1371,7 +1371,7 @@ Generates custom structure matching user request
 **Input**:
 ```bash
 # After waves complete
-/sh_memory pattern wave-execution
+/shannon:wave pattern wave-execution
 ```
 
 **Output**:
@@ -1446,13 +1446,13 @@ After ALL waves:
 
 ## FAQ
 
-**Q: When should I use /sh_wave vs just implementing?**
-A: Use /sh_wave when:
-   - Complexity >=0.50 (from /sh_spec)
+**Q: When should I use /shannon:wave vs just implementing?**
+A: Use /shannon:wave when:
+   - Complexity >=0.50 (from /shannon:wave)
    - Multiple independent components
    - Want 2-4x speedup
 
-   Skip /sh_wave when:
+   Skip /shannon:wave when:
    - Complexity <0.50 (sequential is fine)
    - Single linear task
    - Strict dependency chain (no parallelism possible)
@@ -1474,9 +1474,9 @@ A: No. Dependencies must be satisfied. Cannot skip waves.
 
 ---
 
-**Command**: /sh_wave
+**Command**: /shannon:wave
 **Skill**: wave-orchestration (shannon-plugin/skills/wave-orchestration/SKILL.md)
 **Agent**: WAVE_COORDINATOR (shannon-plugin/agents/WAVE_COORDINATOR.md)
 **Examples**: 15 comprehensive scenarios
 **Anti-Patterns**: 5 common mistakes + corrections
-**Integration**: Links to /sh_spec (prerequisite), /sh_checkpoint (recovery)
+**Integration**: Links to /shannon:wave (prerequisite), /shannon:wave (recovery)

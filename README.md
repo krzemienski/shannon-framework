@@ -1331,7 +1331,7 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 
 ## Commands Reference
 
-### Shannon Core Commands (12)
+### Shannon Core Commands (11)
 
 #### /shannon:spec
 **Purpose**: Analyze specification using 8D complexity framework

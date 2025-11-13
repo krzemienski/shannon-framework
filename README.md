@@ -1779,6 +1779,13 @@ Result: 100% of applicable skills found and used (vs ~70% manual)
 - **Validation**: Prevents premature "100% complete" on 32% work (proven in testing)
 - **Command**: /shannon:reflect
 
+**task-automation** ⭐ (PROTOCOL - 1,100 lines):
+- **Purpose**: Orchestrate complete Shannon workflow (prime → spec → wave) in one command
+- **Process**: Session preparation → specification analysis → user decision → wave execution → completion
+- **Used By**: /shannon:task command for end-to-end automation
+- **Modes**: Interactive (default), --auto (fully automated), --plan-only (preview)
+- **Unique**: One-command workflow eliminates manual command chaining and sequencing errors
+
 ---
 
 ## Agents Reference

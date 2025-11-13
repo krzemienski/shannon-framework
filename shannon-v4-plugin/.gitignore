@@ -1,0 +1,29 @@
+# Python
+hooks/__pycache__/
+hooks/*.pyc
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs
+hooks/logs/
+*.log
+*.jsonl
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary
+*.tmp
+*.bak
+*.swp
+*~
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/

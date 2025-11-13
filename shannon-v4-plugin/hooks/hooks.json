@@ -1,0 +1,160 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "description": "Shannon v4 session initialization with skill loading",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session_start.py",
+            "description": "Restores context from PreCompact checkpoint, loads generated skills, initializes Serena connection",
+            "timeout": 5000
+          },
+          {
+            "type": "notification",
+            "message": "✓ Shannon Framework v4.0.0 active | Skills-Based Architecture | Commands: /sh_status | Docs: /help shannon",
+            "level": "info"
+          }
+        ]
+      }
+    ],
+
+    "UserPromptSubmit": [
+      {
+        "description": "Shannon North Star goal injection and skill activation hints",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/user_prompt_submit.py",
+            "description": "Injects North Star goal, active wave context, and suggests relevant skills based on prompt analysis",
+            "timeout": 2000
+          }
+        ]
+      }
+    ],
+
+    "PreCompact": [
+      {
+        "description": "Shannon v4 zero-context-loss preservation with skill state",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/precompact.py",
+            "description": "Saves comprehensive checkpoint including: project state, active todos, current wave, generated skills, decisions, file modifications",
+            "timeout": 15000,
+            "continueOnError": false
+          }
+        ]
+      }
+    ],
+
+    "PreWave": [
+      {
+        "description": "NEW v4: Wave execution readiness validation",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre_wave.py",
+            "description": "Validates wave dependencies, checks MCP availability, injects context protocol automatically, performs readiness checks",
+            "timeout": 5000,
+            "continueOnError": false
+          }
+        ]
+      }
+    ],
+
+    "PostWave": [
+      {
+        "description": "NEW v4: Wave completion validation and state updates",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post_wave.py",
+            "description": "Collects wave results, validates outputs against success criteria, updates project state in Serena, triggers next wave or checkpoint",
+            "timeout": 5000
+          }
+        ]
+      }
+    ],
+
+    "QualityGate": [
+      {
+        "description": "NEW v4: 5-gate validation enforcement",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/quality_gate.py",
+            "description": "Enforces validation gates: Specification, Phase, Wave, Quality, Project. Blocks progression until gates pass",
+            "timeout": 10000,
+            "continueOnError": false
+          }
+        ]
+      }
+    ],
+
+    "PreToolUse": [
+      {
+        "description": "NEW v4: Skill activation and MCP availability checks",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre_tool_use.py",
+            "description": "Checks if skill should activate for tool use, validates MCP server availability, suggests alternative approaches if MCP unavailable",
+            "timeout": 2000
+          }
+        ]
+      }
+    ],
+
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "description": "Shannon v4 NO MOCKS enforcement and Reflexion learning",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post_tool_use.py",
+            "description": "Detects mock usage (blocks), learns from errors via Reflexion pattern (saves to Serena), validates functional testing patterns",
+            "timeout": 3000
+          }
+        ]
+      }
+    ],
+
+    "Stop": [
+      {
+        "description": "Shannon v4 wave and phase validation gate enforcement",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/stop.py",
+            "description": "Blocks completion until validation gates satisfied, requires functional test evidence, ensures todos complete",
+            "timeout": 2000
+          }
+        ]
+      }
+    ]
+  },
+
+  "config": {
+    "version": "4.0.0",
+    "framework": "shannon",
+    "progressive_disclosure": true,
+    "skill_based_architecture": true,
+    "zero_context_loss": true,
+    "validation_gates": 5,
+    "new_hooks": ["PreWave", "PostWave", "QualityGate", "PreToolUse"]
+  },
+
+  "hook_descriptions": {
+    "SessionStart": "Restores context, loads skills, initializes environment",
+    "UserPromptSubmit": "Injects North Star goal, suggests relevant skills",
+    "PreCompact": "Zero-context-loss: Saves complete state to Serena MCP",
+    "PreWave": "NEW: Validates dependencies, injects context, checks readiness",
+    "PostWave": "NEW: Collects results, validates outputs, updates state",
+    "QualityGate": "NEW: Enforces 5-gate validation (Spec/Phase/Wave/Quality/Project)",
+    "PreToolUse": "NEW: Skill activation, MCP availability checks",
+    "PostToolUse": "NO MOCKS enforcement, Reflexion learning from errors",
+    "Stop": "Wave/phase validation gate enforcement"
+  }
+}

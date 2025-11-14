@@ -63,6 +63,7 @@ class ShannonConfig:
         self.token_budget: int = 150000
         self.session_dir: Path = self.config_dir / 'sessions'
         self.framework_path: Optional[str] = None  # Path to Shannon Framework
+        self.cost_budget: float = 100.00  # Cost budget in USD for V3 cost optimization
 
         # Load from file first (if exists)
         self.load()
@@ -97,6 +98,13 @@ class ShannonConfig:
 
         if 'SHANNON_FRAMEWORK_PATH' in os.environ:
             self.framework_path = os.environ['SHANNON_FRAMEWORK_PATH']
+
+        if 'SHANNON_COST_BUDGET' in os.environ:
+            try:
+                self.cost_budget = float(os.environ['SHANNON_COST_BUDGET'])
+            except ValueError:
+                # Keep existing value if conversion fails
+                pass
 
     def load(self) -> None:
         """Load configuration from JSON file if it exists.
@@ -133,6 +141,9 @@ class ShannonConfig:
 
                 if 'framework_path' in data:
                     self.framework_path = data['framework_path']
+
+                if 'cost_budget' in data:
+                    self.cost_budget = data['cost_budget']
         except (json.JSONDecodeError, OSError):
             # If config is malformed or unreadable, use defaults
             # Don't raise - degrade gracefully
@@ -162,7 +173,8 @@ class ShannonConfig:
             'log_level': self.log_level,
             'session_dir': str(self.session_dir),
             'token_budget': self.token_budget,
-            'framework_path': self.framework_path
+            'framework_path': self.framework_path,
+            'cost_budget': self.cost_budget
         }
 
         with open(self.config_file, 'w') as f:

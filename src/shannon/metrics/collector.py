@@ -222,18 +222,83 @@ class MetricsCollector(MessageCollector):
 
     async def _extract_from_message(self, message: Any) -> None:
         """
-        Extract metrics from SDK message
+        Extract OPERATIONAL STATE from SDK message
 
-        Handles various SDK message types:
-        - Usage blocks (tokens, cost)
-        - Content blocks (text, tool use)
-        - Progress indicators
+        Extracts:
+        - Current operation/stage from text
+        - Tool calls in progress
+        - Completed stages/dimensions
+        - Progress percentage
+        - Cost/tokens from usage blocks
 
         Args:
             message: SDK message to parse
         """
         # Get message type
         msg_type = type(message).__name__
+
+        # Extract text content for operational state parsing
+        text_content = None
+        if hasattr(message, 'text'):
+            text_content = message.text
+        elif hasattr(message, 'content') and isinstance(message.content, str):
+            text_content = message.content
+
+        # Parse operational state from text
+        if text_content:
+            # Detect current step/stage
+            if "## Step" in text_content or "### " in text_content:
+                # Extract stage name
+                lines = text_content.split('\n')
+                for line in lines:
+                    if line.startswith("## Step") or line.startswith("###"):
+                        stage = line.replace("##", "").replace("###", "").strip()
+                        self._metrics.current_stage = stage[:50]  # Truncate
+                        break
+
+            # Detect dimension completion (for spec analysis)
+            import re
+            score_pattern = r'Score:\s*\*\*(\d+\.\d+)\*\*'
+            dimension_pattern = r'\*\*(\w+)\s+Complexity'
+
+            if re.search(score_pattern, text_content):
+                # Found a completed dimension
+                dim_match = re.search(dimension_pattern, text_content)
+                score_match = re.search(score_pattern, text_content)
+
+                if dim_match and score_match:
+                    dim_name = dim_match.group(1)
+                    score = float(score_match.group(1))
+
+                    # Add to completed stages
+                    stage_entry = f"{dim_name} ({score:.2f})"
+                    if stage_entry not in self._metrics.completed_stages:
+                        self._metrics.completed_stages.append(stage_entry)
+
+                        # Update progress if this is 8D analysis (8 dimensions)
+                        if self._metrics.total_stages == 0:
+                            self._metrics.total_stages = 8  # Spec analysis has 8 dimensions
+
+                        completed_count = len(self._metrics.completed_stages)
+                        self._metrics.progress = completed_count / self._metrics.total_stages
+
+            # Detect current activity
+            activity_keywords = {
+                "Analyzing": "analyzing",
+                "Calculating": "calculating",
+                "Processing": "processing",
+                "Generating": "generating",
+                "Computing": "computing"
+            }
+
+            for keyword, state in activity_keywords.items():
+                if keyword in text_content:
+                    # Extract what's being analyzed
+                    if "complexity" in text_content.lower():
+                        for dim in ["Structural", "Cognitive", "Coordination", "Temporal", "Technical", "Scale", "Uncertainty", "Dependencies"]:
+                            if dim in text_content:
+                                self._metrics.current_stage = f"{state.title()} {dim} Complexity"
+                                break
 
         # Try to extract usage info (tokens, cost)
         if hasattr(message, 'usage'):

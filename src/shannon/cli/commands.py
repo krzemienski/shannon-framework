@@ -975,21 +975,57 @@ def task(
             # Step 3: Execute waves
             ui.console.print("[bold]Step 2:[/bold] Executing waves...")
 
-            # Use /shannon:task command for integrated execution
+            # Use /shannon:task command with dashboard
             wave_messages = []
+
+            # V3: Live dashboard for task execution
             try:
-                async for msg in client.invoke_command('/shannon:task', spec_text):
-                    wave_messages.append(msg)
-                    if verbose:
-                        from claude_agent_sdk import ToolUseBlock, TextBlock
-                        if isinstance(msg, ToolUseBlock):
-                            ui.console.print(f"  [cyan]→[/cyan] Tool: {msg.name}")
-                        elif isinstance(msg, TextBlock):
-                            preview = msg.text[:80].replace('\n', ' ')
-                            ui.console.print(f"  [dim]{preview}[/dim]")
-            finally:
-                # Ensure generator cleanup
-                pass
+                from shannon.sdk.interceptor import MessageInterceptor
+                from shannon.metrics.collector import MetricsCollector
+                from shannon.metrics.dashboard import LiveDashboard
+
+                collector = MetricsCollector(operation_name="task-execution")
+                dashboard = LiveDashboard(collector, refresh_per_second=4)
+                interceptor = MessageInterceptor()
+
+                task_iter = client.invoke_command('/shannon:task', spec_text)
+                instrumented_iter = interceptor.intercept(task_iter, [collector])
+
+                with dashboard:
+                    async for msg in instrumented_iter:
+                        wave_messages.append(msg)
+
+                        # Stream messages to dashboard
+                        from claude_agent_sdk import TextBlock, ToolUseBlock, ThinkingBlock
+
+                        if isinstance(msg, TextBlock):
+                            dashboard.update(msg.text)
+                        elif isinstance(msg, ToolUseBlock):
+                            dashboard.update(f"→ Tool: {msg.name}")
+                        elif isinstance(msg, ThinkingBlock):
+                            preview = msg.thinking[:100] + "..." if len(msg.thinking) > 100 else msg.thinking
+                            dashboard.update(f"💭 {preview}")
+                        elif hasattr(msg, 'content'):
+                            for block in msg.content:
+                                if isinstance(block, TextBlock):
+                                    dashboard.update(block.text)
+
+            except Exception as e:
+                ui.console.print(f"[yellow]Dashboard unavailable: {e}[/yellow]\n")
+
+                # Fallback
+                try:
+                    async for msg in client.invoke_command('/shannon:task', spec_text):
+                        wave_messages.append(msg)
+                        if verbose:
+                            from claude_agent_sdk import ToolUseBlock, TextBlock
+                            if isinstance(msg, ToolUseBlock):
+                                ui.console.print(f"  [cyan]→[/cyan] Tool: {msg.name}")
+                            elif isinstance(msg, TextBlock):
+                                preview = msg.text[:80].replace('\n', ' ')
+                                ui.console.print(f"  [dim]{preview}[/dim]")
+                finally:
+                    pass
 
             # Parse wave results
             wave_result = parser.extract_wave_result(wave_messages)

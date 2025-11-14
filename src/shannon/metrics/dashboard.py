@@ -93,7 +93,7 @@ class LiveDashboard:
         buffer_size: int = 100
     ):
         """
-        Initialize live dashboard
+        Initialize live dashboard with message streaming
 
         Args:
             collector: MetricsCollector instance to read from

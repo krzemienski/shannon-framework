@@ -238,6 +238,27 @@ def analyze(
                                 messages.append(msg)
                                 message_count += 1
 
+                                # Pass readable message content to dashboard for display
+                                from claude_agent_sdk import TextBlock, ToolUseBlock, ThinkingBlock
+
+                                if isinstance(msg, TextBlock):
+                                    # Show Shannon's text output
+                                    dashboard.update(msg.text)
+                                elif isinstance(msg, ToolUseBlock):
+                                    # Show tool calls
+                                    dashboard.update(f"→ Tool: {msg.name}")
+                                elif isinstance(msg, ThinkingBlock):
+                                    # Show thinking (truncated)
+                                    thinking_preview = msg.thinking[:100] + "..." if len(msg.thinking) > 100 else msg.thinking
+                                    dashboard.update(f"💭 {thinking_preview}")
+                                elif hasattr(msg, 'content'):
+                                    # Handle other message types with content
+                                    for block in msg.content:
+                                        if isinstance(block, TextBlock):
+                                            dashboard.update(block.text)
+                                        elif isinstance(block, ToolUseBlock):
+                                            dashboard.update(f"→ Tool: {block.name}")
+
                         console.print("\n[dim]Analysis complete, processing results...[/dim]\n")
 
                     except Exception as e:

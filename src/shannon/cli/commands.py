@@ -510,25 +510,45 @@ def wave(request: str, session_id: Optional[str], verbose: bool) -> None:
             # Invoke wave orchestration skill
             messages = []
 
-            if verbose:
-                ui.console.print("[dim]Invoking wave orchestration...[/dim]")
-
-            # Use /shannon:wave command - collect all messages first
+            # V3: Use live dashboard for wave execution
             try:
-                async for msg in client.invoke_command('/shannon:wave', request):
-                    messages.append(msg)
+                from shannon.sdk.interceptor import MessageInterceptor
+                from shannon.metrics.collector import MetricsCollector
+                from shannon.metrics.dashboard import LiveDashboard
 
-                    # Show progress inline during iteration
-                    if verbose:
-                        from claude_agent_sdk import ToolUseBlock, TextBlock
-                        if isinstance(msg, ToolUseBlock):
-                            ui.console.print(f"  [cyan]→[/cyan] Tool: {msg.name}")
-                        elif isinstance(msg, TextBlock):
-                            preview = msg.text[:80].replace('\n', ' ')
-                            ui.console.print(f"  [dim]{preview}[/dim]")
-            finally:
-                # Ensure generator cleanup
-                pass
+                ui.console.print("[dim]Executing wave with live dashboard...[/dim]\n")
+
+                collector = MetricsCollector(operation_name="wave-execution")
+                dashboard = LiveDashboard(collector, refresh_per_second=4)
+                interceptor = MessageInterceptor()
+
+                # Wrap wave execution with dashboard
+                wave_iter = client.invoke_command('/shannon:wave', request)
+                instrumented_iter = interceptor.intercept(wave_iter, [collector])
+
+                with dashboard:
+                    async for msg in instrumented_iter:
+                        messages.append(msg)
+
+                ui.console.print("\n[dim]Wave complete, processing results...[/dim]\n")
+
+            except Exception as e:
+                ui.console.print(f"[yellow]Dashboard unavailable: {e}, using standard output[/yellow]\n")
+
+                # Fallback: Standard wave execution
+                try:
+                    async for msg in client.invoke_command('/shannon:wave', request):
+                        messages.append(msg)
+
+                        if verbose:
+                            from claude_agent_sdk import ToolUseBlock, TextBlock
+                            if isinstance(msg, ToolUseBlock):
+                                ui.console.print(f"  [cyan]→[/cyan] Tool: {msg.name}")
+                            elif isinstance(msg, TextBlock):
+                                preview = msg.text[:80].replace('\n', ' ')
+                                ui.console.print(f"  [dim]{preview}[/dim]")
+                finally:
+                    pass
 
             if verbose:
                 ui.console.print(f"[dim]Received {len(messages)} messages[/dim]")

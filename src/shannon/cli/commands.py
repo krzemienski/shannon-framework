@@ -551,6 +551,23 @@ def wave(request: str, session_id: Optional[str], verbose: bool) -> None:
                     async for msg in instrumented_iter:
                         messages.append(msg)
 
+                        # Pass readable messages to dashboard
+                        from claude_agent_sdk import TextBlock, ToolUseBlock, ThinkingBlock
+
+                        if isinstance(msg, TextBlock):
+                            dashboard.update(msg.text)
+                        elif isinstance(msg, ToolUseBlock):
+                            dashboard.update(f"→ Tool: {msg.name}")
+                        elif isinstance(msg, ThinkingBlock):
+                            preview = msg.thinking[:100] + "..." if len(msg.thinking) > 100 else msg.thinking
+                            dashboard.update(f"💭 {preview}")
+                        elif hasattr(msg, 'content'):
+                            for block in msg.content:
+                                if isinstance(block, TextBlock):
+                                    dashboard.update(block.text)
+                                elif isinstance(block, ToolUseBlock):
+                                    dashboard.update(f"→ Tool: {block.name}")
+
                 ui.console.print("\n[dim]Wave complete, processing results...[/dim]\n")
 
             except Exception as e:

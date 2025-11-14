@@ -276,6 +276,26 @@ class ContextManager:
 
         self.logger.info(f"Project deleted: {project_id}")
 
+    def get_state(self) -> Dict[str, Any]:
+        """
+        Get current context state for V3.1 dashboard.
+
+        Returns:
+            Dictionary with loaded context information:
+            - loaded_files: List of file paths currently loaded
+            - active_memories: List of active memory names
+            - available_tools: List of tool names
+            - mcp_servers: List of connected MCP servers
+            - total_bytes: Total bytes of loaded content
+        """
+        return {
+            'loaded_files': list(self.session.loaded_files.keys()),
+            'active_memories': [],  # Would track from Serena queries
+            'available_tools': [],  # Would track from tool registry
+            'mcp_servers': [],  # Would track from MCP manager
+            'total_bytes': sum(len(content) for content in self.session.loaded_files.values())
+        }
+
     def get_stats(self) -> Dict[str, Any]:
         """
         Get context manager statistics

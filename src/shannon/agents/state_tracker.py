@@ -418,6 +418,16 @@ class AgentStateTracker:
         with self._lock:
             return self._get_state(agent_id)
 
+    def get_all_states(self) -> List[AgentState]:
+        """
+        Get all agent states regardless of status (V3.1 dashboard integration).
+
+        Returns:
+            List of all AgentState instances
+        """
+        with self._lock:
+            return list(self.agents.values())
+
     def get_active_agents(self) -> List[AgentState]:
         """
         Get all active agents.
@@ -430,6 +440,16 @@ class AgentStateTracker:
                 state for state in self.agents.values()
                 if state.is_active
             ]
+
+    def get_all_states(self) -> List[AgentState]:
+        """
+        Get all agent states regardless of status.
+
+        Returns:
+            List of all AgentState instances
+        """
+        with self._lock:
+            return list(self.agents.values())
 
     def get_wave_agents(self, wave_number: int) -> List[AgentState]:
         """

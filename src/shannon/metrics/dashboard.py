@@ -215,48 +215,85 @@ class LiveDashboard:
 
     def _create_compact_layout(self, snapshot: MetricsSnapshot) -> Panel:
         """
-        Create compact 3-line view
+        Create OPERATIONAL TELEMETRY compact view
+
+        Shows WHAT is running, WHERE we are, WHAT we're waiting for
 
         Args:
-            snapshot: Current metrics
+            snapshot: Current operational state and metrics
 
         Returns:
-            Panel with compact display
+            Panel with live operational display
         """
-        # Progress bar
+        lines = []
+
+        # Line 1: Current stage/operation
+        stage_display = snapshot.current_stage if snapshot.current_stage else "Initializing"
+        lines.append(f"[bold]{snapshot.current_operation}[/bold] - {stage_display}")
+
+        # Line 2: Progress bar with stage count
         progress_chars = 10
         filled = int(snapshot.progress * progress_chars)
         bar = '▓' * filled + '░' * (progress_chars - filled)
 
-        # Format metrics
-        cost_str = f"${snapshot.cost_total:.2f}"
-        tokens_str = f"{snapshot.tokens_total / 1000:.1f}K"
-        duration_str = f"{snapshot.duration_seconds:.0f}s"
-
-        # Stage info
         stage_info = ""
         if snapshot.total_stages > 0:
             completed = len(snapshot.completed_stages)
-            stage_info = f" ({completed}/{snapshot.total_stages} dims)"
+            stage_info = f" ({completed}/{snapshot.total_stages} stages)"
 
-        # Build content
-        content = (
-            f"{bar} {snapshot.progress:.0%}{stage_info}\n"
-            f"{cost_str} | {tokens_str} | {duration_str}\n"
-            f"Press ↵ for streaming"
-        )
+        lines.append(f"{bar} {snapshot.progress:.0%}{stage_info}")
 
-        # Determine border style based on status
-        border_style = "cyan"
+        # Line 3: Operational state - WHAT we're doing/waiting for
+        if snapshot.waiting_for:
+            # WAITING state - show what we're blocked on
+            wait_time = ""
+            if snapshot.last_activity_time:
+                wait_seconds = (datetime.now() - snapshot.last_activity_time).total_seconds()
+                wait_time = f" ({wait_seconds:.0f}s...)"
+
+            lines.append(f"[yellow]⏳ {snapshot.waiting_for}{wait_time}[/yellow]")
+
+        elif snapshot.agent_status == "ACTIVE" and snapshot.last_activity:
+            # ACTIVE state - show recent activity
+            lines.append(f"[green]⚙[/green]  {snapshot.last_activity}")
+
+        elif snapshot.is_complete:
+            lines.append("[green]✅ Complete[/green]")
+
+        elif snapshot.has_error:
+            lines.append(f"[red]✗ Error: {snapshot.error_message}[/red]")
+
+        else:
+            lines.append("[dim]Processing...[/dim]")
+
+        # Line 4: Metrics
+        cost_str = f"${snapshot.cost_total:.2f}"
+        tokens_k = snapshot.tokens_total / 1000
+        tokens_str = f"{tokens_k:.1f}K" if tokens_k > 0 else "0"
+        duration_str = f"{snapshot.duration_seconds:.0f}s" if snapshot.duration_seconds > 0 else "0s"
+
+        lines.append(f"{cost_str} | {tokens_str} | {duration_str} | {snapshot.message_count} msgs")
+
+        # Line 5: Controls
+        lines.append("[dim][↵] Details | [Esc] Hide | [q] Quit[/dim]")
+
+        content = "\n".join(lines)
+
+        # Border color based on status
         if snapshot.has_error:
             border_style = "red"
         elif snapshot.is_complete:
             border_style = "green"
+        elif snapshot.waiting_for:
+            border_style = "yellow"  # Waiting
+        else:
+            border_style = "cyan"  # Active
 
         return Panel(
             content,
-            title=f"Shannon: {snapshot.current_operation}",
-            border_style=border_style
+            title="[cyan]Shannon CLI V3 - Live Operations[/cyan]",
+            border_style=border_style,
+            padding=(0, 1)
         )
 
     def _create_detailed_layout(self, snapshot: MetricsSnapshot) -> Layout:

@@ -28,9 +28,10 @@ from shannon.sdk.interceptor import MessageCollector
 @dataclass
 class MetricsSnapshot:
     """
-    Immutable snapshot of current metrics
+    Immutable snapshot of OPERATIONAL STATE and metrics
 
-    Used for thread-safe reads by dashboard without locking.
+    Used for thread-safe reads by dashboard.
+    Shows WHAT is running, WHERE we are, WHAT we're waiting for.
     """
     # Cost tracking
     cost_input: float = 0.0
@@ -64,6 +65,13 @@ class MetricsSnapshot:
     is_complete: bool = False
     has_error: bool = False
     error_message: Optional[str] = None
+
+    # OPERATIONAL STATE (NEW for V3 telemetry)
+    waiting_for: Optional[str] = None  # "Claude API (Sequential tool)" or None
+    last_activity_time: Optional[datetime] = None  # Detect stalls
+    last_activity: Optional[str] = None  # "Completed Cognitive dimension"
+    current_tool: Optional[str] = None  # "Sequential" or "Read" or None
+    agent_status: str = "ACTIVE"  # "ACTIVE" | "WAITING" | "BLOCKED" | "COMPLETE"
 
 
 class MetricsCollector(MessageCollector):
@@ -188,16 +196,20 @@ class MetricsCollector(MessageCollector):
 
     def get_snapshot(self) -> MetricsSnapshot:
         """
-        Get immutable snapshot of current metrics
+        Get immutable snapshot of OPERATIONAL STATE and metrics
 
         Thread-safe: Returns copy of internal state without locking.
         Dashboard can call this at any time without blocking.
 
         Returns:
-            MetricsSnapshot with current values
+            MetricsSnapshot with current operational state and metrics
         """
-        # Return copy to avoid race conditions
-        # Python dataclass copy is atomic for primitive types
+        # Calculate wait duration if waiting
+        waiting_duration = None
+        if self._tool_start_time:
+            waiting_duration = (datetime.now() - self._tool_start_time).total_seconds()
+
+        # Return copy with all operational state
         return MetricsSnapshot(
             cost_input=self._metrics.cost_input,
             cost_output=self._metrics.cost_output,
@@ -217,7 +229,13 @@ class MetricsCollector(MessageCollector):
             error_count=self._metrics.error_count,
             is_complete=self._metrics.is_complete,
             has_error=self._metrics.has_error,
-            error_message=self._metrics.error_message
+            error_message=self._metrics.error_message,
+            # OPERATIONAL STATE
+            waiting_for=self._metrics.waiting_for,
+            last_activity_time=self._metrics.last_activity_time,
+            last_activity=self._metrics.last_activity,
+            current_tool=self._metrics.current_tool,
+            agent_status=self._metrics.agent_status
         )
 
     async def _extract_from_message(self, message: Any) -> None:
@@ -298,7 +316,36 @@ class MetricsCollector(MessageCollector):
                         for dim in ["Structural", "Cognitive", "Coordination", "Temporal", "Technical", "Scale", "Uncertainty", "Dependencies"]:
                             if dim in text_content:
                                 self._metrics.current_stage = f"{state.title()} {dim} Complexity"
+                                self._metrics.agent_status = "ACTIVE"
+                                self._metrics.last_activity = f"{state.title()} {dim}"
+                                self._metrics.last_activity_time = datetime.now()
                                 break
+
+        # Detect tool calls (WAITING state)
+        if hasattr(message, 'name'):  # ToolUseBlock
+            tool_name = message.name
+            self._metrics.current_tool = tool_name
+            self._metrics.waiting_for = f"API call ({tool_name} tool)"
+            self._metrics.agent_status = "WAITING"
+            self._tool_start_time = datetime.now()
+            self._current_tool_name = tool_name
+
+            # Log activity
+            self._metrics.last_activity = f"Tool: {tool_name}"
+            self._metrics.last_activity_time = datetime.now()
+
+        # Detect tool completion (results returned)
+        if hasattr(message, 'is_error'):  # ToolResultBlock
+            if self._current_tool_name:
+                self._metrics.last_activity = f"✓ {self._current_tool_name} complete"
+                self._metrics.last_activity_time = datetime.now()
+
+            # Clear waiting state
+            self._metrics.waiting_for = None
+            self._metrics.current_tool = None
+            self._metrics.agent_status = "ACTIVE"
+            self._tool_start_time = None
+            self._current_tool_name = None
 
         # Try to extract usage info (tokens, cost)
         if hasattr(message, 'usage'):

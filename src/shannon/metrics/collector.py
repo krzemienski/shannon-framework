@@ -115,12 +115,18 @@ class MetricsCollector(MessageCollector):
         self._lock = asyncio.Lock()
         self._metrics = MetricsSnapshot(
             current_operation=operation_name,
-            start_time=datetime.now()
+            start_time=datetime.now(),
+            last_activity_time=datetime.now(),
+            agent_status="ACTIVE"
         )
 
         # Message parsing state
         self._message_buffer: List[str] = []
         self._last_progress_update: Optional[datetime] = None
+
+        # Tool wait tracking (NEW for operational telemetry)
+        self._tool_start_time: Optional[datetime] = None
+        self._current_tool_name: Optional[str] = None
 
     async def process(self, message: Any) -> None:
         """

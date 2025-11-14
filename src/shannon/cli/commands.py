@@ -146,17 +146,6 @@ def analyze(
     """
     async def run_analysis() -> None:
         """Execute analysis workflow with COMPLETE streaming visibility."""
-        # Import all SDK message types for complete visibility
-        from claude_agent_sdk import (
-            AssistantMessage,
-            SystemMessage,
-            ToolUseBlock,
-            TextBlock,
-            ThinkingBlock,
-            ToolResultBlock,
-            ResultMessage
-        )
-
         # Initialize components
         config = ShannonConfig()
         config.ensure_directories()
@@ -184,6 +173,50 @@ def analyze(
             console.print(f"[dim]Length: {len(spec_text)} characters[/dim]")
             console.print(f"[dim]Session: {generated_session_id}[/dim]")
             console.print()
+
+            # Check if running inside Claude Code or if API key is missing
+            # Allow SHANNON_TEST_MODE to override direct mode for testing
+            import os
+            test_mode = os.getenv('SHANNON_TEST_MODE') == '1'
+
+            from shannon.cli.direct_mode import is_running_inside_claude_code, check_api_key_and_suggest
+
+            if is_running_inside_claude_code() and not test_mode:
+                console.print("[yellow]ℹ️  Running inside Claude Code - using direct mode[/yellow]")
+                console.print("[dim]Shannon Framework skills will be invoked directly[/dim]")
+                console.print("[dim]Set SHANNON_TEST_MODE=1 to force SDK mode for testing[/dim]")
+                console.print()
+                console.print("="*60)
+                console.print("DIRECT MODE: Execute spec-analysis skill")
+                console.print("="*60)
+                console.print()
+                console.print("Specification to analyze:")
+                console.print()
+                console.print(spec_text)
+                console.print()
+                console.print("="*60)
+                console.print("Please invoke: @skill spec-analysis")
+                console.print("Or use: /shannon:spec via SlashCommand tool")
+                console.print("="*60)
+                console.print()
+                sys.exit(0)
+
+            # Check API key for standalone mode
+            if not check_api_key_and_suggest():
+                console.print("[red]Cannot proceed: API key required for standalone Shannon CLI[/red]")
+                console.print("[dim]Set ANTHROPIC_API_KEY environment variable[/dim]")
+                sys.exit(1)
+
+            # Import all SDK message types for complete visibility
+            from claude_agent_sdk import (
+                AssistantMessage,
+                SystemMessage,
+                ToolUseBlock,
+                TextBlock,
+                ThinkingBlock,
+                ToolResultBlock,
+                ResultMessage
+            )
 
             # Initialize SDK client
             client = ShannonSDKClient()
@@ -224,8 +257,9 @@ def analyze(
                         interceptor = MessageInterceptor()
 
                         # Create query iterator
+                        # CRITICAL: Use /spec (not /shannon:spec - no namespace in SDK loading)
                         query_iter = query(
-                            prompt=f"/shannon:spec {spec_text}",
+                            prompt=f'/spec "{spec_text}"',
                             options=client.base_options
                         )
 
@@ -261,6 +295,16 @@ def analyze(
 
                         console.print("\n[dim]Analysis complete, processing results...[/dim]\n")
 
+                        # Show final metrics from collector
+                        final_metrics = collector.get_snapshot()
+                        if final_metrics.cost_total > 0 or final_metrics.tokens_total > 0:
+                            console.print("[bold cyan]📊 Final Metrics:[/bold cyan]")
+                            console.print(f"  Cost: [green]${final_metrics.cost_total:.4f}[/green]")
+                            console.print(f"  Tokens: [green]{final_metrics.tokens_total:,}[/green] ({final_metrics.tokens_input:,} in / {final_metrics.tokens_output:,} out)")
+                            console.print(f"  Duration: [green]{final_metrics.duration_seconds:.1f}s[/green]")
+                            console.print(f"  Messages: [green]{final_metrics.message_count}[/green]")
+                            console.print()
+
                     except Exception as e:
                         console.print(f"[yellow]Dashboard unavailable: {e}[/yellow]")
                         console.print("[dim]Falling back to standard output...[/dim]\n")
@@ -272,8 +316,9 @@ def analyze(
                     console.print()
 
                     # Use query() DIRECTLY
+                    # CRITICAL: Use /spec (not /shannon:spec - no namespace when plugin loaded)
                     async for msg in query(
-                        prompt=f"/shannon:spec {spec_text}",
+                        prompt=f'/spec "{spec_text}"',
                         options=client.base_options
                     ):
                         messages.append(msg)

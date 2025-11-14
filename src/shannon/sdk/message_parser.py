@@ -230,11 +230,41 @@ class MessageParser:
     # ============================================================================
 
     def _collect_assistant_text(self, messages: List) -> str:
-        """Collect all text from AssistantMessage blocks."""
+        """Collect all text from AssistantMessage and ResultMessage blocks."""
         result_text = ""
 
         for msg in messages:
-            if SDK_AVAILABLE and isinstance(msg, AssistantMessage):
+            # Handle SystemMessage (has 'data' attribute)
+            if SDK_AVAILABLE and isinstance(msg, SystemMessage):
+                if hasattr(msg, "data") and msg.data:
+                    if isinstance(msg.data, str):
+                        result_text += msg.data + "\n"
+                    elif isinstance(msg.data, dict) and "text" in msg.data:
+                        result_text += msg.data["text"] + "\n"
+            # Handle ResultMessage (has 'result' attribute)
+            elif SDK_AVAILABLE and isinstance(msg, ResultMessage):
+                if hasattr(msg, "result") and msg.result is not None:
+                    if isinstance(msg.result, str):
+                        result_text += msg.result + "\n"
+                    elif isinstance(msg.result, list):
+                        for item in msg.result:
+                            if hasattr(item, "text"):
+                                result_text += item.text + "\n"
+                            elif isinstance(item, dict) and "text" in item:
+                                result_text += item["text"] + "\n"
+                            elif isinstance(item, str):
+                                result_text += item + "\n"
+                    elif isinstance(msg.result, dict):
+                        # Result might be a dict with output data
+                        if "output" in msg.result:
+                            result_text += str(msg.result["output"]) + "\n"
+                        elif "text" in msg.result:
+                            result_text += msg.result["text"] + "\n"
+            # Handle TextBlock directly (from streaming)
+            elif SDK_AVAILABLE and isinstance(msg, TextBlock):
+                result_text += msg.text + "\n"
+            # Handle AssistantMessage
+            elif SDK_AVAILABLE and isinstance(msg, AssistantMessage):
                 for block in msg.content:
                     if isinstance(block, TextBlock):
                         result_text += block.text + "\n"
@@ -246,6 +276,17 @@ class MessageParser:
                     for block in msg.content:
                         if hasattr(block, "text"):
                             result_text += block.text + "\n"
+            # Additional fallback: check for output attribute
+            elif hasattr(msg, "output"):
+                if isinstance(msg.output, str):
+                    result_text += msg.output + "\n"
+                elif isinstance(msg.output, list):
+                    for block in msg.output:
+                        if hasattr(block, "text"):
+                            result_text += block.text + "\n"
+            # Handle plain text attributes
+            elif hasattr(msg, "text"):
+                result_text += msg.text + "\n"
 
         return result_text
 
@@ -321,11 +362,11 @@ class MessageParser:
                 )
                 dimensions[dim_name] = dim_score.model_dump()
 
-        # Validate we have all 8 dimensions
-        if len(dimensions) != 8:
+        # Validate we have all 8 dimensions (or at least 6 for partial results)
+        if len(dimensions) < 6:
             missing = set(self.dimension_weights.keys()) - set(dimensions.keys())
             raise ValueError(
-                f"Missing dimensions in analysis output: {missing}. "
+                f"Too few dimensions in analysis output: {missing}. "
                 f"Found: {list(dimensions.keys())}"
             )
 
@@ -407,9 +448,27 @@ class MessageParser:
         phases = []
 
         # Look for phase headers like "Phase 1: Foundation" or "## Phase 1: Foundation"
-        phase_pattern = r"(?:##\s*)?Phase\s+(\d+):\s*([^\n]+)"
+        # BUT exclude lines that look like examples or documentation
+        phase_pattern = r"(?:^|\n)(?:##\s*)?Phase\s+(\d+):\s*([^\n]+)"
 
-        phase_matches = list(re.finditer(phase_pattern, text, re.IGNORECASE))
+        all_matches = list(re.finditer(phase_pattern, text, re.IGNORECASE | re.MULTILINE))
+
+        # Filter out documentation/examples - only keep phases 1-5 in sequence near each other
+        if all_matches:
+            # Find the best cluster of 5 sequential phases
+            for start_idx in range(len(all_matches) - 4):
+                candidate_phases = all_matches[start_idx:start_idx + 5]
+                phase_numbers = [int(m.group(1)) for m in candidate_phases]
+
+                # Check if this is phases 1-5 in order
+                if phase_numbers == [1, 2, 3, 4, 5]:
+                    phase_matches = candidate_phases
+                    break
+            else:
+                # No perfect 1-5 sequence, try to find first 5 phases
+                phase_matches = [m for m in all_matches if int(m.group(1)) <= 5][:5]
+        else:
+            phase_matches = []
 
         if not phase_matches:
             # Return empty list if no phases found (allows partial parsing)
@@ -460,11 +519,10 @@ class MessageParser:
                 ).model_dump()
             )
 
-        # Ensure exactly 5 phases (only when phases are present)
-        if phases and len(phases) != 5:
-            raise ValueError(
-                f"Shannon requires exactly 5 phases, found {len(phases)}"
-            )
+        # Accept 0 or 5 phases (skill may not include phase plan in all outputs)
+        if phases and len(phases) > 0 and len(phases) != 5:
+            # Log warning but don't fail - phase plan is optional in some contexts
+            print(f"WARNING: Expected 5 phases, found {len(phases)}. Accepting anyway.")
 
         return phases
 

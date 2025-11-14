@@ -93,8 +93,18 @@ class ShannonSDKClient:
                 "path": str(self.framework_path)
             }],
             setting_sources=["user", "project"],  # CRITICAL: Load skills from filesystem
-            allowed_tools=["Skill", "Read", "Write", "Bash", "SlashCommand"],
-            model="sonnet[1m]"  # 1M context model for Shannon Framework
+            permission_mode="bypassPermissions",  # Auto-approve for CLI usage
+            allowed_tools=[
+                "Skill", "Read", "Write", "Bash", "SlashCommand", "Grep", "Glob", "TodoWrite",
+                # Serena MCP tools (required by spec-analysis skill)
+                "mcp__serena__write_memory",
+                "mcp__serena__read_memory",
+                "mcp__serena__list_memories",
+                "mcp__serena__get_current_config",
+                # Sequential thinking (optional but recommended)
+                "mcp__sequential-thinking__sequentialthinking"
+            ]
+            # model defaults to latest sonnet with extended context
         )
 
         # V3 Features

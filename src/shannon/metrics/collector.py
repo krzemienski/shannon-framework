@@ -353,8 +353,21 @@ class MetricsCollector(MessageCollector):
             self._tool_start_time = None
             self._current_tool_name = None
 
+        # Extract from ResultMessage (has final usage/cost)
+        if hasattr(message, 'total_cost_usd'):
+            # ResultMessage has complete usage data
+            self._metrics.cost_total = message.total_cost_usd
+
+            if hasattr(message, 'usage') and isinstance(message.usage, dict):
+                self._metrics.tokens_input = message.usage.get('input_tokens', 0)
+                self._metrics.tokens_output = message.usage.get('output_tokens', 0)
+                self._metrics.tokens_total = self._metrics.tokens_input + self._metrics.tokens_output
+
+            if hasattr(message, 'duration_ms'):
+                self._metrics.duration_seconds = message.duration_ms / 1000.0
+
         # Try to extract usage info (tokens, cost)
-        if hasattr(message, 'usage'):
+        elif hasattr(message, 'usage'):
             await self._extract_usage(message.usage)
 
         # Try to extract content (for progress parsing)

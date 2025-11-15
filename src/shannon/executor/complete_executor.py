@@ -216,28 +216,83 @@ class CompleteExecutor:
         attempt: int
     ) -> Dict[str, Any]:
         """
-        Generate and apply code changes
+        Generate and apply code changes using Claude SDK
         
-        This is where code generation happens. For real implementation,
-        this would use Claude SDK. For now, we'll use template-based
-        generation for simple tasks.
+        Args:
+            task: Task description
+            prompts: Enhanced system prompts
+            libraries: Discovered libraries
+            attempt: Current attempt number
+            
+        Returns:
+            Dict with 'files' list and change metadata
         """
-        self.logger.info("Generating code changes...")
+        from shannon.sdk.client import ShannonSDKClient
+        from claude_agent_sdk import ToolUseBlock
+        from pathlib import Path
         
-        # Determine what kind of change this is
-        task_lower = task.lower()
+        self.logger.info(f"Generating code changes (attempt {attempt + 1})...")
         
-        # For very simple tasks, we can generate code directly
-        if any(word in task_lower for word in ['add comment', 'add logging', 'add docstring']):
-            return await self._generate_simple_change(task)
-        
-        # For complex tasks, would use Claude SDK
-        # Since SDK not available, return indication of what would happen
-        return {
-            'files': [],
-            'description': f"Would generate code for: {task}",
-            'note': 'Actual code generation requires Claude SDK integration'
-        }
+        try:
+            # Use SDK client for code generation
+            client = ShannonSDKClient(logger=self.logger)
+            
+            # Track files created/modified
+            files_changed = set()
+            
+            # Generate code using Claude with enhanced prompts
+            async for message in client.generate_code_changes(
+                task=task,
+                enhanced_prompts=prompts,
+                working_directory=self.project_root,
+                libraries=libraries
+            ):
+                # Track file operations
+                if isinstance(message, ToolUseBlock):
+                    if message.name in ['Write', 'Edit']:
+                        if 'file_path' in message.input:
+                            file_path = message.input['file_path']
+                            # Make relative to project root
+                            try:
+                                abs_path = Path(file_path)
+                                if abs_path.is_absolute():
+                                    rel_path = abs_path.relative_to(self.project_root)
+                                    files_changed.add(str(rel_path))
+                                else:
+                                    files_changed.add(file_path)
+                            except (ValueError, AttributeError):
+                                files_changed.add(file_path)
+            
+            if files_changed:
+                self.logger.info(f"Changes applied: {len(files_changed)} files modified")
+                return {
+                    'files': list(files_changed),
+                    'description': task,
+                    'attempt': attempt + 1,
+                    'libraries_mentioned': [lib.name for lib in libraries[:3]] if libraries else []
+                }
+            else:
+                self.logger.warning("No file changes detected from Claude execution")
+                # Try simple fallback for basic tasks
+                if attempt == 0:
+                    return await self._generate_simple_change(task)
+                return {
+                    'files': [],
+                    'description': task,
+                    'note': 'No changes generated'
+                }
+                
+        except Exception as e:
+            self.logger.error(f"Code generation failed: {e}", exc_info=True)
+            # Fallback to simple patterns on first attempt
+            if attempt == 0:
+                self.logger.info("Falling back to simple pattern matching...")
+                return await self._generate_simple_change(task)
+            return {
+                'files': [],
+                'description': task,
+                'error': str(e)
+            }
     
     async def _generate_simple_change(self, task: str) -> Dict[str, Any]:
         """Generate simple code changes (comments, docstrings, etc.)"""

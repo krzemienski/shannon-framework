@@ -319,6 +319,71 @@ class ShannonSDKClient:
             self.logger.error(f"Enhanced command invocation failed: {e}")
             raise
 
+    async def generate_code_changes(
+        self,
+        task: str,
+        enhanced_prompts: str,
+        working_directory: Path,
+        libraries: Optional[List[Any]] = None
+    ) -> AsyncIterator[Any]:
+        """
+        Generate code changes using Claude with enhanced prompts.
+        
+        Specifically designed for autonomous code generation in Shannon V3.5.
+        Uses system_prompt.append to inject library discovery and validation instructions.
+        
+        Args:
+            task: Task description
+            enhanced_prompts: System prompt enhancements (library discovery, validation, git)
+            working_directory: Project directory for file operations
+            libraries: Optional discovered libraries to mention in prompt
+            
+        Yields:
+            SDK messages (ToolUseBlock, AssistantMessage, etc.)
+        """
+        from claude_agent_sdk import ClaudeAgentOptions, query
+        
+        # Build library context
+        library_context = ""
+        if libraries:
+            library_context = "\\n\\nRECOMMENDED LIBRARIES (use these):\\n"
+            for lib in libraries[:3]:
+                library_context += f"- {lib.name}: {lib.why_recommended}\\n"
+                library_context += f"  Install: {lib.install_command}\\n"
+        
+        # Build task prompt
+        prompt = f"""Execute this task in the current directory:
+
+TASK: {task}
+{library_context}
+
+REQUIREMENTS:
+1. Use recommended libraries (don't build custom if library exists)
+2. Make focused, minimal changes
+3. Use Write tool to create files, Edit tool to modify existing files
+4. Ensure code works (proper syntax, imports, etc.)
+5. Follow project conventions
+
+Execute the task now."""
+
+        # Create options with enhanced prompts
+        options = ClaudeAgentOptions(
+            cwd=str(working_directory),
+            allowed_tools=["Read", "Write", "Edit", "Bash", "Glob", "Grep"],
+            permission_mode="acceptEdits",  # Auto-accept file edits
+            system_prompt={
+                "type": "preset",
+                "preset": "claude_code",
+                "append": enhanced_prompts  # INJECT enhanced prompts
+            },
+            max_turns=10,
+            setting_sources=["user", "project"]
+        )
+        
+        # Query Claude for code generation
+        async for message in query(prompt=prompt, options=options):
+            yield message
+
     def _find_shannon_framework(self) -> Path:
         """
         Locate Shannon Framework directory

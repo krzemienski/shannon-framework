@@ -217,29 +217,30 @@ class CompleteExecutor:
     ) -> Dict[str, Any]:
         """
         Generate and apply code changes using Claude SDK
-        
+
         Args:
             task: Task description
             prompts: Enhanced system prompts
             libraries: Discovered libraries
             attempt: Current attempt number
-            
+
         Returns:
             Dict with 'files' list and change metadata
         """
         from shannon.sdk.client import ShannonSDKClient
-        from claude_agent_sdk import ToolUseBlock
+        from claude_agent_sdk import ToolUseBlock, AssistantMessage, TextBlock
         from pathlib import Path
-        
+
         self.logger.info(f"Generating code changes (attempt {attempt + 1})...")
-        
+
         try:
             # Use SDK client for code generation
             client = ShannonSDKClient(logger=self.logger)
-            
+
             # Track files created/modified
             files_changed = set()
-            
+            message_count = 0
+
             # Generate code using Claude with enhanced prompts
             async for message in client.generate_code_changes(
                 task=task,
@@ -247,24 +248,55 @@ class CompleteExecutor:
                 working_directory=self.project_root,
                 libraries=libraries
             ):
-                # Track file operations
-                if isinstance(message, ToolUseBlock):
-                    if message.name in ['Write', 'Edit']:
-                        if 'file_path' in message.input:
-                            file_path = message.input['file_path']
-                            # Make relative to project root
-                            try:
-                                abs_path = Path(file_path)
-                                if abs_path.is_absolute():
-                                    rel_path = abs_path.relative_to(self.project_root)
-                                    files_changed.add(str(rel_path))
-                                else:
-                                    files_changed.add(file_path)
-                            except (ValueError, AttributeError):
-                                files_changed.add(file_path)
-            
+                message_count += 1
+                self.logger.debug(f"Message {message_count}: {type(message).__name__}")
+
+                # Check if this is an AssistantMessage with tool uses
+                if isinstance(message, AssistantMessage):
+                    # Iterate through content blocks to find ToolUseBlock instances
+                    for block in message.content:
+                        if isinstance(block, ToolUseBlock):
+                            self.logger.debug(f"  Tool: {block.name}, Input keys: {list(block.input.keys())}")
+
+                            # Track Write and Edit operations
+                            if block.name in ['Write', 'Edit']:
+                                if 'file_path' in block.input:
+                                    file_path = block.input['file_path']
+                                    self.logger.debug(f"  File operation: {block.name} -> {file_path}")
+
+                                    # Make relative to project root
+                                    try:
+                                        abs_path = Path(file_path)
+                                        if abs_path.is_absolute():
+                                            # Resolve symlinks and convert to relative
+                                            abs_path = abs_path.resolve()
+                                            project_root_resolved = self.project_root.resolve()
+
+                                            try:
+                                                rel_path = abs_path.relative_to(project_root_resolved)
+                                                files_changed.add(str(rel_path))
+                                                self.logger.info(f"Tracked file change: {rel_path}")
+                                            except ValueError:
+                                                # Path not under project root - use filename only
+                                                files_changed.add(abs_path.name)
+                                                self.logger.info(f"Tracked file change: {abs_path.name} (not under project root)")
+                                        else:
+                                            # Already relative
+                                            files_changed.add(file_path)
+                                            self.logger.info(f"Tracked file change: {file_path}")
+                                    except Exception as e:
+                                        self.logger.warning(f"Error parsing file path {file_path}: {e}")
+                                        # Fallback: use just the filename
+                                        try:
+                                            files_changed.add(Path(file_path).name)
+                                        except:
+                                            files_changed.add(file_path)
+
+            self.logger.info(f"Processed {message_count} messages from Claude")
+
             if files_changed:
                 self.logger.info(f"Changes applied: {len(files_changed)} files modified")
+                self.logger.info(f"Files: {list(files_changed)}")
                 return {
                     'files': list(files_changed),
                     'description': task,
@@ -281,7 +313,7 @@ class CompleteExecutor:
                     'description': task,
                     'note': 'No changes generated'
                 }
-                
+
         except Exception as e:
             self.logger.error(f"Code generation failed: {e}", exc_info=True)
             # Fallback to simple patterns on first attempt

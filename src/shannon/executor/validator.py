@@ -89,10 +89,16 @@ class ValidationOrchestrator:
                 data = json.loads(package_json.read_text())
                 scripts = data.get('scripts', {})
 
+                                # Only enable type checking if TypeScript is present
+                tsconfig_exists = (self.project_root / 'tsconfig.json').exists()
+                type_check_cmd = scripts.get('type-check')
+                if not type_check_cmd and tsconfig_exists:
+                    type_check_cmd = 'npx tsc --noEmit'
+
                 return TestConfig(
                     project_type='nodejs',
                     build_cmd=scripts.get('build'),
-                    type_check_cmd=scripts.get('type-check') or 'npx tsc --noEmit',
+                    type_check_cmd=type_check_cmd,
                     lint_cmd=scripts.get('lint'),
                     test_cmd=scripts.get('test', 'npm test'),
                     e2e_cmd=scripts.get('e2e') or scripts.get('test:e2e'),

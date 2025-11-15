@@ -18,7 +18,15 @@ import time
 from pathlib import Path
 
 try:
-    from claude_agent_sdk import query, ClaudeAgentOptions
+    from claude_agent_sdk import (
+        query,
+        ClaudeAgentOptions,
+        AssistantMessage,
+        SystemMessage,
+        ResultMessage,
+        TextBlock,
+        ToolUseBlock
+    )
 except ImportError:
     print("❌ ERROR: claude-agent-sdk not installed")
     print("   Run: pip install -r tests/requirements.txt")
@@ -79,15 +87,27 @@ Execute /shannon:wave to build everything including mobile app and backend.
 
     try:
         async for msg in query(prompt=prompt, options=options):
-            if msg.type == 'assistant':
-                messages.append(msg.content)
+            if isinstance(msg, AssistantMessage):
+                for block in msg.content:
+                    if isinstance(block, TextBlock):
+                        messages.append(block.text)
+                    elif isinstance(block, ToolUseBlock):
+                        tool_count += 1
+
                 now = time.time()
                 if now - last_update >= 30:
                     elapsed_min = (now - start_time) / 60
                     print(f"  [{elapsed_min:.1f} min] Building... ({tool_count} tools)")
                     last_update = now
-            elif msg.type == 'tool_call':
-                tool_count += 1
+
+            elif isinstance(msg, SystemMessage):
+                if msg.subtype == 'init':
+                    print("  ✓ Session initialized", flush=True)
+
+            elif isinstance(msg, ResultMessage):
+                cost = msg.total_cost_usd or 0.0
+                print(f"  ✓ Cost: ${cost:.4f}", flush=True)
+
     except Exception as e:
         return False, f"Build execution failed: {e}"
 
@@ -157,9 +177,11 @@ Run complete verification and report results.
     messages = []
     try:
         async for msg in query(prompt=prompt, options=options):
-            if msg.type == 'assistant':
-                messages.append(msg.content)
-                print(".", end="", flush=True)
+            if isinstance(msg, AssistantMessage):
+                for block in msg.content:
+                    if isinstance(block, TextBlock):
+                        messages.append(block.text)
+                        print(".", end="", flush=True)
     except Exception as e:
         return False, f"Verification failed: {e}"
 

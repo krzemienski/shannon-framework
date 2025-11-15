@@ -72,8 +72,8 @@ Shannon Framework is a **Claude Code plugin** that transforms AI-assisted develo
 
 | Layer | Count | Purpose | Examples |
 |-------|-------|---------|----------|
-| **Commands** | 15 | User entry points | spec, wave, prime, test |
-| **Skills** | 18 | Workflow implementation | spec-analysis, wave-orchestration |
+| **Commands** | 16 | User entry points | spec, wave, prime, test, exec |
+| **Skills** | 19 | Workflow implementation | spec-analysis, wave-orchestration, exec |
 | **Hooks** | 5 | Automatic enforcement | post_tool_use (NO MOCKS), precompact |
 | **Core Files** | 9 | Reference specs (11K lines) | TESTING_PHILOSOPHY, SPEC_ANALYSIS |
 | **Agent Guides** | 25 | Agent usage documentation | WAVE_COORDINATOR, TEST_GUARDIAN |
@@ -323,10 +323,11 @@ User-invocable slash commands. Invocation: `/shannon:command_name`
 | `analyze` | Project analysis with confidence | shannon-analysis, confidence-check |
 | `discover_skills` | Catalog available skills | skill-discovery |
 
-#### Execution (3)
+#### Execution (4)
 
 | Command | Purpose | Skill(s) |
 |---------|---------|----------|
+| `exec` | **NEW V5.1** Autonomous execution with libraries & validation | exec, wave-orchestration, context-preservation |
 | `wave` | Parallel wave execution | wave-orchestration, context-preservation, functional-testing, goal-alignment |
 | `task` | Automated prime→spec→wave | [Chains multiple commands] |
 | `scaffold` | Generate project structure | spec-analysis, project-indexing, functional-testing |

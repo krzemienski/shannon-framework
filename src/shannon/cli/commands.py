@@ -1242,7 +1242,10 @@ def exec(
             # Phase 6: Simple execution
             ui.console.print("[cyan]Phase 6:[/cyan] Task execution...")
             ui.console.print()
-            
+
+            # Initialize libraries for dry-run display
+            libraries = None
+
             if dry_run:
                 ui.console.print("[yellow]═══════════════════════════════════════════════════════════════[/yellow]")
                 ui.console.print("[yellow] DRY RUN MODE - No execution performed[/yellow]")
@@ -1265,14 +1268,14 @@ def exec(
                 
                 ui.success("Dry run complete")
             else:
-                # Actually execute using SimpleTaskExecutor
-                ui.console.print("[bold cyan]Executing with SimpleTaskExecutor...[/bold cyan]")
+                # Actually execute using CompleteExecutor (full autonomous execution)
+                ui.console.print("[bold cyan]Executing with CompleteExecutor (full autonomous execution)...[/bold cyan]")
                 ui.console.print()
                 
-                from shannon.executor.simple_executor import SimpleTaskExecutor
-                
-                executor = SimpleTaskExecutor(Path.cwd())
-                result = await executor.execute(task, auto_commit=auto_commit)
+                from shannon.executor.complete_executor import CompleteExecutor
+
+                executor = CompleteExecutor(Path.cwd(), max_iterations=max_iterations)
+                result = await executor.execute_autonomous(task, auto_commit=auto_commit)
                 
                 ui.console.print()
                 ui.console.print("[yellow]═══════════════════════════════════════════════════════════════[/yellow]")

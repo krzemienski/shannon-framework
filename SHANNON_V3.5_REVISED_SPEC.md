@@ -1,16 +1,16 @@
 # Shannon V3.5 - Autonomous Executor (REVISED SPECIFICATION)
 
-**Version**: 3.5.0  
-**Date**: November 15, 2025  
-**Status**: Revised Design - Builds on Existing Shannon Infrastructure  
-**Ultra-Thinking**: 30 sequential thoughts completed  
+**Version**: 3.5.0
+**Date**: November 15, 2025
+**Status**: Revised Design - Builds on Existing Shannon Infrastructure
+**Ultra-Thinking**: 30 sequential thoughts completed
 **Philosophy**: Enhance what exists, don't rebuild
 
 ---
 
 ## 🎯 Critical Revision
 
-**Original V3.5**: Standalone autonomous system (~2,350 lines, 11 days)  
+**Original V3.5**: Standalone autonomous system (~2,350 lines, 11 days)
 **Revised V3.5**: Enhancement layer on existing Shannon (~1,850 lines, 8 days)
 
 ### Key Realization
@@ -69,14 +69,14 @@ Enhancement Layer:
   │   ├─ Adds validation loop                   │
   │   └─ Adds git automation                    │
   └─────────────────────────────────────────────┘
-  
+
   ┌─────────────────────────────────────────────┐
   │ NEW: Enhanced System Prompts (200 lines)    │
   │   ├─ Library discovery instructions         │
   │   ├─ Functional validation instructions     │
   │   └─ Git workflow instructions              │
   └─────────────────────────────────────────────┘
-  
+
   ┌─────────────────────────────────────────────┐
   │ NEW: Shannon CLI Modules (1,050 lines)      │
   │   ├─ library_discoverer.py (250 lines)      │
@@ -85,7 +85,7 @@ Enhancement Layer:
   │   ├─ prompt_enhancer.py (150 lines)         │
   │   └─ exec command in CLI (150 lines)        │
   └─────────────────────────────────────────────┘
-  
+
   ┌─────────────────────────────────────────────┐
   │ NEW: Analytics Tracking (200 lines)         │
   │   ├─ executions table                       │
@@ -113,25 +113,25 @@ Shannon CLI injects enhanced prompts using `ClaudeAgentOptions.system_prompt.app
 @click.argument('task')
 def exec(task: str):
     """Execute autonomous task with validation"""
-    
+
     async def run_exec():
         # Create SDK client
         client = ShannonSDKClient()
-        
+
         # Build enhanced instructions
         from shannon.executor.prompt_enhancer import PromptEnhancer
         enhancer = PromptEnhancer()
-        
+
         # Detect project type
         project_type = detect_project_type(os.getcwd())
-        
+
         # Generate enhancements
         enhancements = enhancer.build_enhancements(
             task=task,
             project_type=project_type
         )
         # Returns: "LIBRARY DISCOVERY...\n\nFUNCTIONAL VALIDATION...\n\nGIT WORKFLOW..."
-        
+
         # Create options with enhanced prompt
         options = ClaudeAgentOptions(
             plugins=[{"type": "local", "path": str(framework_path)}],
@@ -143,7 +143,7 @@ def exec(task: str):
             setting_sources=["user", "project"],
             permission_mode="bypassPermissions"
         )
-        
+
         # Invoke /shannon:exec with enhanced prompts
         async for msg in client.query(
             prompt=f"/shannon:exec {task}",
@@ -395,7 +395,7 @@ Common Python libraries:
   - Testing: pytest, pytest-async
   - Validation: Pydantic (built into FastAPI)
   - HTTP client: httpx
-  
+
 Search: "Python <feature> library PyPI"
 
 Validation:
@@ -425,135 +425,135 @@ import { sequential_thinking, serena } from '@mcp';
 export const exec = skill({
   name: 'exec',
   description: 'Autonomous execution: research libraries, validate functionally, commit atomically',
-  
+
   async execute(task: string, options?: ExecOptions) {
     console.log(`🎯 Shannon V3.5 Autonomous Executor`);
     console.log(`📝 Task: ${task}\n`);
-    
+
     //═══════════════════════════════════════════════════════════
     // PHASE 1: Context Preparation (REUSES /shannon:prime)
     //═══════════════════════════════════════════════════════════
-    
+
     console.log("🔍 Phase 1/5: Context Preparation");
-    
+
     // Invoke existing prime skill
     await invokeSkill('/shannon:prime', {
       project: process.cwd(),
       task_focused: true,  // Only prime relevant files
       keywords: await extractKeywords(task)
     });
-    
+
     console.log("✓ Context primed\n");
-    
+
     //═══════════════════════════════════════════════════════════
     // PHASE 2: Library Discovery (NEW functionality)
     //═══════════════════════════════════════════════════════════
-    
+
     console.log("🔍 Phase 2/5: Library Discovery");
-    
+
     // Detect project type
     const projectType = await detectProjectType();
     const language = await detectLanguage();
-    
+
     // Discover relevant libraries
     const libraries = await discoverLibraries(task, projectType, language);
-    
+
     // Cache in Serena
     await serena.write_memory(`libraries_${task}`, libraries);
-    
+
     console.log(`✓ Found ${libraries.length} relevant libraries`);
     if (libraries.length > 0) {
       console.log(`✓ Recommended: ${libraries[0].name}`);
     }
     console.log("");
-    
+
     //═══════════════════════════════════════════════════════════
     // PHASE 3: Task Analysis (REUSES /shannon:analyze)
     //═══════════════════════════════════════════════════════════
-    
+
     console.log("🔍 Phase 3/5: Task Analysis");
-    
+
     // Invoke existing analyze skill
     const analysis = await invokeSkill('/shannon:analyze', task);
-    
+
     console.log("✓ Analysis complete\n");
-    
+
     //═══════════════════════════════════════════════════════════
     // PHASE 4: Execution Planning (Enhanced with libraries)
     //═══════════════════════════════════════════════════════════
-    
+
     console.log("📋 Phase 4/5: Execution Planning");
-    
+
     // Use sequential thinking to create plan
     const plan = await createExecutionPlan(task, analysis, libraries);
-    
+
     // Save plan to session
     await serena.write_memory('exec_plan', plan);
-    
+
     console.log(`✓ Plan created: ${plan.steps.length} steps`);
     console.log(`✓ Estimated duration: ${plan.estimated_minutes}min\n`);
-    
+
     //═══════════════════════════════════════════════════════════
     // PHASE 5: Execution with Validation (Wraps /shannon:wave)
     //═══════════════════════════════════════════════════════════
-    
+
     console.log("🚀 Phase 5/5: Execution");
-    
+
     // Create git branch
     const branchName = generateBranchName(task);
     await useTool('run_terminal_cmd', `git checkout -b ${branchName}`);
-    
+
     // Execute each step with validation
     for (const step of plan.steps) {
       console.log(`\nStep ${step.number}/${plan.steps.length}: ${step.description}`);
-      
+
       let success = false;
-      
+
       // Try up to 3 times
       for (let attempt = 0; attempt < 3; attempt++) {
         // Execute step using existing wave system
         const result = await executeStepViaWave(step);
-        
+
         // Validate using Shannon CLI ValidationOrchestrator
         const validation = await validateStep(result, step.validation);
-        
+
         if (validation.allPassed) {
           // Success! Commit
           const commitMsg = generateCommitMessage(step, validation);
           await useTool('run_terminal_cmd', `git add -A`);
           await useTool('run_terminal_cmd', `git commit -m "${commitMsg}"`);
-          
+
           console.log(`✅ Step complete, committed`);
           success = true;
           break;
         } else {
           // Failed - analyze and retry
           console.log(`❌ Validation failed (attempt ${attempt + 1}/3)`);
-          
+
           if (attempt < 2) {
             // Research solution
             const research = await researchFailure(validation.failures);
-            
+
             // Create alternative approach
             step = await replanWithResearch(step, research);
-            
+
             // Rollback
             await useTool('run_terminal_cmd', 'git reset --hard');
-            
+
             console.log(`🔄 Retrying with alternative approach...`);
           }
         }
       }
-      
+
       if (!success) {
         throw new Error(`Step ${step.number} failed after 3 attempts`);
       }
     }
-    
+
     //═══════════════════════════════════════════════════════════
     // PHASE 6: Completion Report
     //═══════════════════════════════════════════════════════════
-    
+
     return generateExecutionReport(plan, commits, validations);
   }
 });
@@ -569,7 +569,7 @@ async function executeStepViaWave(step: ExecutionStep) {
     description: step.description,
     deliverables: step.expected_outputs
   };
-  
+
   // Create minimal wave plan
   const wavePlan = {
     waves: [{
@@ -578,7 +578,7 @@ async function executeStepViaWave(step: ExecutionStep) {
       tasks: [waveTask]
     }]
   };
-  
+
   // Invoke existing /shannon:wave skill
   return await invokeSkill('/shannon:wave', JSON.stringify(wavePlan));
 }
@@ -586,21 +586,21 @@ async function executeStepViaWave(step: ExecutionStep) {
 async function discoverLibraries(task, projectType, language) {
   // This calls out to Shannon CLI's LibraryDiscoverer
   // via custom tool or direct invocation
-  
+
   // Use firecrawl MCP to search
   const query = `${language} ${task} library package`;
   const searchResults = await useTool('firecrawl_search', { query, limit: 10 });
-  
+
   // Parse and rank
   const libraries = parseLibraryResults(searchResults, projectType);
-  
+
   return libraries;
 }
 
 async function validateStep(result, validationCriteria) {
   // This calls Shannon CLI's ValidationOrchestrator
   // Shannon CLI has the validation logic, skill just invokes it
-  
+
   // Via custom tool or skill invocation
   return await callCLIValidator(result, validationCriteria);
 }
@@ -649,16 +649,16 @@ class LibraryOption:
 class LibraryDiscoverer:
     """
     Discover and recommend open-source libraries for features
-    
+
     Uses firecrawl MCP for search, Serena MCP for caching.
     Integrates with package registries (npm, PyPI, CocoaPods, Maven, crates.io).
     """
-    
+
     def __init__(self, project_root: Path):
         self.project_root = project_root
         self.project_type = self._detect_project_type()
         self.language = self._detect_language()
-        
+
     async def discover_for_feature(
         self,
         feature_description: str,
@@ -666,21 +666,21 @@ class LibraryDiscoverer:
     ) -> List[LibraryOption]:
         """
         Discover libraries for a specific feature
-        
+
         Args:
             feature_description: "authentication", "UI components", "SSH client", etc.
             category: Feature category for better search
-            
+
         Returns:
             Ranked list of library options (best first)
         """
         # 1. Check Serena cache
         cache_key = f"libraries_{self.language}_{feature_description}"
         cached = await self._check_serena_cache(cache_key)
-        
+
         if cached:
             return cached
-        
+
         # 2. Search package registry
         if self.language in ["javascript", "typescript"]:
             results = await self._search_npm(feature_description)
@@ -692,23 +692,23 @@ class LibraryDiscoverer:
             results = await self._search_maven(feature_description)
         else:
             results = await self._generic_search(feature_description)
-        
+
         # 3. Rank by quality
         ranked = self._rank_libraries(results)
-        
+
         # 4. Cache in Serena
         await self._cache_in_serena(cache_key, ranked)
-        
+
         return ranked[:5]  # Top 5
-    
+
     async def _search_npm(self, feature: str) -> List[Dict]:
         """Search npm registry using firecrawl MCP"""
-        
+
         # Check if firecrawl MCP available
         try:
             from shannon.mcp.manager import MCPManager
             mcp_mgr = MCPManager()
-            
+
             if mcp_mgr.is_available('firecrawl'):
                 # Use firecrawl to search npm
                 query = f"npm {feature} package"
@@ -721,39 +721,39 @@ class LibraryDiscoverer:
                         'scrapeOptions': {'formats': ['markdown']}
                     }
                 )
-                
+
                 return self._parse_npm_results(results)
         except:
             pass
-        
+
         # Fallback: Direct npm API or web search
         return await self._fallback_npm_search(feature)
-    
+
     async def _search_swift_packages(self, feature: str) -> List[Dict]:
         """Search Swift packages using GitHub + SwiftPackageIndex"""
-        
+
         query = f"Swift {feature} library site:github.com OR site:swiftpackageindex.com"
-        
+
         # Use firecrawl MCP
         results = await self._web_search(query)
-        
+
         # Parse GitHub repos
         packages = []
         for result in results:
             if 'github.com' in result['url']:
                 pkg = await self._fetch_github_metadata(result['url'])
                 packages.append(pkg)
-        
+
         return packages
-    
+
     def _rank_libraries(self, libraries: List[Dict]) -> List[LibraryOption]:
         """Rank libraries by quality metrics"""
-        
+
         ranked = []
-        
+
         for lib in libraries:
             score = self._calculate_score(lib)
-            
+
             ranked.append(LibraryOption(
                 name=lib['name'],
                 description=lib['description'],
@@ -765,14 +765,14 @@ class LibraryDiscoverer:
                 compatibility_score=self._check_compatibility(lib),
                 overall_score=score
             ))
-        
+
         return sorted(ranked, key=lambda x: x.overall_score, reverse=True)
-    
+
     def _calculate_score(self, lib: Dict) -> float:
         """Calculate overall quality score (0-100)"""
-        
+
         score = 0.0
-        
+
         # Stars weight: 40%
         stars = lib.get('stars', 0)
         if stars > 10000:
@@ -783,7 +783,7 @@ class LibraryDiscoverer:
             score += 20
         else:
             score += 10
-        
+
         # Maintenance weight: 30%
         last_updated = lib.get('last_updated')
         if last_updated:
@@ -795,7 +795,7 @@ class LibraryDiscoverer:
             elif days_ago < 365:
                 score += 10  # Maintained
             # else: 0 points (abandoned)
-        
+
         # Downloads weight: 20%
         downloads = lib.get('downloads', 0)
         if downloads > 100000:
@@ -804,35 +804,35 @@ class LibraryDiscoverer:
             score += 15
         elif downloads > 1000:
             score += 10
-        
+
         # License weight: 10%
         license = lib.get('license', '').lower()
         if any(l in license for l in ['mit', 'apache', 'bsd']):
             score += 10
         elif 'isc' in license:
             score += 8
-        
+
         return score
-    
+
     def _check_compatibility(self, lib: Dict) -> float:
         """Check compatibility with current project (0-1)"""
-        
+
         # Check if library works with current framework versions
         # Check peer dependencies
         # Check platform compatibility (iOS version, React version, etc.)
-        
+
         # Simplified for now
         return 1.0  # Assume compatible, actual check would parse package.json/Podfile
-    
+
     async def _check_serena_cache(self, key: str) -> Optional[List[LibraryOption]]:
         """Check if we've already discovered libraries for this feature"""
-        
+
         try:
             from shannon.mcp.manager import MCPManager
             mcp = MCPManager()
-            
+
             cached = await mcp.invoke('serena', 'read_memory', {'key': key})
-            
+
             if cached:
                 # Check if cache is recent (< 7 days)
                 cached_at = datetime.fromisoformat(cached.get('cached_at'))
@@ -840,16 +840,16 @@ class LibraryDiscoverer:
                     return cached['libraries']
         except:
             pass
-        
+
         return None
-    
+
     async def _cache_in_serena(self, key: str, libraries: List[LibraryOption]):
         """Cache discovered libraries in Serena MCP"""
-        
+
         try:
             from shannon.mcp.manager import MCPManager
             mcp = MCPManager()
-            
+
             await mcp.invoke('serena', 'write_memory', {
                 'key': key,
                 'data': {
@@ -897,14 +897,14 @@ class ValidationResult:
     tier1_passed: bool  # Static (build, lint, types)
     tier2_passed: bool  # Unit/Integration tests
     tier3_passed: bool  # Functional (E2E, user perspective)
-    
+
     tier1_details: Dict[str, Any]
     tier2_details: Dict[str, Any]
     tier3_details: Dict[str, Any]
-    
+
     failures: List[str]
     duration_seconds: float
-    
+
     @property
     def all_passed(self) -> bool:
         return self.tier1_passed and self.tier2_passed and self.tier3_passed
@@ -913,21 +913,21 @@ class ValidationResult:
 class ValidationOrchestrator:
     """
     Orchestrates 3-tier validation using existing test infrastructure
-    
+
     Auto-detects test commands from:
     - package.json scripts (npm test, npm run e2e)
     - pyproject.toml (pytest config)
     - Xcode project (xcodebuild test)
     - Maven/Gradle files
     """
-    
+
     def __init__(self, project_root: Path):
         self.project_root = project_root
         self.test_config = self._auto_detect_tests()
-    
+
     def _auto_detect_tests(self) -> Dict[str, Any]:
         """Auto-detect how to test this project"""
-        
+
         config = {
             'project_type': None,
             'build_cmd': None,
@@ -937,13 +937,13 @@ class ValidationOrchestrator:
             'e2e_cmd': None,
             'start_cmd': None
         }
-        
+
         # Check for Node.js project
         package_json = self.project_root / 'package.json'
         if package_json.exists():
             data = json.loads(package_json.read_text())
             scripts = data.get('scripts', {})
-            
+
             config['project_type'] = 'nodejs'
             config['build_cmd'] = scripts.get('build', 'npm run build')
             config['type_check_cmd'] = scripts.get('type-check', 'npx tsc --noEmit')
@@ -951,7 +951,7 @@ class ValidationOrchestrator:
             config['test_cmd'] = scripts.get('test', 'npm test')
             config['e2e_cmd'] = scripts.get('e2e') or scripts.get('test:e2e')
             config['start_cmd'] = scripts.get('start') or scripts.get('dev')
-        
+
         # Check for Python project
         elif (self.project_root / 'pyproject.toml').exists() or \
              (self.project_root / 'pytest.ini').exists():
@@ -960,58 +960,58 @@ class ValidationOrchestrator:
             config['lint_cmd'] = 'ruff check .'
             config['test_cmd'] = 'pytest tests/'
             config['start_cmd'] = self._detect_python_start()
-        
+
         # Check for iOS project
         elif list(self.project_root.glob('*.xcodeproj')):
             config['project_type'] = 'ios'
             config['build_cmd'] = 'xcodebuild'
             config['test_cmd'] = 'xcodebuild test'
             config['lint_cmd'] = 'swiftlint'
-        
+
         return config
-    
+
     async def validate_tier1(self, changes: ChangeSet) -> TierResult:
         """Tier 1: Static validation (build, lint, types)"""
-        
+
         results = {}
         failures = []
-        
+
         # Build
         if self.test_config['build_cmd']:
             build_result = await run_command(self.test_config['build_cmd'])
             results['build'] = build_result.success
             if not build_result.success:
                 failures.append(f"Build failed: {build_result.error}")
-        
+
         # Type check
         if self.test_config['type_check_cmd']:
             type_result = await run_command(self.test_config['type_check_cmd'])
             results['type_check'] = type_result.success
             if not type_result.success:
                 failures.append(f"Type check failed: {type_result.error}")
-        
+
         # Lint
         if self.test_config['lint_cmd']:
             lint_result = await run_command(self.test_config['lint_cmd'])
             results['lint'] = lint_result.success
             if not lint_result.success:
                 failures.append(f"Lint failed: {lint_result.error}")
-        
+
         return TierResult(
             passed=len(failures) == 0,
             details=results,
             failures=failures
         )
-    
+
     async def validate_tier2(self, changes: ChangeSet) -> TierResult:
         """Tier 2: Unit/Integration tests"""
-        
+
         if not self.test_config['test_cmd']:
             return TierResult(passed=True, details={'skipped': True}, failures=[])
-        
+
         # Run test suite
         test_result = await run_command(self.test_config['test_cmd'])
-        
+
         if test_result.success:
             return TierResult(
                 passed=True,
@@ -1024,17 +1024,17 @@ class ValidationOrchestrator:
                 details={'test_output': test_result.output},
                 failures=[f"Tests failed: {test_result.error}"]
             )
-    
+
     async def validate_tier3(
         self,
         changes: ChangeSet,
         functional_criteria: List[str]
     ) -> TierResult:
         """Tier 3: Functional validation from user perspective"""
-        
+
         results = {}
         failures = []
-        
+
         # Strategy depends on project type
         if self.test_config['project_type'] == 'nodejs':
             result = await self._validate_nodejs_functional(functional_criteria)
@@ -1044,18 +1044,18 @@ class ValidationOrchestrator:
             result = await self._validate_ios_functional(functional_criteria)
         else:
             result = TierResult(passed=True, details={'skipped': True}, failures=[])
-        
+
         return result
-    
+
     async def _validate_nodejs_functional(self, criteria: List[str]) -> TierResult:
         """Functional validation for Node.js apps"""
-        
+
         # 1. Start app
         if self.test_config['start_cmd']:
             # Start in background
             await run_command_bg(self.test_config['start_cmd'])
             await asyncio.sleep(5)  # Wait for startup
-        
+
         # 2. Run E2E tests if available
         if self.test_config['e2e_cmd']:
             e2e_result = await run_command(self.test_config['e2e_cmd'])
@@ -1065,27 +1065,27 @@ class ValidationOrchestrator:
                     details={'e2e': e2e_result.output},
                     failures=["E2E tests failed"]
                 )
-        
+
         # 3. Check health endpoint
         health_check = await run_command("curl http://localhost:3000/health")
-        
+
         return TierResult(
             passed=health_check.success,
             details={'health_check': health_check.output},
             failures=[] if health_check.success else ["Health check failed"]
         )
-    
+
     async def _validate_ios_functional(self, criteria: List[str]) -> TierResult:
         """Functional validation for iOS apps"""
-        
+
         # 1. Boot simulator
         await run_command('xcrun simctl boot "iPhone 14"')
-        
+
         # 2. Run UI tests
         test_result = await run_command(
             'xcodebuild test -scheme MyApp -destination "platform=iOS Simulator,name=iPhone 14"'
         )
-        
+
         return TierResult(
             passed=test_result.success,
             details={'ui_tests': test_result.output},
@@ -1133,38 +1133,38 @@ class GitCommit:
 class GitManager:
     """
     Manages git operations for autonomous execution
-    
+
     Guarantees:
     - Only commits validated changes
     - Atomic commits (one step = one commit)
     - Descriptive messages
     - Clean rollback on failure
     """
-    
+
     def __init__(self, project_root: Path):
         self.project_root = project_root
         self.commits: List[GitCommit] = []
-    
+
     async def ensure_clean_state(self) -> bool:
         """Verify git working directory is clean"""
-        
+
         status = await self._run_git('status --porcelain')
-        
+
         if status.strip():
             # Uncommitted changes exist
             return False
-        
+
         return True
-    
+
     async def create_feature_branch(self, task: str) -> str:
         """Create feature branch with descriptive name"""
-        
+
         branch_name = self._generate_branch_name(task)
-        
+
         await self._run_git(f'checkout -b {branch_name}')
-        
+
         return branch_name
-    
+
     async def commit_validated_changes(
         self,
         files: List[str],
@@ -1172,23 +1172,23 @@ class GitManager:
         validation_result: ValidationResult
     ) -> GitCommit:
         """Commit changes after successful validation"""
-        
+
         # Generate commit message
         commit_msg = self._generate_commit_message(
             step_description,
             validation_result
         )
-        
+
         # Stage files
         for file in files:
             await self._run_git(f'add {file}')
-        
+
         # Commit
         await self._run_git(f'commit -m "{commit_msg}"')
-        
+
         # Get commit hash
         commit_hash = await self._run_git('rev-parse HEAD')
-        
+
         # Track commit
         commit = GitCommit(
             hash=commit_hash.strip(),
@@ -1197,31 +1197,31 @@ class GitManager:
             validation_passed=True,
             timestamp=datetime.now().isoformat()
         )
-        
+
         self.commits.append(commit)
-        
+
         # Store in analytics DB
         await self._track_commit(commit)
-        
+
         return commit
-    
+
     async def rollback_to_last_commit(self) -> bool:
         """Rollback failed changes to last good state"""
-        
+
         await self._run_git('reset --hard HEAD')
         await self._run_git('clean -fd')
-        
+
         # Verify clean
         status = await self._run_git('status --porcelain')
         return status.strip() == ''
-    
+
     def _generate_branch_name(self, task: str) -> str:
         """Generate descriptive branch name"""
-        
+
         # Extract keywords
         words = [w for w in task.lower().split() if len(w) > 3][:4]
         slug = '-'.join(words)
-        
+
         # Determine prefix
         if any(w in task.lower() for w in ['fix', 'bug', 'broken', 'error']):
             prefix = 'fix'
@@ -1233,38 +1233,38 @@ class GitManager:
             prefix = 'refactor'
         else:
             prefix = 'chore'
-        
+
         return f"{prefix}/{slug}"
-    
+
     def _generate_commit_message(
         self,
         step_description: str,
         validation: ValidationResult
     ) -> str:
         """Generate descriptive commit message"""
-        
+
         # Format:
         # <type>: <summary>
         #
         # WHY: <reasoning>
         # WHAT: <changes>
         # VALIDATION: <results>
-        
+
         commit_type = self._determine_commit_type(step_description)
-        
+
         message = f"{commit_type}: {step_description}\n\n"
         message += f"VALIDATION:\n"
         message += f"- Build: {'PASS' if validation.tier1_passed else 'SKIP'}\n"
         message += f"- Tests: {'PASS' if validation.tier2_passed else 'SKIP'}\n"
         message += f"- Functional: {'PASS' if validation.tier3_passed else 'SKIP'}\n"
-        
+
         return message
-    
+
     async def _run_git(self, command: str) -> str:
         """Run git command via run_terminal_cmd"""
-        
+
         from shannon.sdk.client import ShannonSDKClient
-        
+
         # Use SDK's run_terminal_cmd
         # (Would need helper method, simplified here)
         result = await run_terminal_cmd(f'git {command}', cwd=self.project_root)
@@ -1526,9 +1526,9 @@ Phase 4: Planning (uses sequential-thinking MCP)
 
 Phase 5: Execution (invokes /shannon:wave per step)
   → Creates git branch: feat/expo-todo-app
-  
+
   [For each step]
-  
+
   Step 1: Create Expo app
     → Executes via /shannon:wave
     → Validation Tier 1: ✅ Project created
@@ -1536,7 +1536,7 @@ Phase 5: Execution (invokes /shannon:wave per step)
     → Validation Tier 3: ✅ App loads in Expo Go
     → GitManager commits: abc123 "Initialize Expo todo app"
     → Time: 45s
-  
+
   Step 2: Install libraries
     → Executes: npm install react-native-paper expo-router
     → Validation Tier 1: ✅ Build succeeds
@@ -1544,7 +1544,7 @@ Phase 5: Execution (invokes /shannon:wave per step)
     → Validation Tier 3: ✅ App still runs
     → GitManager commits: def456 "Add react-native-paper and expo-router"
     → Time: 30s
-  
+
   Step 3: Setup navigation
     → Executes via /shannon:wave (creates routes)
     → Uses expo-router (from discovered libraries)
@@ -1553,7 +1553,7 @@ Phase 5: Execution (invokes /shannon:wave per step)
     → Validation Tier 3: ✅ Can navigate between screens in app
     → GitManager commits: ghi789 "Setup navigation with expo-router"
     → Time: 2m 15s
-  
+
   Step 4: Build todo list screen
     → Executes via /shannon:wave
     → Uses react-native-paper List, Card components (NOT custom)
@@ -1562,18 +1562,18 @@ Phase 5: Execution (invokes /shannon:wave per step)
     → Validation Tier 3: ✅ Screen renders, can see todos
     → GitManager commits: jkl012 "Implement todo list screen with react-native-paper"
     → Time: 3m 30s
-  
+
   [Steps 5-7 continue similarly...]
-  
+
   ✓ All steps complete (total: 11m 45s)
 
 Phase 6: Report
   ✅ Task complete!
-  
+
   Changes:
     • Created 12 new files
     • Modified 3 existing files
-  
+
   Commits:
     • abc123 Initialize Expo todo app
     • def456 Add react-native-paper and expo-router
@@ -1582,32 +1582,32 @@ Phase 6: Report
     • mno345 Implement add todo screen
     • pqr678 Add AsyncStorage persistence
     • stu901 Test complete flow in Expo Go
-  
+
   Libraries Used:
     ✓ expo (official framework)
     ✓ react-native-paper (Material Design UI)
     ✓ expo-router (navigation)
-    
+
   Validations:
     ✅ Build: All steps passed
     ✅ Tests: All created tests passing
     ✅ Functional: App works in Expo Go
-  
+
   Branch: feat/expo-todo-app-material
   Ready for: git push + PR
-  
+
   Time: 11m 45s
   Cost: $0.89
 ```
 
 ### Key Observations
 
-✅ **Uses react-native-paper** (didn't build custom UI components)  
-✅ **Uses expo-router** (didn't build custom navigation)  
-✅ **Each step validated** before committing  
-✅ **Atomic commits** with descriptive messages  
-✅ **Functional testing** (app actually works in Expo Go)  
-✅ **Built on existing** `/shannon:wave` execution  
+✅ **Uses react-native-paper** (didn't build custom UI components)
+✅ **Uses expo-router** (didn't build custom navigation)
+✅ **Each step validated** before committing
+✅ **Atomic commits** with descriptive messages
+✅ **Functional testing** (app actually works in Expo Go)
+✅ **Built on existing** `/shannon:wave` execution
 
 ---
 
@@ -1749,12 +1749,12 @@ This complete prompt ensures the agent:
 
 ### 10.2 What Makes This Practical
 
-✅ **Builds on existing Shannon Framework** - 18 skills already work  
-✅ **Reuses existing systems** - Context, agents, session, analytics, dashboard  
-✅ **Integrates existing MCPs** - Serena, sequential-thinking, firecrawl  
-✅ **Simple additions** - Just orchestration layer + validation + git  
-✅ **Realistic timeline** - 8 days because 90% already exists  
-✅ **Clear integration points** - System prompts, skill invocations, MCP calls  
+✅ **Builds on existing Shannon Framework** - 18 skills already work
+✅ **Reuses existing systems** - Context, agents, session, analytics, dashboard
+✅ **Integrates existing MCPs** - Serena, sequential-thinking, firecrawl
+✅ **Simple additions** - Just orchestration layer + validation + git
+✅ **Realistic timeline** - 8 days because 90% already exists
+✅ **Clear integration points** - System prompts, skill invocations, MCP calls
 
 ---
 
@@ -1762,18 +1762,18 @@ This complete prompt ensures the agent:
 
 ### Requirement Checklist
 
-✅ **"Leverage current Shannon framework"** - Reuses all 18 skills  
-✅ **"Build upon Claude Code"** - Uses ClaudeAgentOptions.system_prompt.append  
-✅ **"Utilize existing skills and commands"** - Invokes /shannon:prime, /shannon:analyze, /shannon:wave  
-✅ **"Use pod agent SDK"** - Existing AgentController, no changes needed  
-✅ **"Use our database"** - Analytics DB tracks executions  
-✅ **"Use JSON files"** - SessionManager stores plans/results  
-✅ **"Use Serena MCP"** - Caching for libraries, context, research  
-✅ **"Append to system prompt with custom instructions"** - Yes! ClaudeAgentOptions.system_prompt.append  
-✅ **"Research libraries, don't reinvent wheel"** - LibraryDiscoverer + enhanced prompts enforce this  
-✅ **"Functional validation from user endpoint"** - 3-tier validation with Tier 3 focused on user perspective  
-✅ **"Git integration"** - GitManager with atomic commits  
-✅ **"Automatically apply and systematically execute"** - Full orchestration loop  
+✅ **"Leverage current Shannon framework"** - Reuses all 18 skills
+✅ **"Build upon Claude Code"** - Uses ClaudeAgentOptions.system_prompt.append
+✅ **"Utilize existing skills and commands"** - Invokes /shannon:prime, /shannon:analyze, /shannon:wave
+✅ **"Use pod agent SDK"** - Existing AgentController, no changes needed
+✅ **"Use our database"** - Analytics DB tracks executions
+✅ **"Use JSON files"** - SessionManager stores plans/results
+✅ **"Use Serena MCP"** - Caching for libraries, context, research
+✅ **"Append to system prompt with custom instructions"** - Yes! ClaudeAgentOptions.system_prompt.append
+✅ **"Research libraries, don't reinvent wheel"** - LibraryDiscoverer + enhanced prompts enforce this
+✅ **"Functional validation from user endpoint"** - 3-tier validation with Tier 3 focused on user perspective
+✅ **"Git integration"** - GitManager with atomic commits
+✅ **"Automatically apply and systematically execute"** - Full orchestration loop
 
 ALL requirements met with REALISTIC, BUILDABLE architecture.
 
@@ -1783,12 +1783,12 @@ ALL requirements met with REALISTIC, BUILDABLE architecture.
 
 Shannon V3.5 is:
 
-**NOT**: A separate autonomous system replacing Shannon  
+**NOT**: A separate autonomous system replacing Shannon
 **IS**: An enhancement layer that makes Shannon autonomous
 
-**Adds**: ~1,850 lines of orchestration, validation, and git automation  
-**Reuses**: ~15,000+ lines of existing Shannon infrastructure  
-**Timeline**: 8 days (realistic)  
+**Adds**: ~1,850 lines of orchestration, validation, and git automation
+**Reuses**: ~15,000+ lines of existing Shannon infrastructure
+**Timeline**: 8 days (realistic)
 **Result**: `shannon exec "anything"` → working code with commits
 
 **The Magic**: Enhanced system prompts + library discovery + validation loop + git automation wrapped around existing Shannon skills.
@@ -1908,12 +1908,12 @@ class ShannonSDKClient:
     ) -> AsyncIterator[Any]:
         """
         Invoke Shannon command with enhanced system prompts
-        
+
         Args:
             command: Shannon command (/shannon:exec, /shannon:wave, etc.)
             content: Command content
             enhancements: Additional system prompt instructions
-            
+
         Yields:
             SDK messages
         """
@@ -1929,12 +1929,12 @@ class ShannonSDKClient:
                 "append": enhancements  # <-- INJECT custom instructions
             }
         )
-        
+
         # Query with enhanced prompts
         prompt = f"{command} {content}"
-        
+
         query_iterator = query(prompt=prompt, options=enhanced_options)
-        
+
         # Return iterator (possibly with interception if V3 enabled)
         if self.enable_v3_features:
             return self.interceptor.intercept(query_iterator, self.message_collectors)
@@ -1972,13 +1972,13 @@ from .task_enhancements import (
 class PromptEnhancer:
     """
     Builds enhanced system prompts for autonomous execution
-    
+
     Combines:
     - Core instructions (library discovery, validation, git)
     - Project-specific guidelines (iOS, React, Python, etc.)
     - Task-specific hints
     """
-    
+
     def build_enhancements(
         self,
         task: str,
@@ -1986,42 +1986,42 @@ class PromptEnhancer:
     ) -> str:
         """
         Build complete prompt enhancements
-        
+
         Args:
             task: User's task description
             project_root: Project directory
-            
+
         Returns:
             Complete enhancement text to append to system prompt
         """
         enhancements = []
-        
+
         # Always include core instructions
         enhancements.append(LIBRARY_DISCOVERY_INSTRUCTIONS)
         enhancements.append(FUNCTIONAL_VALIDATION_INSTRUCTIONS)
         enhancements.append(GIT_WORKFLOW_INSTRUCTIONS)
-        
+
         # Add project-specific guidelines
         project_type = self._detect_project_type(project_root)
         project_enhancement = get_enhancement_for_project(project_type)
-        
+
         if project_enhancement:
             enhancements.append(project_enhancement)
-        
+
         # Add task-specific hints
         task_hints = self._generate_task_hints(task, project_type)
         if task_hints:
             enhancements.append(task_hints)
-        
+
         return "\n\n".join(enhancements)
-    
+
     def _detect_project_type(self, project_root: Path) -> str:
         """Auto-detect project type"""
-        
+
         if (project_root / 'package.json').exists():
             pkg = json.loads((project_root / 'package.json').read_text())
             deps = pkg.get('dependencies', {})
-            
+
             if 'expo' in deps:
                 return 'react-native-expo'
             elif 'react-native' in deps:
@@ -2032,7 +2032,7 @@ class PromptEnhancer:
                 return 'react'
             else:
                 return 'nodejs'
-        
+
         elif list(project_root.glob('*.xcodeproj')):
             # Check if SwiftUI or UIKit
             swift_files = list(project_root.rglob('*.swift'))
@@ -2040,7 +2040,7 @@ class PromptEnhancer:
                 return 'ios-swiftui'
             else:
                 return 'ios-uikit'
-        
+
         elif (project_root / 'pyproject.toml').exists():
             toml = (project_root / 'pyproject.toml').read_text()
             if 'fastapi' in toml.lower():
@@ -2049,15 +2049,15 @@ class PromptEnhancer:
                 return 'python-django'
             else:
                 return 'python'
-        
+
         return 'unknown'
-    
+
     def _generate_task_hints(self, task: str, project_type: str) -> Optional[str]:
         """Generate hints specific to this task"""
-        
+
         task_lower = task.lower()
         hints = []
-        
+
         # Authentication hints
         if 'auth' in task_lower or 'login' in task_lower:
             if project_type.startswith('react'):
@@ -2066,7 +2066,7 @@ class PromptEnhancer:
                 hints.append("For iOS auth, use: AuthenticationServices (built-in Sign in with Apple)")
             elif project_type.startswith('python'):
                 hints.append("For Python auth, consider: FastAPI-Users, django-allauth")
-        
+
         # UI component hints
         if any(w in task_lower for w in ['ui', 'component', 'screen', 'view']):
             if project_type == 'react-native-expo':
@@ -2074,17 +2074,17 @@ class PromptEnhancer:
                 hints.append("DO NOT build custom Button/Input/Card components")
             elif project_type.startswith('react'):
                 hints.append("For React UI, use: shadcn/ui, MUI, Chakra UI")
-        
+
         # Database hints
         if any(w in task_lower for w in ['database', 'db', 'query', 'migration']):
             if project_type == 'python-fastapi':
                 hints.append("For FastAPI DB, use: SQLAlchemy + Alembic (migrations)")
             elif project_type.startswith('nodejs'):
                 hints.append("For Node.js DB, use: Prisma (best DX), TypeORM, or Sequelize")
-        
+
         if hints:
             return "TASK-SPECIFIC HINTS:\n" + "\n".join(f"  - {h}" for h in hints)
-        
+
         return None
 ```
 
@@ -2154,7 +2154,7 @@ User Command:
   • Detect project type: Python/FastAPI
   • Build enhanced prompts:
     - Library discovery
-    - Python/FastAPI best practices  
+    - Python/FastAPI best practices
     - Functional validation
     - Git workflow
   • Create ClaudeAgentOptions with system_prompt.append
@@ -2185,19 +2185,19 @@ PHASE 1: Context
     → EXISTING ContextManager loads relevant files
     → Ser ena caches context
   → Result: Context ready
-  
+
 PHASE 2: Library Discovery
   → Call LibraryDiscoverer (Shannon CLI module)
   → Search PyPI: "Python database query optimization"
   → Find: sqlalchemy-utils, alembic-postgresql-enum, etc.
   → Serena caches results
   → Result: Library recommendations
-  
+
 PHASE 3: Analysis
   → invokeSkill('/shannon:analyze')
     → EXISTING analyze skill runs 8D analysis
   → Result: Complexity, domains, recommendations
-  
+
 PHASE 4: Planning
   → Use sequential-thinking MCP
   → Create plan incorporating:
@@ -2208,21 +2208,21 @@ PHASE 4: Planning
 
 PHASE 5: Execution Loop
   FOR EACH STEP:
-    
+
     A. Execute via /shannon:wave
        → Convert step to WaveTask
        → invokeSkill('/shannon:wave', wavePlan)
        → EXISTING AgentController executes
        → Agent makes changes using tools
        → Result: Code changes
-    
+
     B. Validate (3 tiers)
        → ValidationOrchestrator (Shannon CLI module)
        → Tier 1: pytest --collect-only (syntax)
        → Tier 2: pytest tests/ (unit tests)
        → Tier 3: uvicorn + curl (functional)
        → Result: ValidationResult
-    
+
     C. Decide
        IF validation.all_passed:
          → GitManager.commit(changes, validation)
@@ -2448,7 +2448,7 @@ class ExecutionPlan:
     research_summary: str
     total_estimated_minutes: int
     branch_name: str
-    
+
     def to_json(self) -> Dict:
         """Serialize for storage in SessionManager"""
         return {
@@ -2481,10 +2481,10 @@ class ExecutionResult:
 
 **END OF REVISED SPECIFICATION**
 
-**Status**: ✅ REALISTIC, BUILDABLE, INTEGRATED  
-**New Code**: ~1,850 lines (vs 2,350 original)  
-**Reused**: ~15,000+ lines existing Shannon  
-**Timeline**: 8 days (vs 11 original)  
+**Status**: ✅ REALISTIC, BUILDABLE, INTEGRATED
+**New Code**: ~1,850 lines (vs 2,350 original)
+**Reused**: ~15,000+ lines existing Shannon
+**Timeline**: 8 days (vs 11 original)
 
 This specification BUILDS ON existing Shannon Framework infrastructure and is ready for implementation.
 

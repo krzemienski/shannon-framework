@@ -2210,6 +2210,194 @@ def mcp_install(mcp_name: str) -> None:
         console.print(f"[red]Installation failed: {e}[/red]")
 
 
+@cli.command()
+@require_framework()
+@click.option('--show-thinking', is_flag=True, help='Display thinking from thinking-capable models')
+@click.option('--no-partial', is_flag=True, help='Disable character-by-character streaming')
+def interactive(show_thinking: bool, no_partial: bool) -> None:
+    """
+    Start an interactive conversation session with Shannon Framework
+    
+    Maintains conversation context across multiple turns - Claude remembers
+    all previous exchanges in the session. Perfect for exploratory workflows:
+    
+    \b
+    Examples:
+        # Start interactive session
+        shannon interactive
+        
+        # With thinking display (for thinking models)
+        shannon interactive --show-thinking
+        
+    \b
+    Session commands:
+        - Type your message and press Enter to send
+        - Type 'exit' or 'quit' to end session
+        - Type 'help' for available commands
+        - Type 'interrupt' to stop current operation
+        - Press Ctrl+C to interrupt
+    
+    \b
+    What makes this different:
+        - Claude REMEMBERS previous turns (unlike regular commands)
+        - Multi-turn workflows: analyze → understand → generate → refine
+        - Real-time streaming responses
+        - Thinking display for insight into reasoning
+    """
+    def run_interactive() -> None:
+        """Run interactive session (anyio compatible)"""
+        from rich.console import Console
+        from rich.panel import Panel
+        from rich.prompt import Prompt
+        from shannon.sdk import ShannonSDKClient, InteractiveSession
+        from claude_agent_sdk import TextBlock, ThinkingBlock, ToolUseBlock, ResultMessage
+        import sys
+        
+        console = Console()
+        
+        console.print()
+        console.print(Panel.fit(
+            "[bold cyan]Shannon Interactive Session[/bold cyan]\n\n"
+            "Claude will remember all previous exchanges in this session.\n"
+            "Type '[yellow]exit[/yellow]' or '[yellow]quit[/yellow]' to end, '[yellow]help[/yellow]' for commands.",
+            border_style="cyan"
+        ))
+        console.print()
+        
+        async def run_session():
+            """Async session runner"""
+            try:
+                # Initialize SDK client
+                client = ShannonSDKClient()
+                
+                # Start interactive session
+                session = await client.start_interactive_session(
+                    enable_partial_messages=not no_partial,
+                    enable_thinking_display=show_thinking
+                )
+                
+                async with session:
+                    turn = 0
+                    
+                    while True:
+                        # Prompt for user input
+                        try:
+                            user_input = Prompt.ask(
+                                f"\n[bold green]You[/bold green] (Turn {turn + 1})",
+                                console=console
+                            )
+                        except (EOFError, KeyboardInterrupt):
+                            console.print("\n[yellow]Session interrupted[/yellow]")
+                            break
+                        
+                        # Handle special commands
+                        if user_input.lower() in ('exit', 'quit'):
+                            console.print("[cyan]Ending session...[/cyan]")
+                            break
+                        
+                        if user_input.lower() == 'help':
+                            console.print(Panel(
+                                "[bold]Available commands:[/bold]\n\n"
+                                "  exit, quit     - End the interactive session\n"
+                                "  help           - Show this help message\n"
+                                "  interrupt      - Stop current operation\n"
+                                "  stats          - Show session statistics\n\n"
+                                "[bold]Tips:[/bold]\n\n"
+                                "  • Claude remembers all previous turns\n"
+                                "  • Ask follow-up questions naturally\n"
+                                "  • Use @skill commands for Shannon Framework skills\n"
+                                "  • Press Ctrl+C to interrupt long operations",
+                                title="Help",
+                                border_style="yellow"
+                            ))
+                            continue
+                        
+                        if user_input.lower() == 'interrupt':
+                            console.print("[yellow]Sending interrupt...[/yellow]")
+                            await session.interrupt()
+                            console.print("[green]Interrupted[/green]")
+                            continue
+                        
+                        if user_input.lower() == 'stats':
+                            console.print(Panel(
+                                f"[bold]Session Statistics:[/bold]\n\n"
+                                f"  Turns: {session.get_turn_count()}\n"
+                                f"  Active: {session.is_active()}\n",
+                                title="Stats",
+                                border_style="blue"
+                            ))
+                            continue
+                        
+                        if not user_input.strip():
+                            continue
+                        
+                        turn += 1
+                        
+                        # Send message
+                        try:
+                            await session.send(user_input)
+                        except Exception as e:
+                            console.print(f"[red]Error sending message: {e}[/red]")
+                            continue
+                        
+                        # Receive and display response
+                        console.print(f"[bold cyan]Claude[/bold cyan] (Turn {turn}):")
+                        
+                        try:
+                            async for msg in session.receive():
+                                if isinstance(msg, TextBlock):
+                                    # Regular text response
+                                    console.print(msg.text, style="white")
+                                
+                                elif isinstance(msg, ThinkingBlock) and show_thinking:
+                                    # Thinking content (only if enabled)
+                                    console.print(Panel(
+                                        msg.thinking,
+                                        title="[dim]Thinking[/dim]",
+                                        border_style="dim",
+                                        style="dim italic"
+                                    ))
+                                
+                                elif isinstance(msg, ToolUseBlock):
+                                    # Tool usage
+                                    console.print(
+                                        f"  [dim cyan]→ Using tool: {msg.name}[/dim cyan]"
+                                    )
+                                
+                                elif isinstance(msg, ResultMessage):
+                                    # Final result with stats
+                                    if msg.total_cost_usd:
+                                        console.print(
+                                            f"  [dim]Cost: ${msg.total_cost_usd:.4f}, "
+                                            f"Duration: {msg.duration_ms}ms[/dim]"
+                                        )
+                        
+                        except KeyboardInterrupt:
+                            console.print("\n[yellow]Interrupted by user[/yellow]")
+                            await session.interrupt()
+                        except Exception as e:
+                            console.print(f"[red]Error receiving response: {e}[/red]")
+                
+                # Session ended
+                console.print()
+                console.print(Panel.fit(
+                    f"[bold cyan]Session Complete[/bold cyan]\n\n"
+                    f"Total turns: {turn}",
+                    border_style="cyan"
+                ))
+                
+            except Exception as e:
+                console.print(f"[red]Session error: {e}[/red]")
+                import traceback
+                console.print(f"[dim]{traceback.format_exc()}[/dim]")
+                sys.exit(1)
+        
+        # Run async session
+        anyio.run(run_session)
+    
+    run_interactive()
+
+
 # Entry point for console script
 def main() -> None:
     """Main entry point for CLI."""

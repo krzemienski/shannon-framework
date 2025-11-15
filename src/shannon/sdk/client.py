@@ -12,16 +12,33 @@ import logging
 try:
     from claude_agent_sdk import (
         query,
+        ClaudeSDKClient,
         ClaudeAgentOptions,
         AssistantMessage,
         TextBlock,
+        ThinkingBlock,
         ToolUseBlock,
         SystemMessage,
-        ResultMessage
+        ResultMessage,
+        HookMatcher,
+        HookContext,
+        CLINotFoundError,
+        ProcessError,
+        CLIConnectionError,
+        CLIJSONDecodeError
     )
     SDK_AVAILABLE = True
 except ImportError:
     SDK_AVAILABLE = False
+    # Define stub classes if SDK not available
+    ClaudeSDKClient = None
+    ThinkingBlock = None
+    HookMatcher = None
+    HookContext = None
+    CLINotFoundError = Exception
+    ProcessError = Exception
+    CLIConnectionError = Exception
+    CLIJSONDecodeError = Exception
 
 # V3 Imports
 from .interceptor import MessageInterceptor, MessageCollector
@@ -85,6 +102,24 @@ class ShannonSDKClient:
                 f"Invalid Shannon Framework: missing {plugin_json}"
             )
 
+        # SDK Hooks for tool-level monitoring
+        async def pre_tool_hook(input_data: dict, tool_use_id: Optional[str], context: HookContext) -> dict:
+            """Log tool usage before execution"""
+            tool_name = input_data.get('tool_name', 'unknown')
+            self.logger.debug(f"[PRE-TOOL] {tool_name}")
+            return {}
+        
+        async def post_tool_hook(input_data: dict, tool_use_id: Optional[str], context: HookContext) -> dict:
+            """Log tool completion after execution"""
+            tool_name = input_data.get('tool_name', 'unknown')
+            self.logger.debug(f"[POST-TOOL] {tool_name} completed")
+            return {}
+        
+        # stderr callback for integrated logging
+        def stderr_handler(stderr_line: str) -> None:
+            """Integrate SDK stderr into shannon logging"""
+            self.logger.debug(f"[SDK stderr] {stderr_line.strip()}")
+        
         # Base options for all SDK calls
         # Note: plugins parameter expects list of dicts with "type" and "path"
         self.base_options = ClaudeAgentOptions(
@@ -95,7 +130,8 @@ class ShannonSDKClient:
             setting_sources=["user", "project"],  # CRITICAL: Load skills from filesystem
             permission_mode="bypassPermissions",  # Auto-approve for CLI usage
             allowed_tools=[
-                "Skill", "Read", "Write", "Bash", "SlashCommand", "Grep", "Glob", "TodoWrite",
+                "Skill", "Read", "Write", "Edit",  # Added Edit for precise code modifications
+                "Bash", "SlashCommand", "Grep", "Glob", "TodoWrite",
                 # Serena MCP tools (required by spec-analysis skill)
                 "mcp__serena__write_memory",
                 "mcp__serena__read_memory",
@@ -103,7 +139,13 @@ class ShannonSDKClient:
                 "mcp__serena__get_current_config",
                 # Sequential thinking (optional but recommended)
                 "mcp__sequential-thinking__sequentialthinking"
-            ]
+            ],
+            max_turns=50,  # Prevent runaway costs and infinite loops
+            hooks={
+                'PreToolUse': [HookMatcher(hooks=[pre_tool_hook])],
+                'PostToolUse': [HookMatcher(hooks=[post_tool_hook])]
+            },
+            stderr=stderr_handler  # Integrate SDK stderr into logging
             # model defaults to latest sonnet with extended context
         )
 
@@ -194,6 +236,24 @@ class ShannonSDKClient:
 
             self.logger.info(f"Skill {skill_name} complete ({message_count} messages)")
 
+        except CLINotFoundError as e:
+            self.logger.error("Claude Code CLI not found")
+            raise RuntimeError(
+                "Claude Code not installed. Install with:\n"
+                "  npm install -g @anthropic-ai/claude-code"
+            ) from e
+        except ProcessError as e:
+            self.logger.error(f"Process failed (exit {e.exit_code}): {e.stderr}")
+            raise RuntimeError(
+                f"Claude Code process failed with exit code {e.exit_code}\n"
+                f"Error: {e.stderr}"
+            ) from e
+        except CLIConnectionError as e:
+            self.logger.error(f"Connection failed: {e}")
+            raise RuntimeError(f"Failed to connect to Claude Code: {e}") from e
+        except CLIJSONDecodeError as e:
+            self.logger.error(f"JSON parse error: {e.line}")
+            raise RuntimeError(f"Failed to parse Claude Code response: {e}") from e
         except Exception as e:
             self.logger.error(f"Skill invocation failed: {e}")
             raise
@@ -236,6 +296,24 @@ class ShannonSDKClient:
 
                 yield msg
 
+        except CLINotFoundError as e:
+            self.logger.error("Claude Code CLI not found")
+            raise RuntimeError(
+                "Claude Code not installed. Install with:\n"
+                "  npm install -g @anthropic-ai/claude-code"
+            ) from e
+        except ProcessError as e:
+            self.logger.error(f"Process failed (exit {e.exit_code}): {e.stderr}")
+            raise RuntimeError(
+                f"Claude Code process failed with exit code {e.exit_code}\n"
+                f"Error: {e.stderr}"
+            ) from e
+        except CLIConnectionError as e:
+            self.logger.error(f"Connection failed: {e}")
+            raise RuntimeError(f"Failed to connect to Claude Code: {e}") from e
+        except CLIJSONDecodeError as e:
+            self.logger.error(f"JSON parse error: {e.line}")
+            raise RuntimeError(f"Failed to parse Claude Code response: {e}") from e
         except Exception as e:
             self.logger.error(f"Command invocation failed: {e}")
             raise
@@ -315,6 +393,24 @@ class ShannonSDKClient:
                 
                 yield msg
         
+        except CLINotFoundError as e:
+            self.logger.error("Claude Code CLI not found")
+            raise RuntimeError(
+                "Claude Code not installed. Install with:\n"
+                "  npm install -g @anthropic-ai/claude-code"
+            ) from e
+        except ProcessError as e:
+            self.logger.error(f"Process failed (exit {e.exit_code}): {e.stderr}")
+            raise RuntimeError(
+                f"Claude Code process failed with exit code {e.exit_code}\n"
+                f"Error: {e.stderr}"
+            ) from e
+        except CLIConnectionError as e:
+            self.logger.error(f"Connection failed: {e}")
+            raise RuntimeError(f"Failed to connect to Claude Code: {e}") from e
+        except CLIJSONDecodeError as e:
+            self.logger.error(f"JSON parse error: {e.line}")
+            raise RuntimeError(f"Failed to parse Claude Code response: {e}") from e
         except Exception as e:
             self.logger.error(f"Enhanced command invocation failed: {e}")
             raise
@@ -491,3 +587,298 @@ Execute the task now."""
         if self.stream_handler:
             return self.stream_handler.get_stats()
         return None
+
+    async def start_interactive_session(
+        self,
+        initial_prompt: Optional[str] = None,
+        enable_partial_messages: bool = True,
+        enable_thinking_display: bool = True
+    ) -> 'InteractiveSession':
+        """
+        Start an interactive conversation session with Shannon Framework
+        
+        Uses ClaudeSDKClient for continuous conversation (maintains context across turns).
+        This enables multi-turn interactions where Claude remembers previous exchanges.
+        
+        Args:
+            initial_prompt: Optional initial message to start the conversation
+            enable_partial_messages: Enable character-by-character streaming
+            enable_thinking_display: Show ThinkingBlock content from thinking models
+            
+        Returns:
+            InteractiveSession instance for managing the conversation
+            
+        Example:
+            async with client.start_interactive_session() as session:
+                # First turn
+                await session.send("Analyze spec.md")
+                async for msg in session.receive():
+                    print(msg)
+                
+                # Follow-up (Claude remembers spec.md context!)
+                await session.send("What API endpoints did you find?")
+                async for msg in session.receive():
+                    print(msg)
+                    
+                # Another follow-up (still remembers everything)
+                await session.send("Generate code for the user endpoint")
+                async for msg in session.receive():
+                    print(msg)
+        """
+        # Create interactive options (extends base options)
+        interactive_options = ClaudeAgentOptions(
+            plugins=self.base_options.plugins,
+            setting_sources=self.base_options.setting_sources,
+            permission_mode=self.base_options.permission_mode,
+            allowed_tools=self.base_options.allowed_tools,
+            max_turns=self.base_options.max_turns,
+            hooks=self.base_options.hooks,
+            stderr=self.base_options.stderr,
+            include_partial_messages=enable_partial_messages,  # KEY: Enable character-by-character streaming
+        )
+        
+        # Create interactive session
+        session = InteractiveSession(
+            options=interactive_options,
+            logger=self.logger,
+            enable_thinking_display=enable_thinking_display,
+            initial_prompt=initial_prompt
+        )
+        
+        return session
+
+
+class InteractiveSession:
+    """
+    Interactive conversation session using ClaudeSDKClient
+    
+    Maintains conversation context across multiple user inputs, enabling:
+    - Multi-turn conversations where Claude remembers previous exchanges
+    - Follow-up questions that build on previous context
+    - Continuous workflow (analyze → understand → generate → refine)
+    - Real-time streaming with partial message updates
+    - ThinkingBlock display for models with thinking capability
+    
+    Usage:
+        async with session:
+            await session.send("Analyze spec.md")
+            async for msg in session.receive():
+                # Process first response
+                if isinstance(msg, TextBlock):
+                    print(msg.text)
+            
+            # Follow-up (context preserved!)
+            await session.send("What API endpoints did you find?")
+            async for msg in session.receive():
+                # Claude remembers the spec analysis
+                if isinstance(msg, TextBlock):
+                    print(msg.text)
+    """
+    
+    def __init__(
+        self,
+        options: ClaudeAgentOptions,
+        logger: logging.Logger,
+        enable_thinking_display: bool = True,
+        initial_prompt: Optional[str] = None
+    ):
+        """
+        Initialize interactive session
+        
+        Args:
+            options: ClaudeAgentOptions with interactive settings
+            logger: Logger instance
+            enable_thinking_display: Show thinking content from ThinkingBlock
+            initial_prompt: Optional initial message
+        """
+        self.options = options
+        self.logger = logger
+        self.enable_thinking_display = enable_thinking_display
+        self.initial_prompt = initial_prompt
+        
+        self.client: Optional[ClaudeSDKClient] = None
+        self.turn_count = 0
+        self.is_connected = False
+    
+    async def __aenter__(self) -> 'InteractiveSession':
+        """Async context manager entry - connects to Claude"""
+        await self.connect()
+        return self
+    
+    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Async context manager exit - disconnects from Claude"""
+        await self.disconnect()
+    
+    async def connect(self) -> None:
+        """
+        Connect to Claude and start session
+        
+        Raises:
+            RuntimeError: If Claude Code not installed or connection fails
+        """
+        if self.is_connected:
+            self.logger.warning("Already connected")
+            return
+        
+        try:
+            self.client = ClaudeSDKClient(options=self.options)
+            await self.client.connect(prompt=self.initial_prompt)
+            self.is_connected = True
+            self.logger.info("Interactive session connected")
+            
+            # If initial prompt was provided, we already sent first message
+            if self.initial_prompt:
+                self.turn_count = 1
+                self.logger.debug(f"Initial prompt sent: {self.initial_prompt[:100]}...")
+                
+        except CLINotFoundError as e:
+            raise RuntimeError(
+                "Claude Code not installed. Install with:\n"
+                "  npm install -g @anthropic-ai/claude-code"
+            ) from e
+        except Exception as e:
+            self.logger.error(f"Failed to connect: {e}")
+            raise RuntimeError(f"Failed to start interactive session: {e}") from e
+    
+    async def disconnect(self) -> None:
+        """Disconnect from Claude and end session"""
+        if not self.is_connected or not self.client:
+            return
+        
+        try:
+            await self.client.disconnect()
+            self.is_connected = False
+            self.logger.info(f"Interactive session ended after {self.turn_count} turns")
+        except Exception as e:
+            self.logger.warning(f"Error during disconnect: {e}")
+    
+    async def send(self, message: str) -> None:
+        """
+        Send a message to Claude
+        
+        Args:
+            message: User message to send
+            
+        Raises:
+            RuntimeError: If not connected
+        """
+        if not self.is_connected or not self.client:
+            raise RuntimeError("Not connected. Call connect() first or use async with.")
+        
+        self.turn_count += 1
+        self.logger.info(f"[Turn {self.turn_count}] Sending: {message[:100]}...")
+        
+        try:
+            await self.client.query(message)
+        except CLINotFoundError as e:
+            raise RuntimeError(
+                "Claude Code not installed. Install with:\n"
+                "  npm install -g @anthropic-ai/claude-code"
+            ) from e
+        except ProcessError as e:
+            raise RuntimeError(
+                f"Claude Code process failed with exit code {e.exit_code}\n"
+                f"Error: {e.stderr}"
+            ) from e
+        except CLIConnectionError as e:
+            raise RuntimeError(f"Connection failed: {e}") from e
+        except CLIJSONDecodeError as e:
+            raise RuntimeError(f"Failed to parse response: {e}") from e
+        except Exception as e:
+            self.logger.error(f"Failed to send message: {e}")
+            raise
+    
+    async def receive(self) -> AsyncIterator[Any]:
+        """
+        Receive response messages from Claude
+        
+        Yields messages until ResultMessage (end of turn).
+        Handles TextBlock, ThinkingBlock, ToolUseBlock, ToolResultBlock, etc.
+        
+        Yields:
+            SDK message objects (TextBlock, ThinkingBlock, ToolUseBlock, etc.)
+            
+        Example:
+            async for msg in session.receive():
+                if isinstance(msg, TextBlock):
+                    print(f"Text: {msg.text}")
+                elif isinstance(msg, ThinkingBlock):
+                    print(f"Thinking: {msg.thinking}")
+                elif isinstance(msg, ToolUseBlock):
+                    print(f"Tool: {msg.name}")
+        """
+        if not self.is_connected or not self.client:
+            raise RuntimeError("Not connected. Call connect() first or use async with.")
+        
+        self.logger.debug(f"[Turn {self.turn_count}] Receiving response...")
+        message_count = 0
+        
+        try:
+            async for message in self.client.receive_response():
+                message_count += 1
+                msg_type = type(message).__name__
+                self.logger.debug(f"[Turn {self.turn_count}] Message {message_count}: {msg_type}")
+                
+                # Handle different message types
+                if isinstance(message, AssistantMessage):
+                    for block in message.content:
+                        if isinstance(block, TextBlock):
+                            self.logger.debug(f"  Text: {block.text[:100]}...")
+                            yield block
+                        elif isinstance(block, ThinkingBlock):
+                            if self.enable_thinking_display:
+                                self.logger.debug(f"  Thinking: {block.thinking[:100]}...")
+                                yield block
+                        elif isinstance(block, ToolUseBlock):
+                            self.logger.debug(f"  Tool use: {block.name}")
+                            yield block
+                        elif isinstance(block, ToolResultBlock):
+                            self.logger.debug(f"  Tool result for: {block.tool_use_id}")
+                            yield block
+                        else:
+                            # Unknown block type - yield it anyway
+                            yield block
+                
+                elif isinstance(message, ResultMessage):
+                    # Final message - log stats
+                    self.logger.info(
+                        f"[Turn {self.turn_count}] Complete: "
+                        f"{message.num_turns} turns, "
+                        f"{message.duration_ms}ms, "
+                        f"${message.total_cost_usd:.4f}" if message.total_cost_usd else ""
+                    )
+                    yield message
+                
+                else:
+                    # Other message types (SystemMessage, etc.)
+                    yield message
+        
+        except Exception as e:
+            self.logger.error(f"Error receiving messages: {e}")
+            raise
+    
+    async def interrupt(self) -> None:
+        """
+        Send interrupt signal to stop Claude mid-execution
+        
+        Useful for stopping long-running operations.
+        After interrupting, you can send a new message.
+        """
+        if not self.is_connected or not self.client:
+            raise RuntimeError("Not connected")
+        
+        self.logger.info(f"[Turn {self.turn_count}] Sending interrupt...")
+        try:
+            await self.client.interrupt()
+            self.logger.info("Interrupt sent successfully")
+        except Exception as e:
+            self.logger.error(f"Failed to send interrupt: {e}")
+            raise
+    
+    def get_turn_count(self) -> int:
+        """Get current turn count"""
+        return self.turn_count
+    
+    def is_active(self) -> bool:
+        """Check if session is active"""
+        return self.is_connected

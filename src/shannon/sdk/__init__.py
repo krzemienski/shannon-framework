@@ -5,7 +5,7 @@ plus AgentFactory and PromptBuilder for template-based agent creation,
 and MessageParser for extracting structured data from SDK message streams.
 """
 
-from shannon.sdk.client import ShannonSDKClient, SDK_AVAILABLE
+from shannon.sdk.client import ShannonSDKClient, SDK_AVAILABLE, InteractiveSession
 from shannon.sdk.message_parser import MessageParser
 
 # Optional: AgentFactory and PromptBuilder (not yet implemented)
@@ -22,6 +22,7 @@ except ImportError:
 __all__ = [
     "ShannonSDKClient",
     "SDK_AVAILABLE",
+    "InteractiveSession",
     "AgentFactory",
     "PromptBuilder",
     "MessageParser",

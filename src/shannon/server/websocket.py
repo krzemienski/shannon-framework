@@ -330,6 +330,48 @@ async def subscribe(sid: str, data: Dict[str, Any]):
         }, to=sid)
 
 
+@sio.event
+async def cli_event(sid: str, data: Dict[str, Any]):
+    """
+    Receive events from CLI and broadcast to all dashboards.
+
+    This handler allows the CLI (running in a separate process) to send
+    execution events to the server, which then broadcasts them to all
+    connected dashboard clients.
+
+    Args:
+        sid: Socket.IO session ID of the CLI client
+        data: Event data with session_id, event_type, timestamp, data
+
+    Example:
+        {
+            'session_id': 'do_20251116_123456_abc',
+            'event_type': 'skill:started',
+            'timestamp': '2025-11-16T12:34:56.789',
+            'data': {'skill_name': 'code_generation', ...}
+        }
+    """
+    try:
+        event_type = data.get('event_type')
+        event_data = data.get('data', {})
+        timestamp = data.get('timestamp', datetime.now().isoformat())
+        session_id = data.get('session_id')
+
+        logger.info(f"CLI event received: {event_type} from session {session_id}")
+
+        # Broadcast to ALL connected dashboards
+        await sio.emit(event_type, {
+            'timestamp': timestamp,
+            'data': event_data,
+            'session_id': session_id
+        })
+
+        logger.debug(f"Broadcasted {event_type} to all dashboards")
+
+    except Exception as e:
+        logger.error(f"Error handling CLI event: {e}", exc_info=True)
+
+
 # ============================================================================
 # Command Handlers
 # ============================================================================

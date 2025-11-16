@@ -108,7 +108,8 @@ class Orchestrator:
         executor: SkillExecutor,
         state_manager: StateManager,
         session_id: Optional[str] = None,
-        event_callback: Optional[Callable] = None
+        event_callback: Optional[Callable] = None,
+        dashboard_url: Optional[str] = None
     ):
         """
         Initialize orchestrator.
@@ -119,6 +120,7 @@ class Orchestrator:
             state_manager: StateManager for checkpoints
             session_id: Optional session ID for event routing
             event_callback: Optional callback for event emission
+            dashboard_url: Optional dashboard server URL for event streaming
         """
         self.plan = plan
         self.executor = executor
@@ -136,6 +138,13 @@ class Orchestrator:
         self.current_step = 0
         self.checkpoints_created: List[str] = []
         self.execution_context = ExecutionContext(task=plan.task)
+
+        # Dashboard client for event streaming
+        self.dashboard_client = None
+        if session_id and dashboard_url:
+            from shannon.communication.dashboard_client import DashboardEventClient
+            self.dashboard_client = DashboardEventClient(dashboard_url, session_id)
+            logger.info(f"Dashboard client created for session: {session_id}")
 
         logger.info(f"Orchestrator initialized: {plan.plan_id}, {len(plan.steps)} steps")
 
@@ -155,6 +164,14 @@ class Orchestrator:
             if self.state != ExecutionState.IDLE:
                 raise OrchestratorError(f"Cannot execute - state is {self.state.value}")
             self.state = ExecutionState.RUNNING
+
+        # Connect to dashboard server if client configured
+        if self.dashboard_client:
+            connected = await self.dashboard_client.connect()
+            if connected:
+                logger.info("Dashboard client connected successfully")
+            else:
+                logger.warning("Dashboard client connection failed - continuing without dashboard")
 
         logger.info(f"Starting execution: plan={self.plan.plan_id}, steps={len(self.plan.steps)}")
 
@@ -230,6 +247,12 @@ class Orchestrator:
             logger.error(f"Execution failed at step {self.current_step}: {e}", exc_info=True)
 
             return result
+
+        finally:
+            # Disconnect dashboard client
+            if self.dashboard_client:
+                await self.dashboard_client.disconnect()
+                logger.info("Dashboard client disconnected")
 
     async def halt(self, reason: str = "User requested"):
         """
@@ -390,7 +413,7 @@ class Orchestrator:
 
     async def _emit_event(self, event_type: str, data: Dict[str, Any]):
         """
-        Emit event to both stdout and WebSocket.
+        Emit event to both stdout and WebSocket dashboard.
 
         Args:
             event_type: Type of event
@@ -399,30 +422,14 @@ class Orchestrator:
         # Keep stdout for CLI visibility
         print(f"Event: {event_type}")
 
-        # DEBUG: Verify this code is reached
-        logger.error(f"DEBUG _emit_event called: type={event_type}, has_session_id={self.session_id is not None}")
-
-        # Add WebSocket emission
-        if self.session_id:
-            logger.error(f"DEBUG: Attempting WebSocket emit for {event_type}")
+        # Emit to dashboard via Socket.IO client
+        if hasattr(self, 'dashboard_client') and self.dashboard_client:
             try:
-                from shannon.server.websocket import emit_skill_event, emit_execution_event
-                logger.error(f"DEBUG: Imports successful")
-
-                if event_type.startswith('skill:'):
-                    result = await emit_skill_event(event_type, data, self.session_id)
-                    logger.error(f"DEBUG: emit_skill_event returned: {result}")
-                elif event_type.startswith('execution:'):
-                    result = await emit_execution_event(event_type, data, self.session_id)
-                    logger.error(f"DEBUG: emit_execution_event returned: {result}")
-                elif event_type.startswith('checkpoint:'):
-                    result = await emit_execution_event(event_type, data, self.session_id)
-                    logger.error(f"DEBUG: emit_checkpoint_event returned: {result}")
+                await self.dashboard_client.emit_event(event_type, data)
+                logger.debug(f"Event sent to dashboard: {event_type}")
             except Exception as e:
-                # Don't fail execution if WebSocket emission fails
-                logger.error(f"DEBUG: Exception during emit: {e}", exc_info=True)
-        else:
-            logger.error(f"DEBUG: No session_id, skipping WebSocket emit")
+                # Don't fail execution if dashboard emission fails
+                logger.warning(f"Failed to send event to dashboard: {e}")
 
         # Also call event callback if provided
         if self.event_callback:

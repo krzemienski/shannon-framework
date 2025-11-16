@@ -241,7 +241,8 @@ def do_command(
                 executor=executor,
                 state_manager=state_manager,
                 session_id=generated_session_id,
-                event_callback=event_callback if dashboard else None
+                event_callback=event_callback if dashboard else None,
+                dashboard_url='http://localhost:8000' if dashboard else None
             )
 
             # Debug: Verify session_id propagation

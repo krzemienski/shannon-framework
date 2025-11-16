@@ -59,16 +59,16 @@ function App() {
           </div>
 
           {/* Connection Status */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2" data-testid="connection-status">
             {connected ? (
               <>
                 <Wifi className="text-green-500" size={20} />
-                <span className="text-green-500 font-medium">Connected</span>
+                <span className="text-green-500 font-medium" data-testid="connection-state">Connected</span>
               </>
             ) : (
               <>
                 <WifiOff className="text-red-500" size={20} />
-                <span className="text-red-500 font-medium">
+                <span className="text-red-500 font-medium" data-testid="connection-state">
                   {error ? `Error: ${error}` : 'Disconnected'}
                 </span>
               </>
@@ -98,15 +98,17 @@ function App() {
 
       {/* Event Stream Debug Info - Collapsible */}
       {import.meta.env.DEV && events.length > 0 && (
-        <details className="mt-8 bg-gray-900 rounded-lg p-4 border border-gray-800">
-          <summary className="cursor-pointer text-gray-400 font-medium mb-2">
-            Event Stream ({events.length} events)
+        <details className="mt-8 bg-gray-900 rounded-lg p-4 border border-gray-800" data-testid="event-stream">
+          <summary className="cursor-pointer text-gray-400 font-medium mb-2" data-testid="event-stream-summary">
+            Event Stream (<span data-testid="event-count">{events.length}</span> events)
           </summary>
-          <div className="space-y-2 max-h-64 overflow-y-auto">
+          <div className="space-y-2 max-h-64 overflow-y-auto" data-testid="event-list">
             {events.slice(-10).map((event, index) => (
               <div
                 key={index}
                 className="text-xs font-mono bg-gray-950 p-2 rounded text-gray-300"
+                data-testid="event-item"
+                data-event-type={event.type}
               >
                 <span className="text-blue-400">{event.type}</span>
                 <span className="text-gray-500 ml-2">

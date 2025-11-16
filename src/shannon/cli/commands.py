@@ -1801,7 +1801,7 @@ def do(
         - HALT/RESUME support
         - Auto-mode for unattended execution
     """
-    from shannon.cli.commands.do import do_command
+    from shannon.cli.v4_commands.do import do_command
     from click import Context
 
     # Create context and invoke command

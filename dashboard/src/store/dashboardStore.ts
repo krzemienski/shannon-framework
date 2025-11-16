@@ -277,6 +277,74 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
         }
         break;
 
+      // Handle colon-separated event types from new client-server architecture
+      case 'execution:started':
+        // Data is nested: {timestamp, data: {task, plan_id, ...}, session_id}
+        if (data.data && data.data.task) {
+          get().updateExecution({
+            taskName: data.data.task,
+            status: 'running',
+            startTime: Date.now(),
+            progress: 0,
+          });
+        }
+        break;
+
+      case 'execution:completed':
+        get().updateExecution({
+          status: 'completed',
+          progress: 100,
+          elapsedTime: Date.now() - (get().execution.startTime || Date.now()),
+        });
+        break;
+
+      case 'execution:failed':
+        get().updateExecution({
+          status: 'failed',
+        });
+        break;
+
+      case 'skill:started':
+        // Colon version of skill_started
+        // Data is nested: {timestamp, data: {skill_name, step_index, ...}, session_id}
+        if (data.data && data.data.skill_name) {
+          const skillId = `${data.data.skill_name}_${data.data.step_index || Date.now()}`;
+          get().addSkill({
+            id: skillId,
+            name: data.data.skill_name,
+            status: 'running',
+            progress: 0,
+            duration: 0,
+            startTime: Date.now(),
+            endTime: null,
+          });
+        }
+        break;
+
+      case 'skill:completed':
+        // Colon version of skill_completed
+        // Data is nested: {timestamp, data: {skill_name, duration, ...}, session_id}
+        if (data.data && data.data.skill_name) {
+          const skills = get().skills;
+          const skill = skills.find((s) => s.name === data.data.skill_name && s.status === 'running');
+          if (skill) {
+            get().updateSkill(skill.id, {
+              status: 'completed',
+              progress: 100,
+              endTime: Date.now(),
+              duration: data.data.duration ? data.data.duration * 1000 : (Date.now() - (skill.startTime || Date.now())),
+            });
+          }
+        }
+        break;
+
+      case 'checkpoint:created':
+        // Just acknowledge - could add checkpoint tracking later
+        if (data.data) {
+          console.log('Checkpoint created:', data.data.checkpoint_id);
+        }
+        break;
+
       default:
         // Unknown event type - just log it
         console.log('Unknown event type:', type);

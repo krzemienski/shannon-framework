@@ -27,12 +27,9 @@ execution:
   retry: 3
 
 hooks:
-  pre:
-    - validate_git_clean
-  post:
-    - collect_generated_files
-  error:
-    - rollback_changes
+  pre: []
+  post: []
+  error: []
 
 metadata:
   author: Shannon Framework

@@ -223,6 +223,9 @@ class ExecutionPlanner:
         # Initialize context if not provided
         context = context or {}
 
+        # Add raw task to context for parameter extraction
+        context['raw_task'] = parsed_task.raw_task
+
         # Step 1: Select and validate skills
         selected_skills = await self._select_skills(parsed_task.candidate_skills)
 
@@ -425,8 +428,8 @@ class ExecutionPlanner:
                 params['project_root'] = str(context.get('project_root', '.'))
 
             elif param.name == 'task':
-                # Build task description from intent
-                params['task'] = f"{intent.goal} {intent.domain}".strip()
+                # Use raw task from context if available, otherwise build from intent
+                params['task'] = context.get('raw_task', f"{intent.goal} {intent.domain}").strip()
 
             elif param.name == 'feature_description':
                 # Extract from task keywords or goal

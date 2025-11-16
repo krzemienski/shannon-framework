@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://shannon.dev/schemas/checkpoint.schema.json",
+  "title": "Shannon State Checkpoint",
+  "description": "Snapshot of execution state for rollback capability",
+  "type": "object",
+  "required": ["id", "label", "timestamp", "skill_stack", "git_state"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique checkpoint identifier (UUID)",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "label": {
+      "type": "string",
+      "description": "Human-readable label (typically skill name)"
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "When checkpoint was created",
+      "format": "date-time"
+    },
+    "skill_stack": {
+      "type": "array",
+      "description": "Skills executed so far",
+      "items": {"type": "string"}
+    },
+    "current_skill": {
+      "type": ["string", "null"],
+      "description": "Currently executing skill"
+    },
+    "next_skills": {
+      "type": "array",
+      "description": "Upcoming skills in execution plan",
+      "items": {"type": "string"}
+    },
+    "file_snapshots": {
+      "type": "object",
+      "description": "Snapshots of changed files",
+      "additionalProperties": {"type": "string"}
+    },
+    "file_hashes": {
+      "type": "object",
+      "description": "SHA256 hashes for verification",
+      "additionalProperties": {"type": "string"}
+    },
+    "git_state": {
+      "type": "object",
+      "required": ["branch", "commit"],
+      "properties": {
+        "branch": {"type": "string"},
+        "commit": {"type": "string"},
+        "stash_id": {"type": ["string", "null"]}
+      }
+    },
+    "execution_context": {
+      "type": "object",
+      "description": "Execution variables and state"
+    },
+    "decision_history": {
+      "type": "array",
+      "description": "Decisions made so far",
+      "items": {
+        "type": "object",
+        "properties": {
+          "decision_id": {"type": "string"},
+          "selected_option": {"type": "integer"},
+          "timestamp": {"type": "string", "format": "date-time"}
+        }
+      }
+    },
+    "agent_states": {
+      "type": "array",
+      "description": "State of active agents",
+      "items": {
+        "type": "object",
+        "properties": {
+          "agent_id": {"type": "string"},
+          "role": {"type": "string"},
+          "status": {"enum": ["spawned", "running", "completed", "failed"]},
+          "progress": {"type": "number", "minimum": 0, "maximum": 1}
+        }
+      }
+    },
+    "rollback_count": {
+      "type": "integer",
+      "description": "How many times this checkpoint was restored to",
+      "minimum": 0,
+      "default": 0
+    },
+    "restored_from": {
+      "type": ["string", "null"],
+      "description": "If restored, the checkpoint ID we came from"
+    }
+  }
+}

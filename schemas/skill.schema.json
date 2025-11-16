@@ -1,0 +1,238 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://shannon.dev/schemas/skill.schema.json",
+  "title": "Shannon Skill Definition",
+  "description": "Schema for defining Shannon skills with parameters, dependencies, hooks, and execution configuration",
+  "type": "object",
+  "required": ["name", "version", "description", "execution"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique skill identifier (snake_case)",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "minLength": 3,
+      "maxLength": 50
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version (MAJOR.MINOR.PATCH)",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of what the skill does",
+      "minLength": 10,
+      "maxLength": 200
+    },
+    "category": {
+      "type": "string",
+      "description": "Organizational category",
+      "enum": [
+        "research",
+        "analysis",
+        "validation",
+        "testing",
+        "git",
+        "deployment",
+        "monitoring",
+        "optimization",
+        "documentation",
+        "workflow",
+        "utility",
+        "other"
+      ]
+    },
+    "parameters": {
+      "type": "array",
+      "description": "List of parameters this skill accepts",
+      "items": {
+        "type": "object",
+        "required": ["name", "type"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Parameter name (snake_case)",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "type": {
+            "type": "string",
+            "description": "Parameter data type",
+            "enum": ["string", "integer", "float", "boolean", "array", "object"]
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Whether parameter is required",
+            "default": false
+          },
+          "default": {
+            "description": "Default value if not provided"
+          },
+          "description": {
+            "type": "string",
+            "description": "Parameter description"
+          },
+          "validation": {
+            "type": "string",
+            "description": "Regex pattern for validation (strings only)"
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "description": "List of other skills this skill depends on",
+      "items": {
+        "type": "string",
+        "description": "Skill name",
+        "pattern": "^[a-z][a-z0-9_]*$"
+      },
+      "uniqueItems": true
+    },
+    "hooks": {
+      "type": "object",
+      "description": "Lifecycle hooks (skills to run before/after/on-error)",
+      "properties": {
+        "pre": {
+          "type": "array",
+          "description": "Skills to run before main execution",
+          "items": {"type": "string"}
+        },
+        "post": {
+          "type": "array",
+          "description": "Skills to run after successful execution",
+          "items": {"type": "string"}
+        },
+        "error": {
+          "type": "array",
+          "description": "Skills to run if execution fails",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "description": "How to execute this skill",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Execution type",
+          "enum": ["native", "script", "mcp", "composite"]
+        },
+        "module": {
+          "type": "string",
+          "description": "Python module path (for type=native)",
+          "pattern": "^[a-z_][a-z0-9_.]*$"
+        },
+        "class": {
+          "type": "string",
+          "description": "Python class name (for type=native)"
+        },
+        "method": {
+          "type": "string",
+          "description": "Python method name (for type=native)"
+        },
+        "script": {
+          "type": "string",
+          "description": "Path to script file (for type=script)"
+        },
+        "mcp_server": {
+          "type": "string",
+          "description": "MCP server name (for type=mcp)"
+        },
+        "mcp_tool": {
+          "type": "string",
+          "description": "MCP tool name (for type=mcp)"
+        },
+        "skills": {
+          "type": "array",
+          "description": "List of skills to execute (for type=composite)",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Simple skill name"
+              },
+              {
+                "type": "object",
+                "description": "Skill with configuration",
+                "required": ["skill"],
+                "properties": {
+                  "skill": {"type": "string"},
+                  "parameters": {"type": "object"},
+                  "on_failure": {
+                    "type": "string",
+                    "enum": ["halt", "continue", "rollback", "retry"]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "timeout": {
+          "type": "integer",
+          "description": "Execution timeout in seconds",
+          "minimum": 1,
+          "maximum": 3600,
+          "default": 300
+        },
+        "retry": {
+          "type": "integer",
+          "description": "Number of retry attempts on failure",
+          "minimum": 0,
+          "maximum": 5,
+          "default": 0
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {"type": {"const": "native"}},
+          "required": ["module", "class", "method"]
+        },
+        {
+          "properties": {"type": {"const": "script"}},
+          "required": ["script"]
+        },
+        {
+          "properties": {"type": {"const": "mcp"}},
+          "required": ["mcp_server", "mcp_tool"]
+        },
+        {
+          "properties": {"type": {"const": "composite"}},
+          "required": ["skills"]
+        }
+      ]
+    },
+    "validation": {
+      "type": "object",
+      "description": "Validation configuration",
+      "properties": {
+        "check": {
+          "type": "string",
+          "description": "Skill to use for validation"
+        },
+        "criteria": {
+          "type": "object",
+          "description": "Success criteria"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional metadata",
+      "properties": {
+        "author": {"type": "string"},
+        "created": {"type": "string", "format": "date-time"},
+        "updated": {"type": "string", "format": "date-time"},
+        "auto_generated": {"type": "boolean", "default": false},
+        "usage_count": {"type": "integer", "minimum": 0, "default": 0},
+        "success_rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "avg_duration": {"type": "number", "minimum": 0},
+        "tags": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    }
+  }
+}

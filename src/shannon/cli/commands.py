@@ -95,7 +95,7 @@ def require_framework():
 
 
 @click.group()
-@click.version_option(version='3.0.0')
+@click.version_option(version='3.5.0')
 def cli() -> None:
     """Shannon Framework - Standalone CLI Agent.
 

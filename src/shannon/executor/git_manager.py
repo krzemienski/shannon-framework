@@ -299,8 +299,14 @@ class GitManager:
             )
 
             if process.returncode != 0:
-                error_msg = stderr.decode() if stderr else "Unknown error"
-                raise Exception(f"Git command failed (exit {process.returncode}): {error_msg}")
+                stdout_str = stdout.decode() if stdout else ""
+                stderr_str = stderr.decode() if stderr else ""
+                error_msg = stderr_str or stdout_str or "No error output"
+                self.logger.error(f"Git command failed: {full_command}")
+                self.logger.error(f"Exit code: {process.returncode}")
+                self.logger.error(f"Stdout: {stdout_str}")
+                self.logger.error(f"Stderr: {stderr_str}")
+                raise Exception(f"Git command '{command}' failed (exit {process.returncode}): {error_msg}")
 
             output = stdout.decode() if stdout else ""
             return output

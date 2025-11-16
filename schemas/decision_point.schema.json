@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://shannon.dev/schemas/decision_point.schema.json",
+  "title": "Shannon Decision Point",
+  "description": "Decision requiring user input during execution",
+  "type": "object",
+  "required": ["id", "context", "question", "options"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique decision identifier",
+      "pattern": "^decision_[0-9]+$"
+    },
+    "context": {
+      "type": "string",
+      "description": "Context explaining why this decision is needed",
+      "minLength": 10
+    },
+    "question": {
+      "type": "string",
+      "description": "The specific question to ask user",
+      "minLength": 10
+    },
+    "options": {
+      "type": "array",
+      "description": "Available options for user to choose from",
+      "minItems": 2,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["label", "confidence"],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Option label/title"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of this option"
+          },
+          "pros": {
+            "type": "array",
+            "description": "Advantages of this option",
+            "items": {"type": "string"}
+          },
+          "cons": {
+            "type": "array",
+            "description": "Disadvantages of this option",
+            "items": {"type": "string"}
+          },
+          "confidence": {
+            "type": "number",
+            "description": "Confidence score for this option",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "impact": {
+            "type": "string",
+            "description": "Impact level",
+            "enum": ["low", "medium", "high"]
+          },
+          "time_estimate": {
+            "type": "string",
+            "description": "Estimated additional time if selected",
+            "pattern": "^\\d+(-\\d+)? (seconds|minutes|hours|days)$"
+          }
+        }
+      }
+    },
+    "recommended": {
+      "type": "integer",
+      "description": "Index of recommended option",
+      "minimum": 0
+    },
+    "timeout_seconds": {
+      "type": "integer",
+      "description": "Auto-select after timeout",
+      "minimum": 10,
+      "maximum": 300,
+      "default": 30
+    },
+    "priority": {
+      "type": "string",
+      "description": "Decision priority level",
+      "enum": ["low", "medium", "high", "critical"],
+      "default": "medium"
+    },
+    "made_at": {
+      "type": ["string", "null"],
+      "description": "When decision was made",
+      "format": "date-time"
+    },
+    "selected_option": {
+      "type": ["integer", "null"],
+      "description": "Which option was selected (index)"
+    },
+    "auto_selected": {
+      "type": "boolean",
+      "description": "Whether auto-selected due to timeout",
+      "default": false
+    }
+  }
+}

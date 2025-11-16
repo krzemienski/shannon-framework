@@ -130,26 +130,202 @@ class LibraryDiscoverer:
 
     async def _search_npm(self, feature: str) -> List[Dict[str, Any]]:
         """
-        Search npm registry
+        Search npm registry using official npm API
 
-        Uses firecrawl MCP if available, falls back to web search
+        API: https://registry.npmjs.org/-/v1/search
+        Docs: https://github.com/npm/registry/blob/master/docs/REGISTRY-API.md
         """
-        query = f"npm {feature} package"
+        import httpx
 
-        # Try using firecrawl MCP
+        query = f"{feature}"  # Direct feature search
+        url = "https://registry.npmjs.org/-/v1/search"
+
+        self.logger.debug(f"Searching npm registry: {query}")
+
         try:
-            # Would use MCP here in real implementation
-            # For now, return mock data structure
-            results = await self._web_search_packages(query, "npm")
-            return results
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.get(url, params={
+                    "text": query,
+                    "size": 10,  # Top 10 results
+                    "popularity": 0.5,  # Weight popularity
+                    "quality": 0.3,
+                    "maintenance": 0.2
+                })
+
+                response.raise_for_status()
+                data = response.json()
+
+                libraries = []
+                for obj in data.get("objects", []):
+                    package = obj.get("package", {})
+
+                    # Extract metadata
+                    name = package.get("name", "")
+                    description = package.get("description", "No description")
+                    version = package.get("version", "unknown")
+                    
+                    # Extract repository URL
+                    links = package.get("links", {})
+                    repo_url = links.get("repository", links.get("homepage", ""))
+                    
+                    # Extract npm URL
+                    npm_url = links.get("npm", f"https://www.npmjs.com/package/{name}")
+
+                    # Extract score metrics
+                    score_obj = obj.get("score", {})
+                    final_score = score_obj.get("final", 0) * 100  # Convert to 0-100
+                    detail = score_obj.get("detail", {})
+                    
+                    # Extract detailed metrics (may not always be available)
+                    quality = detail.get("quality", 0.5) * 100
+                    popularity = detail.get("popularity", 0.5) * 100
+                    maintenance = detail.get("maintenance", 0.5) * 100
+
+                    # Parse last_updated to datetime or ISO string
+                    date_str = package.get("date", "")
+                    if date_str:
+                        last_updated = date_str  # Already ISO format from npm
+                    else:
+                        last_updated = datetime.now().isoformat()
+                    
+                    libraries.append({
+                        'name': name,
+                        'description': description,
+                        'version': version,
+                        'repository_url': repo_url,
+                        'npm_url': npm_url,
+                        # Don't include stars/downloads if None - let defaults handle it
+                        'last_updated': last_updated,
+                        'license': package.get("license") or "unknown",
+                        'npm_score': final_score,
+                        'quality': quality,
+                        'popularity': popularity,
+                        'maintenance': maintenance
+                    })
+
+                self.logger.info(f"npm registry: {len(libraries)} packages found")
+                return libraries
+
+        except httpx.HTTPError as e:
+            self.logger.warning(f"npm registry search failed: {e}")
+            return []
         except Exception as e:
-            self.logger.warning(f"npm search failed: {e}")
+            self.logger.warning(f"npm search error: {e}")
             return []
 
     async def _search_pypi(self, feature: str) -> List[Dict[str, Any]]:
-        """Search Python Package Index"""
-        query = f"python {feature} library pypi"
-        return await self._web_search_packages(query, "pypi")
+        """
+        Search Python Package Index using PyPI JSON API
+        
+        Note: PyPI doesn't have a direct search API anymore.
+        We'll use the pypi.org search page and parse results, OR
+        use the JSON API for known packages.
+        
+        Strategy: Web search for PyPI packages, then fetch details via JSON API
+        """
+        import httpx
+        from urllib.parse import quote
+
+        query = quote(feature)
+        self.logger.debug(f"Searching PyPI: {feature}")
+
+        libraries = []
+
+        try:
+            # Use PyPI search endpoint (returns HTML, need to parse)
+            # Alternative: Use httpx to search and parse
+            
+            # For now, use a curated list approach + JSON API for verification
+            # This is more reliable than HTML parsing
+            
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                # Search using simple strategy: try common package patterns
+                search_terms = self._get_pypi_search_terms(feature)
+                
+                for package_name in search_terms:
+                    try:
+                        # Fetch package info from PyPI JSON API
+                        pkg_url = f"https://pypi.org/pypi/{package_name}/json"
+                        resp = await client.get(pkg_url)
+                        
+                        if resp.status_code == 200:
+                            pkg_data = resp.json()
+                            info = pkg_data.get("info", {})
+                            
+                            # Parse last_updated to datetime
+                            upload_time_str = info.get("upload_time", "")
+                            if upload_time_str:
+                                try:
+                                    last_updated = datetime.fromisoformat(upload_time_str.replace('Z', '+00:00'))
+                                except:
+                                    last_updated = datetime.now().isoformat()
+                            else:
+                                last_updated = datetime.now().isoformat()
+                            
+                            libraries.append({
+                                'name': info.get("name", package_name),
+                                'description': info.get("summary", "No description"),
+                                'version': info.get("version", "unknown"),
+                                'repository_url': info.get("project_url", info.get("home_page", "")),
+                                'pypi_url': f"https://pypi.org/project/{package_name}/",
+                                # Don't include stars/downloads if None - let defaults handle it
+                                'last_updated': last_updated,
+                                'license': info.get("license") or "unknown",
+                                'author': info.get("author", "unknown"),
+                                'python_requires': info.get("requires_python", "")
+                            })
+                            
+                    except httpx.HTTPError:
+                        continue  # Package doesn't exist, skip
+                    except Exception as e:
+                        self.logger.debug(f"Error fetching {package_name}: {e}")
+                        continue
+
+            self.logger.info(f"PyPI: {len(libraries)} packages found")
+            return libraries
+
+        except Exception as e:
+            self.logger.warning(f"PyPI search failed: {e}")
+            return []
+    
+    def _get_pypi_search_terms(self, feature: str) -> List[str]:
+        """
+        Generate likely PyPI package names based on feature description
+        
+        This is a heuristic approach since PyPI search API is limited.
+        For production, would integrate with Libraries.io or pypistats.
+        """
+        feature_lower = feature.lower()
+        
+        # Curated mapping of features to popular packages
+        package_map = {
+            'web framework': ['fastapi', 'flask', 'django', 'starlette', 'tornado'],
+            'http': ['httpx', 'requests', 'aiohttp', 'urllib3'],
+            'orm': ['sqlalchemy', 'tortoise-orm', 'peewee', 'pony'],
+            'async': ['asyncio', 'aiofiles', 'anyio', 'trio'],
+            'test': ['pytest', 'pytest-asyncio', 'pytest-cov', 'unittest'],
+            'data': ['pandas', 'numpy', 'polars', 'dask'],
+            'cli': ['click', 'typer', 'argparse', 'rich'],
+            'api': ['fastapi', 'django-rest-framework', 'flask-restful'],
+            'auth': ['fastapi-users', 'django-allauth', 'authlib', 'python-jose'],
+            'database': ['sqlalchemy', 'psycopg2', 'pymongo', 'redis'],
+            'validation': ['pydantic', 'marshmallow', 'cerberus', 'voluptuous'],
+            'task queue': ['celery', 'rq', 'huey', 'dramatiq']
+        }
+        
+        # Find matching packages
+        for key, packages in package_map.items():
+            if key in feature_lower:
+                return packages[:5]  # Return top 5 for category
+        
+        # Fallback: try the feature term directly + common variations
+        base_terms = [
+            feature.replace(' ', '-'),  # "web framework" → "web-framework"
+            feature.replace(' ', '_'),  # "web framework" → "web_framework"
+            feature.replace(' ', ''),   # "web framework" → "webframework"
+        ]
+        
+        return base_terms[:3]
 
     async def _search_swift_packages(self, feature: str) -> List[Dict[str, Any]]:
         """Search Swift Package Manager / CocoaPods"""
@@ -332,7 +508,7 @@ class LibraryDiscoverer:
         score = 0.0
 
         # Stars (40 points)
-        stars = lib.get('stars', 0)
+        stars = lib.get('stars') or 0  # Handle None
         if stars > 10000:
             score += 40
         elif stars > 5000:
@@ -366,7 +542,7 @@ class LibraryDiscoverer:
                 score += 10  # Unknown, give some points
 
         # Downloads (20 points)
-        downloads = lib.get('downloads', 0)
+        downloads = lib.get('downloads') or 0  # Handle None
         if downloads > 1000000:
             score += 20
         elif downloads > 100000:
@@ -377,7 +553,7 @@ class LibraryDiscoverer:
             score += 5
 
         # License (10 points)
-        license = lib.get('license', '').lower()
+        license = (lib.get('license') or '').lower()  # Handle None
         if any(l in license for l in ['mit', 'apache', 'bsd']):
             score += 10
         elif 'isc' in license or 'unlicense' in license:
@@ -391,7 +567,7 @@ class LibraryDiscoverer:
         """Generate explanation for why this library is recommended"""
         reasons = []
 
-        stars = lib.get('stars', 0)
+        stars = lib.get('stars') or 0  # Handle None
         if stars > 5000:
             reasons.append(f"{stars:,} stars (very popular)")
         elif stars > 1000:
@@ -412,7 +588,7 @@ class LibraryDiscoverer:
         if downloads and downloads > 100000:
             reasons.append(f"{downloads:,} weekly downloads")
 
-        license = lib.get('license')
+        license = lib.get('license') or ''
         if license and 'mit' in license.lower():
             reasons.append("MIT license")
 

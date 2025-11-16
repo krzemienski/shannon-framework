@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://shannon.dev/schemas/execution_plan.schema.json",
+  "title": "Shannon Execution Plan",
+  "description": "Plan for executing a task using orchestrated skills",
+  "type": "object",
+  "required": ["task", "skills", "estimated_duration"],
+  "properties": {
+    "task": {
+      "type": "object",
+      "description": "Parsed task information",
+      "required": ["original", "intent"],
+      "properties": {
+        "original": {"type": "string"},
+        "intent": {
+          "type": "object",
+          "properties": {
+            "goal": {"type": "string"},
+            "domain": {"type": "string"},
+            "type": {"enum": ["fix", "feature", "refactor", "optimize", "analyze"]},
+            "keywords": {"type": "array", "items": {"type": "string"}}
+          }
+        }
+      }
+    },
+    "skills": {
+      "type": "array",
+      "description": "Skills to execute in order (with checkpoints)",
+      "items": {
+        "type": "object",
+        "required": ["skill_name", "parameters"],
+        "properties": {
+          "skill_name": {"type": "string"},
+          "parameters": {"type": "object"},
+          "checkpoint_before": {"type": "boolean", "default": true},
+          "is_decision_point": {"type": "boolean", "default": false},
+          "decision": {"type": "object"},
+          "estimated_duration": {"type": "number"}
+        }
+      }
+    },
+    "skill_levels": {
+      "type": "array",
+      "description": "Skills grouped by dependency level (for parallel execution)",
+      "items": {
+        "type": "array",
+        "items": {"type": "string"}
+      }
+    },
+    "decision_points": {
+      "type": "array",
+      "description": "Decision points requiring user input",
+      "items": {"type": "string"}
+    },
+    "estimated_duration": {
+      "type": "number",
+      "description": "Total estimated duration in seconds"
+    },
+    "parallel_opportunities": {
+      "type": "array",
+      "description": "Skills that can run in parallel",
+      "items": {
+        "type": "array",
+        "items": {"type": "string"}
+      }
+    }
+  }
+}

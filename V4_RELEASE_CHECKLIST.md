@@ -11,6 +11,10 @@
 - [x] Dashboard builds cleanly (867ms)
 - [x] Server starts without errors
 - [x] WebSocket connection working
+- [x] **Dashboard client-server architecture implemented** ✅
+- [x] **Events flow from CLI → Server → Dashboard** ✅
+- [x] **Dashboard UI updates in real-time** ✅
+- [x] **Playwright browser automation verified** ✅
 
 ## Testing
 
@@ -36,12 +40,24 @@
 - [x] CHANGELOG.md: [4.0.0] - 2025-11-16 ✅
 - [x] Working directory clean (only untracked validation docs)
 
+## Dashboard (Playwright-Verified)
+
+- [x] Dashboard loads in browser ✅
+- [x] WebSocket connection establishes ✅
+- [x] Events flow from CLI to dashboard ✅
+- [x] ExecutionOverview shows task name ✅
+- [x] Skills panel shows executing skills ✅
+- [x] Real-time UI updates verified ✅
+- [x] HALT button functional ✅
+- [x] Playwright screenshots as evidence ✅
+
 ## Release
 
 - [x] All tests passing (221/221)
 - [x] Documentation complete and reviewed
 - [x] Version consistent everywhere
-- [ ] Git tag v4.0.0 created
+- [x] **Dashboard real-time monitoring working** ✅
+- [x] Git tag v4.0.0 created
 - [x] Ready for production use
 
 ## Test Summary

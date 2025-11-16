@@ -125,6 +125,9 @@ class GitManager:
         if not validation_result.all_passed:
             raise ValueError("Cannot commit - validation did not pass all tiers")
 
+        # Ensure .gitignore exists with standard ignores
+        await self._ensure_gitignore()
+
         # Generate commit message
         commit_msg = self._generate_commit_message(step_description, validation_result)
 
@@ -267,6 +270,40 @@ class GitManager:
             return 'docs'
         else:
             return 'chore'
+
+    async def _ensure_gitignore(self) -> None:
+        """Ensure .gitignore exists with standard Python/Node.js ignores"""
+        gitignore_path = self.project_root / '.gitignore'
+
+        standard_ignores = [
+            '__pycache__/',
+            '*.pyc',
+            '*.pyo',
+            '*.pyd',
+            '.Python',
+            'node_modules/',
+            '.shannon/',
+            '.shannon_cache/',
+            '.DS_Store',
+            '*.log'
+        ]
+
+        if not gitignore_path.exists():
+            # Create new .gitignore
+            self.logger.info("Creating .gitignore with standard ignores")
+            gitignore_path.write_text('\n'.join(standard_ignores) + '\n')
+            await self._run_git('add .gitignore')
+        else:
+            # Check if __pycache__ is already in .gitignore
+            content = gitignore_path.read_text()
+            if '__pycache__' not in content:
+                # Append Python ignores
+                self.logger.info("Adding __pycache__/ to .gitignore")
+                with gitignore_path.open('a') as f:
+                    f.write('\n# Python\n')
+                    f.write('__pycache__/\n')
+                    f.write('*.pyc\n')
+                await self._run_git('add .gitignore')
 
     async def _run_git(self, command: str) -> str:
         """

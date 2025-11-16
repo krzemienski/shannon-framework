@@ -85,6 +85,10 @@ from shannon.skills.executor import (
     MCPExecutionError,
     CompositeExecutionError,
 )
+from shannon.skills.catalog import (
+    SkillCatalog,
+    SkillCatalogError,
+)
 
 __version__ = "4.0.0"
 
@@ -114,7 +118,7 @@ __all__ = [
     'HookExecutionError',
     'CircularHookError',
     'HookTimeoutError',
-    # Executor (NEW!)
+    # Executor
     'SkillExecutor',
     'SkillExecutionError',
     'ParameterValidationError',
@@ -123,4 +127,7 @@ __all__ = [
     'ScriptExecutionError',
     'MCPExecutionError',
     'CompositeExecutionError',
+    # Catalog (NEW!)
+    'SkillCatalog',
+    'SkillCatalogError',
 ]

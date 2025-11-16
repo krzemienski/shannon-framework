@@ -31,6 +31,23 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
   files: [],
   events: [],
   connected: false,
+  agents: [],
+  agentStats: {
+    totalAgents: 0,
+    activeAgents: 0,
+    idleAgents: 0,
+    maxActive: 10,
+    maxTotal: 20,
+    queuedTasks: 0,
+    completedTasks: 0,
+    failedTasks: 0,
+    totalProcessed: 0,
+    poolUptime: 0,
+  },
+  pendingDecisions: [],
+  resolvedDecisions: [],
+  validationResults: [],
+  isValidating: false,
 
   setConnected: (connected) => set({ connected }),
 

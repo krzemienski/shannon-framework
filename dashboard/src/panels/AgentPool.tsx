@@ -11,7 +11,8 @@
  */
 
 import React from 'react';
-import { Agent, AgentRole, AgentStatus, AgentPoolStats } from '../types';
+import type { Agent, AgentPoolStats } from '../types';
+import { AgentRole, AgentStatus } from '../types';
 
 interface AgentPoolPanelProps {
   agents: Agent[];
@@ -160,7 +161,7 @@ const AgentPoolPanel: React.FC<AgentPoolPanelProps> = ({ agents, stats }) => {
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .agent-pool-panel {
           padding: 1rem;
           height: 100%;

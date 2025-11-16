@@ -31,25 +31,42 @@ export interface FileChange {
   approved: boolean;
 }
 
-// Agent types
-export enum AgentRole {
-  RESEARCH = "research",
-  ANALYSIS = "analysis",
-  TESTING = "testing",
-  VALIDATION = "validation",
-  GIT = "git",
-  PLANNING = "planning",
-  MONITORING = "monitoring",
-  GENERIC = "generic"
-}
+// Agent types - Using string union types instead of enums for erasableSyntaxOnly compatibility
+export type AgentRole =
+  | "research"
+  | "analysis"
+  | "testing"
+  | "validation"
+  | "git"
+  | "planning"
+  | "monitoring"
+  | "generic";
 
-export enum AgentStatus {
-  IDLE = "idle",
-  ACTIVE = "active",
-  BUSY = "busy",
-  FAILED = "failed",
-  COMPLETED = "completed"
-}
+export const AgentRole = {
+  RESEARCH: "research" as AgentRole,
+  ANALYSIS: "analysis" as AgentRole,
+  TESTING: "testing" as AgentRole,
+  VALIDATION: "validation" as AgentRole,
+  GIT: "git" as AgentRole,
+  PLANNING: "planning" as AgentRole,
+  MONITORING: "monitoring" as AgentRole,
+  GENERIC: "generic" as AgentRole
+};
+
+export type AgentStatus =
+  | "idle"
+  | "active"
+  | "busy"
+  | "failed"
+  | "completed";
+
+export const AgentStatus = {
+  IDLE: "idle" as AgentStatus,
+  ACTIVE: "active" as AgentStatus,
+  BUSY: "busy" as AgentStatus,
+  FAILED: "failed" as AgentStatus,
+  COMPLETED: "completed" as AgentStatus
+};
 
 export interface Agent {
   agentId: string;

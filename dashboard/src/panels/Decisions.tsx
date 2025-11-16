@@ -9,7 +9,7 @@
  * Part of: Wave 8 - Full Dashboard
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 
 interface DecisionOption {
   optionId: string;
@@ -40,7 +40,7 @@ const DecisionsPanel: React.FC<DecisionsPanelProps> = ({
   resolvedDecisions,
   onResolve
 }) => {
-  const [selectedDecision, setSelectedDecision] = useState<string | null>(null);
+  // const [selectedDecision, setSelectedDecision] = useState<string | null>(null);
 
   const getPriorityColor = (priority: string): string => {
     const colors = {
@@ -151,7 +151,7 @@ const DecisionsPanel: React.FC<DecisionsPanelProps> = ({
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .decisions-panel {
           padding: 1rem;
           height: 100%;

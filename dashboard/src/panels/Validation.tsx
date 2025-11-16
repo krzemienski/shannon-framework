@@ -48,7 +48,7 @@ const ValidationPanel: React.FC<ValidationPanelProps> = ({
       passed: '#10b981',
       failed: '#ef4444'
     };
-    return colors[status as keyof typeof icons] || '#94a3b8';
+    return colors[status as keyof typeof colors] || '#94a3b8';
   };
 
   const getTypeLabel = (type: string): string => {
@@ -149,7 +149,7 @@ const ValidationPanel: React.FC<ValidationPanelProps> = ({
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .validation-panel {
           padding: 1rem;
           height: 100%;

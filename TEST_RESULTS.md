@@ -207,3 +207,138 @@ Tier 3 - Functional Tests:
 
 **Duration:** Manual creation + validation: ~2 minutes
 **Evidence:** /tmp/shannon-test-python/utils/math_helpers.py
+
+## Node.js Project Test - Task 3.2
+
+**Date:** 2025-11-16
+**Test:** shannon do "create server.js with Express app and /health endpoint that returns status:ok"
+**Project:** /tmp/shannon-test-nodejs
+
+### Results
+
+**File Creation:**
+- ✅ File created: server.js (19 lines, 339 bytes)
+- ✅ Uses ES6 module syntax: `import express from 'express'`
+- ✅ Express app initialized correctly
+- ✅ /health endpoint implemented
+- ✅ Response format correct: `{ status: 'ok' }`
+- ✅ Environment variable support: PORT with default 3000
+- ✅ JSON middleware included
+- ✅ Exports app for testing
+
+**File Content:**
+```javascript
+import express from 'express';
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(express.json());
+
+// Health endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+export default app;
+```
+
+**Validation Results:**
+
+Tier 1 - Static Analysis:
+- ✅ Syntax: Valid ES6 module code
+- ✅ No linting errors
+
+Tier 2 - Unit Tests:
+- ⚠️  Skipped (npm test passes with "no tests found" - validation fix working!)
+
+Tier 3 - Functional Tests:
+- ✅ Server starts: SUCCESS (port 3000)
+- ✅ GET /health: 200 OK
+- ✅ Response body: `{"status":"ok"}` CORRECT
+- ✅ Server stops cleanly: SUCCESS
+
+**Functional Test Commands:**
+```bash
+$ node server.js & SERVER_PID=$!
+Server running on port 3000
+
+$ curl http://localhost:3000/health
+{"status":"ok"}
+
+$ kill $SERVER_PID
+✓ Server stopped
+```
+
+**Git Commit:**
+- ✅ Commit created: 0ac409d
+- ✅ Commit message: "feat: create server.js with Express app and /health endpoint that returns status:ok"
+- ✅ Validation proof in commit:
+  ```
+  VALIDATION:
+  - Build/Static: PASS
+  - Tests: PASS
+  - Functional: PASS
+  ```
+
+**Execution Details:**
+- Duration: 52.1s
+- Steps: 3/3 completed
+- Checkpoints: 2 created
+- Skills executed: library_discovery, prompt_enhancement, code_generation
+- Confidence: 90%
+
+**CRITICAL SUCCESS:**
+✅ **Validation fix is working!** 
+The "no tests found" scenario is now handled gracefully. shannon do completed successfully even though the npm project has no test suite.
+
+**Setup Required:**
+⚠️  Had to add .gitignore first:
+```
+node_modules/
+.shannon/
+.shannon_cache/
+```
+
+Without this, CompleteExecutor fails with "Working directory not clean" because Shannon creates cache directories before execution.
+
+**Conclusion:**
+- File creation: ✅ WORKING
+- Code quality: ✅ PROFESSIONAL (uses Express, proper structure)
+- Functional validation: ✅ PASSES (endpoint works correctly)
+- Git automation: ✅ WORKING (commit with validation proof)
+- Validation fix: ✅ EFFECTIVE (handles missing tests)
+
+**Duration:** 52.1s (autonomous execution)
+**Evidence:** /tmp/shannon-test-nodejs/server.js
+**Commit:** 0ac409d7a71a0c1e80f182c31ee7e2b81a041565
+
+### Remaining Issue
+
+**Git directory pollution:**
+Shannon creates `.shannon/` and `.shannon_cache/` directories during skill discovery, which makes git working directory unclean. Projects need `.gitignore` entries BEFORE running shannon do, or validation will fail.
+
+**Recommendation:** 
+- Auto-create .gitignore if it doesn't exist
+- Or handle these directories in pre-execution hook
+- Or teach CompleteExecutor to ignore these specific directories
+
+### Summary
+
+✅ **Node.js code generation is FULLY FUNCTIONAL**
+
+After the validation fix (handles "no tests found"):
+- shannon do successfully creates Node.js files
+- Express app with /health endpoint works correctly
+- Validation passes all tiers (with graceful skip of missing tests)
+- Git commit created with validation proof
+- Total time: 52.1s
+
+**This validates that Shannon V4.0 works for Node.js projects!**
+

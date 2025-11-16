@@ -28,6 +28,7 @@ from shannon.skills.executor import SkillExecutor
 from shannon.skills.models import SkillResult, ExecutionContext
 from shannon.orchestration.planner import ExecutionPlan, SkillStep
 from shannon.orchestration.state_manager import StateManager, Checkpoint
+from shannon.server.websocket import emit_skill_event, emit_execution_event
 
 logger = logging.getLogger(__name__)
 
@@ -389,14 +390,31 @@ class Orchestrator:
 
     async def _emit_event(self, event_type: str, data: Dict[str, Any]):
         """
-        Emit event for monitoring.
+        Emit event to both stdout and WebSocket.
 
         Args:
             event_type: Type of event
             data: Event data
         """
+        # Keep stdout for CLI visibility
+        print(f"Event: {event_type}")
+
+        # Add WebSocket emission
+        if self.session_id:
+            try:
+                if event_type.startswith('skill:'):
+                    await emit_skill_event(event_type, data, self.session_id)
+                elif event_type.startswith('execution:'):
+                    await emit_execution_event(event_type, data, self.session_id)
+                elif event_type.startswith('checkpoint:'):
+                    await emit_execution_event(event_type, data, self.session_id)
+            except Exception as e:
+                # Don't fail execution if WebSocket emission fails
+                logger.warning(f"Failed to emit event to WebSocket: {e}")
+
+        # Also call event callback if provided
         if self.event_callback:
             try:
                 await self.event_callback(event_type, data, self.session_id)
             except Exception as e:
-                logger.warning(f"Event emission failed: {e}")
+                logger.warning(f"Event callback failed: {e}")

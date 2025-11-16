@@ -176,13 +176,13 @@ class TaskParser:
     # Skill mapping patterns - maps domains/goals to typical skill sequences
     # NOTE: Only using skills that currently exist in built-in directory
     SKILL_PATTERNS = {
-        ('create', 'authentication'): ['library_discovery', 'prompt_enhancement'],
-        ('create', 'api'): ['library_discovery', 'prompt_enhancement'],
+        ('create', 'authentication'): ['code_generation', 'library_discovery', 'prompt_enhancement'],
+        ('create', 'api'): ['code_generation', 'library_discovery', 'prompt_enhancement'],
         ('fix', 'generic'): ['library_discovery', 'prompt_enhancement'],
         ('test', 'generic'): ['library_discovery', 'prompt_enhancement'],
         ('refactor', 'generic'): ['library_discovery', 'prompt_enhancement'],
         ('document', 'generic'): ['library_discovery', 'prompt_enhancement'],
-        ('create', 'generic'): ['library_discovery', 'prompt_enhancement'],
+        ('create', 'generic'): ['code_generation', 'library_discovery', 'prompt_enhancement'],
     }
 
     def __init__(self, registry: SkillRegistry):
@@ -446,6 +446,10 @@ class TaskParser:
         # Build skill list dynamically by querying registry
         skills = []
 
+        # If creating/generating code, include code_generation skill
+        if intent.goal in ['create', 'implement', 'build']:
+            skills.append('code_generation')
+
         # Query skills by category matching domain
         try:
             domain_skills = self.registry.find_by_category(intent.domain)
@@ -461,6 +465,13 @@ class TaskParser:
                 pass
             except Exception as e:
                 logger.debug(f"Error searching for keyword {keyword}: {e}")
+
+        # Always include library_discovery and prompt_enhancement for code tasks
+        if 'code_generation' in skills:
+            if 'library_discovery' not in skills:
+                skills.append('library_discovery')
+            if 'prompt_enhancement' not in skills:
+                skills.append('prompt_enhancement')
 
         # If no skills found, use default sequence (only existing skills)
         if not skills:

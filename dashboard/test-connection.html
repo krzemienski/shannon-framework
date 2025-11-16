@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shannon Dashboard - Connection Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .connected { background: #10b981; }
+        .disconnected { background: #ef4444; }
+        .event {
+            background: #2a2a2a;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Shannon Dashboard - Connection Test</h1>
+    <div id="status" class="status disconnected">Disconnected</div>
+
+    <div>
+        <button onclick="testHalt()">Test HALT Command</button>
+        <button onclick="testResume()">Test RESUME Command</button>
+        <button onclick="testGetState()">Get Execution State</button>
+    </div>
+
+    <h2>Events (last 10)</h2>
+    <div id="events"></div>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        const statusEl = document.getElementById('status');
+        const eventsEl = document.getElementById('events');
+        const events = [];
+
+        const socket = io('http://localhost:8000', {
+            transports: ['websocket', 'polling']
+        });
+
+        socket.on('connect', () => {
+            statusEl.textContent = 'Connected to ws://localhost:8000';
+            statusEl.className = 'status connected';
+        });
+
+        socket.on('disconnect', () => {
+            statusEl.textContent = 'Disconnected';
+            statusEl.className = 'status disconnected';
+        });
+
+        socket.onAny((eventName, data) => {
+            events.push({ type: eventName, data, time: new Date().toLocaleTimeString() });
+            if (events.length > 10) events.shift();
+
+            eventsEl.innerHTML = events.map(e =>
+                `<div class="event"><strong>${e.time}</strong> - ${e.type}: ${JSON.stringify(e.data)}</div>`
+            ).reverse().join('');
+        });
+
+        function testHalt() {
+            socket.emit('command', { type: 'halt' });
+        }
+
+        function testResume() {
+            socket.emit('command', { type: 'resume' });
+        }
+
+        function testGetState() {
+            socket.emit('command', { type: 'get_execution_state' });
+        }
+    </script>
+</body>
+</html>

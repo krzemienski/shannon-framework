@@ -622,18 +622,22 @@ async def emit_skill_event(
     Args:
         event_type: Event type (skill:started, skill:completed, skill:failed)
         data: Event data
-        session_id: Optional session ID for room targeting
+        session_id: Optional session ID for room targeting (UNUSED - broadcasts to all)
 
     Event Types:
         - skill:started: Skill execution began
         - skill:completed: Skill execution succeeded
         - skill:failed: Skill execution failed
         - skill:progress: Skill progress update
+
+    Note:
+        Broadcasts to ALL connected clients to support dashboards
+        that connect without a session_id.
     """
     await sio.emit(event_type, {
         'timestamp': datetime.now().isoformat(),
         'data': data
-    }, room=session_id if session_id else None)
+    })  # Broadcast to all clients
 
 
 async def emit_file_event(
@@ -647,17 +651,21 @@ async def emit_file_event(
     Args:
         event_type: Event type (file:modified, file:created, file:deleted)
         data: Event data with file path and details
-        session_id: Optional session ID for room targeting
+        session_id: Optional session ID for room targeting (UNUSED - broadcasts to all)
 
     Event Types:
         - file:modified: File was modified
         - file:created: New file was created
         - file:deleted: File was deleted
+
+    Note:
+        Broadcasts to ALL connected clients to support dashboards
+        that connect without a session_id.
     """
     await sio.emit(event_type, {
         'timestamp': datetime.now().isoformat(),
         'data': data
-    }, room=session_id if session_id else None)
+    })  # Broadcast to all clients
 
 
 async def emit_decision_event(
@@ -671,16 +679,20 @@ async def emit_decision_event(
     Args:
         event_type: Event type (decision:point, decision:made)
         data: Event data with decision details
-        session_id: Optional session ID for room targeting
+        session_id: Optional session ID for room targeting (UNUSED - broadcasts to all)
 
     Event Types:
         - decision:point: Decision point reached, waiting for input
         - decision:made: Decision was made (auto or manual)
+
+    Note:
+        Broadcasts to ALL connected clients to support dashboards
+        that connect without a session_id.
     """
     await sio.emit(event_type, {
         'timestamp': datetime.now().isoformat(),
         'data': data
-    }, room=session_id if session_id else None)
+    })  # Broadcast to all clients
 
 
 async def emit_validation_event(
@@ -694,16 +706,20 @@ async def emit_validation_event(
     Args:
         event_type: Event type (validation:started, validation:result)
         data: Event data with validation details
-        session_id: Optional session ID for room targeting
+        session_id: Optional session ID for room targeting (UNUSED - broadcasts to all)
 
     Event Types:
         - validation:started: Validation process started
         - validation:result: Validation completed with results
+
+    Note:
+        Broadcasts to ALL connected clients to support dashboards
+        that connect without a session_id.
     """
     await sio.emit(event_type, {
         'timestamp': datetime.now().isoformat(),
         'data': data
-    }, room=session_id if session_id else None)
+    })  # Broadcast to all clients
 
 
 async def emit_agent_event(
@@ -717,17 +733,21 @@ async def emit_agent_event(
     Args:
         event_type: Event type (agent:spawned, agent:progress, agent:completed)
         data: Event data with agent details
-        session_id: Optional session ID for room targeting
+        session_id: Optional session ID for room targeting (UNUSED - broadcasts to all)
 
     Event Types:
         - agent:spawned: New agent spawned
         - agent:progress: Agent progress update
         - agent:completed: Agent completed
+
+    Note:
+        Broadcasts to ALL connected clients to support dashboards
+        that connect without a session_id.
     """
     await sio.emit(event_type, {
         'timestamp': datetime.now().isoformat(),
         'data': data
-    }, room=session_id if session_id else None)
+    })  # Broadcast to all clients
 
 
 async def emit_checkpoint_event(
@@ -739,12 +759,16 @@ async def emit_checkpoint_event(
 
     Args:
         data: Checkpoint data
-        session_id: Optional session ID for room targeting
+        session_id: Optional session ID for room targeting (UNUSED - broadcasts to all)
+
+    Note:
+        Broadcasts to ALL connected clients to support dashboards
+        that connect without a session_id.
     """
     await sio.emit('checkpoint:created', {
         'timestamp': datetime.now().isoformat(),
         'data': data
-    }, room=session_id if session_id else None)
+    })  # Broadcast to all clients
 
 
 async def emit_execution_event(
@@ -758,16 +782,20 @@ async def emit_execution_event(
     Args:
         event_type: Event type (execution:halted, execution:resumed)
         data: Event data
-        session_id: Optional session ID for room targeting
+        session_id: Optional session ID for room targeting (UNUSED - broadcasts to all)
 
     Event Types:
         - execution:halted: Execution paused
         - execution:resumed: Execution resumed
+
+    Note:
+        Broadcasts to ALL connected clients to support dashboards
+        that connect without a session_id.
     """
     await sio.emit(event_type, {
         'timestamp': datetime.now().isoformat(),
         'data': data
-    }, room=session_id if session_id else None)
+    })  # Broadcast to all clients
 
 
 # ============================================================================

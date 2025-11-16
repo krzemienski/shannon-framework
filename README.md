@@ -1,15 +1,22 @@
 # Shannon CLI
 
-**Version**: 3.1 (Dashboard) + 3.5 (Autonomous Executor Core)  
-**Status**: Production (V3.1), Core Complete (V3.5)
+**Version**: 4.0.0
+**Status**: Production Ready
+
+Shannon CLI combines autonomous execution with interactive orchestration:
+- 🤖 **shannon exec**: Autonomous code generation (V3.5 foundation)
+- 🎛️ **shannon do**: Interactive orchestration with real-time dashboard (V4.0 new)
+- ✨ **Skills Framework**: Discoverable, composable capabilities
+- 📊 **Real-time Dashboard**: WebSocket streaming with 6 panels
+- 🎮 **Interactive Controls**: HALT/RESUME/ROLLBACK mid-execution
 
 ---
 
 ## Overview
 
 Shannon CLI provides:
-- **V3.1**: Interactive 4-layer dashboard for monitoring AI agent execution (htop/k9s-level TUI)
-- **V3.5**: Autonomous execution modules (enhanced prompts, library discovery, validation, git automation)
+- **V3.5**: Autonomous execution (shannon exec) with enhanced prompts, library discovery, validation, git automation
+- **V4.0**: Interactive orchestration (shannon do) with skills framework, real-time dashboard, and human-in-the-loop control
 
 ---
 
@@ -127,6 +134,88 @@ Result: Creates `auth/tokens.py`, `auth/middleware.py`, `models/user.py` with co
 - ⚠️ Node.js support requires Node 18+ with npm
 - ⚠️ iOS support requires Xcode CLI tools
 - ⚠️ Validation quality depends on test suite coverage
+
+---
+
+## shannon do - Interactive Task Orchestration
+
+**NEW in V4.0**: Interactive orchestration with real-time visibility and human-in-the-loop control.
+
+### Basic Usage
+
+```bash
+shannon do "create authentication module with JWT tokens"
+```
+
+**What happens**:
+1. 📋 **Task Parsing**: Natural language → structured intent
+2. 🔍 **Skill Discovery**: Auto-discovers relevant skills from 7 sources
+3. 📐 **Execution Planning**: Resolves dependencies, orders skills
+4. 🎮 **Interactive Execution**: Real-time dashboard with HALT/RESUME controls
+5. ✅ **Validation**: 3-tier validation ensures quality
+6. 🔄 **Git Automation**: Atomic commits with validation proof
+
+### With Real-Time Dashboard
+
+```bash
+# Terminal 1: Start server
+poetry run python run_server.py
+
+# Terminal 2: Start dashboard
+cd dashboard && npm run dev
+
+# Terminal 3: Execute with monitoring
+shannon do "implement user authentication" --dashboard
+
+# Browser: http://localhost:5173
+# Watch execution in real-time, use HALT/RESUME controls
+```
+
+### Features
+
+✅ **Skills Framework**:
+- Define custom skills in YAML
+- Auto-discovered from 7 sources (built-in, project, user-global, package.json, Makefile, MCPs, Memory)
+- Hook system (pre/post/error)
+- Dependency resolution with parallel execution
+
+✅ **Real-Time Dashboard**:
+- ExecutionOverview: Task status, progress, timing
+- SkillsView: Active/queued/completed skills
+- FileDiff: Live code changes
+- AgentPool: Multi-agent status (planned)
+- Decisions: Decision points (planned)
+- Validation: Test results streaming (planned)
+
+✅ **Interactive Controls**:
+- HALT: Pause execution instantly
+- RESUME: Continue from current state
+- ROLLBACK: Undo last N steps (planned)
+
+### Flags
+
+- `--dashboard`: Enable real-time dashboard monitoring
+- `--auto`: Fully autonomous mode (no checkpoints)
+- `--dry-run`: Show execution plan without executing
+- `--verbose`: Detailed execution logs
+- `--interactive`: Enable decision points (planned)
+
+---
+
+## shannon exec vs shannon do
+
+**Use shannon exec when:**
+- You want autonomous execution (trust the AI)
+- Working on well-defined, small-medium tasks
+- Don't need real-time visibility
+- Prefer speed over control
+
+**Use shannon do when:**
+- You want visibility and control
+- Working on complex or critical tasks
+- Want to monitor execution in real-time
+- Need ability to HALT/RESUME
+- Want to see exactly what's happening
 
 ---
 

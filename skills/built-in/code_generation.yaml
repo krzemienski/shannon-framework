@@ -1,0 +1,58 @@
+name: code_generation
+version: 1.0.0
+description: Generate code files using autonomous execution with library discovery, validation, and git automation
+category: workflow
+
+parameters:
+  - name: task_description
+    type: string
+    required: true
+    description: What code to generate (e.g., "create calculator.py with math functions")
+
+  - name: libraries_discovered
+    type: array
+    required: false
+    default: []
+    description: Libraries discovered by library_discovery skill (if run previously)
+
+  - name: enhanced_prompts
+    type: string
+    required: false
+    default: ""
+    description: Enhanced prompts from prompt_enhancement skill (if run previously)
+
+  - name: project_root
+    type: string
+    required: true
+    description: Project root directory for context
+
+dependencies:
+  - library_discovery
+  - prompt_enhancement
+
+execution:
+  type: native
+  module: shannon.executor.complete_executor
+  class: CompleteExecutor
+  method: execute_autonomous
+  timeout: 600
+  retry: 3
+
+hooks:
+  pre:
+    - validate_git_clean
+  post:
+    - collect_generated_files
+  error:
+    - rollback_changes
+
+metadata:
+  author: Shannon Framework
+  auto_generated: false
+  critical: true
+  tags:
+    - generation
+    - code
+    - autonomous
+    - validation
+    - git

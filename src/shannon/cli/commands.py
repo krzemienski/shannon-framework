@@ -1764,6 +1764,62 @@ def prime() -> None:
 
 @cli.command()
 @require_framework()
+@click.argument('task')
+@click.option('--dashboard', '-d', is_flag=True, help='Start WebSocket server for dashboard')
+@click.option('--auto', is_flag=True, help='Auto-mode: use defaults for decisions')
+@click.option('--project-root', type=click.Path(exists=True), default='.', help='Project root directory')
+@click.option('--session-id', help='Session ID for dashboard (auto-generated if not provided)')
+@click.option('--dry-run', is_flag=True, help='Plan only, do not execute')
+@click.option('--verbose', '-v', is_flag=True, help='Verbose output')
+def do(
+    task: str,
+    dashboard: bool,
+    auto: bool,
+    project_root: str,
+    session_id: Optional[str],
+    dry_run: bool,
+    verbose: bool
+) -> None:
+    """Execute natural language task with orchestration.
+
+    The shannon do command is the main entry point for task execution.
+    It handles the complete workflow from parsing to execution.
+
+    \b
+    Examples:
+        shannon do "create authentication system"
+        shannon do "fix login bug" --dashboard
+        shannon do "add tests" --auto
+        shannon do "refactor user module" --dry-run
+
+    \b
+    Features:
+        - Natural language task understanding
+        - Automatic skill selection and ordering
+        - Checkpoint creation for rollback
+        - Real-time dashboard streaming
+        - HALT/RESUME support
+        - Auto-mode for unattended execution
+    """
+    from shannon.cli.commands.do import do_command
+    from click import Context
+
+    # Create context and invoke command
+    ctx = Context(do_command)
+    ctx.invoke(
+        do_command,
+        task=task,
+        dashboard=dashboard,
+        auto=auto,
+        project_root=project_root,
+        session_id=session_id,
+        dry_run=dry_run,
+        verbose=verbose
+    )
+
+
+@cli.command()
+@require_framework()
 @click.option('--cache', is_flag=True, help='Use cached results')
 def discover_skills(cache: bool) -> None:
     """Discover all available skills.

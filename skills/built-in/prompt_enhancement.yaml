@@ -1,0 +1,59 @@
+name: prompt_enhancement
+version: 1.0.0
+description: Build enhanced system prompts combining core instructions, project-specific guidelines, and task-specific hints
+category: utility
+
+parameters:
+  - name: task
+    type: string
+    required: true
+    description: User task description for generating task-specific hints (e.g., "add authentication to React app")
+  - name: project_root
+    type: string
+    required: true
+    description: Absolute path to project root for auto-detecting project type and guidelines
+
+dependencies: []
+
+execution:
+  type: native
+  module: shannon.executor.prompt_enhancer
+  class: PromptEnhancer
+  method: build_enhancements
+  timeout: 10
+  retry: 0
+
+hooks:
+  post:
+    - validate_prompt_structure
+
+metadata:
+  author: Shannon Framework
+  auto_generated: false
+  tags:
+    - prompt-engineering
+    - task-hints
+    - project-guidelines
+    - library-discovery-instructions
+    - validation-instructions
+    - git-workflow-instructions
+  enhancement_sources: |
+    1. Core Instructions (library discovery, validation, git workflow)
+    2. Project-Specific Guidelines (iOS, React, Python, Java, Rust, Go, etc.)
+    3. Task-Specific Hints (auth, UI, database, networking, state, routing, real-time, etc.)
+  supported_project_types:
+    - ios-swiftui
+    - ios-uikit
+    - react
+    - react-native
+    - react-native-expo
+    - next.js
+    - vue
+    - nodejs
+    - python
+    - python-fastapi
+    - python-django
+    - java
+    - android
+    - rust
+    - go

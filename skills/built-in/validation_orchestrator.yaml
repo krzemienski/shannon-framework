@@ -1,0 +1,49 @@
+name: validation_orchestrator
+version: 1.0.0
+description: Run 3-tier validation (static checks, unit tests, functional E2E) using auto-detected project test infrastructure
+category: validation
+
+parameters:
+  - name: changes
+    type: object
+    required: true
+    description: ChangeSet object containing modified files and changes to validate
+  - name: criteria
+    type: object
+    required: false
+    description: Optional ValidationCriteria object specifying custom validation requirements
+  - name: project_root
+    type: string
+    required: true
+    description: Absolute path to project root for test configuration auto-detection
+
+dependencies: []
+
+execution:
+  type: native
+  module: shannon.executor.validator
+  class: ValidationOrchestrator
+  method: validate_all_tiers
+  timeout: 600
+  retry: 0
+
+hooks:
+  post:
+    - log_validation_results
+  error:
+    - report_validation_failure
+
+metadata:
+  author: Shannon Framework
+  auto_generated: false
+  tags:
+    - validation
+    - testing
+    - static-checks
+    - unit-tests
+    - e2e-tests
+    - three-tier
+  tier_descriptions: |
+    Tier 1: Static checks (build, lint, type-check) ~10s
+    Tier 2: Unit/Integration tests ~1-5min
+    Tier 3: Functional/E2E tests (user perspective) ~2-10min

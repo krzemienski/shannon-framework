@@ -1,0 +1,45 @@
+name: library_discovery
+version: 1.0.0
+description: Discover and recommend open-source libraries for features across npm, PyPI, and other package registries
+category: research
+
+parameters:
+  - name: feature_description
+    type: string
+    required: true
+    description: Feature or functionality needed (e.g., "authentication", "UI components", "database ORM")
+  - name: category
+    type: string
+    required: false
+    default: "general"
+    description: Category for better search targeting (auth, ui, networking, data, orm, api, validation, etc.)
+  - name: project_root
+    type: string
+    required: true
+    description: Absolute path to project root directory for language/ecosystem detection
+
+dependencies: []
+
+execution:
+  type: native
+  module: shannon.executor.library_discoverer
+  class: LibraryDiscoverer
+  method: discover_for_feature
+  timeout: 60
+  retry: 1
+
+hooks:
+  post:
+    - cache_discovery_results
+
+metadata:
+  author: Shannon Framework
+  auto_generated: false
+  tags:
+    - research
+    - libraries
+    - npm
+    - pypi
+    - discovery
+    - package-registry
+  version_note: "v1.0 - Async method with multi-registry support"

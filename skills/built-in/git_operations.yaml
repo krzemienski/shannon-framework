@@ -1,0 +1,66 @@
+name: git_operations
+version: 1.0.0
+description: Manage atomic git operations including feature branching, validated commits, and rollback on validation failure
+category: git
+
+parameters:
+  - name: project_root
+    type: string
+    required: true
+    description: Absolute path to git repository root
+  - name: operation
+    type: string
+    required: true
+    description: Git operation to perform (create_branch, commit_changes, rollback, ensure_clean)
+  - name: task
+    type: string
+    required: false
+    description: Task description for feature branch naming (required if operation=create_branch)
+  - name: files
+    type: array
+    required: false
+    description: List of files to commit (required if operation=commit_changes)
+  - name: step_description
+    type: string
+    required: false
+    description: Description of what this step does (required if operation=commit_changes)
+  - name: validation_result
+    type: object
+    required: false
+    description: ValidationResult object with all_passed flag (required if operation=commit_changes)
+
+dependencies:
+  - validation_orchestrator
+
+execution:
+  type: native
+  module: shannon.executor.git_manager
+  class: GitManager
+  method: create_feature_branch
+  timeout: 30
+  retry: 0
+
+hooks:
+  pre:
+    - ensure_git_repository
+  post:
+    - verify_git_state
+  error:
+    - attempt_rollback
+
+metadata:
+  author: Shannon Framework
+  auto_generated: false
+  tags:
+    - git
+    - version-control
+    - branching
+    - commits
+    - rollback
+    - atomic-operations
+  multi_method: true
+  methods_available:
+    - "create_feature_branch(task: str) -> str"
+    - "commit_validated_changes(files: List[str], step_description: str, validation_result: ValidationResult) -> GitCommit"
+    - "rollback_to_last_commit() -> bool"
+    - "ensure_clean_state() -> bool"

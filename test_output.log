@@ -1,0 +1,49 @@
+/Users/nick/Library/Python/3.12/lib/python/site-packages/jupyter_client/connect.py:22: DeprecationWarning: Jupyter is migrating its paths to use standard platformdirs
+given by the platformdirs library.  To remove this warning and
+see the appropriate new directories, set the environment variable
+`JUPYTER_PLATFORM_DIRS=1` and then run `jupyter --paths`.
+The use of platformdirs will be the default in `jupyter_core` v6
+  from jupyter_core.paths import jupyter_data_dir, jupyter_runtime_dir, secure_write
+/Users/nick/Library/Python/3.12/lib/python/site-packages/dash/_jupyter.py:30: DeprecationWarning: The `ipykernel.comm.Comm` class has been deprecated. Please use the `comm` module instead.For creating comms, use the function `from comm import create_comm`.
+  _dash_comm = Comm(target_name="dash")
+/Users/nick/Library/Python/3.12/lib/python/site-packages/dash/testing/plugin.py:104: PytestDeprecationWarning: The hookimpl pytest_addhooks uses old-style configuration options (marks or attributes).
+Please use the pytest.hookimpl(tryfirst=True) decorator instead
+ to configure the hooks.
+ See https://docs.pytest.org/en/latest/deprecations.html#configuring-hook-specs-impls-using-markers
+  @pytest.mark.tryfirst
+/Users/nick/Library/Python/3.12/lib/python/site-packages/libtmux/pytest_plugin.py:53: PytestRemovedIn9Warning: Marks applied to fixtures have no effect
+See docs: https://docs.pytest.org/en/stable/deprecations.html#applying-a-mark-to-a-fixture-function
+  @pytest.mark.skipif(USING_ZSH, reason="Using ZSH")
+/Users/nick/Library/Python/3.12/lib/python/site-packages/pytest_asyncio/plugin.py:252: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+
+  warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
+============================= test session starts ==============================
+platform darwin -- Python 3.12.12, pytest-8.4.2, pluggy-1.5.0 -- /opt/homebrew/opt/python@3.12/bin/python3.12
+cachedir: .pytest_cache
+rootdir: /Users/nick/Desktop/shannon-cli
+configfile: pyproject.toml
+plugins: Faker-22.0.0, asyncio-1.2.0, anyio-4.9.0, xonsh-0.19.9, cov-4.1.0, mock-3.12.0, dash-3.1.1, langsmith-0.4.8, xdist-3.6.1, libtmux-0.47.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 171 items
+
+tests/agents/test_agent_control.py::test_agent_state_creation PASSED     [  0%]
+tests/agents/test_agent_control.py::test_agent_state_properties PASSED   [  1%]
+tests/agents/test_agent_control.py::test_agent_state_to_dict PASSED      [  1%]
+tests/agents/test_agent_control.py::test_register_agent PASSED           [  2%]
+tests/agents/test_agent_control.py::test_register_duplicate_agent PASSED [  2%]
+tests/agents/test_agent_control.py::test_state_transitions PASSED        [  3%]
+tests/agents/test_agent_control.py::test_state_transition_to_failed PASSED [  4%]
+tests/agents/test_agent_control.py::test_invalid_state_transitions PASSED [  4%]
+tests/agents/test_agent_control.py::test_concurrent_agent_tracking PASSED [  5%]
+tests/agents/test_agent_control.py::test_update_progress PASSED          [  5%]
+tests/agents/test_agent_control.py::test_update_metrics PASSED           [  6%]
+tests/agents/test_agent_control.py::test_message_tracking PASSED         [  7%]
+tests/agents/test_agent_control.py::test_file_tracking PASSED            [  7%]
+tests/agents/test_agent_control.py::test_get_wave_agents PASSED          [  8%]
+tests/agents/test_agent_control.py::test_get_wave_summary FAILED         [  8%]
+tests/agents/test_agent_control.py::test_thread_safety PASSED            [  9%]
+tests/agents/test_agent_control.py::test_follow_agent PASSED             [  9%]
+tests/agents/test_agent_control.py::test_pause_wave PASSED               [ 10%]
+tests/agents/test_agent_control.py::test_should_start_agent PASSED       [ 11%]
+tests/agents/test_agent_control.py::test_get_wave_status 

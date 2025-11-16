@@ -399,18 +399,30 @@ class Orchestrator:
         # Keep stdout for CLI visibility
         print(f"Event: {event_type}")
 
+        # DEBUG: Verify this code is reached
+        logger.error(f"DEBUG _emit_event called: type={event_type}, has_session_id={self.session_id is not None}")
+
         # Add WebSocket emission
         if self.session_id:
+            logger.error(f"DEBUG: Attempting WebSocket emit for {event_type}")
             try:
+                from shannon.server.websocket import emit_skill_event, emit_execution_event
+                logger.error(f"DEBUG: Imports successful")
+
                 if event_type.startswith('skill:'):
-                    await emit_skill_event(event_type, data, self.session_id)
+                    result = await emit_skill_event(event_type, data, self.session_id)
+                    logger.error(f"DEBUG: emit_skill_event returned: {result}")
                 elif event_type.startswith('execution:'):
-                    await emit_execution_event(event_type, data, self.session_id)
+                    result = await emit_execution_event(event_type, data, self.session_id)
+                    logger.error(f"DEBUG: emit_execution_event returned: {result}")
                 elif event_type.startswith('checkpoint:'):
-                    await emit_execution_event(event_type, data, self.session_id)
+                    result = await emit_execution_event(event_type, data, self.session_id)
+                    logger.error(f"DEBUG: emit_checkpoint_event returned: {result}")
             except Exception as e:
                 # Don't fail execution if WebSocket emission fails
-                logger.warning(f"Failed to emit event to WebSocket: {e}")
+                logger.error(f"DEBUG: Exception during emit: {e}", exc_info=True)
+        else:
+            logger.error(f"DEBUG: No session_id, skipping WebSocket emit")
 
         # Also call event callback if provided
         if self.event_callback:

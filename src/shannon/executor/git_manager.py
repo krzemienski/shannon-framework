@@ -68,17 +68,27 @@ class GitManager:
         """
         Verify git working directory is clean
 
+        Ignores Shannon's own directories (.shannon/, .shannon_cache/, __pycache__/)
+
         Returns:
             True if clean, False if uncommitted changes exist
         """
         status = await self._run_git('status --porcelain')
 
-        is_clean = status.strip() == ''
+        # Filter out Shannon's own directories
+        ignored_patterns = ['.shannon/', '.shannon_cache/', '__pycache__/']
+        lines = [line for line in status.strip().split('\n') if line]
+        relevant_changes = [
+            line for line in lines
+            if not any(pattern in line for pattern in ignored_patterns)
+        ]
+
+        is_clean = len(relevant_changes) == 0
 
         if is_clean:
             self.logger.info("Git working directory is clean ✓")
         else:
-            self.logger.warning("Git working directory has uncommitted changes")
+            self.logger.warning(f"Git working directory has uncommitted changes: {relevant_changes}")
 
         return is_clean
 

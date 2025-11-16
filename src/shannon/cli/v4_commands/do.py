@@ -94,10 +94,16 @@ def do_command(
         # Generate session ID if not provided
         if not session_id:
             from datetime import datetime
+            import uuid
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            generated_session_id = f"do_{timestamp}"
+            unique_id = uuid.uuid4().hex[:8]
+            generated_session_id = f"do_{timestamp}_{unique_id}"
         else:
             generated_session_id = session_id
+
+        # Display session ID when dashboard enabled
+        if dashboard:
+            console.print(f"[bold cyan]Session ID: {generated_session_id}[/bold cyan]")
 
         # Display header
         console.print()
@@ -237,6 +243,10 @@ def do_command(
                 session_id=generated_session_id,
                 event_callback=event_callback if dashboard else None
             )
+
+            # Debug: Verify session_id propagation
+            if verbose or dashboard:
+                console.print(f"[dim]DEBUG: Orchestrator session_id: {orchestrator.session_id}[/dim]")
 
             # Execute with progress
             with Progress(

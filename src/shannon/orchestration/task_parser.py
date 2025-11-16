@@ -174,13 +174,15 @@ class TaskParser:
     }
 
     # Skill mapping patterns - maps domains/goals to typical skill sequences
+    # NOTE: Only using skills that currently exist in built-in directory
     SKILL_PATTERNS = {
-        ('create', 'authentication'): ['library_discovery', 'prompt_enhancement', 'code_generation', 'validation', 'git_operations'],
-        ('create', 'api'): ['library_discovery', 'code_generation', 'validation', 'git_operations'],
-        ('fix', 'generic'): ['analysis', 'code_generation', 'validation', 'git_operations'],
-        ('test', 'generic'): ['test_generation', 'validation', 'git_operations'],
-        ('refactor', 'generic'): ['analysis', 'code_generation', 'validation', 'git_operations'],
-        ('document', 'generic'): ['analysis', 'documentation_generation', 'git_operations'],
+        ('create', 'authentication'): ['library_discovery', 'prompt_enhancement'],
+        ('create', 'api'): ['library_discovery', 'prompt_enhancement'],
+        ('fix', 'generic'): ['library_discovery', 'prompt_enhancement'],
+        ('test', 'generic'): ['library_discovery', 'prompt_enhancement'],
+        ('refactor', 'generic'): ['library_discovery', 'prompt_enhancement'],
+        ('document', 'generic'): ['library_discovery', 'prompt_enhancement'],
+        ('create', 'generic'): ['library_discovery', 'prompt_enhancement'],
     }
 
     def __init__(self, registry: SkillRegistry):
@@ -446,7 +448,7 @@ class TaskParser:
 
         # Query skills by category matching domain
         try:
-            domain_skills = await self.registry.get_by_category(intent.domain)
+            domain_skills = self.registry.find_by_category(intent.domain)
             skills.extend([s.name for s in domain_skills])
         except Exception as e:
             logger.debug(f"No skills found for category {intent.domain}: {e}")
@@ -460,10 +462,10 @@ class TaskParser:
             except Exception as e:
                 logger.debug(f"Error searching for keyword {keyword}: {e}")
 
-        # If no skills found, use default sequence
+        # If no skills found, use default sequence (only existing skills)
         if not skills:
             logger.debug("Using default skill sequence")
-            skills = ['analysis', 'code_generation', 'validation', 'git_operations']
+            skills = ['library_discovery', 'prompt_enhancement']
 
         # Remove duplicates while preserving order
         seen = set()

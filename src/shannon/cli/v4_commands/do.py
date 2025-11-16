@@ -31,6 +31,8 @@ from shannon.skills.registry import SkillRegistry
 from shannon.skills.executor import SkillExecutor
 from shannon.skills.hooks import HookManager
 from shannon.skills.dependencies import DependencyResolver
+from shannon.skills.loader import SkillLoader
+from shannon.skills.discovery import DiscoveryEngine
 from shannon.orchestration import TaskParser, ExecutionPlanner, StateManager, Orchestrator
 from shannon.server.websocket import emit_skill_event, emit_checkpoint_event
 
@@ -112,7 +114,24 @@ def do_command(
             # Initialize components
             console.print("[dim]Initializing orchestration components...[/dim]")
 
-            registry = SkillRegistry.get_instance()
+            # Get or initialize registry with schema
+            # Schema is at project root /schemas/skill.schema.json
+            # __file__ is at src/shannon/cli/v4_commands/do.py
+            # So we go up 4 levels to get to project root
+            schema_path = Path(__file__).parent.parent.parent.parent.parent / "schemas" / "skill.schema.json"
+            try:
+                registry = await SkillRegistry.get_instance()
+            except ValueError:
+                # First initialization - need schema path
+                registry = await SkillRegistry.get_instance(schema_path)
+
+            # Discover and load skills
+            console.print("[dim]Discovering skills...[/dim]")
+            loader = SkillLoader(registry)
+            discovery = DiscoveryEngine(registry, loader)
+            skills = await discovery.discover_all(project_root=project_path)
+            console.print(f"[dim]Loaded {len(skills)} skills[/dim]")
+
             hook_manager = HookManager(registry)
             executor = SkillExecutor(registry, hook_manager)
             dependency_resolver = DependencyResolver(registry)

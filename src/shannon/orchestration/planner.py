@@ -286,7 +286,9 @@ class ExecutionPlanner:
 
         for skill_name in candidates:
             try:
-                skill = await self.registry.get(skill_name)
+                skill = self.registry.get(skill_name)
+                if skill is None:
+                    raise SkillNotFoundError(f"Skill not found: {skill_name}")
                 skills.append(skill)
             except SkillNotFoundError:
                 logger.warning(f"Candidate skill not found: {skill_name}")
@@ -317,7 +319,7 @@ class ExecutionPlanner:
             PlanningError: If dependency resolution fails
         """
         try:
-            resolved = await self.resolver.resolve_dependencies(skills)
+            resolved = self.resolver.resolve_dependencies(skills)
             logger.debug(
                 f"Dependencies resolved: {len(resolved.execution_order)} skills, "
                 f"{resolved.dependency_levels} levels"
@@ -345,7 +347,9 @@ class ExecutionPlanner:
 
         for skill_name in skill_order:
             try:
-                skill = await self.registry.get(skill_name)
+                skill = self.registry.get(skill_name)
+                if skill is None:
+                    raise SkillNotFoundError(f"Skill not found: {skill_name}")
 
                 # Build parameters from intent
                 parameters = self._build_parameters(skill, intent)

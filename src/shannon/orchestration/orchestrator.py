@@ -323,7 +323,9 @@ class Orchestrator:
         })
 
         # Get skill from registry
-        skill = await self.executor.registry.get(step.skill_name)
+        skill = self.executor.registry.get(step.skill_name)
+        if skill is None:
+            raise Exception(f"Skill not found: {step.skill_name}")
 
         # Execute skill
         result = await self.executor.execute(

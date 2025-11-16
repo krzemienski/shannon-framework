@@ -212,7 +212,24 @@ class Orchestrator:
                 results=self.execution_context.skill_results
             )
 
-            await self._emit_event('execution:completed', result.to_dict())
+            # Emit completion with safe serialization
+            try:
+                completion_data = {
+                    'success': result.success,
+                    'plan_id': result.plan_id,
+                    'steps_completed': result.steps_completed,
+                    'steps_total': result.steps_total,
+                    'duration_seconds': result.duration_seconds,
+                    # Skip results list - may contain non-serializable data
+                }
+                await self._emit_event('execution:completed', completion_data)
+            except Exception as e:
+                logger.warning(f"Failed to emit execution:completed: {e}")
+                # At least emit minimal completion
+                await self._emit_event('execution:completed', {
+                    'success': result.success,
+                    'steps_completed': result.steps_completed
+                })
 
             logger.info(
                 f"Execution completed: {result.steps_completed}/{result.steps_total} steps, "

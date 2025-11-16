@@ -165,7 +165,12 @@ def do_command(
             # STEP 2: Create plan
             console.print("[bold cyan]Step 2: Creating execution plan...[/bold cyan]")
 
-            plan = await planner.create_plan(parsed, auto_mode=auto)
+            # Build context with project_root for parameter extraction
+            planning_context = {
+                'project_root': str(project_path)
+            }
+
+            plan = await planner.create_plan(parsed, auto_mode=auto, context=planning_context)
 
             console.print(f"  [green]✓[/green] Steps: {len(plan.steps)}")
             console.print(f"  [green]✓[/green] Checkpoints: {len(plan.checkpoints)}")
@@ -178,14 +183,21 @@ def do_command(
                 plan_table = Table(title="Execution Plan", show_header=True)
                 plan_table.add_column("#", style="dim")
                 plan_table.add_column("Skill", style="cyan")
+                plan_table.add_column("Parameters", style="magenta")
                 plan_table.add_column("Duration", justify="right", style="yellow")
                 plan_table.add_column("Checkpoint", justify="center", style="green")
                 plan_table.add_column("Critical", justify="center", style="red")
 
                 for i, step in enumerate(plan.steps, 1):
+                    # Show key parameters
+                    param_summary = ', '.join(f"{k}={v}" for k, v in list(step.parameters.items())[:2])
+                    if len(step.parameters) > 2:
+                        param_summary += f" (+{len(step.parameters)-2})"
+
                     plan_table.add_row(
                         str(i),
                         step.skill_name,
+                        param_summary[:50],  # Truncate long params
                         f"{step.estimated_duration:.0f}s",
                         "✓" if step.checkpoint_before else "",
                         "✓" if step.critical else ""

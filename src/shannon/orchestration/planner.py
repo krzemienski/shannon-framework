@@ -201,7 +201,8 @@ class ExecutionPlanner:
     async def create_plan(
         self,
         parsed_task: ParsedTask,
-        auto_mode: bool = False
+        auto_mode: bool = False,
+        context: Optional[Dict[str, Any]] = None
     ) -> ExecutionPlan:
         """
         Create execution plan from parsed task.
@@ -209,6 +210,7 @@ class ExecutionPlanner:
         Args:
             parsed_task: Parsed task with intent and candidates
             auto_mode: If True, include default decisions for auto-execution
+            context: Optional execution context (e.g., project_root, variables)
 
         Returns:
             ExecutionPlan ready for orchestrator execution
@@ -217,6 +219,9 @@ class ExecutionPlanner:
             PlanningError: If planning fails
         """
         logger.info(f"Creating execution plan for: {parsed_task.raw_task}")
+
+        # Initialize context if not provided
+        context = context or {}
 
         # Step 1: Select and validate skills
         selected_skills = await self._select_skills(parsed_task.candidate_skills)
@@ -227,7 +232,8 @@ class ExecutionPlanner:
         # Step 3: Create skill steps with parameters
         steps = await self._create_steps(
             resolved.execution_order,
-            parsed_task.intent
+            parsed_task.intent,
+            context
         )
 
         # Step 4: Add checkpoints
@@ -331,7 +337,8 @@ class ExecutionPlanner:
     async def _create_steps(
         self,
         skill_order: List[str],
-        intent: TaskIntent
+        intent: TaskIntent,
+        context: Optional[Dict[str, Any]] = None
     ) -> List[SkillStep]:
         """
         Create skill steps with parameters.
@@ -339,11 +346,13 @@ class ExecutionPlanner:
         Args:
             skill_order: Ordered list of skill names
             intent: Task intent for parameter population
+            context: Optional execution context for parameter extraction
 
         Returns:
             List of SkillStep objects
         """
         steps = []
+        context = context or {}
 
         for skill_name in skill_order:
             try:
@@ -351,8 +360,8 @@ class ExecutionPlanner:
                 if skill is None:
                     raise SkillNotFoundError(f"Skill not found: {skill_name}")
 
-                # Build parameters from intent
-                parameters = self._build_parameters(skill, intent)
+                # Extract parameters intelligently from intent and context
+                parameters = self._extract_parameters_for_skill(skill, intent, context)
 
                 # Estimate duration
                 duration = self._estimate_skill_duration(skill_name)
@@ -380,9 +389,102 @@ class ExecutionPlanner:
 
         return steps
 
+    def _extract_parameters_for_skill(
+        self,
+        skill: Skill,
+        intent: TaskIntent,
+        context: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """
+        Intelligently extract parameters for skill from task intent and context.
+
+        Maps skill parameter requirements to available data sources:
+        - Task intent (goal, domain, keywords, entities)
+        - Execution context variables (project_root, previous results)
+        - Skill-specific patterns and defaults
+
+        Args:
+            skill: Skill to extract parameters for
+            intent: Task intent with extracted information
+            context: Optional execution context variables
+
+        Returns:
+            Dictionary of parameters with all required fields populated
+        """
+        params = {}
+        context = context or {}
+
+        for param in skill.parameters:
+            # Skip if optional and has default (will use default)
+            if not param.required and param.default is not None:
+                continue
+
+            # Common parameter patterns
+            if param.name == 'project_root':
+                # Get from context or use current directory
+                params['project_root'] = str(context.get('project_root', '.'))
+
+            elif param.name == 'task':
+                # Build task description from intent
+                params['task'] = f"{intent.goal} {intent.domain}".strip()
+
+            elif param.name == 'feature_description':
+                # Extract from task keywords or goal
+                feature_desc = ' '.join(intent.keywords) if intent.keywords else intent.goal
+                params['feature_description'] = feature_desc
+
+            elif param.name == 'category':
+                # Use domain as category
+                params['category'] = intent.domain or 'general'
+
+            elif param.name == 'domain':
+                params['domain'] = intent.domain
+
+            elif param.name == 'goal':
+                params['goal'] = intent.goal
+
+            elif param.name == 'keywords':
+                params['keywords'] = intent.keywords
+
+            elif param.name == 'changes':
+                # Get from context if available
+                params['changes'] = context.get('changes', {})
+
+            elif param.name == 'check_tests':
+                params['check_tests'] = True
+
+            elif param.name == 'check_types':
+                params['check_types'] = True
+
+            elif param.name == 'auto_commit':
+                params['auto_commit'] = True
+
+            elif param.name == 'message':
+                # Build commit message from intent
+                params['message'] = f"{intent.goal}: {intent.domain}"
+
+            # If parameter is required but not mapped, try to use intent.goal
+            elif param.required and param.name not in params:
+                logger.warning(
+                    f"Required parameter '{param.name}' for skill '{skill.name}' "
+                    f"not explicitly mapped, using intent.goal as fallback"
+                )
+                params[param.name] = intent.goal
+
+        # Add any explicit defaults for optional parameters
+        for param in skill.parameters:
+            if param.name not in params and param.default is not None:
+                params[param.name] = param.default
+
+        logger.debug(f"Extracted parameters for {skill.name}: {list(params.keys())}")
+        return params
+
     def _build_parameters(self, skill: Skill, intent: TaskIntent) -> Dict[str, Any]:
         """
-        Build skill parameters from task intent.
+        Build skill parameters from task intent (legacy method).
+
+        DEPRECATED: Use _extract_parameters_for_skill instead.
+        Kept for backward compatibility.
 
         Args:
             skill: Skill to build parameters for
@@ -391,35 +493,8 @@ class ExecutionPlanner:
         Returns:
             Dictionary of parameters
         """
-        params = {}
-
-        # Add common parameters
-        params['task'] = intent.goal + ' ' + intent.domain
-        params['keywords'] = intent.keywords
-
-        # Add skill-specific parameters based on skill name
-        if skill.name == 'library_discovery':
-            params['domain'] = intent.domain
-            params['keywords'] = intent.keywords
-
-        elif skill.name == 'code_generation':
-            params['goal'] = intent.goal
-            params['domain'] = intent.domain
-
-        elif skill.name == 'validation':
-            params['check_tests'] = True
-            params['check_types'] = True
-
-        elif skill.name == 'git_operations':
-            params['auto_commit'] = True
-            params['message'] = f"{intent.goal}: {intent.domain}"
-
-        # Add any default parameter values
-        for param in skill.parameters:
-            if param.name not in params and param.default is not None:
-                params[param.name] = param.default
-
-        return params
+        # Delegate to new intelligent extraction method
+        return self._extract_parameters_for_skill(skill, intent)
 
     def _estimate_skill_duration(self, skill_name: str) -> float:
         """

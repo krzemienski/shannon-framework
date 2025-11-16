@@ -59,7 +59,8 @@ class LibraryDiscoverer:
     async def discover_for_feature(
         self,
         feature_description: str,
-        category: str = "general"
+        category: str = "general",
+        project_root: str = "."
     ) -> List[LibraryRecommendation]:
         """
         Discover libraries for a specific feature
@@ -67,6 +68,7 @@ class LibraryDiscoverer:
         Args:
             feature_description: Feature/functionality needed (e.g., "authentication", "UI components")
             category: Category for better search (auth, ui, networking, data, etc.)
+            project_root: Project root directory for language/ecosystem detection
 
         Returns:
             Ranked list of library recommendations (best first)

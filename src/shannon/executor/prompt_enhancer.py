@@ -43,25 +43,29 @@ class PromptEnhancer:
     def build_enhancements(
         self,
         task: str,
-        project_root: Path
+        project_root
     ) -> str:
         """
         Build complete prompt enhancements for a task
-        
+
         Args:
             task: User's task description
-            project_root: Project directory
-            
+            project_root: Project directory (str or Path)
+
         Returns:
             Complete enhancement text to append to system prompt
         """
+        # Convert to Path if string
+        if isinstance(project_root, str):
+            project_root = Path(project_root)
+
         enhancements = []
-        
+
         # Always include core instructions
         enhancements.append(LIBRARY_DISCOVERY_INSTRUCTIONS)
         enhancements.append(FUNCTIONAL_VALIDATION_INSTRUCTIONS)
         enhancements.append(GIT_WORKFLOW_INSTRUCTIONS)
-        
+
         # Add project-specific guidelines
         project_type = self._detect_project_type(project_root)
         project_enhancement = get_enhancement_for_project(project_type)

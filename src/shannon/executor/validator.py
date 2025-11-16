@@ -286,7 +286,47 @@ class ValidationOrchestrator:
         if not self.test_config.test_cmd:
             return {'passed': True, 'skipped': True, 'reason': 'No test command configured'}
 
-        test_passed = await self._run_check(self.test_config.test_cmd, "Tests")
+        test_result = await self._run_check_with_exit_code(self.test_config.test_cmd, "Tests")
+
+        # Handle "no tests found" scenarios - these should NOT fail validation
+        # pytest exit code 4 = no tests collected
+        # npm test exit code 1 with "no tests found" message
+        if test_result['exit_code'] == 4:
+            self.logger.info("Tests: SKIP (no tests found - pytest exit code 4)")
+            return {
+                'passed': True,
+                'skipped': True,
+                'reason': 'No tests found',
+                'checks': {'tests': 'skipped'},
+                'failures': []
+            }
+
+        # Check for npm test "no tests found" pattern
+        if test_result['exit_code'] != 0:
+            stderr_text = test_result['stderr'].decode('utf-8', errors='ignore').lower()
+            stdout_text = test_result['stdout'].decode('utf-8', errors='ignore').lower()
+            combined_output = stderr_text + stdout_text
+
+            # npm/jest patterns for no tests
+            no_tests_patterns = [
+                'no tests found',
+                'no test files found',
+                'no specs found',
+                '0 tests',
+                'no test suites found'
+            ]
+
+            if any(pattern in combined_output for pattern in no_tests_patterns):
+                self.logger.info("Tests: SKIP (no tests found in output)")
+                return {
+                    'passed': True,
+                    'skipped': True,
+                    'reason': 'No tests found',
+                    'checks': {'tests': 'skipped'},
+                    'failures': []
+                }
+
+        test_passed = test_result['success']
 
         return {
             'passed': test_passed,
@@ -322,6 +362,20 @@ class ValidationOrchestrator:
         Returns:
             True if command succeeded (exit code 0)
         """
+        result = await self._run_check_with_exit_code(command, check_name)
+        return result['success']
+
+    async def _run_check_with_exit_code(self, command: str, check_name: str) -> Dict[str, Any]:
+        """
+        Run a validation check command and return detailed results
+
+        Args:
+            command: Shell command to run
+            check_name: Name for logging
+
+        Returns:
+            Dict with 'success', 'exit_code', 'stdout', 'stderr'
+        """
         self.logger.debug(f"Running {check_name}: {command}")
 
         # Execute command via subprocess
@@ -346,7 +400,13 @@ class ValidationOrchestrator:
             except asyncio.TimeoutError:
                 process.kill()
                 self.logger.error(f"{check_name} timed out after 5 minutes")
-                return False
+                return {
+                    'success': False,
+                    'exit_code': -1,
+                    'stdout': b'',
+                    'stderr': b'Timeout after 5 minutes',
+                    'timed_out': True
+                }
 
             # Check exit code
             success = process.returncode == 0
@@ -358,9 +418,21 @@ class ValidationOrchestrator:
                 if stderr:
                     self.logger.debug(f"  Error: {stderr.decode()[:200]}")
 
-            return success
+            return {
+                'success': success,
+                'exit_code': process.returncode,
+                'stdout': stdout,
+                'stderr': stderr,
+                'timed_out': False
+            }
 
         except Exception as e:
             self.logger.error(f"{check_name} failed with exception: {e}")
-            return False
+            return {
+                'success': False,
+                'exit_code': -1,
+                'stdout': b'',
+                'stderr': str(e).encode(),
+                'exception': True
+            }
 

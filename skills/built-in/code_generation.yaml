@@ -4,22 +4,10 @@ description: Generate code files using autonomous execution with library discove
 category: workflow
 
 parameters:
-  - name: task_description
+  - name: task
     type: string
     required: true
     description: What code to generate (e.g., "create calculator.py with math functions")
-
-  - name: libraries_discovered
-    type: array
-    required: false
-    default: []
-    description: Libraries discovered by library_discovery skill (if run previously)
-
-  - name: enhanced_prompts
-    type: string
-    required: false
-    default: ""
-    description: Enhanced prompts from prompt_enhancement skill (if run previously)
 
   - name: project_root
     type: string

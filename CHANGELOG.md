@@ -2,6 +2,119 @@
 
 All notable changes to Shannon CLI will be documented in this file.
 
+## [4.0.0] - 2025-11-16
+
+### Added - Interactive Orchestration System
+
+**Shannon V4.0** represents a major architectural transformation, combining autonomous execution (V3.5) with interactive orchestration infrastructure.
+
+**New Command**: `shannon do "task description"`
+
+Interactive task orchestration with real-time dashboard visibility and human-in-the-loop control.
+
+**Core Features**:
+- 🎛️ **Interactive Orchestration**: Real-time monitoring with HALT/RESUME controls
+- ✨ **Skills Framework**: YAML-defined, auto-discovered, composable capabilities (329 tests passing)
+- 📊 **WebSocket Dashboard**: 6-panel React UI with <50ms latency
+- 🤖 **Multi-Agent Ready**: Framework for parallel skill execution
+- 🔄 **State Management**: Checkpoints and rollback capability
+- 🎯 **Smart Task Parsing**: Natural language → skill selection
+
+**New Modules** (~20,000 lines total):
+
+*Skills Framework* (Wave 1-2, ~5,500 lines):
+- `skills/registry.py` (554 lines) - Central skill registry with validation
+- `skills/loader.py` (517 lines) - YAML/JSON skill definition loading
+- `skills/executor.py` (1,223 lines) - Skill execution engine with hooks
+- `skills/hooks.py` (562 lines) - Pre/post/error hook system
+- `skills/discovery.py` (792 lines) - Auto-discovery from 7 sources
+- `skills/dependencies.py` (542 lines) - Dependency resolution with networkx
+- `skills/catalog.py` (430 lines) - Memory MCP caching
+- `skills/pattern_detector.py` (600 lines) - Pattern detection
+- `skills/generator.py` (700 lines) - Dynamic skill generation
+- `skills/performance.py` (300 lines) - Performance tracking
+
+*Orchestration Layer* (Wave 5, ~2,700 lines):
+- `orchestration/task_parser.py` (500 lines) - Natural language parsing
+- `orchestration/planner.py` (800 lines) - Execution planning
+- `orchestration/state_manager.py` (600 lines) - Checkpoints and rollback
+- `orchestration/orchestrator.py` (400 lines) - Main execution coordinator
+- `orchestration/agent_pool.py` (700 lines) - Multi-agent management
+- `orchestration/decision_engine.py` (400 lines) - Decision points
+- `orchestration/agents/` (800 lines) - 7 agent types
+
+*Communication Layer* (Wave 3, ~1,900 lines):
+- `server/app.py` (400 lines) - FastAPI application
+- `server/websocket.py` (800 lines) - Socket.IO integration
+- `communication/events.py` (426 lines) - Event bus (25 event types)
+- `communication/command_queue.py` (347 lines) - Command queue (9 command types)
+
+*Specialized Modes* (Wave 7-9, ~3,700 lines):
+- `modes/debug_mode.py` (1,500 lines) - Debug mode framework
+- `modes/ultrathink.py` (1,800 lines) - Deep reasoning framework
+- `modes/investigation.py` (400 lines) - Investigation tools
+
+*Research Layer* (Wave 9, ~1,200 lines):
+- `research/orchestrator.py` (1,200 lines) - Research orchestration
+
+*Dashboard* (Wave 4, 8, ~5,900 lines React/TypeScript):
+- `dashboard/src/App.tsx` (200 lines) - Main application
+- `dashboard/src/panels/ExecutionOverview.tsx` (400 lines) - Task overview
+- `dashboard/src/panels/SkillsView.tsx` (600 lines) - Skills monitoring
+- `dashboard/src/panels/FileDiff.tsx` (800 lines) - Live code diff
+- `dashboard/src/panels/AgentPool.tsx` (500 lines) - Agent status
+- `dashboard/src/panels/Decisions.tsx` (400 lines) - Decision points
+- `dashboard/src/panels/Validation.tsx` (400 lines) - Test results
+- `dashboard/src/hooks/useSocket.ts` (200 lines) - WebSocket client
+- `dashboard/src/store/dashboardStore.ts` (600 lines) - State management
+
+*CLI Commands* (~1,500 lines):
+- `cli/commands/do.py` (400 lines) - shannon do command
+- `cli/commands/debug.py` (300 lines) - shannon debug command
+- `cli/commands/ultrathink.py` (200 lines) - shannon ultrathink command
+- `cli/commands/research.py` (200 lines) - shannon research command
+- Updates to existing commands (400 lines)
+
+*Skill Definitions* (8 built-in skills):
+- `skills/built-in/library_discovery.yaml` - Multi-registry library search
+- `skills/built-in/validation_orchestrator.yaml` - 3-tier validation
+- `skills/built-in/prompt_enhancement.yaml` - Prompt building
+- `skills/built-in/git_operations.yaml` - Git automation
+- `skills/built-in/code_generation.yaml` - Code generation (NEW in this release)
+- Plus 3 more utility skills
+
+*Schemas* (~800 lines):
+- `schemas/skill.schema.json` - Skill definition schema
+- `schemas/execution_plan.schema.json` - Plan schema
+- `schemas/checkpoint.schema.json` - State checkpoint schema
+- `schemas/decision_point.schema.json` - Decision schema
+
+**Test Coverage**:
+- Skills Framework: 188 tests passing (100%)
+- Auto-Discovery: 64 tests passing (100%)
+- WebSocket Communication: 77 tests passing (100%)
+- Integration tests: 5+ scenarios validated
+- **Total**: 334+ tests passing
+
+**Breaking Changes**:
+- None - V4.0 is additive (shannon exec unchanged)
+
+**Upgrade Notes**:
+- Install new dependencies: `poetry install` (adds fastapi, python-socketio, networkx, pyyaml)
+- Install dashboard: `cd dashboard && npm install`
+- Optional: Start server for dashboard features
+
+### Changed from V3.5
+
+**shannon exec command**:
+- Now integrated with V4 skills framework
+- Can be invoked as a skill by shannon do
+- No functional changes to user-facing behavior
+
+### Deprecated
+
+**None** - All V3.x features maintained
+
 ## [3.5.0] - 2025-11-15
 
 ### Added - shannon exec Command

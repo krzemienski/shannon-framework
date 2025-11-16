@@ -289,10 +289,11 @@ class ValidationOrchestrator:
         test_result = await self._run_check_with_exit_code(self.test_config.test_cmd, "Tests")
 
         # Handle "no tests found" scenarios - these should NOT fail validation
-        # pytest exit code 4 = no tests collected
+        # pytest exit code 4 = no tests collected (directory doesn't exist)
+        # pytest exit code 5 = no tests ran (directory exists but empty)
         # npm test exit code 1 with "no tests found" message
-        if test_result['exit_code'] == 4:
-            self.logger.info("Tests: SKIP (no tests found - pytest exit code 4)")
+        if test_result['exit_code'] in [4, 5]:
+            self.logger.info(f"Tests: SKIP (no tests found - pytest exit code {test_result['exit_code']})")
             return {
                 'passed': True,
                 'skipped': True,

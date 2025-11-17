@@ -2533,10 +2533,74 @@ def context_status() -> None:
 
 @cli.command(name='wave-agents')
 def wave_agents() -> None:
-    """List active agents in current wave."""
+    """List active agents and agent pool infrastructure status.
+
+    Shows AgentPool status. Note: Parallel agent execution integration
+    is pending - infrastructure exists but not yet wired into wave command.
+    """
     from rich.console import Console
+    from rich.table import Table
+    from shannon.orchestrator import ContextAwareOrchestrator
+
     console = Console()
-    console.print("No active agents")
+
+    try:
+        # Initialize orchestrator to access agent pool
+        orchestrator = ContextAwareOrchestrator()
+
+        console.print()
+
+        # Check AgentPool
+        if orchestrator.agent_pool:
+            stats = orchestrator.agent_pool.get_agent_stats()
+            active_agents = orchestrator.agent_pool.get_active_agents()
+
+            # Stats table
+            table = Table(title="Agent Pool Infrastructure")
+            table.add_column("Metric", style="cyan")
+            table.add_column("Value", justify="right")
+
+            table.add_row("Max Active", f"{stats['max_active']}")
+            table.add_row("Max Total", f"{stats['max_total']}")
+            table.add_row("Total Agents", f"{stats['total_agents']}")
+            table.add_row("Active Now", f"{stats['active_agents']}", style="green" if stats['active_agents'] > 0 else "dim")
+            table.add_row("Completed Tasks", f"{stats['completed_tasks']}")
+            table.add_row("Failed Tasks", f"{stats['failed_tasks']}")
+
+            console.print(table)
+            console.print()
+
+            if active_agents:
+                # Show active agents
+                agent_table = Table(title="Active Agents")
+                agent_table.add_column("ID", style="cyan")
+                agent_table.add_column("Role", style="green")
+                agent_table.add_column("Status")
+                agent_table.add_column("Tasks Done", justify="right")
+
+                for agent in active_agents:
+                    agent_table.add_row(
+                        agent.agent_id,
+                        agent.role.value,
+                        agent.status.value,
+                        str(agent.tasks_completed)
+                    )
+
+                console.print(agent_table)
+                console.print()
+            else:
+                console.print("[dim]No agents currently active[/dim]")
+                console.print()
+                console.print("[yellow]ℹ Note:[/yellow] AgentPool infrastructure ready (8 active / 50 max)")
+                console.print("[dim]       Parallel wave execution integration pending[/dim]")
+                console.print()
+        else:
+            console.print("[yellow]AgentPool not initialized[/yellow]")
+            console.print()
+
+    except Exception as e:
+        console.print(f"[red]Error:[/red] {e}")
+        console.print()
 
 
 @cli.command(name='mcp-install')

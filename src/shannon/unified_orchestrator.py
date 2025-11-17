@@ -297,36 +297,6 @@ class UnifiedOrchestrator:
 
     async def execute_task(
         self,
-        spec_or_request: str,
-        project_id: Optional[str] = None,
-        session_id: Optional[str] = None
-    ) -> Dict[str, Any]:
-        """Execute combined analyze + wave via V3 ContextAwareOrchestrator.
-
-        Args:
-            spec_or_request: Specification text or task request
-            project_id: Optional project ID
-            session_id: Session ID for tracking
-
-        Returns:
-            Combined analysis and wave results
-        """
-        if not self.v3_orchestrator:
-            raise RuntimeError("V3 orchestrator not available")
-
-        logger.info(f"Delegating to V3 task: {spec_or_request}")
-
-        result = await self.v3_orchestrator.execute_task(
-            spec_or_request=spec_or_request,
-            project_id=project_id,
-            session_id=session_id
-        )
-
-        logger.info("V3 task complete")
-        return result
-
-    async def execute_task(
-        self,
         task: str,
         project_path: Optional[Path] = None,  # NEW
         dashboard_client: Optional[Any] = None,

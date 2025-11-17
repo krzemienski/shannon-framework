@@ -2617,9 +2617,8 @@ def onboard(project_path: str, project_id: Optional[str], force: bool) -> None:
                 onboard_task = progress.add_task("Scanning codebase...", total=None)
 
                 result = await orchestrator.context.onboard_project(
-                    project_path=resolved_path,
-                    project_id=generated_project_id,
-                    force=force
+                    project_path=str(resolved_path),
+                    project_id=generated_project_id
                 )
 
                 progress.update(onboard_task, completed=True)

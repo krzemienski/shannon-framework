@@ -373,7 +373,11 @@ class TestEventEmission:
 
     @pytest.mark.asyncio
     async def test_emit_skill_event_with_session(self, mock_sio):
-        """Test skill event emission to specific session."""
+        """Test skill event emission to specific session.
+
+        NOTE: V4 broadcasts to all clients, ignoring session_id.
+        This supports dashboards that connect without a session_id.
+        """
         with patch('shannon.server.websocket.sio', mock_sio):
             await emit_skill_event(
                 'skill:completed',
@@ -381,8 +385,14 @@ class TestEventEmission:
                 session_id='session_abc'
             )
 
+            # V4 broadcasts to all clients (no room targeting)
             call_args = mock_sio.emit.call_args
-            assert call_args[1]['room'] == 'session_abc'
+            assert call_args[0][0] == 'skill:completed'
+            # Verify V4 event structure: {'timestamp': ..., 'data': ...}
+            event_payload = call_args[0][1]
+            assert 'timestamp' in event_payload
+            assert 'data' in event_payload
+            assert event_payload['data']['skill_name'] == 'test_skill'
 
     @pytest.mark.asyncio
     async def test_emit_file_event(self, mock_sio):
@@ -512,7 +522,11 @@ class TestIntegration:
 
     @pytest.mark.asyncio
     async def test_multi_client_session(self, reset_conn_manager):
-        """Test multiple clients connecting to same session."""
+        """Test multiple clients connecting to same session.
+
+        NOTE: V4 broadcasts events to all clients, not just session rooms.
+        This supports dashboards that connect without a session_id.
+        """
         manager = reset_conn_manager
 
         with patch('shannon.server.websocket.sio') as mock_sio:
@@ -531,9 +545,14 @@ class TestIntegration:
                 session_id='session_abc'
             )
 
-            # Verify event sent to room (all clients will receive)
+            # V4 broadcasts to all clients (no room targeting)
             call_args = mock_sio.emit.call_args
-            assert call_args[1]['room'] == 'session_abc'
+            assert call_args[0][0] == 'skill:started'
+            # Verify V4 event structure
+            event_payload = call_args[0][1]
+            assert 'timestamp' in event_payload
+            assert 'data' in event_payload
+            assert event_payload['data']['skill_name'] == 'test'
 
 
 # ============================================================================

@@ -458,6 +458,82 @@ class UnifiedOrchestrator:
 
         return gates
 
+    async def _execute_with_context(
+        self,
+        task: str,
+        context: Dict,
+        validation_gates: Dict[str, str],
+        dashboard_client: Optional[Any]
+    ) -> Dict[str, Any]:
+        """Execute task with project context awareness.
+
+        Creates context-enhanced prompt that tells exec skill about:
+        - Existing tech stack
+        - Project patterns
+        - Validation requirements
+
+        Args:
+            task: Task to execute
+            context: Project context from ContextManager
+            validation_gates: Validation commands to run
+            dashboard_client: Optional dashboard client for streaming
+
+        Returns:
+            Execution result dictionary
+        """
+        # Build context-enhanced prompt
+        discovery = context.get('discovery', {})
+
+        planning_prompt = f"""Task: {task}
+
+PROJECT CONTEXT:
+- Tech Stack: {', '.join(discovery.get('tech_stack', []))}
+- Files: {discovery.get('file_count', 0)} files
+- Modules: {len(discovery.get('modules', []))} modules
+- Entry Points: {', '.join(discovery.get('entry_points', [])[:3])}
+
+VALIDATION REQUIREMENTS:
+- Test command: {validation_gates.get('test_cmd', 'None')}
+- Build command: {validation_gates.get('build_cmd', 'None')}
+- Lint command: {validation_gates.get('lint_cmd', 'None')}
+
+REQUIREMENTS:
+1. Integrate with existing code patterns
+2. Use project's tech stack
+3. Follow project conventions
+4. Ensure code can be validated with above commands
+
+Execute this task with full project awareness."""
+
+        # V3: Model selection
+        model = 'sonnet'
+        if self.model_selector and self.budget_enforcer:
+            try:
+                complexity = len(task) / 100
+                selection = self.model_selector.select_optimal_model(
+                    agent_complexity=complexity,
+                    context_size_tokens=len(planning_prompt) / 4,
+                    budget_remaining=self.budget_enforcer.get_status().remaining
+                )
+                model = selection.model
+                logger.info(f"Selected model: {model}")
+            except Exception as e:
+                logger.warning(f"Model selection failed: {e}")
+
+        # Execute via Shannon Framework exec skill
+        logger.info("Executing with project context")
+        messages = []
+
+        async for msg in self.sdk_client.invoke_skill(
+            skill_name='exec',
+            prompt_content=planning_prompt
+        ):
+            messages.append(msg)
+            if dashboard_client:
+                await self._stream_message_to_dashboard(msg, dashboard_client)
+
+        return self._parse_task_result(messages)
+
     async def _stream_message_to_dashboard(
         self,
         msg: Any,

@@ -479,7 +479,7 @@ Execute this task with full project awareness."""
         model = 'sonnet'
         if self.model_selector and self.budget_enforcer:
             try:
-                complexity = len(task) / 100
+                complexity = min(1.0, len(task) / 500)  # Clamp to [0.0, 1.0]
                 selection = self.model_selector.select_optimal_model(
                     agent_complexity=complexity,
                     context_size_tokens=len(planning_prompt) / 4,

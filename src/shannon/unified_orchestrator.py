@@ -14,6 +14,7 @@ Design: docs/design/UNIFIED_ORCHESTRATOR_DESIGN.md
 
 import asyncio
 import logging
+import time
 from pathlib import Path
 from typing import Optional, Dict, Any, List
 from datetime import datetime
@@ -682,23 +683,45 @@ Execute this task with full project awareness."""
         msg: Any,
         dashboard_client: Any
     ) -> None:
-        """Stream message to dashboard for real-time updates."""
-        from claude_agent_sdk import TextBlock, ToolUseBlock, ThinkingBlock
-
+        """Stream message to dashboard for real-time updates with correct event types."""
+        from claude_agent_sdk import TextBlock, ToolUseBlock, ThinkingBlock, AssistantMessage
+        
         try:
             if isinstance(msg, TextBlock):
-                await dashboard_client.emit_event('task:progress', {
-                    'type': 'text',
-                    'content': msg.text[:500]  # Truncate long text
+                # Map to execution_progress
+                await dashboard_client.emit_event('execution_progress', {
+                    'progress': 50,  # Approximate
+                    'message': msg.text[:200]
                 })
             elif isinstance(msg, ToolUseBlock):
-                await dashboard_client.emit_event('tool:use', {
-                    'name': msg.name,
-                    'input': str(msg.input)[:200]  # Truncate
-                })
+                # Tool usage
+                if msg.name in ['Write', 'Edit', 'MultiEdit']:
+                    # File modification
+                    file_path = msg.input.get('file_path', 'unknown')
+                    await dashboard_client.emit_event('file_modified', {
+                        'file_path': file_path,
+                        'operation': msg.name,
+                        'timestamp': datetime.now().isoformat()
+                    })
+                elif msg.name == 'Skill':
+                    # Skill invocation
+                    skill_name = msg.input.get('skill', 'unknown')
+                    await dashboard_client.emit_event('skill_started', {
+                        'skill_id': f"skill_{skill_name}_{int(time.time())}",
+                        'skill_name': skill_name,
+                        'timestamp': datetime.now().isoformat()
+                    })
+                else:
+                    # Other tool use
+                    await dashboard_client.emit_event('tool_use', {
+                        'tool': msg.name,
+                        'timestamp': datetime.now().isoformat()
+                    })
             elif isinstance(msg, ThinkingBlock):
-                await dashboard_client.emit_event('task:thinking', {
-                    'content': msg.thinking[:500]  # Truncate
+                # Thinking mapped to progress
+                await dashboard_client.emit_event('execution_progress', {
+                    'progress': 25,  # Approximate
+                    'thinking': True
                 })
         except Exception as e:
             logger.warning(f"Dashboard streaming failed: {e}")

@@ -108,6 +108,13 @@ def do_command(
                 if connected:
                     console.print("[dim]✓ Dashboard connected[/dim]")
                     console.print(f"[dim]  Open: http://localhost:5173 (session: {generated_session_id})[/dim]")
+                    
+                    # Emit execution_started event
+                    await dashboard_client.emit_event('execution_started', {
+                        'task_name': task,
+                        'session_id': generated_session_id,
+                        'timestamp': datetime.now().isoformat()
+                    })
                 else:
                     console.print("[yellow]⚠ Dashboard connection failed[/yellow]")
                     console.print("[dim]  Continuing without real-time updates[/dim]")
@@ -177,8 +184,20 @@ def do_command(
 
             console.print()
 
-            # Disconnect dashboard
+            # Emit completion event before disconnect
             if dashboard_client:
+                if success:
+                    await dashboard_client.emit_event('execution_completed', {
+                        'success': True,
+                        'files_created': files,
+                        'timestamp': datetime.now().isoformat()
+                    })
+                else:
+                    await dashboard_client.emit_event('execution_failed', {
+                        'success': False,
+                        'timestamp': datetime.now().isoformat()
+                    })
+                
                 await dashboard_client.disconnect()
 
             sys.exit(0 if success else 1)

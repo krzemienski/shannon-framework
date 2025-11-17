@@ -656,7 +656,12 @@ Execute this task with full project awareness."""
             if not auto_mode:
                 print("Codebase changed - updating context...")
 
-            context = await self.context.update_project(project_id)
+            # Update project (returns ChangeSet)
+            await self.context.update_project(project_id)
+            
+            # Reload context after update
+            context = await self.context.load_project(project_id)
+            
             from datetime import datetime
             config['last_updated'] = datetime.now().isoformat()
             config['file_count'] = context.get('discovery', {}).get('file_count', config.get('file_count', 0))

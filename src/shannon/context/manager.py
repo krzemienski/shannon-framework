@@ -102,25 +102,53 @@ class ContextManager:
     async def load_project(self, project_id: str) -> Dict[str, Any]:
         """Load project context.
 
-        Returns cached context for project.
+        Returns cached context for project by combining all saved JSON files.
 
         Args:
             project_id: Project identifier
 
         Returns:
-            Project context dictionary
+            Project context dictionary with discovery and metadata
 
         Raises:
             FileNotFoundError: If project context doesn't exist
         """
         project_dir = Path.home() / '.shannon' / 'projects' / project_id
-        context_file = project_dir / 'context.json'
-
-        if not context_file.exists():
+        
+        if not project_dir.exists():
             raise FileNotFoundError(f"No context for project: {project_id}")
 
+        # Load all context files
         import json
-        return json.loads(context_file.read_text())
+        context = {'discovery': {}}
+        
+        # Load project metadata
+        project_file = project_dir / 'project.json'
+        if project_file.exists():
+            project_data = json.loads(project_file.read_text())
+            context['discovery']['file_count'] = project_data.get('file_count', 0)
+            context['discovery']['tech_stack'] = project_data.get('tech_stack', [])
+            context['project_id'] = project_data.get('project_id')
+            context['project_path'] = project_data.get('project_path')
+        
+        # Load structure
+        structure_file = project_dir / 'structure.json'
+        if structure_file.exists():
+            structure_data = json.loads(structure_file.read_text())
+            # Extract file paths from structure list
+            context['discovery']['entry_points'] = [item['path'] for item in structure_data if isinstance(item, dict)]
+        
+        # Load modules
+        modules_file = project_dir / 'modules.json'
+        if modules_file.exists():
+            context['discovery']['modules'] = json.loads(modules_file.read_text())
+        
+        # Load patterns
+        patterns_file = project_dir / 'patterns.json'
+        if patterns_file.exists():
+            context['discovery']['patterns'] = json.loads(patterns_file.read_text())
+        
+        return context
 
     async def onboard_project(
         self,

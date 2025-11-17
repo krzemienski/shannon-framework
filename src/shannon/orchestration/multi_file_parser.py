@@ -68,10 +68,10 @@ class MultiFileParser:
     """
 
     # Pattern: <action> <directory>: <file1>, <file2>, <file3>
-    # Captures: directory name and comma-separated file list
+    # Captures: directory name (including nested paths like api/routes) and comma-separated file list
     MULTI_FILE_PATTERN = re.compile(
         r'^(?:create|generate|build|add|implement)\s+'  # Action verb
-        r'([a-zA-Z0-9_-]+)\s*:\s*'                      # Directory name + colon
+        r'([a-zA-Z0-9_/-]+)\s*:\s*'                     # Directory name + colon (supports /)
         r'([a-zA-Z0-9_.,\s-]+)$',                       # Comma-separated files
         re.IGNORECASE
     )

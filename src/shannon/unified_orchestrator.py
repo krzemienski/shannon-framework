@@ -490,14 +490,13 @@ Execute this task with full project awareness."""
             except Exception as e:
                 logger.warning(f"Model selection failed: {e}")
 
-        # Execute via Shannon Framework task-automation skill
-        # Note: task-automation runs prime→spec→wave workflow
-        # Proven to work for file creation (hello.py test)
-        logger.info("Executing with project context")
+        # Execute via Shannon Framework wave-orchestration skill
+        # wave-orchestration: Proven code generation, used by shannon wave command
+        logger.info("Executing with project context via wave-orchestration")
         messages = []
 
         async for msg in self.sdk_client.invoke_skill(
-            skill_name='task-automation',
+            skill_name='wave-orchestration',
             prompt_content=planning_prompt
         ):
             messages.append(msg)

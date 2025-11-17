@@ -2907,6 +2907,145 @@ def wave_agents(session_id: Optional[str]) -> None:
         console.print()
 
 
+@cli.command(name='wave-follow')
+@click.argument('agent_id')
+def wave_follow(agent_id: str) -> None:
+    """Stream messages from specific agent in real-time.
+
+    Follows a single agent's execution and streams its messages
+    as they occur. Useful for debugging or monitoring specific agent progress.
+
+    \b
+    Example:
+        shannon wave-follow agent-task-code_generation-0
+        shannon wave-follow agent-wave-1-agent
+    """
+    async def run_follow():
+        from shannon.unified_orchestrator import UnifiedOrchestrator
+        from rich.console import Console
+
+        console = Console()
+        config = ShannonConfig()
+
+        console.print()
+        console.print(f"[bold cyan]Following Agent:[/bold cyan] {agent_id}")
+        console.print("[dim]Press Ctrl+C to stop[/dim]")
+        console.print()
+
+        try:
+            orchestrator = UnifiedOrchestrator(config)
+
+            if not orchestrator.agent_controller:
+                console.print("[red]✗ Agent controller unavailable[/red]")
+                sys.exit(1)
+
+            # Define message callback
+            def print_message(msg: str):
+                console.print(f"[cyan]{agent_id}:[/cyan] {msg}")
+
+            # Follow agent (streams messages)
+            await orchestrator.agent_controller.follow_agent(
+                agent_id=agent_id,
+                message_callback=print_message
+            )
+
+            console.print()
+            console.print("[green]✓ Agent follow complete[/green]")
+            console.print()
+
+        except KeyboardInterrupt:
+            console.print("\n[yellow]Stopped following agent[/yellow]\n")
+        except Exception as e:
+            console.print(f"\n[red]✗ Follow failed:[/red] {e}\n")
+            sys.exit(1)
+
+    anyio.run(run_follow)
+
+
+@cli.command(name='wave-pause')
+def wave_pause() -> None:
+    """Pause current wave execution.
+
+    Halts execution at the next checkpoint. The execution can be
+    resumed later with 'shannon wave-resume'.
+
+    \b
+    Example:
+        shannon wave-pause
+    """
+    async def run_pause():
+        from shannon.unified_orchestrator import UnifiedOrchestrator
+        from rich.console import Console
+
+        console = Console()
+        config = ShannonConfig()
+
+        console.print()
+        console.print("[bold yellow]Pausing Wave Execution[/bold yellow]")
+        console.print()
+
+        try:
+            orchestrator = UnifiedOrchestrator(config)
+
+            if not orchestrator.agent_controller:
+                console.print("[red]✗ Agent controller unavailable[/red]")
+                sys.exit(1)
+
+            # Pause execution
+            await orchestrator.agent_controller.pause()
+
+            console.print("[green]✓ Execution paused[/green]")
+            console.print("[dim]Resume with: shannon wave-resume[/dim]")
+            console.print()
+
+        except Exception as e:
+            console.print(f"\n[red]✗ Pause failed:[/red] {e}\n")
+            sys.exit(1)
+
+    anyio.run(run_pause)
+
+
+@cli.command(name='wave-resume')
+def wave_resume() -> None:
+    """Resume paused wave execution.
+
+    Resumes execution from the last checkpoint after a pause.
+
+    \b
+    Example:
+        shannon wave-resume
+    """
+    async def run_resume():
+        from shannon.unified_orchestrator import UnifiedOrchestrator
+        from rich.console import Console
+
+        console = Console()
+        config = ShannonConfig()
+
+        console.print()
+        console.print("[bold green]Resuming Wave Execution[/bold green]")
+        console.print()
+
+        try:
+            orchestrator = UnifiedOrchestrator(config)
+
+            if not orchestrator.agent_controller:
+                console.print("[red]✗ Agent controller unavailable[/red]")
+                sys.exit(1)
+
+            # Resume execution
+            await orchestrator.agent_controller.resume()
+
+            console.print("[green]✓ Execution resumed[/green]")
+            console.print()
+
+        except Exception as e:
+            console.print(f"\n[red]✗ Resume failed:[/red] {e}\n")
+            sys.exit(1)
+
+    anyio.run(run_resume)
+
+
 @cli.command(name='mcp-install')
 @click.argument('mcp_name')
 def mcp_install(mcp_name: str) -> None:

@@ -39,6 +39,9 @@ from shannon.ui.progress import ProgressUI
 from shannon.setup.framework_detector import FrameworkDetector
 from shannon.setup.wizard import SetupWizard
 
+# Initialize logger
+logger = logging.getLogger(__name__)
+
 
 def require_framework():
     """Decorator to ensure Shannon Framework is available before command execution.
@@ -283,13 +286,13 @@ def analyze(
 
                     # Select optimal model
                     selection = orchestrator.model_selector.select_optimal_model(
-                        complexity_score=complexity_estimate,
-                        context_size=0,
+                        agent_complexity=complexity_estimate,
+                        context_size_tokens=0,
                         budget_remaining=budget_remaining
                     )
-                    selected_model = selection.selected_model
+                    selected_model = selection.model
 
-                    console.print(f"[dim]✓ Model: {selected_model} (saves ${selection.savings_vs_baseline:.2f})[/dim]")
+                    console.print(f"[dim]✓ Model: {selected_model} (saves ${selection.savings_vs_sonnet:.2f})[/dim]")
 
                     # Check budget before execution
                     if orchestrator.budget_enforcer:

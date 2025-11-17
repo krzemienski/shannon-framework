@@ -160,7 +160,7 @@ def do_command(
             # STEP 1: Parse task
             console.print("[bold cyan]Step 1: Parsing task...[/bold cyan]")
 
-            # Check for multi-file request FIRST (Agent 1 implementation)
+            # Check for multi-file request FIRST
             multi_file_parser = MultiFileParser()
             if multi_file_parser.is_multi_file(task):
                 console.print("  [yellow]⚡[/yellow] Multi-file request detected")

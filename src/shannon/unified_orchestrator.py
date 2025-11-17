@@ -792,7 +792,7 @@ Execute this task with full project awareness."""
         """
         return {
             'unified': {
-                'version': '5.0.0',
+                'version': '5.1.0',
                 'mode': 'unified'
             },
             'shared_subsystems': {
@@ -813,12 +813,9 @@ Execute this task with full project awareness."""
                 'agent_tracker': self.agent_tracker is not None,
                 'agent_controller': self.agent_controller is not None
             },
-            'v4_components': {
-                'skills_registry': self.skills_registry is not None,
-                'planner': self.planner is not None,
+            'v5_components': {
                 'state_manager': self.state_manager is not None,
-                'executor': self.v4_executor is not None,
-                'hook_manager': self.hook_manager is not None
+                'intelligent_workflows': True  # First-time, returning workflows
             }
         }
 

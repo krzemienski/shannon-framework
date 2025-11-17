@@ -29,6 +29,7 @@ from shannon.analytics.trends import TrendAnalyzer
 from shannon.analytics.insights import InsightsGenerator
 from shannon.sdk.client import ShannonSDKClient
 from shannon.config import ShannonConfig
+from shannon.orchestration.agent_pool import AgentPool
 
 logger = logging.getLogger(__name__)
 
@@ -113,6 +114,14 @@ class ContextAwareOrchestrator:
         except Exception as e:
             logger.error(f"SDK client initialization failed: {e}")
             self.sdk_client = None
+
+        # Initialize agent pool for parallel execution
+        try:
+            self.agent_pool = AgentPool(max_active=8, max_total=50)
+            logger.info("AgentPool initialized: 8 active / 50 max")
+        except Exception as e:
+            logger.warning(f"AgentPool initialization failed: {e}")
+            self.agent_pool = None
 
     async def execute_analyze(
         self,

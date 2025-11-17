@@ -570,6 +570,21 @@ def analyze(
 
             console.print()
 
+            # ═══════════════════════════════════════════════════════════════
+            # V3 INTEGRATION: MCP Auto-Installation (POST-ANALYSIS)
+            # ═══════════════════════════════════════════════════════════════
+
+            if orchestrator and orchestrator.mcp and not output_json:
+                # Only prompt in interactive mode (not JSON output)
+                try:
+                    mcp_install_results = await orchestrator.mcp.post_analysis_check(result)
+                    if mcp_install_results:
+                        installed_count = sum(1 for success in mcp_install_results.values() if success)
+                        console.print(f"[dim]✓ Installed {installed_count} recommended MCP(s)[/dim]")
+                        console.print()
+                except Exception as e:
+                    logger.warning(f"MCP auto-install check failed: {e}")
+
             # Save to session
             session.write_memory('spec_analysis', result)
 
@@ -677,10 +692,30 @@ def wave(request: str, session_id: Optional[str], verbose: bool) -> None:
             client = ShannonSDKClient()
             parser = MessageParser()
 
+            # V3: Initialize orchestrator for agent tracking
+            orchestrator = None
+            try:
+                from shannon.orchestrator import ContextAwareOrchestrator
+                orchestrator = ContextAwareOrchestrator(config)
+                logger.info("V3 ContextAwareOrchestrator initialized for wave")
+            except Exception as e:
+                ui.console.print(f"[yellow]V3 features unavailable: {e}[/yellow]\n")
+
             # Display header
             ui.console.print()
             ui.console.print(f"[bold cyan]Wave Execution: {request}[/bold cyan]")
             ui.console.print()
+
+            # V3: MCP Pre-Wave Check
+            if orchestrator and orchestrator.mcp:
+                try:
+                    # Check if required MCPs are available
+                    wave_plan = {'required_mcps': []}  # TODO: Extract from analysis
+                    mcp_ready = await orchestrator.mcp.pre_wave_check(wave_plan)
+                    if not mcp_ready:
+                        ui.console.print("[yellow]⚠ Continuing without all MCPs (may cause issues)[/yellow]\n")
+                except Exception as e:
+                    logger.warning(f"Pre-wave MCP check failed: {e}")
 
             # Invoke wave orchestration skill
             messages = []

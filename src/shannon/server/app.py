@@ -93,10 +93,11 @@ async def shutdown_event():
     """Cleanup on server shutdown."""
     logger.info("Shannon Dashboard Server shutting down...")
 
-    # Close all active Socket.IO connections
+    # Notify all connected clients
     try:
         await sio.emit('server:shutdown', {'message': 'Server is shutting down'})
-        await sio.disconnect()
+        # Note: Connections close automatically on server shutdown
+        # sio.disconnect() requires sid parameter - not needed here
     except Exception as e:
         logger.error(f"Error during shutdown: {e}")
 
@@ -403,4 +404,17 @@ async def global_exception_handler(request, exc):
             "error": "Internal server error",
             "detail": str(exc)
         }
+    )
+
+
+# Server entry point
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(
+        "shannon.server.app:socket_app",  # ASGI app with FastAPI + Socket.IO
+        host="0.0.0.0",
+        port=8000,
+        log_level="info",
+        reload=False  # Critical: Disable reload for stability
     )

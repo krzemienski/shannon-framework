@@ -2678,6 +2678,152 @@ def context_status() -> None:
     console.print("Last updated: Never")
 
 
+@context.command(name='update')
+@click.option('--project', help='Project ID (uses current directory if not provided)')
+def context_update(project: Optional[str]) -> None:
+    """Update project context after code changes.
+
+    Incrementally updates the context by scanning for file changes,
+    new modules, and updated patterns. Much faster than full re-onboarding.
+
+    \b
+    Example:
+        shannon context update
+        shannon context update --project myapp
+    """
+    async def run_update():
+        from shannon.unified_orchestrator import UnifiedOrchestrator
+        from rich.console import Console
+        from rich.progress import Progress, SpinnerColumn, TextColumn
+
+        console = Console()
+        config = ShannonConfig()
+
+        # Determine project ID
+        if not project:
+            # Use current directory name
+            project_id = Path.cwd().name
+        else:
+            project_id = project
+
+        console.print()
+        console.print(f"[bold cyan]Updating Context[/bold cyan]")
+        console.print(f"[dim]Project: {project_id}[/dim]")
+        console.print()
+
+        try:
+            orchestrator = UnifiedOrchestrator(config)
+
+            if not orchestrator.context:
+                console.print("[red]✗ Context manager unavailable[/red]")
+                sys.exit(1)
+
+            # Execute update with progress
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                console=console
+            ) as progress:
+                update_task = progress.add_task("Scanning for changes...", total=None)
+
+                changeset = await orchestrator.context.update_project(project_id)
+
+                progress.update(update_task, completed=True)
+
+            console.print()
+            console.print("[bold green]✓ Context Updated[/bold green]")
+            console.print()
+            console.print(f"[cyan]Changes:[/cyan] {changeset.get('total_changes', 0)}")
+
+            files_added = changeset.get('files_added', [])
+            if files_added:
+                console.print(f"[cyan]Files added:[/cyan] {len(files_added)}")
+
+            files_modified = changeset.get('files_modified', [])
+            if files_modified:
+                console.print(f"[cyan]Files modified:[/cyan] {len(files_modified)}")
+
+            files_deleted = changeset.get('files_deleted', [])
+            if files_deleted:
+                console.print(f"[cyan]Files deleted:[/cyan] {len(files_deleted)}")
+
+            console.print()
+
+        except Exception as e:
+            console.print(f"\n[red]✗ Update failed:[/red] {e}\n")
+            sys.exit(1)
+
+    anyio.run(run_update)
+
+
+@context.command(name='clean')
+@click.option('--project', help='Project ID (uses current directory if not provided)')
+@click.option('--all', 'clean_all', is_flag=True, help='Clean all projects')
+def context_clean(project: Optional[str], clean_all: bool) -> None:
+    """Remove stale context data.
+
+    Cleans up old or invalid context entries. Use --all to clean
+    all projects, or specify --project for a specific project.
+
+    \b
+    Example:
+        shannon context clean
+        shannon context clean --project myapp
+        shannon context clean --all
+    """
+    async def run_clean():
+        from shannon.unified_orchestrator import UnifiedOrchestrator
+        from rich.console import Console
+
+        console = Console()
+        config = ShannonConfig()
+
+        console.print()
+        console.print(f"[bold cyan]Cleaning Context[/bold cyan]")
+
+        if clean_all:
+            console.print("[dim]Cleaning all projects...[/dim]")
+        elif project:
+            console.print(f"[dim]Project: {project}[/dim]")
+        else:
+            console.print(f"[dim]Project: {Path.cwd().name}[/dim]")
+
+        console.print()
+
+        try:
+            orchestrator = UnifiedOrchestrator(config)
+
+            if not orchestrator.context:
+                console.print("[red]✗ Context manager unavailable[/red]")
+                sys.exit(1)
+
+            # Determine what to clean
+            if clean_all:
+                result = await orchestrator.context.clean_all()
+                cleaned_count = result.get('projects_cleaned', 0)
+            else:
+                project_id = project or Path.cwd().name
+                result = await orchestrator.context.clean_project(project_id)
+                cleaned_count = 1 if result.get('cleaned') else 0
+
+            console.print()
+            console.print(f"[bold green]✓ Context Cleaned[/bold green]")
+            console.print()
+
+            if clean_all:
+                console.print(f"[cyan]Projects cleaned:[/cyan] {cleaned_count}")
+            else:
+                console.print(f"[cyan]Stale entries removed:[/cyan] {result.get('entries_removed', 0)}")
+
+            console.print()
+
+        except Exception as e:
+            console.print(f"\n[red]✗ Clean failed:[/red] {e}\n")
+            sys.exit(1)
+
+    anyio.run(run_clean)
+
+
 @cli.command(name='wave-agents')
 @click.option('--session-id', help='Session ID (uses latest if not provided)')
 def wave_agents(session_id: Optional[str]) -> None:

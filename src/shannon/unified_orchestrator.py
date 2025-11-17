@@ -381,6 +381,31 @@ class UnifiedOrchestrator:
 
         return result
 
+    async def _project_context_exists(self, project_id: str) -> bool:
+        """Check if we have context for this project.
+
+        Checks both:
+        1. ContextManager has the project
+        2. Local config exists (~/.shannon/projects/<project_id>/config.json)
+
+        Args:
+            project_id: Project identifier (usually directory name)
+
+        Returns:
+            True if project has been onboarded and config saved
+        """
+        if not self.context:
+            return False
+
+        # Check ContextManager
+        has_context = await self.context.project_exists(project_id)
+
+        # Check local config
+        config_path = self.config.config_dir / 'projects' / project_id / 'config.json'
+        has_config = config_path.exists()
+
+        return has_context and has_config
+
     async def _stream_message_to_dashboard(
         self,
         msg: Any,

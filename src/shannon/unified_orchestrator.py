@@ -30,14 +30,9 @@ from shannon.mcp.manager import MCPManager
 from shannon.agents.state_tracker import AgentStateTracker
 from shannon.agents.controller import AgentController
 
-# V4 Orchestration and subsystems
-from shannon.orchestration.orchestrator import Orchestrator as V4Orchestrator
-from shannon.orchestration.planner import ExecutionPlanner
+# V5 Infrastructure (not custom skills framework)
 from shannon.orchestration.state_manager import StateManager
 from shannon.orchestration.agent_pool import AgentPool
-from shannon.skills.registry import SkillRegistry
-from shannon.skills.executor import SkillExecutor
-from shannon.skills.hooks import HookManager
 
 # Shared infrastructure
 from shannon.config import ShannonConfig

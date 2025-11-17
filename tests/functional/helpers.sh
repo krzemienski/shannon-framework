@@ -3,7 +3,13 @@
 # Common utilities for functional testing
 
 # CRITICAL: Set required environment variables for testing
-export ANTHROPIC_API_KEY="***REMOVED_API_KEY***"
+# ANTHROPIC_API_KEY must be set in environment before running tests
+# export ANTHROPIC_API_KEY="your-key-here"  # DO NOT commit real keys
+if [ -z "$ANTHROPIC_API_KEY" ]; then
+    echo "Error: ANTHROPIC_API_KEY not set"
+    echo "Set it with: export ANTHROPIC_API_KEY='your-key'"
+    exit 1
+fi
 export SHANNON_TEST_MODE=1
 
 # Assert output contains expected pattern

@@ -21,6 +21,7 @@ Component: CLI Commands (Agent D)
 import sys
 import time
 import functools
+import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
@@ -227,8 +228,83 @@ def analyze(
             try:
                 from shannon.orchestrator import ContextAwareOrchestrator
                 orchestrator = ContextAwareOrchestrator(config)
+                logger.info("V3 ContextAwareOrchestrator initialized successfully")
             except Exception as e:
                 console.print(f"[yellow]V3 features unavailable: {e}[/yellow]\n")
+
+            # ═══════════════════════════════════════════════════════════════
+            # V3 INTEGRATION: Cache Check (PRE-EXECUTION)
+            # ═══════════════════════════════════════════════════════════════
+
+            if orchestrator and orchestrator.cache and not no_cache:
+                try:
+                    cached_result = orchestrator.cache.analysis.get(spec_text, None)
+                    if cached_result:
+                        console.print("[bold green]✓ Cache Hit![/bold green]")
+                        console.print("[dim]Returning cached analysis (no API call needed)[/dim]\n")
+
+                        # Display cached result
+                        from shannon.ui.formatters import OutputFormatter
+                        formatter = OutputFormatter(console=console)
+                        console.print(formatter.format_table(cached_result))
+                        console.print()
+                        console.print(f"[dim]From cache: ~/.shannon/cache/analyses/[/dim]")
+                        console.print("[green]✓[/green] [bold]Analysis complete (cached)[/bold]\n")
+
+                        # Record cache hit to analytics
+                        if orchestrator.analytics_db:
+                            try:
+                                orchestrator.analytics_db.record_cache_hit(generated_session_id)
+                            except:
+                                pass
+
+                        return
+                except Exception as e:
+                    logger.warning(f"Cache check failed: {e}, continuing without cache")
+
+            # ═══════════════════════════════════════════════════════════════
+            # V3 INTEGRATION: Cost Optimization & Model Selection
+            # ═══════════════════════════════════════════════════════════════
+
+            selected_model = "sonnet"  # Default
+            if orchestrator and orchestrator.model_selector:
+                try:
+                    # Rough complexity estimate before analysis
+                    complexity_estimate = min(1.0, len(spec_text) / 2000)
+
+                    # Get budget status
+                    budget_remaining = 100.0  # Default
+                    if orchestrator.budget_enforcer:
+                        try:
+                            budget_status = orchestrator.budget_enforcer.get_status()
+                            budget_remaining = budget_status.remaining
+                        except:
+                            pass
+
+                    # Select optimal model
+                    selection = orchestrator.model_selector.select_optimal_model(
+                        complexity_score=complexity_estimate,
+                        context_size=0,
+                        budget_remaining=budget_remaining
+                    )
+                    selected_model = selection.selected_model
+
+                    console.print(f"[dim]✓ Model: {selected_model} (saves ${selection.savings_vs_baseline:.2f})[/dim]")
+
+                    # Check budget before execution
+                    if orchestrator.budget_enforcer:
+                        try:
+                            # Rough cost estimate
+                            estimated_cost = complexity_estimate * 2.0  # Heuristic
+                            if not orchestrator.budget_enforcer.check_available(estimated_cost):
+                                console.print("[yellow]⚠ Warning: Close to budget limit[/yellow]\n")
+                        except:
+                            pass
+
+                except Exception as e:
+                    logger.warning(f"Cost optimization failed: {e}, using default model")
+
+            console.print()
 
             # ═══════════════════════════════════════════════════════════════
             # V3: Live Dashboard OR V2: Complete Streaming Visibility
@@ -460,6 +536,39 @@ def analyze(
             console.print()
 
             result = parser.extract_analysis_result(messages)
+
+            # ═══════════════════════════════════════════════════════════════
+            # V3 INTEGRATION: Cache Save (POST-EXECUTION)
+            # ═══════════════════════════════════════════════════════════════
+
+            if orchestrator and orchestrator.cache and not no_cache:
+                try:
+                    orchestrator.cache.analysis.save(spec_text, result, None)
+                    logger.info("Analysis cached for future use")
+                    console.print("[dim]✓ Cached for future use[/dim]")
+                except Exception as e:
+                    logger.warning(f"Cache save failed: {e}")
+
+            # ═══════════════════════════════════════════════════════════════
+            # V3 INTEGRATION: Analytics Recording (POST-EXECUTION)
+            # ═══════════════════════════════════════════════════════════════
+
+            if orchestrator and orchestrator.analytics_db:
+                try:
+                    orchestrator.analytics_db.record_session(
+                        session_id=generated_session_id,
+                        spec_hash=orchestrator._hash_spec(spec_text),
+                        complexity_score=result.get('complexity_score', 0.0),
+                        interpretation=result.get('interpretation', 'Unknown'),
+                        dimensions=result.get('dimension_scores', {}),
+                        domains=result.get('domains', {})
+                    )
+                    logger.info("Analysis recorded to historical database")
+                    console.print("[dim]✓ Recorded to analytics database[/dim]")
+                except Exception as e:
+                    logger.warning(f"Analytics recording failed: {e}")
+
+            console.print()
 
             # Save to session
             session.write_memory('spec_analysis', result)

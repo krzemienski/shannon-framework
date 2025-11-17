@@ -411,53 +411,51 @@ Project Context:
         """Run analysis query via SDK with optional metrics collection.
 
         Args:
-            prompt: Analysis prompt
+            prompt: Analysis prompt (should be just the spec text)
             model: Model to use
-            collector: Optional metrics collector
+            collector: Optional metrics collector for tracking
 
         Returns:
-            Analysis result
+            Analysis result dictionary from Shannon Framework
         """
         if not self.sdk_client:
             raise RuntimeError("SDK client not available")
 
-        # Execute query (simplified - real implementation would use SDK)
-        # For now, return mock result structure
-        result = {
-            "complexity_score": 0.60,
-            "interpretation": "Complex",
-            "dimension_scores": {
-                "structural": 0.55,
-                "cognitive": 0.75,
-                "coordination": 1.00,
-                "temporal": 0.25,
-                "technical": 0.85,
-                "scale": 0.45,
-                "uncertainty": 0.15,
-                "dependencies": 0.35
-            },
-            "domains": {
-                "Backend": 30,
-                "Analytics": 20,
-                "DevOps": 17,
-                "CLI": 17,
-                "UI": 16
-            }
-        }
+        # Invoke spec-analysis skill via SDK
+        # This calls the REAL Shannon Framework skill, not a mock
+        try:
+            result = await self.sdk_client.invoke_skill('spec-analysis', prompt, model=model)
 
-        return result
+            # Update metrics collector if provided
+            if collector and 'cost' in result:
+                collector.record_cost(result.get('cost', 0.0))
+            if collector and 'tokens' in result:
+                collector.record_tokens(result.get('tokens', 0))
+
+            return result
+        except Exception as e:
+            logger.error(f"SDK analysis query failed: {e}")
+            raise RuntimeError(f"Analysis execution failed: {e}")
 
     async def _run_wave_query(self, prompt: str) -> Dict[str, Any]:
         """Run wave execution query via SDK.
 
         Args:
-            prompt: Wave execution prompt
+            prompt: Wave execution prompt (task description with context)
 
         Returns:
-            Wave execution result
+            Wave execution result from Shannon Framework
         """
-        # Simplified implementation
-        return {"status": "completed", "agents": []}
+        if not self.sdk_client:
+            raise RuntimeError("SDK client not available")
+
+        try:
+            # Invoke wave-orchestration skill via SDK
+            result = await self.sdk_client.invoke_skill('wave-orchestration', prompt)
+            return result
+        except Exception as e:
+            logger.error(f"Wave execution failed: {e}")
+            raise RuntimeError(f"Wave execution failed: {e}")
 
     def _parse_analysis_result(self, raw_result: Dict[str, Any]) -> Dict[str, Any]:
         """Parse and structure raw analysis result.

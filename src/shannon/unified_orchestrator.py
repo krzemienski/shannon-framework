@@ -534,6 +534,55 @@ Execute this task with full project awareness."""
 
         return self._parse_task_result(messages)
 
+    async def _save_project_config(self, project_id: str, config: Dict) -> None:
+        """Save project configuration (validation gates, timestamps, etc.).
+
+        Args:
+            project_id: Project identifier
+            config: Configuration dictionary to save
+        """
+        config_path = self.config.config_dir / 'projects' / project_id / 'config.json'
+        config_path.parent.mkdir(parents=True, exist_ok=True)
+
+        import json
+        config_path.write_text(json.dumps(config, indent=2))
+        logger.info(f"Saved config for {project_id}")
+
+    async def _load_project_config(self, project_id: str) -> Dict:
+        """Load project configuration.
+
+        Args:
+            project_id: Project identifier
+
+        Returns:
+            Project configuration dictionary (empty dict if not found)
+        """
+        config_path = self.config.config_dir / 'projects' / project_id / 'config.json'
+
+        if not config_path.exists():
+            return {}
+
+        import json
+        return json.loads(config_path.read_text())
+
+    async def _codebase_changed(self, project_path: Path, config: Dict) -> bool:
+        """Detect if codebase changed since last scan.
+
+        Simple: Compare file count (sophisticated: git commit hash)
+
+        Args:
+            project_path: Path to project directory
+            config: Project configuration with previous file count
+
+        Returns:
+            True if codebase has changed significantly
+        """
+        current_files = len(list(project_path.rglob('*.py')))
+        last_files = config.get('file_count', 0)
+
+        # Changed if file count differs by more than 5%
+        return abs(current_files - last_files) > (last_files * 0.05) if last_files > 0 else True
+
     async def _stream_message_to_dashboard(
         self,
         msg: Any,

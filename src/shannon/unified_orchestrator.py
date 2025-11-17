@@ -384,13 +384,13 @@ class UnifiedOrchestrator:
         dashboard_client: Optional[Any] = None,
         session_id: Optional[str] = None
     ) -> Dict[str, Any]:
-        """Execute skills-based task via V4 orchestration.Orchestrator.
+        """Execute skills-based task via V4 orchestration with multi-agent support.
 
         This method provides V4 skills-based execution with:
         - Skills framework (auto-discovery, dependencies)
         - Interactive controls (halt, resume, rollback)
         - Real-time dashboard streaming
-        - Multi-agent parallel execution
+        - Multi-agent parallel execution via AgentPool
 
         Args:
             task: Natural language task description
@@ -416,7 +416,49 @@ class UnifiedOrchestrator:
         if dashboard_client:
             self.v4_executor.dashboard_client = dashboard_client
 
-        # Create V4 orchestrator for this execution
+        # V5: Agent spawning and tracking for each skill step
+        if self.agent_pool and self.agent_tracker:
+            logger.info(f"Agent spawning enabled: {len(plan.steps)} skills")
+
+            # Import AgentTask and AgentRole for agent creation
+            from shannon.orchestration.agent_pool import AgentTask, AgentRole
+
+            for i, skill_step in enumerate(plan.steps):
+                # Create agent task for each skill
+                agent_task = AgentTask(
+                    task_id=f"task-{skill_step.skill_name}-{i}",
+                    description=skill_step.description or f"Execute {skill_step.skill_name}",
+                    role=AgentRole.GENERIC
+                )
+
+                # Submit to pool (spawns agent infrastructure)
+                await self.agent_pool.submit_task(agent_task)
+                logger.info(f"Agent task submitted: {agent_task.task_id}")
+
+                # Register with tracker for monitoring
+                agent_id = f"agent-{agent_task.task_id}"
+                self.agent_tracker.register_agent(
+                    agent_id=agent_id,
+                    wave_number=1,  # TODO: Track wave counter
+                    agent_type=skill_step.skill_name,
+                    task_description=skill_step.description or skill_step.skill_name
+                )
+                self.agent_tracker.mark_started(agent_id)
+                logger.info(f"Agent registered and started: {agent_id}")
+
+                # Emit agent:started event
+                if dashboard_client:
+                    await dashboard_client.emit_event('agent:started', {
+                        'agent_id': agent_id,
+                        'skill_name': skill_step.skill_name,
+                        'step_index': i
+                    })
+
+            # Get agent pool stats for logging
+            pool_stats = self.agent_pool.get_agent_stats()
+            logger.info(f"AgentPool stats: {pool_stats}")
+
+        # Create V4 orchestrator for execution
         # Note: Created per-execution to avoid state conflicts
         v4_orchestrator = V4Orchestrator(
             plan=plan,
@@ -434,6 +476,22 @@ class UnifiedOrchestrator:
 
         # Execute via V4 orchestrator
         result = await v4_orchestrator.execute()
+
+        # V5: Mark agents complete after execution
+        if self.agent_tracker:
+            # Mark all registered agents as complete
+            all_states = self.agent_tracker.get_all_states()
+            for agent_state in all_states:
+                if agent_state.status == 'active':
+                    self.agent_tracker.mark_complete(agent_state.agent_id)
+                    logger.info(f"Agent marked complete: {agent_state.agent_id}")
+
+                    # Emit agent:completed event
+                    if dashboard_client:
+                        await dashboard_client.emit_event('agent:completed', {
+                            'agent_id': agent_state.agent_id,
+                            'status': 'complete'
+                        })
 
         logger.info(f"V4 execution complete: {result.success}")
 

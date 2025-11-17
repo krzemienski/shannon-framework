@@ -407,6 +407,12 @@ async def global_exception_handler(request, exc):
     )
 
 
+# Import websocket handlers to register Socket.IO events
+# Must be done AFTER all app.py definitions are complete (circular dependency resolution)
+from shannon.server import websocket
+logger.info("Socket.IO handlers registered")
+
+
 # Server entry point
 if __name__ == "__main__":
     import uvicorn

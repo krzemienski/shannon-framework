@@ -359,14 +359,14 @@ async def cli_event(sid: str, data: Dict[str, Any]):
 
         logger.info(f"CLI event received: {event_type} from session {session_id}")
 
-        # Broadcast to ALL connected dashboards
+        # Emit to session-specific room (clients join room on connect)
         await sio.emit(event_type, {
             'timestamp': timestamp,
             'data': event_data,
             'session_id': session_id
-        })
+        }, room=session_id)
 
-        logger.debug(f"Broadcasted {event_type} to all dashboards")
+        logger.debug(f"Emitted {event_type} to session room: {session_id}")
 
     except Exception as e:
         logger.error(f"Error handling CLI event: {e}", exc_info=True)

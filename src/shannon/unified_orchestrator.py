@@ -374,13 +374,13 @@ class UnifiedOrchestrator:
             except Exception as e:
                 logger.warning(f"Cost optimization failed: {e}")
 
-        # Execute via Shannon Framework task-automation skill
-        # CORRECT API: invoke_skill() not query()
-        logger.info("Invoking Shannon Framework task-automation skill")
+        # Execute via Shannon Framework exec skill (for code generation)
+        # exec skill: Autonomous code generation, library discovery, validation
+        logger.info("Invoking Shannon Framework exec skill for code generation")
         messages = []
 
         async for msg in self.sdk_client.invoke_skill(
-            skill_name='task-automation',
+            skill_name='exec',
             prompt_content=f"Task: {task}"
         ):
             messages.append(msg)

@@ -64,7 +64,7 @@ class TestUltrathinkEngine:
 class TestHypothesisEngine:
     """Test hypothesis generation and comparison.
 
-    GATE 5.2 Tests (to be implemented)
+    GATE 5.2 Tests
     """
 
     @pytest.mark.asyncio

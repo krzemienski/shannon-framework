@@ -647,6 +647,60 @@ Execute this task with full project awareness."""
 
         return result
 
+    async def _returning_workflow(
+        self,
+        task: str,
+        project_id: str,
+        project_path: Path,
+        auto_mode: bool,
+        dashboard_client: Optional[Any]
+    ) -> Dict[str, Any]:
+        """Execute workflow for returning to known project.
+
+        Steps:
+        1. Load cached context
+        2. Check for codebase changes
+        3. Update context if needed
+        4. Execute with cached validation gates
+
+        Args:
+            task: Task to execute
+            project_id: Project identifier
+            project_path: Path to project directory
+            auto_mode: Skip user interactions
+            dashboard_client: Optional dashboard client
+
+        Returns:
+            Execution result dictionary
+        """
+        logger.info(f"Returning workflow for: {project_id}")
+
+        # 1. Load context and config
+        context = await self.context.load_project(project_id)
+        config = await self._load_project_config(project_id)
+        gates = config.get('validation_gates', {})
+
+        # 2. Check for changes
+        if await self._codebase_changed(project_path, config):
+            if not auto_mode:
+                print("Codebase changed - updating context...")
+
+            context = await self.context.update_project(project_id)
+            from datetime import datetime
+            config['last_updated'] = datetime.now().isoformat()
+            config['file_count'] = context.get('discovery', {}).get('file_count', config.get('file_count', 0))
+            await self._save_project_config(project_id, config)
+        else:
+            if not auto_mode:
+                print("Using cached context (< 1s)")
+
+        # 3. Execute with context
+        result = await self._execute_with_context(
+            task, context, gates, dashboard_client
+        )
+
+        return result
+
     async def _stream_message_to_dashboard(
         self,
         msg: Any,

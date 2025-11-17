@@ -2556,26 +2556,110 @@ def optimize() -> None:
 
 
 @cli.command()
-@click.argument('path', type=click.Path(exists=True), default='.')
+@click.argument('project_path', type=click.Path(exists=True), default='.')
+@click.option('--project-id', help='Project ID (defaults to directory name)')
 @click.option('--force', is_flag=True, help='Force re-onboarding')
-def onboard(path: str, force: bool) -> None:
-    """Onboard existing codebase for context-aware analysis."""
-    from shannon.orchestrator import ContextAwareOrchestrator
-    from rich.console import Console
+def onboard(project_path: str, project_id: Optional[str], force: bool) -> None:
+    """Onboard existing codebase for context-aware operations.
 
-    console = Console()
-    console.print(f"\n[bold cyan]Onboarding codebase:[/bold cyan] {path}\n")
+    Indexes the codebase and stores context in Serena MCP for use in
+    context-aware analysis. The context includes:
+    - File inventory and structure
+    - Tech stack detection
+    - Module and pattern identification
+    - Dependencies and imports
 
-    try:
-        orchestrator = ContextAwareOrchestrator()
-        if orchestrator.context:
-            # Call onboard method
-            console.print("[green]✓ Onboarding complete (stub)[/green]")
-            console.print("Project ID: shannon-cli")
+    \b
+    Example:
+        shannon onboard .
+        shannon onboard /path/to/project --project-id myapp
+        shannon onboard . --force
+    """
+    async def run_onboard():
+        from shannon.unified_orchestrator import UnifiedOrchestrator
+        from rich.console import Console
+        from rich.progress import Progress, SpinnerColumn, TextColumn
+
+        console = Console()
+        config = ShannonConfig()
+
+        # Resolve project path
+        resolved_path = Path(project_path).resolve()
+
+        # Generate project ID if not provided
+        if not project_id:
+            generated_project_id = resolved_path.name
         else:
-            console.print("[yellow]Context manager unavailable[/yellow]")
-    except Exception as e:
-        console.print(f"[red]Onboarding failed: {e}[/red]")
+            generated_project_id = project_id
+
+        console.print()
+        console.print(f"[bold cyan]Onboarding Codebase[/bold cyan]")
+        console.print()
+        console.print(f"[dim]Path: {resolved_path}[/dim]")
+        console.print(f"[dim]Project ID: {generated_project_id}[/dim]")
+        console.print()
+
+        try:
+            # Initialize UnifiedOrchestrator
+            orchestrator = UnifiedOrchestrator(config)
+
+            if not orchestrator.context:
+                console.print("[red]✗ Context manager unavailable[/red]")
+                console.print("[yellow]Context features will not be available[/yellow]")
+                sys.exit(1)
+
+            # Execute onboarding with progress indicator
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                console=console
+            ) as progress:
+                onboard_task = progress.add_task("Scanning codebase...", total=None)
+
+                result = await orchestrator.context.onboard_project(
+                    project_path=resolved_path,
+                    project_id=generated_project_id,
+                    force=force
+                )
+
+                progress.update(onboard_task, completed=True)
+
+            console.print()
+            console.print("[bold green]✓ Onboarding Complete[/bold green]")
+            console.print()
+
+            # Display discovery results
+            discovery = result.get('discovery', {})
+            console.print(f"[cyan]Project:[/cyan] {result.get('project_id', generated_project_id)}")
+            console.print(f"[cyan]Files:[/cyan] {discovery.get('file_count', 0):,}")
+            console.print(f"[cyan]Lines:[/cyan] {discovery.get('total_lines', 0):,}")
+
+            tech_stack = discovery.get('tech_stack', [])
+            if tech_stack:
+                console.print(f"[cyan]Tech:[/cyan] {', '.join(tech_stack)}")
+
+            modules = discovery.get('modules', [])
+            if modules:
+                console.print(f"[cyan]Modules:[/cyan] {len(modules)}")
+
+            patterns = discovery.get('patterns', [])
+            if patterns:
+                console.print(f"[cyan]Patterns:[/cyan] {', '.join(patterns[:5])}")
+                if len(patterns) > 5:
+                    console.print(f"[dim]  ... and {len(patterns)-5} more[/dim]")
+
+            console.print()
+            console.print(f"[dim]Stored in: ~/.shannon/projects/{generated_project_id}/[/dim]")
+            console.print()
+
+        except Exception as e:
+            console.print(f"\n[red]✗ Onboarding failed:[/red] {e}\n")
+            if '--verbose' in sys.argv:
+                import traceback
+                console.print("[dim]" + traceback.format_exc() + "[/dim]")
+            sys.exit(1)
+
+    anyio.run(run_onboard)
 
 
 @cli.group()

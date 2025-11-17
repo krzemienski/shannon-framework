@@ -198,74 +198,26 @@ class UnifiedOrchestrator:
             self.v3_orchestrator = None
 
     def _initialize_v4_components(self):
-        """Initialize V4-specific components."""
+        """Initialize infrastructure components (not custom skills framework).
 
-        # Skills Registry (V4 feature) - requires schema_path
-        try:
-            # Schema is in project root /schemas/skill.schema.json
-            schema_path = Path(__file__).parent.parent.parent / "schemas" / "skill.schema.json"
+        V5: Removed custom skills framework (SkillRegistry, Planner, Executor).
+        Shannon V5 uses Shannon Framework Claude Code skills instead.
 
-            if schema_path.exists():
-                self.skills_registry = SkillRegistry(schema_path=schema_path)
-                logger.info(f"✓ V4 SkillRegistry initialized (schema: {schema_path})")
-            else:
-                logger.warning(f"Skill schema not found at {schema_path}, SkillRegistry unavailable")
-                self.skills_registry = None
-        except Exception as e:
-            logger.warning(f"SkillRegistry initialization failed: {e}")
-            self.skills_registry = None
+        Keeping only:
+        - StateManager: For execution checkpoints
+        """
 
-        # Hook Manager (V4 feature) - requires registry
-        try:
-            if self.skills_registry is not None:
-                self.hook_manager = HookManager(registry=self.skills_registry)
-                logger.info("✓ V4 HookManager initialized")
-            else:
-                logger.warning("HookManager skipped (no registry)")
-                self.hook_manager = None
-        except Exception as e:
-            logger.warning(f"HookManager initialization failed: {e}")
-            self.hook_manager = None
-
-        # Execution Planner (V4 feature) - requires registry
-        try:
-            if self.skills_registry is not None:
-                self.planner = ExecutionPlanner(registry=self.skills_registry)
-                logger.info("✓ V4 ExecutionPlanner initialized")
-            else:
-                logger.warning("ExecutionPlanner skipped (no registry)")
-                self.planner = None
-        except Exception as e:
-            logger.warning(f"ExecutionPlanner initialization failed: {e}")
-            self.planner = None
-
-        # State Manager (V4 feature) - requires project_root
+        # State Manager - for checkpoints and rollback
         try:
             # Use config directory as project root for state management
             project_root = self.config.config_dir / "execution_state"
             project_root.mkdir(parents=True, exist_ok=True)
 
             self.state_manager = StateManager(project_root=project_root)
-            logger.info(f"✓ V4 StateManager initialized (root: {project_root})")
+            logger.info(f"✓ StateManager initialized (root: {project_root})")
         except Exception as e:
             logger.warning(f"StateManager initialization failed: {e}")
             self.state_manager = None
-
-        # Skill Executor (V4 feature) - requires registry and hook_manager
-        try:
-            if self.skills_registry is not None and self.hook_manager is not None:
-                self.v4_executor = SkillExecutor(
-                    registry=self.skills_registry,
-                    hook_manager=self.hook_manager,
-                    dashboard_client=None  # Will be set per-execution
-                )
-                logger.info("✓ V4 SkillExecutor initialized")
-            else:
-                logger.warning("SkillExecutor skipped (missing registry or hook_manager)")
-                self.v4_executor = None
-        except Exception as e:
-            logger.warning(f"SkillExecutor initialization failed: {e}")
-            self.v4_executor = None
 
     async def execute_analysis(
         self,
@@ -378,19 +330,16 @@ class UnifiedOrchestrator:
         logger.info("V3 task complete")
         return result
 
-    async def execute_skills(
+    async def execute_task(
         self,
         task: str,
         dashboard_client: Optional[Any] = None,
         session_id: Optional[str] = None
     ) -> Dict[str, Any]:
-        """Execute skills-based task via V4 orchestration with multi-agent support.
+        """Execute task via Shannon Framework task-automation Claude Code skill.
 
-        This method provides V4 skills-based execution with:
-        - Skills framework (auto-discovery, dependencies)
-        - Interactive controls (halt, resume, rollback)
-        - Real-time dashboard streaming
-        - Multi-agent parallel execution via AgentPool
+        V5: This method invokes Shannon Framework's task-automation skill (a Claude
+        Code skill) and wraps it with V3 intelligence features (cache, analytics, cost).
 
         Args:
             task: Natural language task description
@@ -401,102 +350,129 @@ class UnifiedOrchestrator:
             Execution result dictionary
 
         Raises:
-            RuntimeError: If V4 components not available
+            RuntimeError: If SDK client not available
         """
-        if not self.planner or not self.v4_executor or not self.state_manager:
-            raise RuntimeError("V4 orchestration components not available")
+        if not self.sdk_client:
+            raise RuntimeError("SDK client not available")
 
-        logger.info(f"Executing V4 skills-based task: {task}")
+        logger.info(f"Executing task via Shannon Framework task-automation skill: {task}")
 
-        # Create execution plan
-        plan = await self.planner.create_plan(task)
-        logger.info(f"Plan created: {len(plan.steps)} steps")
+        # V3: Check cache first
+        if self.cache:
+            try:
+                cached_result = await self.cache.get(task)
+                if cached_result:
+                    logger.info("Task cache hit - returning cached result")
+                    return cached_result
+            except Exception as e:
+                logger.warning(f"Cache check failed: {e}")
 
-        # Set dashboard client on executor if provided
-        if dashboard_client:
-            self.v4_executor.dashboard_client = dashboard_client
+        # V3: Cost optimization and model selection
+        model = 'sonnet'  # Default
+        if self.model_selector and self.budget_enforcer:
+            try:
+                complexity_estimate = len(task) / 100  # Simple heuristic
+                budget_status = self.budget_enforcer.get_status()
 
-        # V5: Agent spawning and tracking for each skill step
-        if self.agent_pool and self.agent_tracker:
-            logger.info(f"Agent spawning enabled: {len(plan.steps)} skills")
-
-            # Import AgentTask and AgentRole for agent creation
-            from shannon.orchestration.agent_pool import AgentTask, AgentRole
-
-            for i, skill_step in enumerate(plan.steps):
-                # Create agent task for each skill
-                agent_task = AgentTask(
-                    task_id=f"task-{skill_step.skill_name}-{i}",
-                    description=skill_step.description or f"Execute {skill_step.skill_name}",
-                    role=AgentRole.GENERIC
+                selection = self.model_selector.select_optimal_model(
+                    agent_complexity=complexity_estimate,
+                    context_size_tokens=0,
+                    budget_remaining=budget_status.remaining
                 )
+                model = selection.model
+                logger.info(f"Selected model: {model} (saves ${selection.savings_vs_sonnet:.2f})")
+            except Exception as e:
+                logger.warning(f"Cost optimization failed: {e}")
 
-                # Submit to pool (spawns agent infrastructure)
-                await self.agent_pool.submit_task(agent_task)
-                logger.info(f"Agent task submitted: {agent_task.task_id}")
+        # Execute via Shannon Framework task-automation skill
+        logger.info("Invoking Shannon Framework task-automation skill")
+        messages = []
 
-                # Register with tracker for monitoring
-                agent_id = f"agent-{agent_task.task_id}"
-                self.agent_tracker.register_agent(
-                    agent_id=agent_id,
-                    wave_number=1,  # TODO: Track wave counter
-                    agent_type=skill_step.skill_name,
-                    task_description=skill_step.description or skill_step.skill_name
+        async for msg in self.sdk_client.query(
+            prompt=f"@skill task-automation\n\nTask: {task}",
+            model=model
+        ):
+            messages.append(msg)
+
+            # Stream to dashboard if provided
+            if dashboard_client:
+                await self._stream_message_to_dashboard(msg, dashboard_client)
+
+        # Parse result from messages
+        result = self._parse_task_result(messages)
+
+        # V3: Save to cache
+        if self.cache:
+            try:
+                await self.cache.save(task, result)
+                logger.info("Task result cached for future use")
+            except Exception as e:
+                logger.warning(f"Cache save failed: {e}")
+
+        # V3: Record to analytics
+        if self.analytics_db and session_id:
+            try:
+                await self.analytics_db.record_task_execution(
+                    session_id=session_id,
+                    task=task,
+                    result=result
                 )
-                self.agent_tracker.mark_started(agent_id)
-                logger.info(f"Agent registered and started: {agent_id}")
+                logger.info("Task execution recorded to analytics database")
+            except Exception as e:
+                logger.warning(f"Analytics recording failed: {e}")
 
-                # Emit agent:started event
-                if dashboard_client:
-                    await dashboard_client.emit_event('agent:started', {
-                        'agent_id': agent_id,
-                        'skill_name': skill_step.skill_name,
-                        'step_index': i
-                    })
+        logger.info(f"Task execution complete: {result.get('success', False)}")
+        return result
 
-            # Get agent pool stats for logging
-            pool_stats = self.agent_pool.get_agent_stats()
-            logger.info(f"AgentPool stats: {pool_stats}")
+    async def _stream_message_to_dashboard(
+        self,
+        msg: Any,
+        dashboard_client: Any
+    ) -> None:
+        """Stream message to dashboard for real-time updates."""
+        from claude_agent_sdk import TextBlock, ToolUseBlock, ThinkingBlock
 
-        # Create V4 orchestrator for execution
-        # Note: Created per-execution to avoid state conflicts
-        v4_orchestrator = V4Orchestrator(
-            plan=plan,
-            executor=self.v4_executor,
-            state_manager=self.state_manager,
-            session_id=session_id
-        )
+        try:
+            if isinstance(msg, TextBlock):
+                await dashboard_client.emit_event('task:progress', {
+                    'type': 'text',
+                    'content': msg.text[:500]  # Truncate long text
+                })
+            elif isinstance(msg, ToolUseBlock):
+                await dashboard_client.emit_event('tool:use', {
+                    'name': msg.name,
+                    'input': str(msg.input)[:200]  # Truncate
+                })
+            elif isinstance(msg, ThinkingBlock):
+                await dashboard_client.emit_event('task:thinking', {
+                    'content': msg.thinking[:500]  # Truncate
+                })
+        except Exception as e:
+            logger.warning(f"Dashboard streaming failed: {e}")
 
-        # Inject shared subsystems into V4 orchestrator
-        # This gives V4 access to V3's intelligence features
-        v4_orchestrator.cache = self.cache
-        v4_orchestrator.analytics_db = self.analytics_db
-        v4_orchestrator.context = self.context
-        v4_orchestrator.agent_pool = self.agent_pool
+    def _parse_task_result(self, messages: List) -> Dict[str, Any]:
+        """Parse task execution result from Claude messages."""
+        from claude_agent_sdk import ResultMessage, ToolUseBlock
 
-        # Execute via V4 orchestrator
-        result = await v4_orchestrator.execute()
+        # Extract result message
+        result_msgs = [m for m in messages if isinstance(m, ResultMessage)]
+        files_created = []
 
-        # V5: Mark agents complete after execution
-        if self.agent_tracker:
-            # Mark all registered agents as complete
-            all_states = self.agent_tracker.get_all_states()
-            for agent_state in all_states:
-                if agent_state.status == 'active':
-                    self.agent_tracker.mark_complete(agent_state.agent_id)
-                    logger.info(f"Agent marked complete: {agent_state.agent_id}")
+        # Find file operations from messages
+        for msg in messages:
+            if hasattr(msg, 'content'):
+                for block in msg.content:
+                    if isinstance(block, ToolUseBlock) and block.name in ['Write', 'Edit']:
+                        file_path = block.input.get('file_path')
+                        if file_path:
+                            files_created.append(file_path)
 
-                    # Emit agent:completed event
-                    if dashboard_client:
-                        await dashboard_client.emit_event('agent:completed', {
-                            'agent_id': agent_state.agent_id,
-                            'status': 'complete'
-                        })
-
-        logger.info(f"V4 execution complete: {result.success}")
-
-        # Convert OrchestratorResult to dict
-        return result.to_dict()
+        return {
+            'success': len(result_msgs) > 0 and not result_msgs[-1].is_error if result_msgs else True,
+            'files_created': files_created,
+            'message_count': len(messages),
+            'result_messages': result_msgs
+        }
 
     async def execute_unified(
         self,

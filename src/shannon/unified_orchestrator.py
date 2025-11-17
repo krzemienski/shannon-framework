@@ -328,18 +328,27 @@ class UnifiedOrchestrator:
     async def execute_task(
         self,
         task: str,
+        project_path: Optional[Path] = None,  # NEW
         dashboard_client: Optional[Any] = None,
-        session_id: Optional[str] = None
+        session_id: Optional[str] = None,
+        auto_mode: bool = False  # NEW
     ) -> Dict[str, Any]:
-        """Execute task via Shannon Framework task-automation Claude Code skill.
+        """Execute task with intelligent context-aware workflows.
 
-        V5: Invokes Shannon Framework's task-automation skill and wraps with
-        V3 intelligence (cache, analytics, cost optimization).
+        V5: Detects first-time vs returning to project, auto-explores on first time,
+        uses cached context on return, manages validation gates.
+
+        Workflow:
+        - First time: Auto-onboard → Ask gates → Plan → Execute
+        - Returning: Load context → Check changes → Plan → Execute
+        - Auto mode: Skip all interactions (autonomous)
 
         Args:
             task: Natural language task description
+            project_path: Optional project directory (defaults to cwd)
             dashboard_client: Optional DashboardEventClient for real-time updates
             session_id: Optional session ID for tracking
+            auto_mode: Skip user interactions (autonomous mode)
 
         Returns:
             Execution result dictionary
@@ -350,59 +359,26 @@ class UnifiedOrchestrator:
         if not self.sdk_client:
             raise RuntimeError("SDK client not available")
 
-        logger.info(f"Executing task via Shannon Framework task-automation skill: {task}")
+        logger.info(f"Executing task: {task}")
 
-        # V3: Check cache first (CORRECT API: cache.analysis.get)
-        # Note: For now, skip cache for tasks (different from analysis caching)
-        # Tasks are execution-focused, analysis is read-heavy
-        # Can add task caching later if needed
+        # Determine project path
+        if not project_path:
+            project_path = Path.cwd()
 
-        # V3: Cost optimization and model selection
-        model = 'sonnet'  # Default
-        if self.model_selector and self.budget_enforcer:
-            try:
-                complexity_estimate = len(task) / 100  # Simple heuristic
-                budget_status = self.budget_enforcer.get_status()
+        project_id = project_path.name
 
-                selection = self.model_selector.select_optimal_model(
-                    agent_complexity=complexity_estimate,
-                    context_size_tokens=0,
-                    budget_remaining=budget_status.remaining
-                )
-                model = selection.model
-                logger.info(f"Selected model: {model}")
-            except Exception as e:
-                logger.warning(f"Cost optimization failed: {e}")
+        # Context detection: First time vs returning
+        if not await self._project_context_exists(project_id):
+            # FIRST TIME workflow
+            result = await self._first_time_workflow(
+                task, project_id, project_path, auto_mode, dashboard_client
+            )
+        else:
+            # RETURNING workflow
+            result = await self._returning_workflow(
+                task, project_id, project_path, auto_mode, dashboard_client
+            )
 
-        # Execute via Shannon Framework exec skill (for code generation)
-        # exec skill: Autonomous code generation, library discovery, validation
-        logger.info("Invoking Shannon Framework exec skill for code generation")
-        messages = []
-
-        async for msg in self.sdk_client.invoke_skill(
-            skill_name='exec',
-            prompt_content=f"Task: {task}"
-        ):
-            messages.append(msg)
-
-            # Stream to dashboard if provided
-            if dashboard_client:
-                await self._stream_message_to_dashboard(msg, dashboard_client)
-
-        # Parse result from messages
-        result = self._parse_task_result(messages)
-
-        # V3: Record to analytics (skip cache for now)
-        if self.analytics_db and session_id:
-            try:
-                # Record task execution
-                # analytics_db.record_task_execution() may not exist yet
-                # Use record_session() with task info
-                logger.info("Analytics recording skipped (method TBD)")
-            except Exception as e:
-                logger.warning(f"Analytics recording failed: {e}")
-
-        logger.info(f"Task execution complete: {result.get('success', False)}")
         return result
 
     async def _stream_message_to_dashboard(

@@ -48,6 +48,7 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
   resolvedDecisions: [],
   validationResults: [],
   isValidating: false,
+  validationOutput: [],
 
   setConnected: (connected) => set({ connected }),
 
@@ -342,6 +343,33 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
         // Just acknowledge - could add checkpoint tracking later
         if (data.data) {
           console.log('Checkpoint created:', data.data.checkpoint_id);
+        }
+        break;
+
+      case 'validation:started':
+        set({ isValidating: true, validationOutput: [] });
+        break;
+
+      case 'validation:output':
+        if (data.data && data.data.line) {
+          set((state) => ({
+            validationOutput: [
+              ...state.validationOutput,
+              {
+                line: data.data.line,
+                type: data.data.type || 'stdout',
+                checkName: data.data.check_name || 'validation',
+                timestamp: data.data.timestamp || Date.now(),
+              },
+            ],
+          }));
+        }
+        break;
+
+      case 'validation:completed':
+        set({ isValidating: false });
+        if (data.data) {
+          console.log('Validation completed:', data.data.check_name, data.data.success ? 'PASS' : 'FAIL');
         }
         break;
 

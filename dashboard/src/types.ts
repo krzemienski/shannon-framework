@@ -122,6 +122,13 @@ export interface ValidationResult {
   timestamp: string;
 }
 
+export interface ValidationLine {
+  line: string;
+  type: 'stdout' | 'stderr';
+  checkName: string;
+  timestamp: number;
+}
+
 export interface DashboardState {
   execution: ExecutionState;
   skills: Skill[];
@@ -134,4 +141,5 @@ export interface DashboardState {
   resolvedDecisions: DecisionPoint[];
   validationResults: ValidationResult[];
   isValidating: boolean;
+  validationOutput: ValidationLine[];
 }

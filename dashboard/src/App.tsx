@@ -4,6 +4,7 @@ import { useDashboardStore } from './store/dashboardStore';
 import { ExecutionOverview } from './panels/ExecutionOverview';
 import { SkillsView } from './panels/SkillsView';
 import { FileDiff } from './panels/FileDiff';
+import Validation from './panels/Validation';
 import { Wifi, WifiOff, Activity } from 'lucide-react';
 
 const WEBSOCKET_URL = 'http://localhost:8000';
@@ -78,7 +79,7 @@ function App() {
         </div>
       </header>
 
-      {/* Main Content - 3 Panel Layout */}
+      {/* Main Content - 4 Panel Layout */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {/* Panel 1: Execution Overview - Takes left column */}
         <div className="xl:col-span-1">
@@ -90,7 +91,12 @@ function App() {
           <SkillsView />
         </div>
 
-        {/* Panel 3: File Diff - Takes full width second row */}
+        {/* Panel 3: Validation Output - Takes full width second row */}
+        <div className="xl:col-span-2 bg-white rounded-lg shadow-lg border border-gray-200">
+          <Validation />
+        </div>
+
+        {/* Panel 4: File Diff - Takes full width third row */}
         <div className="xl:col-span-2">
           <FileDiff onApprove={approveFileChange} onRevert={revertFileChange} />
         </div>

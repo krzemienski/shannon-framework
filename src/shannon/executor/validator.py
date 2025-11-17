@@ -18,6 +18,7 @@ from pathlib import Path
 from dataclasses import dataclass
 import json
 import logging
+import asyncio
 
 from .models import ValidationResult
 
@@ -54,16 +55,18 @@ class ValidationOrchestrator:
             # Fix and retry
     """
 
-    def __init__(self, project_root: Path, logger: Optional[logging.Logger] = None):
+    def __init__(self, project_root: Path, logger: Optional[logging.Logger] = None, dashboard_client=None):
         """
         Initialize validation orchestrator
 
         Args:
             project_root: Project directory
             logger: Optional logger
+            dashboard_client: Optional dashboard event client for streaming
         """
         self.project_root = project_root
         self.logger = logger or logging.getLogger(__name__)
+        self.dashboard_client = dashboard_client
         self.test_config = self._auto_detect_tests()
 
         self.logger.info(f"ValidationOrchestrator initialized for {self.test_config.project_type}")
@@ -368,7 +371,7 @@ class ValidationOrchestrator:
 
     async def _run_check_with_exit_code(self, command: str, check_name: str) -> Dict[str, Any]:
         """
-        Run a validation check command and return detailed results
+        Run a validation check command with line-by-line streaming
 
         Args:
             command: Shell command to run
@@ -378,6 +381,13 @@ class ValidationOrchestrator:
             Dict with 'success', 'exit_code', 'stdout', 'stderr'
         """
         self.logger.debug(f"Running {check_name}: {command}")
+
+        # Emit validation started event
+        if self.dashboard_client:
+            await self.dashboard_client.emit_event('validation:started', {
+                'check_name': check_name,
+                'command': command
+            })
 
         # Execute command via subprocess
         import subprocess
@@ -392,20 +402,72 @@ class ValidationOrchestrator:
                 stderr=asyncio.subprocess.PIPE
             )
 
-            # Wait for completion (5 min timeout)
+            # Stream output line-by-line
+            stdout_lines = []
+            stderr_lines = []
+
+            async def stream_stdout():
+                """Stream stdout and emit events"""
+                while True:
+                    line = await process.stdout.readline()
+                    if not line:
+                        break
+
+                    line_text = line.decode().rstrip()
+                    stdout_lines.append(line_text)
+
+                    # Emit line to dashboard
+                    if self.dashboard_client:
+                        await self.dashboard_client.emit_event('validation:output', {
+                            'line': line_text,
+                            'type': 'stdout',
+                            'check_name': check_name
+                        })
+
+                    self.logger.debug(f"[{check_name}] {line_text}")
+
+            async def stream_stderr():
+                """Stream stderr and emit events"""
+                while True:
+                    line = await process.stderr.readline()
+                    if not line:
+                        break
+
+                    line_text = line.decode().rstrip()
+                    stderr_lines.append(line_text)
+
+                    # Emit line to dashboard
+                    if self.dashboard_client:
+                        await self.dashboard_client.emit_event('validation:output', {
+                            'line': line_text,
+                            'type': 'stderr',
+                            'check_name': check_name
+                        })
+
+                    self.logger.warning(f"[{check_name}] {line_text}")
+
+            # Stream both stdout and stderr in parallel
+            await asyncio.gather(stream_stdout(), stream_stderr())
+
+            # Wait for process to complete (5 min timeout total)
             try:
-                stdout, stderr = await asyncio.wait_for(
-                    process.communicate(),
-                    timeout=300
-                )
+                await asyncio.wait_for(process.wait(), timeout=300)
             except asyncio.TimeoutError:
                 process.kill()
                 self.logger.error(f"{check_name} timed out after 5 minutes")
+
+                if self.dashboard_client:
+                    await self.dashboard_client.emit_event('validation:completed', {
+                        'check_name': check_name,
+                        'success': False,
+                        'timed_out': True
+                    })
+
                 return {
                     'success': False,
                     'exit_code': -1,
-                    'stdout': b'',
-                    'stderr': b'Timeout after 5 minutes',
+                    'stdout': '\n'.join(stdout_lines),
+                    'stderr': 'Timeout after 5 minutes',
                     'timed_out': True
                 }
 
@@ -416,24 +478,38 @@ class ValidationOrchestrator:
                 self.logger.info(f"{check_name}: PASS")
             else:
                 self.logger.warning(f"{check_name}: FAIL (exit code {process.returncode})")
-                if stderr:
-                    self.logger.debug(f"  Error: {stderr.decode()[:200]}")
+
+            # Emit completion event
+            if self.dashboard_client:
+                await self.dashboard_client.emit_event('validation:completed', {
+                    'check_name': check_name,
+                    'success': success,
+                    'exit_code': process.returncode
+                })
 
             return {
                 'success': success,
                 'exit_code': process.returncode,
-                'stdout': stdout,
-                'stderr': stderr,
+                'stdout': '\n'.join(stdout_lines),
+                'stderr': '\n'.join(stderr_lines),
                 'timed_out': False
             }
 
         except Exception as e:
-            self.logger.error(f"{check_name} failed with exception: {e}")
+            self.logger.error(f"Error running {check_name}: {e}")
+
+            if self.dashboard_client:
+                await self.dashboard_client.emit_event('validation:completed', {
+                    'check_name': check_name,
+                    'success': False,
+                    'error': str(e)
+                })
+
             return {
                 'success': False,
                 'exit_code': -1,
-                'stdout': b'',
-                'stderr': str(e).encode(),
-                'exception': True
+                'stdout': '',
+                'stderr': str(e),
+                'timed_out': False
             }
 

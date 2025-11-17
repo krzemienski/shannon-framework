@@ -490,14 +490,14 @@ Execute this task with full project awareness."""
             except Exception as e:
                 logger.warning(f"Model selection failed: {e}")
 
-        # Execute via Shannon Framework wave-orchestration skill
-        # wave-orchestration: Proven code generation, used by shannon wave command
-        logger.info("Executing with project context via wave-orchestration")
+        # Execute via Shannon Framework intelligent-do skill
+        # intelligent-do: Context-aware execution with Serena backend, auto-research, smart spec
+        logger.info("Executing via intelligent-do skill (Serena MCP backend)")
         messages = []
 
         async for msg in self.sdk_client.invoke_skill(
-            skill_name='wave-orchestration',
-            prompt_content=planning_prompt
+            skill_name='intelligent-do',
+            prompt_content=f"Task: {task}"  # Skill handles context loading from Serena
         ):
             messages.append(msg)
             if dashboard_client:

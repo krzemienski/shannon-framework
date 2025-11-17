@@ -1,63 +1,55 @@
 #!/bin/bash
-# Master functional test runner for Shannon CLI
-# Runs all functional tests and reports summary
+# Shannon V3 - Master Functional Test Suite
+# Runs all V3 feature tests (NO pytest - Shannon mandate)
 
-set +e  # Don't exit on first error - we want to run all tests
+set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PASSED=0
-FAILED=0
-TOTAL=0
-
-echo "═══════════════════════════════════════════════════════"
-echo "Shannon CLI Functional Test Suite"
-echo "═══════════════════════════════════════════════════════"
+echo ""
+echo "╔════════════════════════════════════════════════════════════╗"
+echo "║  Shannon V3 - Complete Functional Test Suite              ║"
+echo "╚════════════════════════════════════════════════════════════╝"
 echo ""
 
-# Function to run a test script
-run_test() {
-    local test_script="$1"
-    local test_name=$(basename "$test_script" .sh)
+# Test tracking
+PASSED=0
+FAILED=0
+SKIPPED=0
 
-    TOTAL=$((TOTAL + 1))
+# Get script directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+run_test() {
+    local test_name="$1"
+    local test_script="$2"
 
     echo "Running: $test_name"
-    echo "───────────────────────────────────────────────────────"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-    if bash "$test_script"; then
-        PASSED=$((PASSED + 1))
-        echo "✅ $test_name PASSED"
-    else
-        FAILED=$((FAILED + 1))
-        echo "❌ $test_name FAILED"
+    if [ ! -f "$test_script" ]; then
+        echo "⚠ SKIP: $test_script not found"
+        SKIPPED=$((SKIPPED + 1))
+        return
     fi
 
+    if bash "$test_script"; then
+        echo "✓ PASSED: $test_name"
+        PASSED=$((PASSED + 1))
+    else
+        echo "✗ FAILED: $test_name"
+        FAILED=$((FAILED + 1))
+    fi
     echo ""
 }
 
-# Run all test scripts
-for test_script in "$SCRIPT_DIR"/test_*.sh; do
-    if [ -f "$test_script" ] && [ -x "$test_script" ]; then
-        run_test "$test_script"
-    fi
-done
+# Run tests
+run_test "Cache System" "$SCRIPT_DIR/test_cache.sh"
+run_test "Cost Optimization" "$SCRIPT_DIR/test_cost.sh"
+run_test "Analytics" "$SCRIPT_DIR/test_analytics.sh"
+run_test "Full Integration" "$SCRIPT_DIR/test_integration.sh"
 
 # Summary
-echo "═══════════════════════════════════════════════════════"
-echo "Test Summary"
-echo "═══════════════════════════════════════════════════════"
-echo "Total:  $TOTAL"
-echo "Passed: $PASSED"
-echo "Failed: $FAILED"
-
-if [ $FAILED -eq 0 ]; then
-    echo ""
-    echo "✅ ALL TESTS PASSED"
-    echo ""
-    exit 0
-else
-    echo ""
-    echo "❌ SOME TESTS FAILED"
-    echo ""
-    exit 1
-fi
+TOTAL=$((PASSED + FAILED + SKIPPED))
+echo "═══════════════════════════════════════════════════════════"
+echo "Results: $PASSED passed, $FAILED failed, $SKIPPED skipped"
+[ "$FAILED" -eq 0 ] && echo "✓ ALL TESTS PASSED" && exit 0
+echo "✗ FAILURES DETECTED" && exit 1

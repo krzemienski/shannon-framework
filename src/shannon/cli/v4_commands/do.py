@@ -140,20 +140,27 @@ def do_command(
             skills = await discovery.discover_all(project_root=project_path)
             console.print(f"[dim]Loaded {len(skills)} skills[/dim]")
 
+            # Create dashboard client if dashboard enabled
+            dashboard_client = None
+            if dashboard:
+                console.print("[dim]Creating dashboard client...[/dim]")
+                from shannon.communication.dashboard_client import DashboardEventClient
+                dashboard_url = 'http://localhost:8000'
+                dashboard_client = DashboardEventClient(dashboard_url, generated_session_id)
+                # Connect to dashboard server
+                connected = await dashboard_client.connect()
+                if connected:
+                    console.print("[dim]Dashboard client connected[/dim]")
+                else:
+                    console.print("[yellow]Dashboard client connection failed - continuing without dashboard[/yellow]")
+                    dashboard_client = None
+
             hook_manager = HookManager(registry)
-            executor = SkillExecutor(registry, hook_manager)
+            executor = SkillExecutor(registry, hook_manager, dashboard_client=dashboard_client)
             dependency_resolver = DependencyResolver(registry)
             task_parser = TaskParser(registry)
             planner = ExecutionPlanner(registry, dependency_resolver)
             state_manager = StateManager(project_path)
-
-            # Start WebSocket server if dashboard enabled
-            if dashboard:
-                console.print("[dim]Starting WebSocket server for dashboard...[/dim]")
-                from shannon.server.app import app as dashboard_app
-                # Start server in background
-                # (In production, would use asyncio.create_task)
-                console.print("[yellow]Dashboard: ws://localhost:8000[/yellow]")
 
             console.print()
 

@@ -168,7 +168,8 @@ class SkillExecutor:
         registry: SkillRegistry,
         hook_manager: HookManager,
         event_bus: Optional[Any] = None,
-        checkpoint_manager: Optional[Any] = None
+        checkpoint_manager: Optional[Any] = None,
+        dashboard_client: Optional[Any] = None
     ):
         """
         Initialize the skill executor.
@@ -178,11 +179,13 @@ class SkillExecutor:
             hook_manager: HookManager for lifecycle hooks
             event_bus: Optional event bus for observability
             checkpoint_manager: Optional checkpoint manager for rollback
+            dashboard_client: Optional dashboard client for event streaming
         """
         self.registry = registry
         self.hook_manager = hook_manager
         self.event_bus = event_bus
         self.checkpoint_manager = checkpoint_manager
+        self.dashboard_client = dashboard_client
         self._lock = asyncio.Lock()
         self._execution_count = 0
 
@@ -645,19 +648,26 @@ class SkillExecutor:
             logger.debug(f"[{execution_id}] Got class: {skill.execution.class_name}")
 
             # Instantiate class
-            # Check if constructor takes project_root parameter
+            # Check if constructor takes project_root, logger, or dashboard_client parameters
             try:
                 import inspect
                 sig = inspect.signature(cls.__init__)
+                constructor_args = {}
+
+                # Add project_root if constructor accepts it
                 if 'project_root' in sig.parameters and 'project_root' in parameters:
-                    # Pass project_root to constructor
-                    project_root = Path(parameters['project_root'])
-                    instance = cls(project_root=project_root)
-                    logger.debug(f"[{execution_id}] Instantiated with project_root")
-                else:
-                    # No project_root parameter
-                    instance = cls()
-                    logger.debug(f"[{execution_id}] Instantiated without args")
+                    constructor_args['project_root'] = Path(parameters['project_root'])
+
+                # Add logger if constructor accepts it
+                if 'logger' in sig.parameters:
+                    constructor_args['logger'] = logger
+
+                # Add dashboard_client if constructor accepts it and we have one
+                if 'dashboard_client' in sig.parameters and self.dashboard_client is not None:
+                    constructor_args['dashboard_client'] = self.dashboard_client
+
+                instance = cls(**constructor_args)
+                logger.debug(f"[{execution_id}] Instantiated with args: {list(constructor_args.keys())}")
             except Exception as e:
                 # Fallback: try both approaches
                 try:

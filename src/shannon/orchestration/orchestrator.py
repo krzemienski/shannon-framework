@@ -140,11 +140,15 @@ class Orchestrator:
         self.execution_context = ExecutionContext(task=plan.task)
 
         # Dashboard client for event streaming
-        self.dashboard_client = None
-        if session_id and dashboard_url:
+        # Use the executor's dashboard_client if available (shared instance)
+        # Otherwise create a new one if dashboard_url provided
+        self.dashboard_client = getattr(executor, 'dashboard_client', None)
+        if self.dashboard_client is None and session_id and dashboard_url:
             from shannon.communication.dashboard_client import DashboardEventClient
             self.dashboard_client = DashboardEventClient(dashboard_url, session_id)
             logger.info(f"Dashboard client created for session: {session_id}")
+        elif self.dashboard_client is not None:
+            logger.info(f"Using executor's dashboard client for session: {session_id}")
 
         logger.info(f"Orchestrator initialized: {plan.plan_id}, {len(plan.steps)} steps")
 
@@ -165,8 +169,8 @@ class Orchestrator:
                 raise OrchestratorError(f"Cannot execute - state is {self.state.value}")
             self.state = ExecutionState.RUNNING
 
-        # Connect to dashboard server if client configured
-        if self.dashboard_client:
+        # Connect to dashboard server if client configured and not already connected
+        if self.dashboard_client and not self.dashboard_client.connected:
             connected = await self.dashboard_client.connect()
             if connected:
                 logger.info("Dashboard client connected successfully")

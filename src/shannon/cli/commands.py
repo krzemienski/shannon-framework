@@ -226,14 +226,14 @@ def analyze(
             client = ShannonSDKClient()
             parser = MessageParser()
 
-            # V3: Initialize orchestrator for integrated features
+            # V5: Initialize UnifiedOrchestrator for integrated V3+V4 features
             orchestrator = None
             try:
-                from shannon.orchestrator import ContextAwareOrchestrator
-                orchestrator = ContextAwareOrchestrator(config)
-                logger.info("V3 ContextAwareOrchestrator initialized successfully")
+                from shannon.unified_orchestrator import UnifiedOrchestrator
+                orchestrator = UnifiedOrchestrator(config)
+                logger.info("V5 UnifiedOrchestrator initialized successfully")
             except Exception as e:
-                console.print(f"[yellow]V3 features unavailable: {e}[/yellow]\n")
+                console.print(f"[yellow]V5 features unavailable: {e}[/yellow]\n")
 
             # ═══════════════════════════════════════════════════════════════
             # V3 INTEGRATION: Cache Check (PRE-EXECUTION)
@@ -695,14 +695,14 @@ def wave(request: str, session_id: Optional[str], verbose: bool) -> None:
             client = ShannonSDKClient()
             parser = MessageParser()
 
-            # V3: Initialize orchestrator for agent tracking
+            # V5: Initialize UnifiedOrchestrator for integrated features
             orchestrator = None
             try:
-                from shannon.orchestrator import ContextAwareOrchestrator
-                orchestrator = ContextAwareOrchestrator(config)
-                logger.info("V3 ContextAwareOrchestrator initialized for wave")
+                from shannon.unified_orchestrator import UnifiedOrchestrator
+                orchestrator = UnifiedOrchestrator(config)
+                logger.info("V5 UnifiedOrchestrator initialized for wave")
             except Exception as e:
-                ui.console.print(f"[yellow]V3 features unavailable: {e}[/yellow]\n")
+                ui.console.print(f"[yellow]V5 features unavailable: {e}[/yellow]\n")
 
             # Display header
             ui.console.print()

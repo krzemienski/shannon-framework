@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { DashboardState, ExecutionState, Skill, FileChange, Event } from '../types';
+import type { DashboardState, ExecutionState, Skill, FileChange, Event, Agent } from '../types';
 
 interface DashboardStore extends DashboardState {
   // Actions
@@ -275,6 +275,71 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
               });
             }
           });
+        }
+        break;
+
+      // Agent pool events
+      case 'agent:spawned':
+        if (data.data && data.data.agent_id) {
+          const newAgent: Agent = {
+            agentId: data.data.agent_id,
+            role: data.data.role || 'generic',
+            status: 'active',
+            currentTask: data.data.skill_name || null,
+            tasksCompleted: 0,
+            tasksFailed: 0,
+            totalTime: 0,
+            lastActive: new Date().toISOString()
+          };
+          set((state) => ({
+            agents: [...state.agents, newAgent],
+            agentStats: {
+              ...state.agentStats,
+              totalAgents: state.agents.length + 1,
+              activeAgents: state.agents.filter(a => a.status === 'active').length + 1
+            }
+          }));
+        }
+        break;
+
+      case 'agent:completed':
+        if (data.data && data.data.agent_id) {
+          set((state) => ({
+            agents: state.agents.map(a =>
+              a.agentId === data.data.agent_id
+                ? {
+                    ...a,
+                    status: data.data.success ? 'completed' : 'failed',
+                    currentTask: null,
+                    tasksCompleted: data.data.success ? a.tasksCompleted + 1 : a.tasksCompleted,
+                    tasksFailed: !data.data.success ? a.tasksFailed + 1 : a.tasksFailed,
+                    totalTime: a.totalTime + (data.data.duration || 0)
+                  }
+                : a
+            ),
+            agentStats: {
+              ...state.agentStats,
+              activeAgents: state.agents.filter(a => a.status === 'active').length - 1,
+              completedTasks: data.data.success
+                ? state.agentStats.completedTasks + 1
+                : state.agentStats.completedTasks,
+              failedTasks: !data.data.success
+                ? state.agentStats.failedTasks + 1
+                : state.agentStats.failedTasks
+            }
+          }));
+        }
+        break;
+
+      case 'agent:progress':
+        if (data.data && data.data.agent_id) {
+          set((state) => ({
+            agents: state.agents.map(a =>
+              a.agentId === data.data.agent_id
+                ? { ...a, lastActive: new Date().toISOString() }
+                : a
+            )
+          }));
         }
         break;
 

@@ -50,20 +50,23 @@ class CompleteExecutor:
         self,
         project_root: Path,
         logger: Optional[logging.Logger] = None,
-        max_iterations: int = 3
+        max_iterations: int = 3,
+        dashboard_client: Optional[Any] = None
     ):
         """
         Initialize complete executor
-        
+
         Args:
             project_root: Project directory
             logger: Optional logger
             max_iterations: Max retry attempts per step
+            dashboard_client: Optional dashboard client for event streaming
         """
         self.project_root = project_root
         self.logger = logger or logging.getLogger(__name__)
         self.max_iterations = max_iterations
-        
+        self.dashboard_client = dashboard_client
+
         # Components
         self.prompt_enhancer = PromptEnhancer()
         self.library_discoverer = LibraryDiscoverer(project_root, logger)

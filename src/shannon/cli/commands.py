@@ -720,6 +720,26 @@ def wave(request: str, session_id: Optional[str], verbose: bool) -> None:
                 except Exception as e:
                     logger.warning(f"Pre-wave MCP check failed: {e}")
 
+            # V3: Register wave execution with AgentStateTracker
+            agent_id = None
+            if orchestrator and orchestrator.agents:
+                try:
+                    # Register wave as an agent for tracking
+                    wave_number = 1  # TODO: Track wave counter in session
+                    agent_id = f"wave-{wave_number}-agent"
+                    
+                    orchestrator.agents.register_agent(
+                        agent_id=agent_id,
+                        wave_number=wave_number,
+                        agent_type="wave-coordinator",
+                        task_description=request
+                    )
+                    orchestrator.agents.mark_started(agent_id)
+                    logger.info(f"Agent tracking started: {agent_id}")
+                except Exception as e:
+                    logger.warning(f"Agent tracking initialization failed: {e}")
+                    agent_id = None
+
             # Invoke wave orchestration skill
             messages = []
 
@@ -742,6 +762,13 @@ def wave(request: str, session_id: Optional[str], verbose: bool) -> None:
                 with dashboard:
                     async for msg in instrumented_iter:
                         messages.append(msg)
+                        
+                        # V3: Track message with agent tracker
+                        if agent_id and orchestrator and orchestrator.agents:
+                            try:
+                                orchestrator.agents.add_message(agent_id, msg)
+                            except:
+                                pass  # Don't fail wave if tracking fails
 
                         # Pass readable messages to dashboard
                         from claude_agent_sdk import TextBlock, ToolUseBlock, ThinkingBlock
@@ -788,6 +815,42 @@ def wave(request: str, session_id: Optional[str], verbose: bool) -> None:
 
             # Determine wave number
             wave_number = wave_result.get('wave_number', 1)
+            
+            # V3: Mark agent complete and update metrics
+            if agent_id and orchestrator and orchestrator.agents:
+                try:
+                    # Extract metrics from messages
+                    from claude_agent_sdk import ResultMessage
+                    result_msgs = [m for m in messages if isinstance(m, ResultMessage)]
+                    
+                    if result_msgs:
+                        result_msg = result_msgs[-1]  # Last result message
+                        if hasattr(result_msg, 'total_cost_usd') and result_msg.total_cost_usd:
+                            orchestrator.agents.update_metrics(
+                                agent_id=agent_id,
+                                cost_delta=result_msg.total_cost_usd
+                            )
+                    
+                    # Mark complete
+                    orchestrator.agents.mark_complete(agent_id)
+                    logger.info(f"Agent tracking completed: {agent_id}")
+                except Exception as e:
+                    logger.warning(f"Agent tracking completion failed: {e}")
+                    try:
+                        orchestrator.agents.mark_failed(agent_id, str(e))
+                    except:
+                        pass
+            
+            # V3: Save agent states to session for persistence
+            if orchestrator and orchestrator.agents:
+                try:
+                    all_agent_states = orchestrator.agents.get_all_states()
+                    agent_data = [agent.to_dict() for agent in all_agent_states]
+                    session.write_memory('tracked_agents', agent_data)
+                    if verbose:
+                        ui.console.print(f"[dim]Saved {len(agent_data)} tracked agent(s) to session[/dim]")
+                except Exception as e:
+                    logger.warning(f"Failed to save agent states: {e}")
 
             # Save results
             session.write_memory(f"wave_{wave_number}_complete", wave_result)
@@ -2532,74 +2595,85 @@ def context_status() -> None:
 
 
 @cli.command(name='wave-agents')
-def wave_agents() -> None:
-    """List active agents and agent pool infrastructure status.
+@click.option('--session-id', help='Session ID (uses latest if not provided)')
+def wave_agents(session_id: Optional[str]) -> None:
+    """List agents tracked during wave execution.
 
-    Shows AgentPool status. Note: Parallel agent execution integration
-    is pending - infrastructure exists but not yet wired into wave command.
+    Shows agents tracked by AgentStateTracker. Agents are saved to session
+    after each wave execution and loaded here for display.
     """
     from rich.console import Console
     from rich.table import Table
-    from shannon.orchestrator import ContextAwareOrchestrator
+    from shannon.config import ShannonConfig
+    from shannon.core.session_manager import SessionManager
 
     console = Console()
+    config = ShannonConfig()
 
     try:
-        # Initialize orchestrator to access agent pool
-        orchestrator = ContextAwareOrchestrator()
+        # Find session
+        if not session_id:
+            sessions = SessionManager.list_all_sessions(config)
+            if not sessions:
+                console.print("\n[yellow]No sessions found[/yellow]")
+                console.print("[dim]Run 'shannon analyze' first[/dim]\n")
+                return
+            session_id = sessions[-1]
+
+        # Load session
+        session = SessionManager(session_id, config)
+        
+        # Load tracked agents from session
+        agent_data = session.read_memory('tracked_agents')
 
         console.print()
 
-        # Check AgentPool
-        if orchestrator.agent_pool:
-            stats = orchestrator.agent_pool.get_agent_stats()
-            active_agents = orchestrator.agent_pool.get_active_agents()
+        if agent_data and len(agent_data) > 0:
+            # Show agents table
+            table = Table(title=f"Wave Agents - {session_id}")
+            table.add_column("ID", style="cyan")
+            table.add_column("Wave", justify="right")
+            table.add_column("Type", style="green")
+            table.add_column("Status")
+            table.add_column("Progress", justify="right")
+            table.add_column("Messages", justify="right")
+            table.add_column("Duration", justify="right")
 
-            # Stats table
-            table = Table(title="Agent Pool Infrastructure")
-            table.add_column("Metric", style="cyan")
-            table.add_column("Value", justify="right")
-
-            table.add_row("Max Active", f"{stats['max_active']}")
-            table.add_row("Max Total", f"{stats['max_total']}")
-            table.add_row("Total Agents", f"{stats['total_agents']}")
-            table.add_row("Active Now", f"{stats['active_agents']}", style="green" if stats['active_agents'] > 0 else "dim")
-            table.add_row("Completed Tasks", f"{stats['completed_tasks']}")
-            table.add_row("Failed Tasks", f"{stats['failed_tasks']}")
+            for agent in agent_data:
+                # Color status
+                status = agent['status']
+                status_style = "green" if status == 'complete' else \
+                             "yellow" if status == 'active' else \
+                             "red" if status == 'failed' else "dim"
+                
+                table.add_row(
+                    agent['agent_id'],
+                    str(agent['wave_number']),
+                    agent['agent_type'],
+                    f"[{status_style}]{status}[/{status_style}]",
+                    f"{agent['progress_percent']:.0f}%",
+                    str(agent['message_count']),
+                    f"{agent['duration_minutes']:.1f}m"
+                )
 
             console.print(table)
             console.print()
-
-            if active_agents:
-                # Show active agents
-                agent_table = Table(title="Active Agents")
-                agent_table.add_column("ID", style="cyan")
-                agent_table.add_column("Role", style="green")
-                agent_table.add_column("Status")
-                agent_table.add_column("Tasks Done", justify="right")
-
-                for agent in active_agents:
-                    agent_table.add_row(
-                        agent.agent_id,
-                        agent.role.value,
-                        agent.status.value,
-                        str(agent.tasks_completed)
-                    )
-
-                console.print(agent_table)
-                console.print()
-            else:
-                console.print("[dim]No agents currently active[/dim]")
-                console.print()
-                console.print("[yellow]ℹ Note:[/yellow] AgentPool infrastructure ready (8 active / 50 max)")
-                console.print("[dim]       Parallel wave execution integration pending[/dim]")
-                console.print()
+            
+            # Summary stats
+            active_count = sum(1 for a in agent_data if a['status'] == 'active')
+            complete_count = sum(1 for a in agent_data if a['status'] == 'complete')
+            failed_count = sum(1 for a in agent_data if a['status'] == 'failed')
+            
+            console.print(f"[dim]Active: {active_count} | Complete: {complete_count} | Failed: {failed_count}[/dim]")
+            console.print()
         else:
-            console.print("[yellow]AgentPool not initialized[/yellow]")
+            console.print("[dim]No agents tracked yet[/dim]")
+            console.print()
+            console.print("[yellow]ℹ Agents appear here after running:[/yellow] shannon wave <request>")
             console.print()
 
     except Exception as e:
-        console.print(f"[red]Error:[/red] {e}")
+        console.print(f"\n[red]Error:[/red] {e}")
         console.print()
 
 

@@ -520,12 +520,14 @@ Execute this task with full project awareness."""
             except Exception as e:
                 logger.warning(f"Model selection failed: {e}")
 
-        # Execute via Shannon Framework exec skill
+        # Execute via Shannon Framework task-automation skill
+        # Note: task-automation runs prime→spec→wave workflow
+        # Proven to work for file creation (hello.py test)
         logger.info("Executing with project context")
         messages = []
 
         async for msg in self.sdk_client.invoke_skill(
-            skill_name='exec',
+            skill_name='task-automation',
             prompt_content=planning_prompt
         ):
             messages.append(msg)

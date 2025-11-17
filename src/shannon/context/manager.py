@@ -85,6 +85,43 @@ class ContextManager:
 
         self.logger = logging.getLogger(__name__)
 
+    async def project_exists(self, project_id: str) -> bool:
+        """Check if project context exists.
+
+        Returns True if project has been onboarded.
+
+        Args:
+            project_id: Project identifier
+
+        Returns:
+            True if project directory exists in ~/.shannon/projects/
+        """
+        project_dir = Path.home() / '.shannon' / 'projects' / project_id
+        return project_dir.exists()
+
+    async def load_project(self, project_id: str) -> Dict[str, Any]:
+        """Load project context.
+
+        Returns cached context for project.
+
+        Args:
+            project_id: Project identifier
+
+        Returns:
+            Project context dictionary
+
+        Raises:
+            FileNotFoundError: If project context doesn't exist
+        """
+        project_dir = Path.home() / '.shannon' / 'projects' / project_id
+        context_file = project_dir / 'context.json'
+
+        if not context_file.exists():
+            raise FileNotFoundError(f"No context for project: {project_id}")
+
+        import json
+        return json.loads(context_file.read_text())
+
     async def onboard_project(
         self,
         project_path: str,

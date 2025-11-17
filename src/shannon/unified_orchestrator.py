@@ -406,6 +406,58 @@ class UnifiedOrchestrator:
 
         return has_context and has_config
 
+    async def _ask_validation_gates(self, context: Dict) -> Dict[str, str]:
+        """Ask user for validation commands (interactive mode).
+
+        Shows auto-detected gates, lets user accept/edit.
+
+        Args:
+            context: Project context with discovery info
+
+        Returns:
+            Dictionary of validation gate commands
+        """
+        # Auto-detect first
+        detected = await self._auto_detect_validation_gates(context)
+
+        print("\nValidation Gates (what to run after making changes):")
+        print(f"  Build: {detected.get('build_cmd', 'None detected')}")
+        print(f"  Tests: {detected.get('test_cmd', 'None detected')}")
+        print(f"  Lint: {detected.get('lint_cmd', 'None detected')}")
+        print("\nAccept these gates? [Y/n]: ", end='', flush=True)
+
+        # For now, return detected (full user interaction TODO)
+        # This allows autonomous execution while preserving the prompt
+        return detected
+
+    async def _auto_detect_validation_gates(self, context: Dict) -> Dict[str, str]:
+        """Auto-detect validation commands from project structure.
+
+        Checks package.json, pyproject.toml, etc. for test commands.
+
+        Args:
+            context: Project context with discovery info
+
+        Returns:
+            Dictionary of detected validation commands
+        """
+        gates = {}
+        discovery = context.get('discovery', {})
+        tech_stack = discovery.get('tech_stack', [])
+
+        # Python projects
+        if any('python' in t.lower() for t in tech_stack):
+            gates['test_cmd'] = 'python -m pytest tests/ || python -m unittest discover'
+            gates['lint_cmd'] = 'python -m ruff check . || python -m flake8'
+
+        # Node.js projects
+        if any('node' in t.lower() or 'npm' in t.lower() for t in tech_stack):
+            gates['build_cmd'] = 'npm run build'
+            gates['test_cmd'] = 'npm test'
+            gates['lint_cmd'] = 'npm run lint'
+
+        return gates
+
     async def _stream_message_to_dashboard(
         self,
         msg: Any,

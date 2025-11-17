@@ -2020,10 +2020,7 @@ def do(
         do_command,
         task=task,
         dashboard=dashboard,
-        auto=auto,
-        project_root=project_root,
         session_id=session_id,
-        dry_run=dry_run,
         verbose=verbose
     )
 

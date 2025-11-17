@@ -34,11 +34,13 @@ logger = logging.getLogger(__name__)
 @click.option('--dashboard', '-d', is_flag=True, help='Enable real-time dashboard')
 @click.option('--session-id', help='Session ID (auto-generated if not provided)')
 @click.option('--verbose', '-v', is_flag=True, help='Verbose output')
+@click.option('--auto', is_flag=True, help='Autonomous mode (no questions)')
 def do_command(
     task: str,
     dashboard: bool,
     session_id: Optional[str],
-    verbose: bool
+    verbose: bool,
+    auto: bool
 ):
     """Execute task via Shannon Framework task-automation skill.
 
@@ -125,11 +127,17 @@ def do_command(
             ) as progress:
                 exec_task = progress.add_task("Invoking task-automation skill...", total=None)
 
-                # V5: Execute via task-automation Claude Code skill
+                # Get project path (defaults to cwd)
+                from pathlib import Path
+                project_path = Path.cwd()
+
+                # V5: Execute via intelligent context-aware workflow
                 result = await orchestrator.execute_task(
                     task=task,
+                    project_path=project_path,
                     dashboard_client=dashboard_client,
-                    session_id=generated_session_id
+                    session_id=generated_session_id,
+                    auto_mode=auto
                 )
 
                 progress.update(exec_task, completed=True)

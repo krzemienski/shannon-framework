@@ -1,3 +1,4 @@
 .shannon/
 .shannon_cache/
 __pycache__/
+.env

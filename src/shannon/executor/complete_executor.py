@@ -67,7 +67,7 @@ class CompleteExecutor:
         # Components
         self.prompt_enhancer = PromptEnhancer()
         self.library_discoverer = LibraryDiscoverer(project_root, logger)
-        self.validator = ValidationOrchestrator(project_root, logger)
+        self.validator = ValidationOrchestrator(project_root, logger, self.dashboard_client)
         self.git_manager = GitManager(project_root, logger)
     
     async def execute_autonomous(

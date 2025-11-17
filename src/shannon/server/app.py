@@ -27,8 +27,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import socketio
 
-from shannon.skills.registry import SkillRegistry, SkillNotFoundError
-from shannon.skills.models import Skill
+# ARCHIVED: V5 uses Claude Code skills, not custom skills framework
+# from shannon.skills.registry import SkillRegistry, SkillNotFoundError
+# from shannon.skills.models import Skill
 
 logger = logging.getLogger(__name__)
 
@@ -128,73 +129,16 @@ async def list_skills(
     tag: Optional[str] = Query(None, description="Filter by tag")
 ) -> Dict[str, Any]:
     """
-    List all registered skills with optional filtering.
-
-    Args:
-        category: Filter by skill category
-        domain: Filter by domain (e.g., "iOS", "Testing")
-        tag: Filter by tag
+    List all registered skills (V5: Disabled - uses Claude Code skills).
 
     Returns:
-        List of skills with metadata
+        Empty list (V5 uses Claude Code skills from Shannon Framework)
     """
-    try:
-        # Get registry instance
-        schema_path = Path(__file__).parent.parent / "skills" / "schemas" / "skill.schema.json"
-
-        # Try to get existing instance or create new one
-        try:
-            registry = await SkillRegistry.get_instance()
-        except ValueError:
-            # First initialization
-            if not schema_path.exists():
-                return {
-                    "skills": [],
-                    "total": 0,
-                    "message": "Skills registry not initialized (schema not found)"
-                }
-            registry = await SkillRegistry.get_instance(schema_path)
-
-        # Apply filters
-        if category:
-            skills = registry.find_by_category(category)
-        elif domain:
-            skills = registry.find_for_domain(domain)
-        elif tag:
-            skills = registry.find_by_tag(tag)
-        else:
-            skills = registry.list_all()
-
-        # Serialize skills
-        skills_data = [
-            {
-                "name": skill.name,
-                "version": skill.version,
-                "description": skill.description,
-                "category": skill.category,
-                "domains": skill.domains,
-                "tags": skill.tags,
-                "execution_type": skill.execution_type.value,
-                "parameters": [p.to_dict() for p in skill.parameters],
-                "dependencies": skill.dependencies,
-                "metadata": skill.metadata
-            }
-            for skill in skills
-        ]
-
-        return {
-            "skills": skills_data,
-            "total": len(skills_data),
-            "filters": {
-                "category": category,
-                "domain": domain,
-                "tag": tag
-            }
-        }
-
-    except Exception as e:
-        logger.error(f"Error listing skills: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to list skills: {str(e)}")
+    return {
+        "skills": [],
+        "total": 0,
+        "message": "V5 uses Claude Code skills - skill registry endpoints disabled"
+    }
 
 
 @app.get("/api/skills/{skill_name}")
@@ -208,53 +152,11 @@ async def get_skill_details(skill_name: str) -> Dict[str, Any]:
     Returns:
         Detailed skill information
     """
-    try:
-        # Get registry instance
-        try:
-            registry = await SkillRegistry.get_instance()
-        except ValueError:
-            raise HTTPException(
-                status_code=503,
-                detail="Skills registry not initialized"
-            )
-
-        # Get skill
-        skill = registry.get(skill_name)
-        if not skill:
-            raise HTTPException(
-                status_code=404,
-                detail=f"Skill not found: {skill_name}"
-            )
-
-        # Serialize with full details
-        return {
-            "name": skill.name,
-            "version": skill.version,
-            "description": skill.description,
-            "category": skill.category,
-            "domains": skill.domains,
-            "tags": skill.tags,
-            "execution_type": skill.execution_type.value,
-            "execution_config": skill.execution_config,
-            "parameters": [p.to_dict() for p in skill.parameters],
-            "dependencies": skill.dependencies,
-            "hooks": skill.hooks.to_dict() if skill.hooks else None,
-            "timeout": skill.timeout,
-            "retry": skill.retry,
-            "metadata": skill.metadata
-        }
-
-    except SkillNotFoundError:
-        raise HTTPException(
-            status_code=404,
-            detail=f"Skill not found: {skill_name}"
-        )
-    except Exception as e:
-        logger.error(f"Error getting skill details: {e}")
-        raise HTTPException(
-            status_code=500,
-            detail=f"Failed to get skill details: {str(e)}"
-        )
+    # V5: Return 404 - uses Claude Code skills
+    raise HTTPException(
+        status_code=404,
+        detail="V5 uses Claude Code skills - skill endpoints disabled"
+    )
 
 
 @app.get("/api/sessions")

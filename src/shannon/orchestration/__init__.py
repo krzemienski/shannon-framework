@@ -1,30 +1,24 @@
-"""Shannon Orchestration Layer - Main user-facing orchestration system.
+"""Shannon Orchestration Layer - Infrastructure components.
 
-This package provides the complete orchestration layer that ties together
-task parsing, execution planning, state management, and the shannon do command.
+V5: Simplified to infrastructure only.
+Custom skills framework (TaskParser, ExecutionPlanner) archived.
+Shannon V5 uses Shannon Framework Claude Code skills instead.
 
 Components:
-- TaskParser: Parse natural language tasks into structured intent
-- ExecutionPlanner: Create execution plans with dependency resolution
 - StateManager: Checkpoint and rollback management
-- Orchestrator: Main execution coordinator
+- AgentPool: Parallel agent execution infrastructure
 
-Created for: Wave 5 - Orchestration Layer
-Purpose: Provide the main user-facing shannon do command
+Created for: Shannon V5
+Purpose: Provide execution infrastructure (not orchestration logic)
 """
 
-from shannon.orchestration.task_parser import TaskParser, ParsedTask, TaskIntent
-from shannon.orchestration.planner import ExecutionPlanner, ExecutionPlan
 from shannon.orchestration.state_manager import StateManager, Checkpoint
-from shannon.orchestration.orchestrator import Orchestrator
+from shannon.orchestration.agent_pool import AgentPool, Agent, AgentTask
 
 __all__ = [
-    'TaskParser',
-    'ParsedTask',
-    'TaskIntent',
-    'ExecutionPlanner',
-    'ExecutionPlan',
     'StateManager',
     'Checkpoint',
-    'Orchestrator',
+    'AgentPool',
+    'Agent',
+    'AgentTask',
 ]

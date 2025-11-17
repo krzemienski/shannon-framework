@@ -34,6 +34,8 @@ from shannon.skills.dependencies import DependencyResolver
 from shannon.skills.loader import SkillLoader
 from shannon.skills.discovery import DiscoveryEngine
 from shannon.orchestration import TaskParser, ExecutionPlanner, StateManager, Orchestrator
+from shannon.orchestration.multi_file_parser import MultiFileParser
+from shannon.executor.multi_file_executor import MultiFileExecutor
 from shannon.server.websocket import emit_skill_event, emit_checkpoint_event
 
 logger = logging.getLogger(__name__)
@@ -158,6 +160,65 @@ def do_command(
             # STEP 1: Parse task
             console.print("[bold cyan]Step 1: Parsing task...[/bold cyan]")
 
+            # Check for multi-file request FIRST
+            multi_file_parser = MultiFileParser()
+            if multi_file_parser.is_multi_file(task):
+                console.print("  [yellow]⚡[/yellow] Multi-file request detected")
+                multi_file_request = multi_file_parser.parse(task)
+
+                if multi_file_request:
+                    console.print(f"  [green]✓[/green] Directory: {multi_file_request.directory}")
+                    console.print(f"  [green]✓[/green] Files: {len(multi_file_request.files)}")
+                    for file_name in multi_file_request.files:
+                        console.print(f"    [dim]- {file_name}[/dim]")
+                    console.print()
+
+                    # Execute multi-file creation
+                    console.print("[bold cyan]Step 2: Creating files...[/bold cyan]")
+                    multi_file_executor = MultiFileExecutor(project_root=project_path)
+
+                    result = await multi_file_executor.execute(
+                        directory=multi_file_request.directory,
+                        files=multi_file_request.files,
+                        base_task=multi_file_request.base_task
+                    )
+
+                    console.print()
+
+                    # Display results
+                    if result.success:
+                        console.print(Panel.fit(
+                            f"[bold green]✓ Multi-File Creation Complete[/bold green]\n\n"
+                            f"Directory: {result.directory}\n"
+                            f"Files created: {len(result.files_created)}/{result.total_files}\n"
+                            f"Duration: {result.duration_seconds:.1f}s\n\n"
+                            f"Files:\n" + "\n".join(f"  ✓ {f}" for f in result.files_created),
+                            border_style="green"
+                        ))
+
+                        # Emit file:created events if dashboard enabled
+                        if dashboard:
+                            for file_path in result.files_created:
+                                await emit_skill_event('file:created', {
+                                    'file': file_path,
+                                    'type': 'multi_file',
+                                    'directory': result.directory
+                                }, generated_session_id)
+
+                        console.print()
+                        sys.exit(0)
+                    else:
+                        console.print(Panel.fit(
+                            f"[bold red]✗ Multi-File Creation Failed[/bold red]\n\n"
+                            f"Files created: {len(result.files_created)}/{result.total_files}\n"
+                            f"Errors: {len(result.errors)}\n\n"
+                            f"Details:\n" + "\n".join(f"  ✗ {e}" for e in result.errors),
+                            border_style="red"
+                        ))
+                        console.print()
+                        sys.exit(1)
+
+            # Regular task parsing for non-multi-file requests
             parsed = await task_parser.parse(task)
 
             console.print(f"  [green]✓[/green] Goal: {parsed.intent.goal}")

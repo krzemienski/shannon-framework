@@ -2044,6 +2044,151 @@ def memory(pattern: Optional[str]) -> None:
     anyio.run(run_memory)
 
 
+@cli.command()
+@click.argument('query')
+@click.option('--sources', '-s', multiple=True, help='Source types: web, documentation, library')
+@click.option('--save', is_flag=True, help='Save results to file')
+@click.option('--verbose', '-v', is_flag=True, help='Verbose output')
+def research(query: str, sources: tuple, save: bool, verbose: bool) -> None:
+    """Gather knowledge from multiple research sources.
+
+    Uses Fire Crawl, Tavily, and web search to gather comprehensive
+    research on a topic. Synthesizes findings into coherent summary.
+
+    \b
+    Examples:
+        shannon research "React hooks"
+        shannon research "API design patterns" --sources web --sources documentation
+        shannon research "Python async" --save
+        shannon research "authentication" --verbose
+
+    \b
+    Source types:
+        - web: Tavily web search
+        - documentation: FireCrawl documentation scraping
+        - library: Context7 library docs
+
+    \b
+    Features:
+        - Multi-source knowledge gathering
+        - Relevance scoring and ranking
+        - Knowledge synthesis
+        - Results saved to current directory
+    """
+    async def run_research() -> None:
+        """Execute research workflow asynchronously."""
+        from rich.console import Console
+        from rich.panel import Panel
+        from rich.table import Table
+        import json
+
+        console = Console()
+
+        try:
+            # Import research orchestrator
+            from shannon.research.orchestrator import ResearchOrchestrator
+
+            # Determine source types
+            source_types = list(sources) if sources else ["web", "documentation"]
+
+            # Display header
+            console.print()
+            console.print(Panel.fit(
+                f"[bold cyan]Shannon Research: {query}[/bold cyan]\n\n"
+                f"Sources: {', '.join(source_types)}",
+                border_style="cyan"
+            ))
+            console.print()
+
+            if verbose:
+                console.print(f"[dim]Initializing research orchestrator...[/dim]")
+
+            # Initialize orchestrator
+            orchestrator = ResearchOrchestrator()
+
+            if verbose:
+                console.print(f"[dim]Gathering from sources: {source_types}[/dim]")
+                console.print()
+
+            # Conduct research
+            console.print("[bold]Gathering knowledge...[/bold]")
+            result = await orchestrator.research(query, source_types=source_types)
+
+            console.print(f"[green]✓[/green] Found {len(result.sources)} sources")
+            console.print()
+
+            # Display results
+            console.print("[bold]Research Results:[/bold]")
+            console.print()
+
+            # Create sources table
+            sources_table = Table(title=f"Sources ({len(result.sources)})")
+            sources_table.add_column("Type", style="cyan")
+            sources_table.add_column("Title", style="yellow")
+            sources_table.add_column("Relevance", justify="right", style="green")
+
+            for source in result.sources:
+                sources_table.add_row(
+                    source.source_type,
+                    source.title[:50] + "..." if len(source.title) > 50 else source.title,
+                    f"{source.relevance_score:.2f}"
+                )
+
+            console.print(sources_table)
+            console.print()
+
+            # Display synthesis
+            console.print("[bold]Knowledge Synthesis:[/bold]")
+            console.print()
+            console.print(Panel(result.synthesis, border_style="green"))
+            console.print()
+
+            console.print(f"[dim]Confidence: {result.confidence:.2f}[/dim]")
+            console.print()
+
+            # Save if requested
+            if save:
+                filename = f"research_{query.replace(' ', '_')[:30]}.json"
+                output_data = {
+                    "query": query,
+                    "sources": [
+                        {
+                            "type": s.source_type,
+                            "url": s.url,
+                            "title": s.title,
+                            "relevance": s.relevance_score,
+                            "metadata": s.metadata
+                        }
+                        for s in result.sources
+                    ],
+                    "synthesis": result.synthesis,
+                    "confidence": result.confidence,
+                    "timestamp": datetime.now().isoformat()
+                }
+
+                with open(filename, 'w') as f:
+                    json.dump(output_data, f, indent=2)
+
+                console.print(f"[green]✓[/green] Results saved to: [cyan]{filename}[/cyan]")
+                console.print()
+
+            console.print("[bold green]Research complete[/bold green]")
+
+        except ImportError as e:
+            console.print(f"[red]Error:[/red] Research module not available: {e}")
+            console.print("[dim]Make sure Shannon Framework research module is installed[/dim]")
+            sys.exit(1)
+        except Exception as e:
+            console.print(f"[red]Research failed:[/red] {e}")
+            if verbose:
+                import traceback
+                console.print(f"[dim]{traceback.format_exc()}[/dim]")
+            sys.exit(1)
+
+    # Run async workflow
+    anyio.run(run_research)
+
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # V3 COMMANDS - Cache Management
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -2264,6 +2409,130 @@ def mcp_install(mcp_name: str) -> None:
             console.print("[yellow]MCP manager unavailable[/yellow]")
     except Exception as e:
         console.print(f"[red]Installation failed: {e}[/red]")
+
+
+@cli.command()
+@click.argument('task')
+@click.option('--min-thoughts', type=int, default=500, help='Minimum number of thoughts to generate')
+@click.option('--verbose', '-v', is_flag=True, help='Verbose output with all thoughts')
+@click.option('--json', 'output_json', is_flag=True, help='Output JSON format')
+def ultrathink(task: str, min_thoughts: int, verbose: bool, output_json: bool) -> None:
+    """Deep reasoning with 500+ thoughts using Sequential MCP.
+
+    Performs extended reasoning analysis generating 500+ discrete thoughts
+    to deeply understand and solve complex tasks. Uses Sequential MCP when
+    available, falls back to systematic reasoning simulation.
+
+    \b
+    Examples:
+        shannon ultrathink "complex architecture decision"
+        shannon ultrathink "debug race condition" --min-thoughts 1000
+        shannon ultrathink "design distributed system" --verbose
+        shannon ultrathink "analyze security vulnerability" --json
+
+    \b
+    Features:
+        - 500+ discrete reasoning steps
+        - Hypothesis generation and comparison
+        - Evidence-based conclusions
+        - Multi-phase systematic analysis
+        - Sequential MCP integration (when available)
+    """
+    async def run_ultrathink() -> None:
+        """Execute ultrathink workflow."""
+        from shannon.modes.ultrathink import UltrathinkEngine
+        from rich.console import Console
+        from rich.progress import Progress, SpinnerColumn, TextColumn
+        from rich.panel import Panel
+        from rich.table import Table
+        import json as json_lib
+
+        console = Console()
+
+        # Display header
+        console.print()
+        console.print(Panel.fit(
+            f"[bold cyan]Shannon Ultrathink[/bold cyan]\n\n"
+            f"Deep reasoning with {min_thoughts}+ thoughts\n"
+            f"Task: {task}",
+            border_style="cyan"
+        ))
+        console.print()
+
+        # Initialize engine
+        engine = UltrathinkEngine(min_thoughts=min_thoughts)
+
+        # Run analysis with progress indicator
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=console
+        ) as progress:
+            task_progress = progress.add_task(
+                f"Generating {min_thoughts}+ thoughts...",
+                total=None
+            )
+
+            result = await engine.analyze(task)
+
+            progress.update(task_progress, description="[green]✓ Analysis complete")
+
+        console.print()
+
+        # Output results
+        if output_json:
+            # JSON output
+            print(json_lib.dumps(result, indent=2))
+        else:
+            # Rich formatted output
+            # Summary table
+            summary_table = Table(title="Analysis Summary", show_header=True)
+            summary_table.add_column("Metric", style="cyan")
+            summary_table.add_column("Value", style="yellow")
+
+            summary_table.add_row("Total Thoughts", str(result['total_thoughts']))
+            summary_table.add_row("Hypotheses Generated", str(len(result['hypotheses'])))
+            summary_table.add_row("Duration", f"{result['duration_seconds']:.2f}s")
+            summary_table.add_row(
+                "Sequential MCP",
+                "✓ Used" if result['sequential_mcp_used'] else "✗ Simulation"
+            )
+
+            console.print(summary_table)
+            console.print()
+
+            # Hypotheses
+            if result['hypotheses']:
+                console.print("[bold]Generated Hypotheses:[/bold]")
+                for i, hypothesis in enumerate(result['hypotheses'][:5], 1):
+                    console.print(
+                        f"  {i}. [cyan]{hypothesis['statement'][:80]}...[/cyan] "
+                        f"(confidence: {hypothesis['confidence']:.2f})"
+                    )
+                if len(result['hypotheses']) > 5:
+                    console.print(f"  ... and {len(result['hypotheses']) - 5} more")
+                console.print()
+
+            # Conclusion
+            console.print("[bold]Conclusion:[/bold]")
+            console.print(f"  {result['conclusion']}")
+            console.print()
+
+            # Verbose: Show sample thoughts
+            if verbose:
+                console.print("[bold]Sample Reasoning Steps:[/bold]")
+                sample_steps = result['reasoning_chain'][::100]  # Every 100th step
+                for step in sample_steps[:10]:
+                    console.print(
+                        f"  Step {step['step']}: [{step['type']}] {step['thought'][:60]}..."
+                    )
+                console.print()
+
+            console.print("[green]✓[/green] [bold]Ultrathink complete[/bold]")
+            console.print()
+
+    # Run async workflow
+    anyio.run(run_ultrathink)
 
 
 @cli.command()

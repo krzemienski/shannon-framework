@@ -1,0 +1,342 @@
+# Shannon CLI Architecture Visualization
+
+## Current State (V5)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      CLI COMMANDS LAYER                         │
+│  shannon analyze | wave | do | exec | research | onboard | ... │
+└────┬──────────────┬────────────┬────────────────┬───────────────┘
+     │              │            │                │
+     │              │            │                │
+     ▼              ▼            ▼                ▼
+┌────────────┐  ┌──────────┐  ┌──────────┐  ┌──────────────┐
+│ Unified    │  │Complete  │  │Research  │  │Context       │
+│Orchestrator│  │Executor  │  │Orchestr. │  │Aware         │
+│   (V5)     │  │ (V3.5)   │  │ (Wave 9) │  │Orchestrator  │
+│            │  │          │  │          │  │   (V3)       │
+│ Delegates  │  │ Enhances │  │ Coords   │  │ Direct       │
+│    to V3   │  │ Shannon  │  │ Research │  │ Access       │
+└─────┬──────┘  └────┬─────┘  └────┬─────┘  └──────────────┘
+      │              │              │
+      │              │              │
+      ▼              ▼              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              CONTEXT AWARE ORCHESTRATOR (V3)                    │
+│                 8 Integrated Subsystems                         │
+│                                                                  │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐          │
+│  │ Context  │ │  Cache   │ │  MCP     │ │  Agents  │          │
+│  │ Manager  │ │ Manager  │ │ Manager  │ │ Tracking │          │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘          │
+│                                                                  │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐          │
+│  │  Cost    │ │Analytics │ │ Metrics  │ │  Agent   │          │
+│  │  Optim   │ │ Database │ │Dashboard │ │   Pool   │          │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘          │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              SHANNON FRAMEWORK (Claude Code Skills)             │
+│                                                                  │
+│  • spec-analysis        • task-automation                       │
+│  • wave-orchestration   • systematic-debugging                  │
+│  • 15+ more skills...                                           │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## Broken V4 Architecture (Archived)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    V4 ORCHESTRATOR                              │
+│                   (BROKEN - NOT USED)                           │
+│                                                                  │
+│  Imports from non-existent shannon.skills:                      │
+│    ❌ SkillExecutor                                             │
+│    ❌ SkillRegistry                                             │
+│                                                                  │
+│  Used by: NOTHING                                               │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             ▼
+                    ❌ BROKEN IMPORTS
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│           ARCHIVED: skills_custom_framework/                    │
+│                                                                  │
+│  • registry.py      • executor.py                               │
+│  • loader.py        • generator.py                              │
+│  • catalog.py       • dependencies.py                           │
+│  • 6 more files...                                              │
+│                                                                  │
+│  Status: ❌ Archived, not in src/shannon/                       │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## V4 Agents (Unused)
+
+```
+orchestration/agents/
+├── base.py           ❌ Not imported
+├── analysis.py       ❌ Not imported
+├── planning.py       ❌ Not imported
+├── git.py            ❌ Not imported
+├── research.py       ❌ Not imported
+├── testing.py        ❌ Not imported
+├── validation.py     ❌ Not imported
+└── monitoring.py     ❌ Not imported
+
+Status: All unused, safe to archive
+```
+
+## Command Execution Flows
+
+### `shannon do "task"` (V5)
+
+```
+CLI Command
+    │
+    ▼
+UnifiedOrchestrator.execute_task()
+    │
+    ├─ First time?
+    │   ├─ context.onboard_project() ─────┐
+    │   ├─ Auto-detect validation gates   │
+    │   └─ Save config                     │
+    │                                      │
+    └─ Returning?                          │
+        ├─ context.load_project() (< 1s)  │
+        └─ Check for changes               │
+                                           │
+                                           ▼
+                        SDK.invoke_skill('task-automation')
+                                           │
+                                           ▼
+                            Shannon Framework Execution
+```
+
+### `shannon analyze spec.md`
+
+```
+CLI Command
+    │
+    ▼
+UnifiedOrchestrator.execute_analysis()
+    │
+    ▼
+ContextAwareOrchestrator.execute_analyze()
+    │
+    ├─ Load context (if project_id)
+    ├─ Check cache
+    ├─ Select optimal model (cost)
+    ├─ Build context-enhanced prompt
+    │
+    ▼
+SDK.invoke_skill('spec-analysis')
+    │
+    ├─ 8D complexity analysis
+    ├─ Domain identification
+    └─ MCP recommendations
+    │
+    ▼
+Save to cache + analytics
+```
+
+### `shannon exec "task"` (V3.5 Autonomous)
+
+```
+CLI Command
+    │
+    ▼
+CompleteExecutor
+    │
+    ├─ LibraryDiscoverer (don't reinvent wheel)
+    ├─ PromptEnhancer (research-driven context)
+    │
+    ▼
+Shannon Framework Skills (orchestrated)
+    │
+    ├─ shannon:prime (load context)
+    ├─ shannon:analyze (understand task)
+    └─ shannon:wave (execute)
+    │
+    ▼
+    ├─ ValidationOrchestrator (3-tier testing)
+    └─ GitManager (atomic commits)
+```
+
+## File Organization (After Cleanup)
+
+```
+shannon-cli/
+├── src/shannon/
+│   ├── orchestrator.py                ✅ V3 (active)
+│   ├── unified_orchestrator.py        ✅ V5 (active)
+│   │
+│   ├── cache/                         ✅ V3 subsystem
+│   ├── context/                       ✅ V3 subsystem
+│   ├── analytics/                     ✅ V3 subsystem
+│   ├── optimization/                  ✅ V3 subsystem
+│   ├── mcp/                           ✅ V3 subsystem
+│   ├── agents/                        ✅ V3 subsystem
+│   ├── metrics/                       ✅ V3 subsystem
+│   ├── sdk/                           ✅ Shared
+│   │
+│   ├── executor/                      ✅ V3.5 autonomous
+│   │
+│   ├── research/
+│   │   └── orchestrator.py            ✅ Wave 9
+│   │
+│   ├── orchestration/
+│   │   ├── orchestrator.py            ❌ ARCHIVE (broken)
+│   │   ├── agents/                    ❌ ARCHIVE (unused)
+│   │   ├── state_manager.py           ✅ Keep (V5 uses)
+│   │   └── agent_pool.py              ✅ Keep (V5 uses)
+│   │
+│   └── _archived/
+│       ├── skills_custom_framework/   ❌ Already archived
+│       └── v4/                         ← Move orchestrator + agents here
+│
+└── skills/
+    └── built-in/                       ❌ ARCHIVE (unused YAML)
+```
+
+## Version Timeline
+
+```
+V3 (Wave 5)
+    ↓
+    ContextAwareOrchestrator
+    + 8 integrated subsystems
+    + SDK integration
+    Status: ✅ Active foundation
+
+V3.5 (Autonomous Executor)
+    ↓
+    CompleteExecutor enhancement layer
+    + Library discovery
+    + 3-tier validation
+    + Git integration
+    Status: ✅ Active (shannon exec)
+
+V4 (Skills Framework)
+    ↓
+    Custom skills system
+    + SkillRegistry
+    + SkillExecutor
+    + Agents system
+    Status: ❌ Archived (replaced by Claude Code)
+
+V5 (Consolidation)
+    ↓
+    UnifiedOrchestrator
+    + Facade over V3
+    + Context-aware workflows
+    + Claude Code skills
+    Status: ✅ Active (shannon do)
+
+Wave 9 (Research)
+    ↓
+    ResearchOrchestrator
+    + Multi-source research
+    + MCP integration
+    Status: ✅ Active (shannon research)
+```
+
+## Subsystem Dependencies
+
+```
+UnifiedOrchestrator
+    │
+    ├─ ContextAwareOrchestrator
+    │       │
+    │       ├─ ContextManager ───────┐
+    │       ├─ CacheManager          │
+    │       ├─ MCPManager             │
+    │       ├─ AgentStateTracker      │  All V3
+    │       ├─ ModelSelector          │  Subsystems
+    │       ├─ CostEstimator          │  (Active)
+    │       ├─ BudgetEnforcer         │
+    │       ├─ AnalyticsDatabase      │
+    │       ├─ TrendAnalyzer          │
+    │       ├─ InsightsGenerator      │
+    │       ├─ MetricsCollector       │
+    │       ├─ LiveDashboard          │
+    │       ├─ AgentPool              │
+    │       └─ ShannonSDKClient ──────┘
+    │
+    ├─ StateManager (V5)
+    └─ AgentPool (V5)
+
+CompleteExecutor
+    │
+    ├─ PromptEnhancer
+    ├─ LibraryDiscoverer
+    ├─ ValidationOrchestrator
+    ├─ GitManager
+    └─ ShannonSDKClient
+
+ResearchOrchestrator
+    │
+    ├─ Tavily MCP (web search)
+    ├─ FireCrawl MCP (documentation)
+    └─ Context7 MCP (library docs)
+```
+
+## Cleanup Impact Visualization
+
+### Before
+```
+125 files
+├── Active: ~70 files
+├── Archived: 14 files (skills_custom_framework)
+├── Broken: 1 file (orchestrator.py)
+├── Unused: 9 files (agents/)
+├── Backup: 1 file (do_v4_original.py)
+├── Definitions: 5 files (YAML)
+└── Bug: 1 (duplicate method)
+
+Issues:
+  ❌ Broken imports (3 files)
+  ❌ Duplicate code (subsystems)
+  ❌ Unused files (15+)
+  ❌ Version confusion
+```
+
+### After
+```
+~85 files (-40)
+├── Active: ~70 files
+├── Archived: 30+ files (organized)
+├── Broken: 0 files
+├── Unused: 0 files
+└── Bugs: 0
+
+Improvements:
+  ✅ No broken imports
+  ✅ Clear architecture
+  ✅ All files active
+  ✅ Version boundaries clear
+  ✅ 32% reduction in files
+```
+
+## Testing Matrix
+
+| Command | V3 | V3.5 | V5 | Wave 9 | Status |
+|---------|----|----- |----|--------|--------|
+| analyze | ✓  |      | ✓  |        | Active |
+| wave    | ✓  |      | ✓  |        | Active |
+| do      |    |      | ✓  |        | Active |
+| exec    |    | ✓    |    |        | Active |
+| research|    |      |    | ✓      | Active |
+| onboard | ✓  |      |    |        | Active |
+| prime   | ✓  |      |    |        | Active |
+
+All commands route through active orchestrators. ✅
+
+---
+
+**Key Takeaway**: V5 architecture is clean, V4 is safely archived/broken, cleanup will improve clarity without breaking functionality.

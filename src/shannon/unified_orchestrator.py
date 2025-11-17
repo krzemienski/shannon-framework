@@ -583,6 +583,70 @@ Execute this task with full project awareness."""
         # Changed if file count differs by more than 5%
         return abs(current_files - last_files) > (last_files * 0.05) if last_files > 0 else True
 
+    async def _first_time_workflow(
+        self,
+        task: str,
+        project_id: str,
+        project_path: Path,
+        auto_mode: bool,
+        dashboard_client: Optional[Any]
+    ) -> Dict[str, Any]:
+        """Execute workflow for first time in a project.
+
+        Steps:
+        1. Auto-onboard project (explore codebase)
+        2. Get validation gates (ask user or auto-detect)
+        3. Save config for next time
+        4. Execute with context-enhanced planning
+
+        Args:
+            task: Task to execute
+            project_id: Project identifier
+            project_path: Path to project directory
+            auto_mode: Skip user interactions
+            dashboard_client: Optional dashboard client
+
+        Returns:
+            Execution result dictionary
+        """
+        logger.info(f"First time workflow for: {project_id}")
+
+        # 1. Auto-onboard
+        if not auto_mode:
+            print(f"First time in {project_id} - exploring codebase...")
+
+        context = await self.context.onboard_project(
+            project_path=str(project_path),
+            project_id=project_id
+        )
+
+        if not auto_mode:
+            discovery = context.get('discovery', {})
+            print(f"  Detected: {', '.join(discovery.get('tech_stack', []))}")
+            print(f"  Files: {discovery.get('file_count', 0):,}")
+
+        # 2. Validation gates
+        if not auto_mode:
+            gates = await self._ask_validation_gates(context)
+        else:
+            gates = await self._auto_detect_validation_gates(context)
+
+        # 3. Save config
+        from datetime import datetime
+        await self._save_project_config(project_id, {
+            'validation_gates': gates,
+            'last_scan': datetime.now().isoformat(),
+            'tech_stack': context.get('discovery', {}).get('tech_stack', []),
+            'file_count': context.get('discovery', {}).get('file_count', 0)
+        })
+
+        # 4. Execute with context
+        result = await self._execute_with_context(
+            task, context, gates, dashboard_client
+        )
+
+        return result
+
     async def _stream_message_to_dashboard(
         self,
         msg: Any,

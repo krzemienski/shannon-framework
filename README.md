@@ -109,17 +109,43 @@ Shannon Framework is a **Claude Code plugin** that transforms AI-assisted develo
 
 ### Installation Steps
 
+**⭐ Recommended: Universal Installation** (Works for both Claude Code and Cursor IDE)
+
 ```bash
-# In Claude Code CLI:
+# Clone repository
+git clone https://github.com/shannon-framework/shannon.git
+cd shannon
 
-# Add Shannon marketplace
-/plugin marketplace add shannon-framework/shannon
+# Install for both editors
+./install_universal.sh
 
-# Install Shannon plugin
-/plugin install shannon@shannon-framework
+# Or install for specific editor
+./install_universal.sh --cursor   # Cursor IDE only
+./install_universal.sh --claude   # Claude Code only
 
-# Restart Claude Code
+# Restart your editor
 ```
+
+**Alternative Options**:
+
+1. **Local Installation (Claude Code only)**:
+   ```bash
+   ./install_local.sh
+   ```
+   More reliable than plugin system. See [INSTALL_LOCAL.md](INSTALL_LOCAL.md)
+
+2. **Plugin Installation (Claude Code only)**:
+   ```bash
+   # In Claude Code CLI:
+   /plugin marketplace add shannon-framework/shannon
+   /plugin install shannon@shannon-framework
+   ```
+   May have discovery issues. Use local/universal installation instead.
+
+**Installation Guides**:
+- **Universal (Both Editors)**: [INSTALL_UNIVERSAL.md](INSTALL_UNIVERSAL.md) ⭐ Recommended
+- **Claude Code Local**: [INSTALL_LOCAL.md](INSTALL_LOCAL.md)
+- **Plugin (Legacy)**: May not discover components properly
 
 ### Verification
 

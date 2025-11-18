@@ -112,6 +112,30 @@ fi
 echo "✅ PASS: No invalid JSON comment syntax (uses separate file fallback)"
 echo ""
 
+# Test 5b: Check for unsafe heredoc (Bug 4)
+echo "Test 5b: Checking for unsafe Python heredoc..."
+
+# Check that Shannon settings are NOT embedded in heredoc
+if grep -q "json.loads('''\${shannon_settings}''')" "${SHANNON_ROOT}/install_universal.sh"; then
+    echo "❌ FAIL: Script uses unsafe heredoc with embedded JSON variable"
+    exit 1
+fi
+
+# Check for temp file approach instead
+if ! grep -q "temp_shannon_settings=" "${SHANNON_ROOT}/install_universal.sh"; then
+    echo "❌ FAIL: Script doesn't use temp file approach for Python merge"
+    exit 1
+fi
+
+# Check temp file is cleaned up
+if ! grep -q 'rm -f "${temp_shannon_settings}"' "${SHANNON_ROOT}/install_universal.sh"; then
+    echo "❌ FAIL: Script doesn't clean up temp file"
+    exit 1
+fi
+
+echo "✅ PASS: Python merge uses safe temp file approach (no heredoc embedding)"
+echo ""
+
 # Test 6: Check for settings overwrite (Bug 1)
 echo "Test 6: Checking settings merge safety..."
 
@@ -229,6 +253,7 @@ echo "Critical bugs verified FIXED:"
 echo "  ✅ Bug 1: settings.json overwrite → safe merge (jq/Python)"
 echo "  ✅ Bug 2: Missing commands → 19 commands + 7 tasks installed"
 echo "  ✅ Bug 3: Invalid JSON comments → separate file fallback"
+echo "  ✅ Bug 4: Unsafe Python heredoc → temp file approach"
 echo ""
 echo "Installation scripts ready:"
 echo "  ./install_universal.sh --both     # Install for both platforms"

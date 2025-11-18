@@ -613,38 +613,71 @@ generate_cursor_settings() {
             print_info "Merging Shannon settings with existing settings (using jq)..."
             
             # Merge using jq (Shannon settings take precedence)
-            local merged_settings=$(jq -s '.[0] * .[1]' "${settings_file}" <(echo "${shannon_settings}"))
+            # Disable set -e temporarily to allow fallback on jq failure
+            set +e
+            local merged_settings=$(jq -s '.[0] * .[1]' "${settings_file}" <(echo "${shannon_settings}") 2>&1)
+            local jq_exit_code=$?
+            set -e
             
-            echo "${merged_settings}" > "${settings_file}"
-            print_success "Settings merged successfully (existing settings preserved)"
-        else
+            if [ ${jq_exit_code} -eq 0 ] && [ -n "${merged_settings}" ]; then
+                echo "${merged_settings}" > "${settings_file}"
+                print_success "Settings merged successfully (existing settings preserved)"
+            else
+                print_warning "jq merge failed (exit code: ${jq_exit_code}), falling back to Python..."
+                
+                # Fall through to Python fallback below
+                command -v jq &> /dev/null && false  # Force fallback to else block
+            fi
+        fi
+        
+        # Python fallback (runs if jq unavailable OR if jq failed)
+        if ! command -v jq &> /dev/null || [ ${jq_exit_code:-1} -ne 0 ]; then
             # Fallback: Manual merge using Python
             print_warning "jq not found, using Python for merge..."
             
+            # Write Shannon settings to temporary file (safer than heredoc embedding)
+            local temp_shannon_settings="/tmp/shannon_settings_$$.json"
+            echo "${shannon_settings}" > "${temp_shannon_settings}"
+            
             python3 << EOF
 import json
+import sys
 
 # Read existing settings
 try:
     with open("${settings_file}", 'r') as f:
         existing = json.load(f)
-except:
+except Exception as e:
+    print(f"Error reading existing settings: {e}", file=sys.stderr)
     existing = {}
 
-# Parse Shannon settings
-shannon = json.loads('''${shannon_settings}''')
+# Read Shannon settings from temp file (safer than heredoc)
+try:
+    with open("${temp_shannon_settings}", 'r') as f:
+        shannon = json.load(f)
+except Exception as e:
+    print(f"Error reading Shannon settings: {e}", file=sys.stderr)
+    sys.exit(1)
 
 # Merge (Shannon settings take precedence)
 merged = {**existing, **shannon}
 
 # Write merged settings
-with open("${settings_file}", 'w') as f:
-    json.dump(merged, f, indent=2)
-
-print("✓ Settings merged successfully")
+try:
+    with open("${settings_file}", 'w') as f:
+        json.dump(merged, f, indent=2)
+    print("✓ Settings merged successfully")
+except Exception as e:
+    print(f"Error writing merged settings: {e}", file=sys.stderr)
+    sys.exit(1)
 EOF
             
-            if [ $? -eq 0 ]; then
+            local python_exit_code=$?
+            
+            # Clean up temp file
+            rm -f "${temp_shannon_settings}"
+            
+            if [ ${python_exit_code} -eq 0 ]; then
                 print_success "Settings merged successfully (existing settings preserved)"
             else
                 print_error "Failed to merge settings with Python"

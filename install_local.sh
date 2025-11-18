@@ -549,11 +549,13 @@ update_path_references() {
     # Find all skill.md files and update references
     find "${SKILLS_DIR}" -name "SKILL.md" -o -name "skill.md" | while read -r skill_file; do
         # Update references to core files
-        sed -i.bak "s|shannon-plugin/core/|${HOME}/.claude/core/shannon/|g" "${skill_file}"
-        sed -i.bak "s|shannon-plugin/skills/|${HOME}/.claude/skills/shannon/|g" "${skill_file}"
-        sed -i.bak "s|shannon-plugin/agents/|${HOME}/.claude/agents/shannon/|g" "${skill_file}"
-        sed -i.bak "s|shannon-plugin/modes/|${HOME}/.claude/modes/shannon/|g" "${skill_file}"
-        sed -i.bak "s|shannon-plugin/templates/|${HOME}/.claude/templates/shannon/|g" "${skill_file}"
+        # Cross-platform sed: create backup, then remove it
+        sed -i.bak -e "s|shannon-plugin/core/|${HOME}/.claude/core/shannon/|g" \
+                   -e "s|shannon-plugin/skills/|${HOME}/.claude/skills/shannon/|g" \
+                   -e "s|shannon-plugin/agents/|${HOME}/.claude/agents/shannon/|g" \
+                   -e "s|shannon-plugin/modes/|${HOME}/.claude/modes/shannon/|g" \
+                   -e "s|shannon-plugin/templates/|${HOME}/.claude/templates/shannon/|g" \
+                   "${skill_file}"
         
         # Remove backup files
         rm -f "${skill_file}.bak"
@@ -563,9 +565,11 @@ update_path_references() {
     print_info "  Updating command references..."
     
     find "${COMMANDS_DIR}" -name "*.md" | while read -r command_file; do
-        sed -i.bak "s|shannon-plugin/core/|${HOME}/.claude/core/shannon/|g" "${command_file}"
-        sed -i.bak "s|shannon-plugin/skills/|${HOME}/.claude/skills/shannon/|g" "${command_file}"
-        sed -i.bak "s|shannon-plugin/agents/|${HOME}/.claude/agents/shannon/|g" "${command_file}"
+        # Cross-platform sed
+        sed -i.bak -e "s|shannon-plugin/core/|${HOME}/.claude/core/shannon/|g" \
+                   -e "s|shannon-plugin/skills/|${HOME}/.claude/skills/shannon/|g" \
+                   -e "s|shannon-plugin/agents/|${HOME}/.claude/agents/shannon/|g" \
+                   "${command_file}"
         
         rm -f "${command_file}.bak"
     done
@@ -574,8 +578,10 @@ update_path_references() {
     print_info "  Updating agent references..."
     
     find "${AGENTS_DIR}" -name "*.md" | while read -r agent_file; do
-        sed -i.bak "s|shannon-plugin/core/|${HOME}/.claude/core/shannon/|g" "${agent_file}"
-        sed -i.bak "s|shannon-plugin/skills/|${HOME}/.claude/skills/shannon/|g" "${agent_file}"
+        # Cross-platform sed
+        sed -i.bak -e "s|shannon-plugin/core/|${HOME}/.claude/core/shannon/|g" \
+                   -e "s|shannon-plugin/skills/|${HOME}/.claude/skills/shannon/|g" \
+                   "${agent_file}"
         
         rm -f "${agent_file}.bak"
     done
@@ -584,8 +590,10 @@ update_path_references() {
     print_info "  Updating core file cross-references..."
     
     find "${CORE_DIR}" -name "*.md" | while read -r core_file; do
-        sed -i.bak "s|shannon-plugin/core/|${HOME}/.claude/core/shannon/|g" "${core_file}"
-        sed -i.bak "s|shannon-plugin/skills/|${HOME}/.claude/skills/shannon/|g" "${core_file}"
+        # Cross-platform sed
+        sed -i.bak -e "s|shannon-plugin/core/|${HOME}/.claude/core/shannon/|g" \
+                   -e "s|shannon-plugin/skills/|${HOME}/.claude/skills/shannon/|g" \
+                   "${core_file}"
         
         rm -f "${core_file}.bak"
     done

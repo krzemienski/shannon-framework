@@ -2,13 +2,13 @@
   "hooks": {
     "UserPromptSubmit": [
       {
-        "description": "Shannon North Star goal injection for consistent goal alignment",
+        "description": "Shannon context injection and forced reading protocol activation (v5.4 enhanced)",
         "hooks": [
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/user_prompt_submit.py",
-            "description": "Injects North Star goal and active wave context into every prompt",
-            "timeout": 2000
+            "description": "Injects North Star goal, active wave context, and auto-activates forced-reading-protocol for large prompts (>3000 chars) or large file references (>5000 lines)",
+            "timeout": 3000
           }
         ]
       }

@@ -1,1 +1,1 @@
-/Users/nick/Desktop/shannon-framework/shannon-plugin/core/CONTEXT_MANAGEMENT.md
+../../../core/CONTEXT_MANAGEMENT.md

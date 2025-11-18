@@ -878,10 +878,113 @@ def validate_shannon_active(session_context):
 
 ---
 
+## V5.4 Enhancements: Superpowers Integration
+
+Shannon v5.4 adds systematic workflows from the Superpowers framework with Shannon quantitative enhancements:
+
+### New Commands (v5.4)
+
+#### /shannon:write-plan - Systematic Planning
+**Purpose**: Create comprehensive implementation plans with quantitative analysis
+
+**When to use**:
+- Complex features requiring careful planning
+- Team collaboration (plan as communication)
+- When you want review checkpoints during execution
+
+**Output**: 
+- Plan file with 8D complexity scoring
+- Bite-sized tasks (2-5 min each)
+- Complete code examples
+- Validation gates per task
+- MCP requirements specified
+
+**Leads to**: `/shannon:execute-plan` for systematic execution
+
+#### /shannon:execute-plan - Batch Execution
+**Purpose**: Execute plans in batches with review checkpoints
+
+**When to use**:
+- Have a plan from `/shannon:write-plan`
+- Want systematic execution with control
+- Need review checkpoints between batches
+
+**Features**:
+- Complexity-based batch sizing (Shannon formula)
+- 3-tier validation per batch
+- Quantitative progress tracking
+- Pattern learning via Serena
+
+**Alternative**: `/shannon:do --with-plan` for automatic execution
+
+### New Skills (v5.4)
+
+**Core Quality Skills**:
+- **forced-reading-protocol** - Complete line-by-line reading (auto-activated for large content)
+- **verification-before-completion** - Evidence-before-claims enforcement
+- **test-driven-development** - RED-GREEN-REFACTOR + NO MOCKS
+- **systematic-debugging** - 4-phase debugging with quantitative tracking
+- **root-cause-tracing** - Backward tracing with pattern learning
+- **defense-in-depth** - 5-layer validation strategy
+
+**Planning & Execution Skills**:
+- **brainstorming** - Design refinement with Shannon quantitative validation
+- **writing-plans** - Create quantitative implementation plans
+- **executing-plans** - Batch execution with validation gates
+
+**Meta Skills**:
+- **writing-skills** - TDD for skill documentation (create skills using RED-GREEN-REFACTOR)
+
+### Integration with Existing Workflows
+
+**You now have THREE execution workflows**:
+
+**1. Automatic (intelligent-do)**:
+```bash
+/shannon:do "build authentication"
+# Fast, automatic, intelligent
+```
+
+**2. Systematic (write-plan + execute-plan)**:
+```bash
+/shannon:write-plan --feature "authentication"
+/shannon:execute-plan docs/plans/2025-11-18-auth.md
+# Careful, planned, checkpointed
+```
+
+**3. Full Automation (task)**:
+```bash
+/shannon:task "Build REST API with auth"
+# Complete: prime → spec → wave
+```
+
+**Choose based on**:
+- Complexity <0.4 → Use /shannon:do (automatic)
+- Complexity 0.4-0.7 → Consider /shannon:write-plan + /shannon:execute-plan
+- Complexity >0.7 → Use /shannon:task or /shannon:write-plan for careful planning
+
+### Auto-Activation (v5.4)
+
+**Forced Reading Protocol** auto-activates via hook when:
+- Prompt >3000 characters (large prompts)
+- File references >5000 lines (large files)
+- Specification keywords detected
+
+**You'll see**:
+```
+📖 **SHANNON FORCED READING PROTOCOL - AUTO-ACTIVATED**
+✋ **LARGE PROMPT DETECTED**
+   - Prompt length: >3000 characters
+```
+
+**Required response**: Follow 4-step protocol (count, read all, verify, synthesize with Sequential MCP)
+
+---
+
 ## Metadata
 
-**Version**: 4.0.0
-**Last Updated**: 2025-11-03
+**Version**: 5.4.0 (Superpowers Integration)
+**Last Updated**: 2025-11-18
 **Author**: Shannon Framework Team
 **License**: MIT
 **Status**: Meta-Skill (auto-loaded via SessionStart hook)

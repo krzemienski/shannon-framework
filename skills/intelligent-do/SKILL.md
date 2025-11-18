@@ -7,7 +7,7 @@ description: |
   intelligent execution command. Use when: User wants task executed in any project (new or existing).
 
 skill-type: PROTOCOL
-shannon-version: ">=5.2.0"
+shannon-version: ">=5.0.0"
 complexity-triggers: [0.00-1.00]
 
 invoked-by-commands:

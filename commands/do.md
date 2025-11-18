@@ -17,7 +17,7 @@ examples:
 delegates_to:
   - intelligent-do
 
-version: "5.2.0"
+version: "5.0.0"
 ---
 
 # /shannon:do - Intelligent Task Execution

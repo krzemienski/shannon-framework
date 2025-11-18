@@ -124,7 +124,7 @@ Extracted from Shannon CLI V3.5 implementation:
 
 ## Version
 
-**Shannon Framework:** V5.1.0
+**Shannon Framework:** V5.0.0
 **Shannon CLI:** V3.5.0
 **Status:** Production
 **Date:** November 15, 2025

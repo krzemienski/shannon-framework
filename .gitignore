@@ -55,4 +55,5 @@ tmp/
 .claude/
 
 # Serena MCP local state
-.serena/
+.serena/dashboard/node_modules/
+dashboard/dist/

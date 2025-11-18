@@ -1,10 +1,63 @@
 # Changelog
 
+All notable changes to Shannon Framework are documented here.
+
+---
+
+## [5.0.0] - 2025-11-18
+
+### 🚨 BREAKING CHANGES
+
+**Command Namespacing**: All commands now require `shannon:` prefix
+- Old: `/do`, `/wave`, `/spec`
+- New: `/shannon:do`, `/shannon:wave`, `/shannon:spec`
+- **Migration**: Replace all command invocations with namespaced versions
+- **Benefit**: Namespace isolation, no conflicts with other plugins
+
+### ✨ Added
+
+**New Commands**:
+- `/shannon:ultrathink` - Deep debugging with 150+ sequential thoughts
+- `/shannon:generate_instructions` - Auto-generate project-specific custom instructions
+
+**New Features**:
+- **Command Orchestration Guide**: `docs/COMMAND_ORCHESTRATION.md` (900+ lines)
+- **Project-Specific Custom Instructions**: Auto-generated, persistent across sessions
+- **Enhanced Documentation**: All 18 commands in `using-shannon` skill
+
+### 🔧 Fixed
+
+**Critical Portability Bugs**:
+- Fixed hardcoded paths in `hooks/session_start.sh`
+- Fixed hardcoded paths in `hooks/hooks.json` (2 instances)
+- All hooks now use `${CLAUDE_PLUGIN_ROOT}`
+
+### 📚 Documentation
+
+**New**: `docs/COMMAND_ORCHESTRATION.md`, `commands/ultrathink.md`, `core/PROJECT_CUSTOM_INSTRUCTIONS.md`
+**Updated**: `skills/using-shannon/SKILL.md`, `skills/intelligent-do/SKILL.md`
+
+### 📦 MCP Requirements
+
+- Sequential Thinking MCP (MANDATORY for `/shannon:ultrathink`)
+
+### 🔄 Migration from V4
+
+```bash
+# Update all command calls
+/do → /shannon:do
+/wave → /shannon:wave
+/spec → /shannon:spec
+# (etc. for all 19 commands)
+```
+
+---
+
 ## [5.1.0] - 2025-11-15
 
 ### Added
 - **/shannon:exec** - Autonomous task execution with library discovery and validation
-- **exec skill** - Complete 6-phase orchestration workflow  
+- **exec skill** - Complete 6-phase orchestration workflow
 - **3 Protocol References**:
   - LIBRARY_DISCOVERY_PROTOCOL.md (606 lines)
   - FUNCTIONAL_VALIDATION_PROTOCOL.md (888 lines)

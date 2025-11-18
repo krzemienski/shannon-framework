@@ -1,5 +1,5 @@
 ---
-name: discover_skills
+name: shannon:discover_skills
 description: Discover and catalog all available skills on system
 usage: /shannon:discover_skills [--cache|--refresh|--filter <pattern>]
 ---

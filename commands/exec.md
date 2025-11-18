@@ -1,5 +1,5 @@
 ---
-name: exec
+name: shannon:exec
 description: Autonomous task execution with library discovery and validation
 tags: [execution, automation, libraries, validation, git, autonomous]
 ---

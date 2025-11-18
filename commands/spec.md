@@ -1,5 +1,5 @@
 ---
-name: spec
+name: shannon:spec
 description: Analyze specification using Shannon 8D complexity framework
 usage: /shannon:spec "specification text" [--mcps] [--save]
 ---

@@ -1,5 +1,5 @@
 ---
-name: do
+name: shannon:do
 description: |
   Intelligent task execution with auto-context and research. One catch-all command:
   First time explores and caches, returning uses cache for speed, auto-detects when
@@ -17,7 +17,7 @@ examples:
 delegates_to:
   - intelligent-do
 
-version: "5.2.0"
+version: "5.0.0"
 ---
 
 # /shannon:do - Intelligent Task Execution

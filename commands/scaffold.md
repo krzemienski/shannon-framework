@@ -1,5 +1,5 @@
 ---
-name: scaffold
+name: shannon:scaffold
 description: Generate Shannon-optimized project structure with functional test scaffolding
 usage: /shannon:scaffold <project_type> [--template <name>]
 ---

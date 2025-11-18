@@ -2,6 +2,9 @@
 
 **Version 5.0.0** | [Installation](#installation) | [Quick Start](#quick-start) | [Documentation](#documentation) | [GitHub](https://github.com/krzemienski/shannon-framework)
 
+> **🚨 V5.0.0 Breaking Change**: All commands now require `shannon:` prefix (e.g., `/shannon:do`, `/shannon:wave`).
+> See [V5_RELEASE_NOTES.md](V5_RELEASE_NOTES.md) for migration guide.
+
 ---
 
 ## Overview
@@ -72,8 +75,8 @@ Shannon Framework is a **Claude Code plugin** that transforms AI-assisted develo
 
 | Layer | Count | Purpose | Examples |
 |-------|-------|---------|----------|
-| **Commands** | 16 | User entry points | spec, wave, prime, test, exec |
-| **Skills** | 19 | Workflow implementation | spec-analysis, wave-orchestration, exec |
+| **Commands** | 19 | User entry points | shannon:do, shannon:wave, shannon:spec, shannon:ultrathink |
+| **Skills** | 20 | Workflow implementation | spec-analysis, wave-orchestration, intelligent-do |
 | **Hooks** | 5 | Automatic enforcement | post_tool_use (NO MOCKS), precompact |
 | **Core Files** | 9 | Reference specs (11K lines) | TESTING_PHILOSOPHY, SPEC_ANALYSIS |
 | **Agent Guides** | 25 | Agent usage documentation | WAVE_COORDINATOR, TEST_GUARDIAN |
@@ -85,8 +88,9 @@ Shannon Framework is a **Claude Code plugin** that transforms AI-assisted develo
 - **Serena MCP**: Persistent state store (61% of skills require it)
 
 **Recommended**:
-- **Sequential MCP**: Deep reasoning (100+ thoughts for complex analysis)
+- **Sequential MCP**: Deep reasoning (100+ thoughts for complex analysis), **REQUIRED for `/shannon:ultrathink`**
 - **Context7 MCP**: Framework-specific documentation
+- **Tavily MCP**: Best practices research
 
 **Conditional** (based on project type):
 - **Puppeteer MCP**: Web testing (NO MOCKS requirement)
@@ -105,17 +109,43 @@ Shannon Framework is a **Claude Code plugin** that transforms AI-assisted develo
 
 ### Installation Steps
 
+**⭐ Recommended: Universal Installation** (Works for both Claude Code and Cursor IDE)
+
 ```bash
-# In Claude Code CLI:
+# Clone repository
+git clone https://github.com/shannon-framework/shannon.git
+cd shannon
 
-# Add Shannon marketplace
-/plugin marketplace add shannon-framework/shannon
+# Install for both editors
+./install_universal.sh
 
-# Install Shannon plugin
-/plugin install shannon@shannon-framework
+# Or install for specific editor
+./install_universal.sh --cursor   # Cursor IDE only
+./install_universal.sh --claude   # Claude Code only
 
-# Restart Claude Code
+# Restart your editor
 ```
+
+**Alternative Options**:
+
+1. **Local Installation (Claude Code only)**:
+   ```bash
+   ./install_local.sh
+   ```
+   More reliable than plugin system. See [INSTALL_LOCAL.md](INSTALL_LOCAL.md)
+
+2. **Plugin Installation (Claude Code only)**:
+   ```bash
+   # In Claude Code CLI:
+   /plugin marketplace add shannon-framework/shannon
+   /plugin install shannon@shannon-framework
+   ```
+   May have discovery issues. Use local/universal installation instead.
+
+**Installation Guides**:
+- **Universal (Both Editors)**: [INSTALL_UNIVERSAL.md](INSTALL_UNIVERSAL.md) ⭐ Recommended
+- **Claude Code Local**: [INSTALL_LOCAL.md](INSTALL_LOCAL.md)
+- **Plugin (Legacy)**: May not discover components properly
 
 ### Verification
 

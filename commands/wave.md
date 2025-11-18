@@ -1,5 +1,5 @@
 ---
-name: wave
+name: shannon:wave
 description: Execute wave-based planning and execution with skill orchestration
 usage: /shannon:wave [request] [--plan] [--dry-run]
 ---

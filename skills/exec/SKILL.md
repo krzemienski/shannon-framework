@@ -7,7 +7,7 @@ description: |
   requests autonomous execution, wants library-first development, needs validated commits.
 
 skill-type: PROTOCOL
-shannon-version: ">=5.1.0"
+shannon-version: ">=5.0.0"
 complexity-triggers: [0.00-1.00]
 
 mcp-requirements:
@@ -495,7 +495,7 @@ Ready for: git push origin {branchName}
 
 ## Version History
 
-**v5.1.0** (2025-11-15):
+**v5.0.0** (2025-11-18):
 - Initial release
 - Integration with Shannon CLI V3.5.0 executor modules
 - Support for Python, Node.js, React, iOS validation
@@ -523,4 +523,4 @@ shannon --version  # Should show 3.5.0+
 
 ---
 
-**Status**: Production-ready for Shannon Framework V5.1.0
+**Status**: Production-ready for Shannon Framework V5.0.0

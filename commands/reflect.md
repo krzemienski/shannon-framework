@@ -1,5 +1,5 @@
 ---
-name: reflect
+name: shannon:reflect
 description: Honest gap analysis before claiming work complete - prevents premature completion
 usage: /shannon:reflect [--scope plan|project|session] [--min-thoughts 100]
 ---

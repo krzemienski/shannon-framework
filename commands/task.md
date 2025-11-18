@@ -1,5 +1,5 @@
 ---
-name: task
+name: shannon:task
 description: Automated prime → spec → wave workflow for complete task execution
 usage: /shannon:task "specification" [--auto] [--plan-only]
 ---

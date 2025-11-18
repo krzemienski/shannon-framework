@@ -24,7 +24,7 @@ Shannon's hook system provides **automatic enforcement** of Iron Laws through re
 | Hook | Event | Purpose | Timeout | Can Fail? | Enforcement Level |
 |------|-------|---------|---------|-----------|-------------------|
 | **session_start.sh** | SessionStart | Load using-shannon meta-skill | 5s | No | CRITICAL |
-| **user_prompt_submit.py** | UserPromptSubmit | Inject North Star goals into prompts | 2s | Yes | HIGH |
+| **user_prompt_submit.py** | UserPromptSubmit | Inject North Star goals + Forced Reading Sentinel | 2s | Yes | HIGH |
 | **post_tool_use.py** | PostToolUse (Write/Edit) | Block mock usage in test files | 3s | Yes | CRITICAL |
 | **precompact.py** | PreCompact | Emergency checkpoint before auto-compact | 15s | **NO** | CRITICAL |
 | **stop.py** | Stop | Validate wave gates before session end | 2s | Yes | MEDIUM |
@@ -395,7 +395,7 @@ Auto-compaction proceeds safely
 **Timeout**: 2000ms (2 seconds)
 **Can Fail**: Yes (warning logged, prompt proceeds)
 
-**Purpose**: Inject North Star goal and active wave context into every prompt to maintain alignment.
+**Purpose**: Inject North Star goal and active wave context into every prompt **and** trigger the Forced Reading Sentinel when prompts/files exceed Shannon thresholds.
 
 **Injection Strategy**:
 ```python
@@ -425,17 +425,24 @@ def execute(user_prompt):
 ```
 
 **What Gets Injected**:
+- Forced Reading Sentinel banner (if prompt ≥10k chars, ≥400 lines, large code blocks, or explicit line ranges)
 - North Star goal (from goal-management skill)
 - Goal progress percentage
 - Active wave number and phase
 - Wave objectives
 - Shannon Framework reminders
 
+**Forced Reading Sentinel**:
+- Thresholds: `>=10,000` characters, `>=400` lines, code block with `>=200` lines, or explicit "`lines 1-500`" references.
+- Output reminds operator to read full file per `skills/forced-reading-sentinel` + `core/FORCED_READING_PROTOCOL.md`.
+- Uses editor-provided metadata when available (`files[].lineCount`, `files[].size`).
+
 **User Impact**: Transparent (users don't see injection, but Claude maintains alignment)
 
 **Integration**:
 - goal-management skill → user_prompt_submit.py (reads goal from Serena)
 - wave-orchestration skill → user_prompt_submit.py (reads wave state)
+- forced-reading-sentinel skill → user_prompt_submit.py (guardrail instructions)
 
 **Failure Mode**: If Serena unavailable, hook proceeds without injection (degraded - no alignment enforcement)
 

@@ -131,8 +131,8 @@ The installer updates Cursor's `settings.json` with:
   "cursor.shannon.requireComplexityAnalysis": true,
   "cursor.shannon.waveExecutionThreshold": 0.50,
 
-  "cursor.chat.systemPrompt": "You are an AI assistant following Shannon Framework v5.0...",
-  "cursor.composer.systemPrompt": "Follow Shannon Framework v5.0..."
+  "cursor.chat.systemPrompt": "You are an AI assistant following Shannon Framework v5.4...",
+  "cursor.composer.systemPrompt": "Follow Shannon Framework v5.4..."
 }
 ```
 
@@ -266,7 +266,7 @@ Installation target: cursor
 /shannon:status
 
 # Expected:
-# Shannon Framework v5.0 active
+# Shannon Framework v5.4 active
 ```
 
 ### Cursor IDE
@@ -517,5 +517,5 @@ MIT License - See LICENSE file in repository root.
 
 ---
 
-**Shannon Framework v5.0** - Quantitative Development for Claude Code and Cursor IDE
+**Shannon Framework v5.4** - Quantitative Development for Claude Code and Cursor IDE
 

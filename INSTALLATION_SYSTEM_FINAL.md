@@ -443,7 +443,7 @@ git pull
 /shannon:status
 
 # Expected:
-# Shannon Framework v5.0 active
+# Shannon Framework v5.4 active
 # ✅ Serena MCP: Connected
 # ✅ Skills loaded: 17/17
 # ✅ Commands available: 19/19
@@ -876,7 +876,7 @@ cd shannon
 
 ---
 
-**Shannon Framework v5.0 - Universal Installation System**
+**Shannon Framework v5.4 - Universal Installation System**
 
 **Status**: ✅ Production-Ready
 **Platforms**: Claude Code + Cursor IDE

@@ -1,18 +1,18 @@
 {
   "hooks": {
-    "UserPromptSubmit": [
-      {
-        "description": "Shannon North Star goal injection for consistent goal alignment",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/user_prompt_submit.py",
-            "description": "Injects North Star goal and active wave context into every prompt",
-            "timeout": 2000
-          }
-        ]
-      }
-    ],
+      "UserPromptSubmit": [
+        {
+          "description": "North Star alignment + Forced Reading Sentinel enforcement",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "${CLAUDE_PLUGIN_ROOT}/hooks/user_prompt_submit.py",
+              "description": "Injects North Star / wave context and warns when prompts exceed forced-reading thresholds",
+              "timeout": 2000
+            }
+          ]
+        }
+      ],
 
     "PreCompact": [
       {

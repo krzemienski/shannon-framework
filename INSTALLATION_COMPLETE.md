@@ -239,9 +239,9 @@ The universal installer generates `~/.cursor/global.cursorrules` containing:
   "cursor.shannon.requireComplexityAnalysis": true,
   "cursor.shannon.waveExecutionThreshold": 0.50,
   
-  "cursor.chat.systemPrompt": "You are an AI assistant following Shannon Framework v5.0 quantitative development methodology. Before any implementation, analyze specifications using 8D complexity scoring. Enforce NO MOCKS testing philosophy (real browsers, real databases, real APIs only). Use wave-based execution for complexity >= 0.50. Reference global Cursor rules for complete Shannon workflows.",
+  "cursor.chat.systemPrompt": "You are an AI assistant following Shannon Framework v5.4 quantitative development methodology. Before any implementation, analyze specifications using 8D complexity scoring. Enforce NO MOCKS testing philosophy (real browsers, real databases, real APIs only). Use wave-based execution for complexity >= 0.50. Reference global Cursor rules for complete Shannon workflows.",
   
-  "cursor.composer.systemPrompt": "Follow Shannon Framework v5.0: Run 8D complexity analysis before implementation. NO MOCKS in tests (use real components). Wave-based execution for complexity >= 0.50. Check global .cursorrules for full methodology."
+  "cursor.composer.systemPrompt": "Follow Shannon Framework v5.4: Run 8D complexity analysis before implementation. NO MOCKS in tests (use real components). Wave-based execution for complexity >= 0.50. Check global .cursorrules for full methodology."
 }
 ```
 
@@ -426,7 +426,7 @@ Build a task management application with React, Node.js, and PostgreSQL"
 - [ ] All directories created in `~/.claude/`
 - [ ] hooks.json configured
 - [ ] Hook scripts executable
-- [ ] `/shannon:status` returns "Shannon Framework v5.0 active"
+- [ ] `/shannon:status` returns "Shannon Framework v5.4 active"
 
 **Cursor IDE**:
 - [ ] global.cursorrules created (2000+ lines)
@@ -492,7 +492,7 @@ MIT License - See LICENSE file in repository root.
 
 ---
 
-**Shannon Framework v5.0** - Complete Installation System
+**Shannon Framework v5.4** - Complete Installation System
 
 **Installation Scripts**:
 - ✅ Universal installer (both platforms)

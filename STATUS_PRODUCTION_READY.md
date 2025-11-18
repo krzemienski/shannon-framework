@@ -24,7 +24,7 @@ Shannon Framework installation system is **PRODUCTION READY** with all critical 
 - **Severity**: 🟡 MAJOR FEATURE GAP
 - **Status**: ✅ FIXED
 - **Fix**: Added `install_cursor_commands()` + `create_cursor_tasks()`
-- **Result**: 19 commands + 7 tasks installed to Cursor
+- **Result**: 22 commands + 7 tasks installed to Cursor
 
 ### Bug 3: Invalid JSON Comment Syntax
 - **Severity**: 🔴 CRITICAL CORRUPTION
@@ -133,8 +133,8 @@ Shannon Framework installation system is **PRODUCTION READY** with all critical 
 ### Components Installed
 ```
 ~/.claude/
-├── skills/shannon/      # 17 skills
-├── commands/shannon/    # 19 commands (/shannon:*)
+├── skills/shannon/      # 26 skills
+├── commands/shannon/    # 22 commands (/shannon:*)
 ├── agents/shannon/      # 24 agents
 ├── core/shannon/        # 9 behavioral patterns
 ├── modes/shannon/       # 2 execution modes
@@ -168,7 +168,7 @@ Shannon Framework installation system is **PRODUCTION READY** with all critical 
 ### Components Installed
 ```
 ~/.cursor/
-├── commands/              # 19 Shannon commands
+├── commands/              # 22 Shannon commands
 │   ├── do.md
 │   ├── spec.md
 │   ├── wave.md
@@ -192,7 +192,7 @@ Shannon Framework installation system is **PRODUCTION READY** with all critical 
 ```
 
 ### Features
-- 19 commands referenceable in Chat/Composer
+- 22 commands referenceable in Chat/Composer
 - 7 VS Code tasks (Cmd+Shift+P)
 - Global rules auto-loaded in every session
 - Settings safely merged (user config preserved)
@@ -413,7 +413,7 @@ cat ~/.shannon_install.log
 
 ## Version
 
-**Shannon Framework**: v5.0.0
+**Shannon Framework**: v5.4.0
 **Installation System**: v1.0.0
 **Last Updated**: 2025-11-18
 **Status**: ✅ PRODUCTION READY
@@ -437,8 +437,8 @@ cat ~/.shannon_install.log
 - 100% verification coverage
 
 **Components Installed**:
-- Claude Code: 17 skills, 19 commands, 24 agents, 9 core files, 5 hooks
-- Cursor: 19 commands, 7 tasks, global rules (2000+ lines), reference docs
+- Claude Code: 26 skills, 22 commands, 24 agents, 9 core files, 5 hooks
+- Cursor: 22 commands, 7 tasks, global rules (2000+ lines), reference docs
 
 **Safety**:
 - 0% data loss risk

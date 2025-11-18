@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides definitive guidance on **when to use which Shannon command** and how commands orchestrate together. Shannon Framework has 17 commands organized into a clear hierarchy.
+This document provides definitive guidance on **when to use which Shannon command** and how commands orchestrate together. Shannon Framework has 22 commands organized into a clear hierarchy.
 
 ---
 
@@ -12,6 +12,11 @@ This document provides definitive guidance on **when to use which Shannon comman
 META-COMMANDS (orchestrate other commands)
 ├─ /shannon:prime      → Session initialization (skills + MCPs + context)
 └─ /shannon:task       → Full workflow automation (prime→spec→wave)
+
+PREPARATION (explore & plan)
+├─ /shannon:brainstorm → Divergent option generation with 8D scoring
+├─ /shannon:write_plan → Detailed implementation plan w/ files/tests
+└─ /shannon:execute_plan → Guided plan execution w/ checkpoints
 
 CORE EXECUTION (do the work)
 ├─ /shannon:do         → Intelligent execution (auto-detects context, research, spec)
@@ -100,6 +105,36 @@ DIAGNOSTICS
 | do      | General tasks | High (auto-detects everything) | Medium |
 | exec    | Validated execution | Medium (structured process) | High |
 | task    | Full workflow | Medium (follows workflow) | Highest |
+
+---
+
+### "I want to design an approach before coding"
+
+**Use: /shannon:brainstorm**
+- **When**: Requirements or architecture still fluid, need ≥3 options.
+- **Output**: `docs/plans/brainstorm/YYYY-MM-DD-<slug>.md` with option pros/cons, 8D mini-scores, wave recommendations.
+- **Best for**: Large features, failing waves, or unfamiliar domains.
+- **Next**: `/shannon:spec` (quantify) → `/shannon:write_plan`.
+
+---
+
+### "I want to convert the chosen option into a plan"
+
+**Use: /shannon:write_plan**
+- **When**: Direction locked, execution requires multiple agents or careful sequencing.
+- **Output**: Implementation plan with files, code snippets, NO MOCKS tests, commit instructions.
+- **Best for**: Complex refactors, multi-step features, onboarding new collaborators.
+- **Next**: `/shannon:execute_plan <plan>` or `/shannon:do` (if intelligent execution preferred).
+
+---
+
+### "I want to execute a documented plan"
+
+**Use: /shannon:execute_plan**
+- **When**: Plan exists and you want deterministic execution with checkpoints.
+- **Modes**: `--mode subagent` (pause after each task) or `--mode solo`.
+- **Behavior**: Replays plan tasks exactly, runs failing tests first, checkpoints via Serena.
+- **Best for**: Compliance-sensitive work, multi-operator handoffs, long-running features.
 
 ---
 
@@ -411,6 +446,12 @@ These workflows are **MANDATORY** and cannot be violated:
 - **Enforced by**: wave-orchestration skill
 - **Violation**: Skipping synthesis checkpoints
 
+### Iron Law 6: Forced Reading Sentinel
+- **Rule**: When sentinel banner appears, pause and perform full-file reading.
+- **Why**: Large prompts/files (>10k chars, >400 lines, large code blocks, explicit ranges) cause comprehension failures.
+- **Enforced by**: `hooks/user_prompt_submit.py` + `skills/forced-reading-sentinel`.
+- **Violation**: Responding without confirming full read & summary.
+
 ---
 
 ## V5 New Features
@@ -437,6 +478,22 @@ These workflows are **MANDATORY** and cannot be violated:
 - Automatic at `/shannon:prime`
 - Caches results for fast reloading
 - Discovers 100+ skills across project/user/plugin
+
+### 5. Planning Command Suite
+- `/shannon:brainstorm` – divergent option generation with 8D mini-scores.
+- `/shannon:write_plan` – detailed plan docs with files/tests/checkpoints.
+- `/shannon:execute_plan` – deterministic plan execution with Serena checkpoints.
+- Provides feature parity with superpowers writing/executing workflows while enforcing NO MOCKS and wave heuristics.
+
+### 6. Systematic Debugging + Root Cause Skills
+- New `skills/systematic-debugging` and `skills/root-cause-analysis`.
+- `/shannon:ultrathink` now explicitly delegates to these skills.
+- Output includes hypothesis logs, causal chains, and prevention steps.
+
+### 7. Forced Reading Sentinel
+- `skills/forced-reading-sentinel` + `hooks/user_prompt_submit.py` watch for large prompts/files.
+- Thresholds: ≥10k characters, ≥400 lines, ≥200-line code block, explicit range references.
+- Injects banner instructing agent to follow `core/FORCED_READING_PROTOCOL.md` before responding.
 
 ---
 
@@ -509,7 +566,7 @@ These workflows are **MANDATORY** and cannot be violated:
 
 ---
 
-**Version**: 5.0.0
+**Version**: 5.4.0
 **Last Updated**: 2025-11-18
 **Status**: Definitive orchestration guide
 

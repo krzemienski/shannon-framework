@@ -1,9 +1,8 @@
 # Shannon Framework
 
-**Version 5.0.0** | [Installation](#installation) | [Quick Start](#quick-start) | [Documentation](#documentation) | [GitHub](https://github.com/krzemienski/shannon-framework)
+**Version 5.4.0** | [Installation](#installation) | [Quick Start](#quick-start) | [Documentation](#documentation) | [GitHub](https://github.com/krzemienski/shannon-framework)
 
-> **🚨 V5.0.0 Breaking Change**: All commands now require `shannon:` prefix (e.g., `/shannon:do`, `/shannon:wave`).
-> See [V5_RELEASE_NOTES.md](V5_RELEASE_NOTES.md) for migration guide.
+> **🚨 V5.4.0 Update**: Adds `/shannon:brainstorm`, `/shannon:write_plan`, `/shannon:execute_plan`, systematic-debugging skills, and the Forced Reading Sentinel. All commands remain `shannon:` namespaced—see [V5_RELEASE_NOTES.md](V5_RELEASE_NOTES.md) for details.
 
 ---
 
@@ -48,13 +47,13 @@ Shannon Framework is a **Claude Code plugin** that transforms AI-assisted develo
                            │
                            ↓
             ┌──────────────────────────┐
-            │   COMMANDS (Layer 4)     │  ← User-facing interface
-            │   15 slash commands      │     /shannon:spec, /shannon:wave
+              │   COMMANDS (Layer 4)     │  ← User-facing interface
+              │   22 slash commands      │     /shannon:spec, /shannon:wave
             └────────────┬─────────────┘     Delegate to skills
                          ↓                   Format output
             ┌──────────────────────────┐
             │   SKILLS (Layer 3)       │  ← Workflow implementation
-            │   18 behavioral patterns │     Execute methodologies
+              │   26 behavioral patterns │     Execute methodologies
             └────────────┬─────────────┘     Save to Serena
                          ↓                   Reference core files
             ┌──────────────────────────┐
@@ -75,8 +74,8 @@ Shannon Framework is a **Claude Code plugin** that transforms AI-assisted develo
 
 | Layer | Count | Purpose | Examples |
 |-------|-------|---------|----------|
-| **Commands** | 19 | User entry points | shannon:do, shannon:wave, shannon:spec, shannon:ultrathink |
-| **Skills** | 20 | Workflow implementation | spec-analysis, wave-orchestration, intelligent-do |
+| **Commands** | 22 | User entry points | shannon:brainstorm, shannon:write_plan, shannon:execute_plan, shannon:ultrathink |
+| **Skills** | 26 | Workflow implementation | spec-analysis, wave-orchestration, writing-plans, systematic-debugging |
 | **Hooks** | 5 | Automatic enforcement | post_tool_use (NO MOCKS), precompact |
 | **Core Files** | 9 | Reference specs (11K lines) | TESTING_PHILOSOPHY, SPEC_ANALYSIS |
 | **Agent Guides** | 25 | Agent usage documentation | WAVE_COORDINATOR, TEST_GUARDIAN |
@@ -154,10 +153,10 @@ cd shannon
 /shannon:status
 
 # Expected output:
-# ✅ Shannon Framework v5.0.0
+# ✅ Shannon Framework v5.4.0
 # ✅ Serena MCP: Connected
-# ✅ Skills loaded: 18/18
-# ✅ Commands available: 15/15
+# ✅ Skills loaded: 26/26
+# ✅ Commands available: 22/22
 ```
 
 ### Quick Start
@@ -433,13 +432,13 @@ Event-driven automation scripts. Execute automatically on lifecycle events.
 | Hook | Event | Purpose | Timeout |
 |------|-------|---------|---------|
 | `session_start.sh` | SessionStart | Load using-shannon meta-skill | 5000ms |
-| `user_prompt_submit.py` | UserPromptSubmit | Inject North Star + wave context | 2000ms |
+| `user_prompt_submit.py` | UserPromptSubmit | Inject North Star + wave context + Forced Reading Sentinel | 2000ms |
 | `post_tool_use.py` | PostToolUse (Write/Edit/MultiEdit) | Block mock usage (NO MOCKS) | 3000ms |
 | `precompact.py` | PreCompact | Create context checkpoint | 15000ms |
 | `stop.py` | Stop | Enforce wave validation gates | 2000ms |
 
 **Key Features**:
-- `user_prompt_submit.py`: Fires on EVERY prompt (cannot skip)
+- `user_prompt_submit.py`: Fires on EVERY prompt (cannot skip) + triggers Forced Reading Sentinel
 - `post_tool_use.py`: Matcher pattern blocks mock writes automatically
 - `precompact.py`: `continueOnError: false` - MUST succeed before compaction
 - All hooks automatic - no user action required
@@ -767,7 +766,13 @@ claude mcp add serena
 
 ## Version History
 
-### v5.0.0 (Current - January 2025)
+### v5.4.0 (Current - November 2025)
+- Planning parity with superpowers: `/shannon:brainstorm`, `/shannon:write_plan`, `/shannon:execute_plan`.
+- New debugging skills: `systematic-debugging`, `root-cause-analysis`, `forced-reading-sentinel`.
+- Forced Reading Sentinel hook for large prompts/files.
+- Documentation + installers updated for 22 commands / 26 skills.
+
+### v5.0.0 (January 2025)
 
 **Major**:
 - Comprehensive functional verification (4 test applications)
@@ -829,7 +834,7 @@ See `CONTRIBUTING.md` for:
 ### Testing
 
 ```bash
-# Validate Shannon v5.0
+# Validate Shannon v5.4
 python validate_shannon_v5.py
 
 # Run skill tests
@@ -861,4 +866,4 @@ Built with Claude Code and inspired by Claude Shannon's information theory princ
 
 **Documentation**: This README + skill-specific guides in `skills/` directory
 
-**Version**: 5.0.0 | **License**: MIT | **Maintainer**: Shannon Framework Team
+**Version**: 5.4.0 | **License**: MIT | **Maintainer**: Shannon Framework Team

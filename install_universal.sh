@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Shannon Framework - Universal Installation Script
-# Version: 5.0.0
+# Version: 5.4.0
 # Purpose: Install Shannon Framework for both Claude Code and Cursor IDE
 #          Translates components appropriately for each platform
 
@@ -60,7 +60,7 @@ print_platform() {
 # Function: Show usage
 show_usage() {
     cat << EOF
-Shannon Framework v5.0 - Universal Installation Script
+Shannon Framework v5.4 - Universal Installation Script
 
 Usage: $0 [OPTIONS]
 
@@ -195,8 +195,8 @@ detect_platforms() {
 generate_cursor_global_rules() {
     local rules_file="$1"
 
-    cat > "${rules_file}" << 'EOF'
-# Shannon Framework v5.0 - Global Cursor Rules
+cat > "${rules_file}" << 'EOF'
+# Shannon Framework v5.4 - Global Cursor Rules
 # This file integrates Shannon Framework's quantitative development methodology into Cursor
 
 ## Shannon Framework Overview
@@ -559,7 +559,7 @@ Consider adding Cursor tasks:
 
 ## Version
 
-**Shannon Framework**: v5.0.0
+**Shannon Framework**: v5.4.0
 **Last Updated**: 2025-11-18
 **License**: MIT
 
@@ -581,14 +581,14 @@ generate_cursor_settings() {
     # Shannon settings to add
     local shannon_settings='{
   "cursor.shannon.enabled": true,
-  "cursor.shannon.version": "5.0.0",
+  "cursor.shannon.version": "5.4.0",
   "cursor.shannon.enforceNoMocks": true,
   "cursor.shannon.requireComplexityAnalysis": true,
   "cursor.shannon.waveExecutionThreshold": 0.50,
   
-  "cursor.chat.systemPrompt": "You are an AI assistant following Shannon Framework v5.0 quantitative development methodology. Before any implementation, analyze specifications using 8D complexity scoring. Enforce NO MOCKS testing philosophy (real browsers, real databases, real APIs only). Use wave-based execution for complexity >= 0.50. Reference global Cursor rules for complete Shannon workflows.",
+  "cursor.chat.systemPrompt": "You are an AI assistant following Shannon Framework v5.4 quantitative development methodology. Before any implementation, analyze specifications using 8D complexity scoring. Enforce NO MOCKS testing philosophy (real browsers, real databases, real APIs only). Use wave-based execution for complexity >= 0.50. Reference global Cursor rules for complete Shannon workflows.",
   
-  "cursor.composer.systemPrompt": "Follow Shannon Framework v5.0: Run 8D complexity analysis before implementation. NO MOCKS in tests (use real components). Wave-based execution for complexity >= 0.50. Check global .cursorrules for full methodology.",
+  "cursor.composer.systemPrompt": "Follow Shannon Framework v5.4: Run 8D complexity analysis before implementation. NO MOCKS in tests (use real components). Wave-based execution for complexity >= 0.50. Check global .cursorrules for full methodology.",
   
   "editor.rulers": [80, 120],
   "editor.formatOnSave": true,
@@ -963,7 +963,7 @@ You'll receive:
 
 ## Version
 
-Shannon Framework v5.0.0
+Shannon Framework v5.4.0
 EOF
 
     print_success "Quick start guide created: ${CURSOR_CONFIG_DIR}/shannon/QUICK_START.md"
@@ -1039,7 +1039,7 @@ post_install_instructions() {
 
 ╔════════════════════════════════════════════════════════════════╗
 ║                                                                ║
-║      Shannon Framework v5.0 - Universal Installation Complete  ║
+║      Shannon Framework v5.4 - Universal Installation Complete  ║
 ║                                                                ║
 ╚════════════════════════════════════════════════════════════════╝
 

@@ -192,7 +192,7 @@ fi
   "editor.fontFamily": "JetBrains Mono",
   "workbench.colorTheme": "Monokai Pro",
   "cursor.shannon.enabled": true,
-  "cursor.shannon.version": "5.0.0",
+  "cursor.shannon.version": "5.4.0",
   ...
 }
 ```
@@ -202,7 +202,7 @@ fi
 // After merge (Shannon settings only)
 {
   "cursor.shannon.enabled": true,
-  "cursor.shannon.version": "5.0.0",
+  "cursor.shannon.version": "5.4.0",
   ...
 }
 ```
@@ -218,7 +218,7 @@ fi
 // After merge (Shannon takes precedence for Shannon keys)
 {
   "cursor.shannon.enabled": true,      // ✓ Overridden
-  "cursor.shannon.version": "5.0.0"    // ✓ Updated
+  "cursor.shannon.version": "5.4.0"    // ✓ Updated
 }
 ```
 

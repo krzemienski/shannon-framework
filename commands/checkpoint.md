@@ -1,5 +1,5 @@
 ---
-name: checkpoint
+name: shannon:checkpoint
 description: Create, load, or manage execution checkpoints for recovery
 usage: /shannon:checkpoint [label] [--load checkpoint_id] [--list]
 ---

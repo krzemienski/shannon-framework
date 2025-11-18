@@ -362,67 +362,231 @@ These thoughts mean you're about to violate Shannon workflows:
 
 ## When to Use Shannon Commands
 
-### /shannon:spec - Specification Analysis
-**Trigger When**:
+Shannon V5 has 18 commands organized into a clear hierarchy. See `/docs/COMMAND_ORCHESTRATION.md` for complete decision trees and workflows.
+
+### PRIMARY EXECUTION COMMANDS
+
+#### /shannon:do - Intelligent Task Execution
+**Trigger When**: General task execution in any project (RECOMMENDED DEFAULT)
+- Auto-detects if needs spec analysis, research, context exploration
+- Checks Serena for project context (< 1s)
+- First time: Explores project OR runs spec if complex
+- Returning: Loads cached context
+- Best for: Both new and existing projects, simple to complex tasks
+
+**Example**: `/shannon:do "add authentication with Auth0"`
+
+#### /shannon:exec - Autonomous Execution with Validation
+**Trigger When**: You want explicit library discovery + validation gates
+- Systematic library research (npm, PyPI, etc.)
+- 3-tier functional validation (build + tests + functionality)
+- Atomic git commits (only validated code)
+- Retries on failure (max 3x)
+
+**Example**: `/shannon:exec "add authentication to React app"`
+
+#### /shannon:task - Full Workflow Automation
+**Trigger When**: You want complete automation from spec to execution
+- Orchestrates: prime → spec → wave automatically
+- Best for: Well-defined specifications, large projects
+- Highest automation level
+
+**Example**: `/shannon:task "Build REST API with auth" --auto`
+
+#### /shannon:wave - Wave-Based Parallel Execution
+**Trigger When**: Complexity >= 0.50 (Shannon threshold)
+- True parallel sub-agent coordination
+- Proven 3.5x speedup
+- Synthesis checkpoints between waves
+- **Mandatory** for complexity >= 0.50
+
+**Example**: `/shannon:wave Build authentication system`
+
+**Prerequisites**: Must run `/shannon:spec` first
+
+### ANALYSIS COMMANDS
+
+#### /shannon:spec - 8D Complexity Analysis
+**Trigger When**: MANDATORY before any implementation
 - User provides ANY specification, requirements, or project description
-- Starting new feature or project
 - Need complexity assessment
 - Planning resource allocation
 
-**Mandatory**: YES - for ALL projects with specifications
+**Output**: 8D scores, domain breakdown, execution strategy, MCP recommendations
 
-**Output**: 8D scores, domain breakdown, MCP recommendations, phase plan, wave plan (if >=0.50), checkpoint
+**Example**: `/shannon:spec "Build e-commerce platform"`
 
-### /shannon:wave - Wave Orchestration
-**Trigger When**:
-- Executing project with complexity >=0.50
-- Need parallel sub-agent coordination
-- Want to achieve 2-4x speedup
+**Iron Law**: ALWAYS run `/shannon:spec` before implementation
 
-**Mandatory**: For complexity >=0.50 (Shannon's quantitative threshold)
+#### /shannon:analyze - Project Analysis
+**Trigger When**: Analyzing existing codebase
+- Architecture assessment
+- Technical debt analysis
+- Complexity hotspot identification
 
-**Output**: Wave execution plan, agent allocation, synthesis checkpoints
+**Output**: Architecture patterns, tech stack, technical debt scores
 
-### /shannon:checkpoint - Manual Checkpoint
-**Trigger When**:
-- Before long-running task
-- User wants to save progress explicitly
-- Testing checkpoint/restore functionality
+**Example**: `/shannon:analyze authentication --deep`
 
-**Mandatory**: NO (PreCompact hook handles automatically)
+### SESSION MANAGEMENT
 
-**Output**: Checkpoint ID, Serena URI
+#### /shannon:prime - Session Initialization
+**Trigger When**: At the start of every session
+- Discovers all available skills
+- Verifies MCP connections
+- Restores context if returning
+- Loads memories
+- Activates forced reading
 
-### /shannon:restore - Restore Session
-**Trigger When**:
-- Resuming after context loss
-- Continuing from previous session
-- Recovering from interruption
+**Options**: `--fresh`, `--resume`, `--quick`, `--full`
 
-**Mandatory**: After context compaction or session end
+**Example**: `/shannon:prime` (auto-detects fresh vs resume)
 
-**Output**: Restored context, ready to continue
+**Recommended**: Run at every session start
 
-### /shannon:status - Framework Status
-**Trigger When**:
-- Want to see Shannon framework health
-- Check MCP connections
-- View active waves/phases
-- Generate SITREP (--sitrep flag)
+### GOAL & VALIDATION COMMANDS
 
-**Mandatory**: NO (diagnostic utility)
+#### /shannon:north_star - Goal Management
+**Trigger When**: Setting or tracking North Star goals
+- Set goal: `/shannon:north_star "Build production-ready SaaS platform"`
+- List goals: `/shannon:north_star`
+- Update progress: `/shannon:north_star --update`
 
-**Output**: Status display, optional SITREP
+**Integration**: goal-alignment skill validates wave results against North Star
 
-### /shannon:check_mcps - MCP Validation
-**Trigger When**:
+#### /shannon:reflect - Honest Gap Analysis
+**Trigger When**: BEFORE any "work complete" claim
+- Mandatory post-execution validation
+- Reads original plan
+- Compares plan vs delivery
+- Runs 100+ sequential thoughts
+- Calculates honest completion %
+
+**Example**: `/shannon:reflect --min-thoughts 150`
+
+**Prevents**: Premature completion claims
+
+### DEBUGGING COMMAND (V5 NEW)
+
+#### /shannon:ultrathink - Deep Debugging
+**Trigger When**: Hard problems, complex bugs, root cause analysis
+- Combines: sequential thinking (150+ thoughts) + systematic debugging + forced reading
+- Root cause tracing
+- Auto-verification with --verify flag
+
+**Example**: `/shannon:ultrathink "Race condition in payment processing" --thoughts 200 --verify`
+
+**MCP Requirement**: Sequential Thinking MCP (MANDATORY)
+
+**When standard debugging fails**: Use /shannon:ultrathink
+
+### CONTEXT MANAGEMENT
+
+#### /shannon:checkpoint - Manual Checkpoint
+**Trigger When**: Before long-running tasks (RARELY NEEDED)
+- PreCompact hook handles automatically
+- Manual use for explicit save points
+
+**Example**: `/shannon:checkpoint "before-refactor"`
+
+#### /shannon:restore - Context Restoration
+**Trigger When**: Resuming after context loss
+- Restores from Serena checkpoint
+- Continues from previous session
+
+**Example**: `/shannon:restore --latest`
+
+### SKILL & MCP COMMANDS
+
+#### /shannon:discover_skills - Skill Discovery
+**Trigger When**: Manually discovering available skills
+- Auto-invoked by `/shannon:prime`
+- Caches results for fast reloading
+
+**Example**: `/shannon:discover_skills`
+
+#### /shannon:check_mcps - MCP Validation
+**Trigger When**: Verifying MCP setup
 - Before starting Shannon workflows
 - Debugging MCP connection issues
-- Validating Shannon setup
+
+**Output**: MCP status (required/recommended/missing)
+
+**Example**: `/shannon:check_mcps`
 
 **Mandatory**: Before first use (verify Serena MCP connected)
 
-**Output**: MCP status list (required/recommended/missing)
+### MEMORY COMMAND
+
+#### /shannon:memory - Memory Operations
+**Trigger When**: Managing Serena memories
+- Save/load/list/delete memories
+- Project context management
+
+**Example**: `/shannon:memory list`
+
+### PROJECT SETUP
+
+#### /shannon:scaffold - Project Scaffolding
+**Trigger When**: Setting up new project structure
+- Creates directories
+- Initializes configuration files
+- Sets up Shannon project structure
+
+**Example**: `/shannon:scaffold --type web-app`
+
+### TESTING COMMAND
+
+#### /shannon:test - Functional Testing
+**Trigger When**: Creating or running functional tests
+- NO MOCKS enforcement (Iron Law)
+- Real browsers (Puppeteer)
+- Real databases
+- Real APIs
+
+**Example**: `/shannon:test --create`
+
+**Integration**: Auto-invoked by `/shannon:wave` and `/shannon:exec`
+
+### DIAGNOSTICS
+
+#### /shannon:status - Framework Health
+**Trigger When**: Checking Shannon framework status
+- View framework health
+- Check MCP connections
+- View active waves/phases
+- Generate SITREP with `--sitrep` flag
+
+**Example**: `/shannon:status`
+
+**Output**: Status display, optional SITREP
+
+---
+
+## Command Decision Tree (Quick Reference)
+
+**Starting session?** → `/shannon:prime`
+
+**Have specification?** → `/shannon:spec` (MANDATORY first)
+
+**Want to execute task?**
+- General task → `/shannon:do` (intelligent)
+- Structured validation → `/shannon:exec`
+- Full automation → `/shannon:task`
+
+**Complexity >= 0.50?** → `/shannon:wave` (MANDATORY)
+
+**Deep debugging needed?** → `/shannon:ultrathink` (V5 NEW)
+
+**Want to validate work?** → `/shannon:reflect`
+
+**Setting goals?** → `/shannon:north_star`
+
+**Analyzing codebase?** → `/shannon:analyze`
+
+---
+
+See `/docs/COMMAND_ORCHESTRATION.md` for complete workflows, examples, and integration patterns.
 
 ---
 

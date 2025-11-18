@@ -1,5 +1,5 @@
 ---
-name: do
+name: shannon:do
 description: |
   Intelligent task execution with auto-context and research. One catch-all command:
   First time explores and caches, returning uses cache for speed, auto-detects when

@@ -1,5 +1,5 @@
 ---
-name: prime
+name: shannon:prime
 description: Unified session priming command - one command for complete context restoration
 usage: /shannon:prime [--fresh|--resume|--quick|--full]
 ---

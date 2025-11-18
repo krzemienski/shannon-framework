@@ -10,6 +10,30 @@ skill-type: PROTOCOL
 shannon-version: ">=5.2.0"
 complexity-triggers: [0.00-1.00]
 
+invoked-by-commands:
+  - /shannon:do
+
+related-commands:
+  - /shannon:exec: Structured execution with library discovery + validation
+  - /shannon:task: Meta-command that orchestrates prime→spec→wave
+  - /shannon:wave: Direct wave execution for parallel work
+
+command-orchestration: |
+  This skill is invoked by /shannon:do, which is the RECOMMENDED default for general task execution.
+
+  WHEN TO USE /shannon:do (this skill):
+  - General task execution in any project
+  - Auto-detection of complexity, research needs, context
+  - Both new and existing projects
+  - Simple to complex tasks
+
+  WHEN TO USE ALTERNATIVES:
+  - /shannon:exec: When you want explicit library discovery + 3-tier validation + git commits
+  - /shannon:task: When you want full automation (prime→spec→wave) from specification
+  - /shannon:wave: When you already have spec analysis and just need parallel execution
+
+  See docs/COMMAND_ORCHESTRATION.md for complete decision trees.
+
 mcp-requirements:
   required:
     - name: serena

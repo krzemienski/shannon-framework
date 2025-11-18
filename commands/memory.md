@@ -1,5 +1,5 @@
 ---
-name: memory
+name: shannon:memory
 description: Track and analyze memory coordination patterns and evolution
 usage: /shannon:memory [track|pattern|visualize|optimize|stats] [entity_name]
 ---

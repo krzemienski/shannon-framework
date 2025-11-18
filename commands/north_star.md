@@ -1,5 +1,5 @@
 ---
-name: north_star
+name: shannon:north_star
 description: Set and manage North Star goals with progress tracking
 usage: /shannon:north_star [goal] [--update] [--history]
 ---

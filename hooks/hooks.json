@@ -50,7 +50,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/nick/.claude/hooks/stop.py",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/stop.py",
             "description": "Blocks completion until wave validation gates are satisfied",
             "timeout": 2000
           }
@@ -60,11 +60,11 @@
 
     "SessionStart": [
       {
-        "description": "Shannon V4 meta-skill loader - loads using-shannon into every session",
+        "description": "Shannon V5 meta-skill loader - loads using-shannon into every session",
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/nick/.claude/hooks/session_start.sh",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/session_start.sh",
             "description": "Loads using-shannon meta-skill to enforce Shannon workflows",
             "timeout": 5000
           }

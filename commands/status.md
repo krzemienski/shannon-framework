@@ -1,5 +1,5 @@
 ---
-name: status
+name: shannon:status
 description: Display Shannon Framework status, version, MCP servers, and configuration
 usage: /shannon:status [--mcps] [--goals] [--verbose]
 ---

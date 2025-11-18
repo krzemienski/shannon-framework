@@ -1,5 +1,5 @@
 ---
-name: check_mcps
+name: shannon:check_mcps
 description: Verify MCP configuration and provide setup guidance
 usage: /shannon:check_mcps [--install-guide] [--fix]
 ---

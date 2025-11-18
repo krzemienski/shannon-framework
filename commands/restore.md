@@ -1,5 +1,5 @@
 ---
-name: restore
+name: shannon:restore
 description: Restore project state from Serena MCP checkpoint
 usage: /shannon:restore [checkpoint_id] [--goals] [--verbose]
 ---

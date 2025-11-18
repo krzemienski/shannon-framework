@@ -1,5 +1,5 @@
 ---
-name: test
+name: shannon:test
 description: NO MOCKS functional testing orchestration with platform detection
 usage: /shannon:test [test_path] [--platform web|mobile|api] [--create]
 ---

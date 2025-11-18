@@ -1,5 +1,5 @@
 ---
-name: analyze
+name: shannon:analyze
 description: Shannon-aware project analysis with complexity assessment and confidence validation
 usage: /shannon:analyze [aspect] [--deep]
 ---

@@ -90,10 +90,12 @@ Claude Code:
     ~/.claude/hooks.json
 
 Cursor IDE:
+    ~/.cursor/commands/                          # Shannon commands (19 files)
     ~/.cursor/shannon/                           # Shannon framework files
     ~/.cursor/global.cursorrules                 # Global rules file
-    ~/Library/Application Support/Cursor/User/   # Settings (macOS)
-    ~/.config/Cursor/User/                       # Settings (Linux)
+    ~/.cursor/.vscode/tasks.json                 # VS Code tasks
+    ~/Library/Application Support/Cursor/User/   # Settings (macOS, merged safely)
+    ~/.config/Cursor/User/                       # Settings (Linux, merged safely)
 
 For detailed documentation, see: INSTALL_LOCAL.md
 
@@ -570,45 +572,108 @@ EOF
     print_success "Generated Cursor global rules: ${rules_file}"
 }
 
-# Function: Generate Cursor settings.json snippet
+# Function: Generate Cursor settings.json snippet (safely merge with existing)
 generate_cursor_settings() {
     local settings_file="$1"
-
-    # Create or update settings.json
-    local settings_content='{
+    
+    print_info "Configuring Cursor settings..."
+    
+    # Shannon settings to add
+    local shannon_settings='{
   "cursor.shannon.enabled": true,
   "cursor.shannon.version": "5.0.0",
   "cursor.shannon.enforceNoMocks": true,
   "cursor.shannon.requireComplexityAnalysis": true,
   "cursor.shannon.waveExecutionThreshold": 0.50,
-
+  
   "cursor.chat.systemPrompt": "You are an AI assistant following Shannon Framework v5.0 quantitative development methodology. Before any implementation, analyze specifications using 8D complexity scoring. Enforce NO MOCKS testing philosophy (real browsers, real databases, real APIs only). Use wave-based execution for complexity >= 0.50. Reference global Cursor rules for complete Shannon workflows.",
-
+  
   "cursor.composer.systemPrompt": "Follow Shannon Framework v5.0: Run 8D complexity analysis before implementation. NO MOCKS in tests (use real components). Wave-based execution for complexity >= 0.50. Check global .cursorrules for full methodology.",
-
+  
   "editor.rulers": [80, 120],
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll": true
   },
-
+  
   "files.exclude": {
     "**/.shannon/checkpoints": false,
     "**/.shannon/waves": false
   }
 }'
-
+    
     # Check if settings.json exists
     if [ -f "${settings_file}" ]; then
         # Backup existing settings
         cp "${settings_file}" "${settings_file}.backup.$(date +%Y%m%d_%H%M%S)"
-        print_warning "Existing Cursor settings.json backed up"
+        print_success "Backed up existing settings.json"
+        
+        # Check if jq is available for JSON merging
+        if command -v jq &> /dev/null; then
+            print_info "Merging Shannon settings with existing settings (using jq)..."
+            
+            # Merge using jq (Shannon settings take precedence)
+            local merged_settings=$(jq -s '.[0] * .[1]' "${settings_file}" <(echo "${shannon_settings}"))
+            
+            echo "${merged_settings}" > "${settings_file}"
+            print_success "Settings merged successfully (existing settings preserved)"
+        else
+            # Fallback: Manual merge using Python
+            print_warning "jq not found, using Python for merge..."
+            
+            python3 << EOF
+import json
+
+# Read existing settings
+try:
+    with open("${settings_file}", 'r') as f:
+        existing = json.load(f)
+except:
+    existing = {}
+
+# Parse Shannon settings
+shannon = json.loads('''${shannon_settings}''')
+
+# Merge (Shannon settings take precedence)
+merged = {**existing, **shannon}
+
+# Write merged settings
+with open("${settings_file}", 'w') as f:
+    json.dump(merged, f, indent=2)
+
+print("✓ Settings merged successfully")
+EOF
+            
+            if [ $? -eq 0 ]; then
+                print_success "Settings merged successfully (existing settings preserved)"
+            else
+                print_error "Failed to merge settings with Python"
+                print_error "Cannot automatically merge settings.json"
+                
+                # Write Shannon settings to separate file for manual merge
+                local shannon_settings_file="${CURSOR_SETTINGS_DIR}/shannon_settings.json"
+                echo "${shannon_settings}" > "${shannon_settings_file}"
+                
+                print_warning "Shannon settings written to: ${shannon_settings_file}"
+                print_warning "MANUAL ACTION REQUIRED:"
+                echo ""
+                echo "1. Open: ${settings_file}"
+                echo "2. Open: ${shannon_settings_file}"
+                echo "3. Copy settings from shannon_settings.json into settings.json"
+                echo "4. Ensure valid JSON syntax (no trailing commas)"
+                echo "5. Save settings.json"
+                echo "6. Delete shannon_settings.json (optional)"
+                echo ""
+                print_error "Settings.json NOT modified to prevent corruption"
+                print_info "Your existing settings are preserved and unchanged"
+            fi
+        fi
+    else
+        # No existing file, create new one
+        print_info "No existing settings.json, creating new file..."
+        echo "${shannon_settings}" > "${settings_file}"
+        print_success "Created new settings.json with Shannon configuration"
     fi
-
-    # Write settings (in production, would merge with existing)
-    echo "${settings_content}" > "${settings_file}"
-
-    print_success "Generated Cursor settings: ${settings_file}"
 }
 
 # Function: Install for Claude Code (using existing logic from install_local.sh)
@@ -625,48 +690,182 @@ install_claude_code() {
     fi
 }
 
+# Function: Install Shannon commands for Cursor
+install_cursor_commands() {
+    print_info "Installing Shannon commands for Cursor..."
+    
+    # Create global commands directory
+    local cursor_commands_dir="${CURSOR_CONFIG_DIR}/commands"
+    mkdir -p "${cursor_commands_dir}"
+    
+    local command_count=0
+    
+    # Copy each command file and adapt for Cursor
+    for command_file in "${SHANNON_ROOT}/commands"/*.md; do
+        if [ -f "${command_file}" ]; then
+            local command_name=$(basename "${command_file}")
+            local cursor_command_file="${cursor_commands_dir}/${command_name}"
+            
+            # Adapt command for Cursor (add usage note at top)
+            cat > "${cursor_command_file}" << 'CMD_HEADER'
+> **Note**: This is a Shannon Framework command. In Cursor, reference this command in Chat/Composer by mentioning its purpose.
+> Example: "Run Shannon 8D complexity analysis on this specification"
+
+CMD_HEADER
+            
+            # Append original command content
+            cat "${command_file}" >> "${cursor_command_file}"
+            
+            print_info "  Installed command: ${command_name}"
+            ((command_count++))
+        fi
+    done
+    
+    print_success "Installed ${command_count} commands to Cursor"
+}
+
+# Function: Create Cursor tasks.json for Shannon
+create_cursor_tasks() {
+    print_info "Creating Cursor tasks for Shannon commands..."
+    
+    # Create tasks directory
+    local cursor_tasks_dir="${CURSOR_CONFIG_DIR}/.vscode"
+    mkdir -p "${cursor_tasks_dir}"
+    
+    local tasks_file="${cursor_tasks_dir}/tasks.json"
+    
+    # Generate tasks.json
+    cat > "${tasks_file}" << 'TASKS_EOF'
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Shannon: Prime Session",
+      "type": "shell",
+      "command": "echo '💡 In Cursor Chat, type: Prime this session with Shannon Framework'",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Shannon: Analyze Specification",
+      "type": "shell",
+      "command": "echo '💡 In Cursor Chat, paste your specification and add: Analyze using Shannon Framework 8D complexity scoring'",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Shannon: Check MCP Status",
+      "type": "shell",
+      "command": "echo '💡 In Cursor Chat, type: Check Shannon Framework MCP server status and recommendations'",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Shannon: Generate Wave Plan",
+      "type": "shell",
+      "command": "echo '💡 In Cursor Chat, type: Generate Shannon wave execution plan for this project'",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Shannon: Validate Tests (NO MOCKS)",
+      "type": "shell",
+      "command": "echo '💡 In Cursor Chat, type: Validate all tests follow Shannon NO MOCKS philosophy'",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Shannon: View Global Rules",
+      "type": "shell",
+      "command": "cat ~/.cursor/global.cursorrules | head -100",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Shannon: View Quick Start",
+      "type": "shell",
+      "command": "cat ~/.cursor/shannon/QUICK_START.md",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    }
+  ]
+}
+TASKS_EOF
+    
+    print_success "Created Cursor tasks.json with Shannon tasks"
+    print_info "Access tasks: Cmd+Shift+P → 'Tasks: Run Task' → Select Shannon task"
+}
+
 # Function: Install for Cursor IDE
 install_cursor() {
     print_platform "Installing Shannon Framework for Cursor IDE..."
     echo ""
-
+    
     # Create Cursor Shannon directory
     local cursor_shannon_dir="${CURSOR_CONFIG_DIR}/shannon"
     mkdir -p "${cursor_shannon_dir}"
-
+    
     # Copy core documentation (for reference)
     print_info "Installing core documentation..."
     mkdir -p "${cursor_shannon_dir}/core"
     mkdir -p "${cursor_shannon_dir}/skills"
     mkdir -p "${cursor_shannon_dir}/agents"
-
+    
     cp -r "${SHANNON_ROOT}/core"/*.md "${cursor_shannon_dir}/core/"
     cp -r "${SHANNON_ROOT}/skills"/* "${cursor_shannon_dir}/skills/"
     cp -r "${SHANNON_ROOT}/agents"/*.md "${cursor_shannon_dir}/agents/"
-
+    
     print_success "Core documentation installed"
     echo ""
-
+    
+    # Install Shannon commands for Cursor
+    install_cursor_commands
+    echo ""
+    
+    # Create Cursor tasks
+    create_cursor_tasks
+    echo ""
+    
     # Generate global Cursor rules
     print_info "Generating global Cursor rules..."
     generate_cursor_global_rules "${CURSOR_CONFIG_DIR}/global.cursorrules"
     echo ""
-
-    # Generate Cursor settings
-    print_info "Configuring Cursor settings..."
+    
+    # Generate Cursor settings (with safe merge)
     mkdir -p "${CURSOR_SETTINGS_DIR}"
     generate_cursor_settings "${CURSOR_SETTINGS_DIR}/settings.json"
     echo ""
-
+    
     # Create Shannon working directory structure
     print_info "Creating Shannon working directory structure..."
     mkdir -p "${CURSOR_CONFIG_DIR}/shannon/.templates"
-
+    
     # Copy templates
     if [ -d "${SHANNON_ROOT}/templates" ]; then
         cp -r "${SHANNON_ROOT}/templates"/* "${CURSOR_CONFIG_DIR}/shannon/.templates/"
     fi
-
+    
     print_success "Shannon working directory created"
     echo ""
 

@@ -69,20 +69,27 @@ The universal installer (`install_universal.sh`) installs Shannon Framework for 
 
 ```
 ~/.cursor/
+├── commands/                # Shannon commands (19 files) ✨ NEW
+│   ├── do.md
+│   ├── spec.md
+│   ├── wave.md
+│   └── ... (16 more)
 ├── shannon/                 # Shannon framework files
 │   ├── core/                # Core documentation
 │   ├── skills/              # Skill reference docs
 │   ├── agents/              # Agent reference docs
 │   ├── .templates/          # Templates
 │   └── QUICK_START.md       # Quick reference
+├── .vscode/                 # ✨ NEW
+│   └── tasks.json           # Shannon tasks (7 tasks)
 ├── global.cursorrules       # Global Shannon rules (2000+ lines)
 └── ...
 
 ~/Library/Application Support/Cursor/User/  (macOS)
-└── settings.json            # Cursor settings with Shannon config
+└── settings.json            # Cursor settings (SAFELY MERGED, not overwritten) ✅
 
 ~/.config/Cursor/User/       (Linux)
-└── settings.json            # Cursor settings with Shannon config
+└── settings.json            # Cursor settings (SAFELY MERGED, not overwritten) ✅
 ```
 
 **How it works**:
@@ -123,7 +130,7 @@ The installer updates Cursor's `settings.json` with:
   "cursor.shannon.enforceNoMocks": true,
   "cursor.shannon.requireComplexityAnalysis": true,
   "cursor.shannon.waveExecutionThreshold": 0.50,
-  
+
   "cursor.chat.systemPrompt": "You are an AI assistant following Shannon Framework v5.0...",
   "cursor.composer.systemPrompt": "Follow Shannon Framework v5.0..."
 }

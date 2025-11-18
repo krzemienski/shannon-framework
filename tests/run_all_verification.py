@@ -229,7 +229,7 @@ def main():
     # Recommendations
     if all_passed:
         print("\n✅ ALL VERIFICATION TESTS PASSED")
-        print("\nShannon Framework v5.0 is working correctly:")
+        print("\nShannon Framework v5.4 is working correctly:")
         if run_tier1:
             print("  - Analysis algorithm validated on 4 real specs")
         if run_tier2:

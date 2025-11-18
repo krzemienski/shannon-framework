@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Shannon Framework - Local Installation Script
-# Version: 5.0.0
+# Version: 5.4.0
 # Purpose: Install Shannon Framework directly to user's Claude configuration
 #          instead of using the plugin system (which has discovery issues)
 
@@ -61,7 +61,7 @@ print_action() {
 # Function: Show usage
 show_usage() {
     cat << EOF
-Shannon Framework v5.0 - Local Installation Script
+Shannon Framework v5.4 - Local Installation Script
 
 Usage: $0 [OPTIONS]
 
@@ -677,7 +677,7 @@ post_install_instructions() {
 
 ╔════════════════════════════════════════════════════════════════╗
 ║                                                                ║
-║          Shannon Framework v5.0 - Installation Complete        ║
+║          Shannon Framework v5.4 - Installation Complete        ║
 ║                                                                ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -701,7 +701,7 @@ Next Steps:
      /shannon:status
    
    Expected output:
-     "Shannon Framework v5.0 active"
+     "Shannon Framework v5.4 active"
 
 3. Configure MCP Servers:
    Shannon requires Serena MCP (MANDATORY):
@@ -756,7 +756,7 @@ post_update_instructions() {
 
 ╔════════════════════════════════════════════════════════════════╗
 ║                                                                ║
-║           Shannon Framework v5.0 - Update Complete             ║
+║           Shannon Framework v5.4 - Update Complete             ║
 ║                                                                ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -784,7 +784,7 @@ INSTRUCTIONS
 
 # Function: Perform installation
 perform_install() {
-    print_info "Shannon Framework v5.0 - Installation"
+    print_info "Shannon Framework v5.4 - Installation"
     print_info "Installing from: ${SHANNON_ROOT}"
     print_info "Installing to: ${CLAUDE_CONFIG_DIR}"
     echo ""
@@ -856,7 +856,7 @@ perform_install() {
 
 # Function: Perform update
 perform_update() {
-    print_info "Shannon Framework v5.0 - Update"
+    print_info "Shannon Framework v5.4 - Update"
     print_info "Updating from: ${SHANNON_ROOT}"
     print_info "Updating in: ${CLAUDE_CONFIG_DIR}"
     echo ""
@@ -955,7 +955,7 @@ perform_update() {
 
 # Function: Perform uninstallation
 perform_uninstall() {
-    print_info "Shannon Framework v5.0 - Uninstallation"
+    print_info "Shannon Framework v5.4 - Uninstallation"
     echo ""
     
     # Confirm uninstallation
@@ -991,7 +991,7 @@ perform_uninstall() {
     cat << 'UNINSTALL_MSG'
 ╔════════════════════════════════════════════════════════════════╗
 ║                                                                ║
-║        Shannon Framework v5.0 - Uninstallation Complete        ║
+║        Shannon Framework v5.4 - Uninstallation Complete        ║
 ║                                                                ║
 ╚════════════════════════════════════════════════════════════════╝
 

@@ -24,6 +24,15 @@ Shannon's forced reading protocol activates automatically for:
 - **SKILL.md files** (skill definitions MUST be read completely)
 - **All files >=3000 lines** (large files most likely to be skimmed)
 
+### Forced Reading Sentinel (Hooks)
+- Triggered by `hooks/user_prompt_submit.py` whenever:
+  - Prompt ≥ **10,000 characters**
+  - OR prompt ≥ **400 lines**
+  - OR any code block ≥ **200 lines**
+  - OR text references explicit line ranges (`lines 1-500`, `L42|`, etc.)
+- Emits banner referencing `skills/forced-reading-sentinel` and this protocol.
+- Applies even outside `/shannon:*` commands (global guardrail).
+
 ### Command Contexts
 - **/shannon:spec** - Specifications MUST be read completely before analysis
 - **/shannon:analyze** - Analysis targets MUST be read completely

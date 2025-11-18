@@ -1,14 +1,25 @@
-# 🎯 Shannon Framework V5.0.0 - MASTER SUMMARY
+# 🎯 Shannon Framework V5.4.0 - MASTER SUMMARY
 
 **Date**: November 18, 2025  
 **Status**: ✅ PRODUCTION DEPLOYMENT COMPLETE  
-**Version**: 5.0.0  
+**Version**: 5.4.0  
 **Breaking Changes**: Implemented & Documented  
 **Quality**: All Gates Passed
 
 ---
 
-## 📋 Executive Summary
+## 🆕 V5.4.0 Additions (November 2025)
+
+- **Planning parity**: `/shannon:brainstorm`, `/shannon:write_plan`, `/shannon:execute_plan` + corresponding skills bring superpowers-style planning into Shannon while preserving NO MOCKS, wave heuristics, and Serena checkpoints.
+- **Debugging upgrades**: New `systematic-debugging` and `root-cause-analysis` skills power `/shannon:ultrathink`, which now documents hypothesis tables + causal chains by default.
+- **Forced Reading Sentinel**: `hooks/user_prompt_submit.py` detects prompts/files ≥10k characters, ≥400 lines, or large code blocks and enforces `skills/forced-reading-sentinel` + `core/FORCED_READING_PROTOCOL.md`.
+- **Docs + installers**: README, `docs/COMMAND_ORCHESTRATION.md`, `skills/using-shannon`, release notes, and installers updated for 22 commands / 26 skills. Added hook unit test + installer smoke tests.
+
+> The detailed V5.0.0 changes remain below for historical context.
+
+---
+
+## 📋 Executive Summary (V5.0.0 Baseline)
 
 Shannon Framework V5.0.0 represents a **comprehensive overhaul** addressing critical portability issues, adding powerful new capabilities, and establishing clear command orchestration patterns. This release includes one breaking change (command namespacing), two major new features (UltraThink and Custom Instructions), and critical bug fixes that make Shannon truly portable.
 

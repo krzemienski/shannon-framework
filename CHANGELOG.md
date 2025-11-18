@@ -4,6 +4,27 @@ All notable changes to Shannon Framework are documented here.
 
 ---
 
+## [5.4.0] - 2025-11-18
+
+### ✨ Added
+- **Planning parity**: `/shannon:brainstorm`, `/shannon:write_plan`, `/shannon:execute_plan` with new skills.
+- **Debugging skills**: `systematic-debugging`, `root-cause-analysis`, and `forced-reading-sentinel`.
+- **Forced Reading Sentinel**: Hook guardrail automatically warns for prompts/files ≥10k characters or ≥400 lines.
+- **Documentation**: README, COMMAND_ORCHESTRATION, using-shannon updated for 22 commands / 26 skills.
+
+### 🔧 Improved
+- `/shannon:ultrathink` explicitly delegates to the new debugging skills.
+- `hooks/user_prompt_submit.py` now emits sentinel banners plus North Star context.
+- Added `tests/hooks/test_user_prompt_submit.py` to verify sentinel behavior.
+- Installers & quick-start scripts updated to version 5.4.0.
+
+### ✅ Validation
+- `python3 -m pytest tests/hooks/test_user_prompt_submit.py`
+- `./test_install.sh`
+- `./test_universal_install.sh`
+
+---
+
 ## [5.0.0] - 2025-11-18
 
 ### 🚨 BREAKING CHANGES

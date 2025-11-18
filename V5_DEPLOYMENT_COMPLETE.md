@@ -1,13 +1,24 @@
-# Shannon Framework V5.0.0 - Deployment Complete ✅
+# Shannon Framework V5.4.0 - Deployment Complete ✅
 
-**Date**: November 18, 2025
-**Status**: ✅ ALL TASKS COMPLETE
-**Version**: 5.0.0
-**Breaking Changes**: Implemented and documented
+**Date**: November 18, 2025  
+**Status**: ✅ ALL TASKS COMPLETE  
+**Version**: 5.4.0  
+**Breaking Changes**: None (additive release)
 
 ---
 
-## 🎉 Executive Summary
+## 🎉 Executive Summary (V5.4.0)
+
+- ✅ Added planning parity commands + skills (brainstorm, write-plan, execute-plan).
+- ✅ Added systematic debugging + root cause skills (ultrathink delegates to them).
+- ✅ Added Forced Reading Sentinel hook + skill for large prompts/files.
+- ✅ Updated README/orchestration docs/installers/tests for 22 commands & 26 skills.
+
+> Legacy V5.0.0 deployment notes remain below for historical context.
+
+---
+
+## 🎉 Executive Summary (V5.0.0 Baseline)
 
 Shannon Framework V5.0.0 has been successfully deployed with:
 - ✅ Command namespacing (breaking change) fully implemented
@@ -291,7 +302,7 @@ Find and replace in your workflows/documentation:
 
 ```bash
 /shannon:status
-# Should show: "Shannon Framework v5.0.0 active"
+# Should show: "Shannon Framework v5.4.0 active"
 ```
 
 ### Step 4: Optional - Generate Custom Instructions

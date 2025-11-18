@@ -4,6 +4,12 @@
 **Action**: Version mismatch correction  
 **Result**: ALL VERSION REFERENCES NOW CONSISTENT
 
+## 2025-11-18 Update (v5.4.0)
+- `.claude-plugin/plugin.json` now reports `5.4.0`.
+- New commands (`/shannon:brainstorm`, `/shannon:write_plan`, `/shannon:execute_plan`, `/shannon:ultrathink` update) declare `version: "5.4.0"`.
+- Sentinels/hooks/tests reference v5.4.0 in status messages and installers.
+- Historical 5.0.0 audit details retained below for traceability.
+
 ---
 
 ## Issue Found
@@ -32,7 +38,7 @@ Commands/skills referenced future versions that don't exist:
 
 ## Final Version State
 
-**Plugin Version**: `5.0.0` (from `.claude-plugin/plugin.json`)
+**Plugin Version (legacy)**: `5.0.0` (from `.claude-plugin/plugin.json`)
 
 **Command Versions**:
 - `shannon:do` → `5.0.0` ✅
@@ -43,7 +49,7 @@ Commands/skills referenced future versions that don't exist:
 - `exec`: `>=5.0.0` (updated) ✅
 - `task-automation`: `>=5.0.0` (correct) ✅
 
-**All versions now consistent with plugin version 5.0.0** ✅
+**All versions now consistent with plugin version 5.0.0 (legacy baseline)** ✅
 
 ---
 
@@ -94,7 +100,7 @@ grep "shannon-version:" skills/*/SKILL.md
 
 ---
 
-**Status**: ✅ All version references consistent with 5.0.0  
+**Status**: ✅ All version references consistent with 5.0.0 (legacy audit)  
 **Issue**: ✅ Resolved  
-**Ready**: ✅ For V5.0.0 release
+**Ready**: ✅ For V5.0.0 release (superseded by V5.4.0 audit above)
 

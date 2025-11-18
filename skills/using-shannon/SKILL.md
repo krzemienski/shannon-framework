@@ -394,6 +394,27 @@ Shannon V5 has 18 commands organized into a clear hierarchy. See `/docs/COMMAND_
 **Example**: `/shannon:task "Build REST API with auth" --auto`
 
 #### /shannon:wave - Wave-Based Parallel Execution
+
+### PREPARATION COMMANDS
+
+#### /shannon:brainstorm - Divergent Exploration
+- Use before committing to architecture or when waves need fallback options.
+- Outputs ≥3 approaches with 8D mini-scores, testing strategies, and wave recommendations.
+- Saves to `docs/plans/brainstorm/YYYY-MM-DD-<slug>.md`.
+- Delegates to `skills/brainstorming`.
+
+#### /shannon:write_plan - Formal Implementation Plan
+- Converts chosen option into actionable plan (files, code, tests, checkpoints).
+- Produces markdown in `docs/plans/` with required next command `/shannon:execute_plan`.
+- Delegates to `skills/writing-plans`.
+- Mandatory for workstreams spanning multiple agents/waves.
+
+#### /shannon:execute_plan - Structured Task Runner
+- Consumes plan file and executes tasks sequentially.
+- Offers `--mode subagent|solo`, checkpoints after each task, enforces NO MOCKS.
+- Delegates to `skills/executing-plans`, `functional-testing`, `wave-orchestration`.
+- Ideal when you need traceability or multiple operators share backlog.
+
 **Trigger When**: Complexity >= 0.50 (Shannon threshold)
 - True parallel sub-agent coordination
 - Proven 3.5x speedup

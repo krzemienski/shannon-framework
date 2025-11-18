@@ -1,13 +1,21 @@
-# 🎓 Shannon Framework V5.0.0 - Completion Certificate
+# 🎓 Shannon Framework V5.4.0 - Completion Certificate
 
 **Certification Date**: November 18, 2025  
 **Certification Status**: ✅ ALL REQUIREMENTS MET  
-**Version**: 5.0.0  
+**Version**: 5.4.0  
 **Quality**: Production-Ready
+
+## New in V5.4.0
+- Planning parity commands (`/shannon:brainstorm`, `/shannon:write_plan`, `/shannon:execute_plan`) and six new skills.
+- `/shannon:ultrathink` now delegates to `systematic-debugging` + `root-cause-analysis`.
+- Forced Reading Sentinel guardrail enforced via `hooks/user_prompt_submit.py`.
+- Documentation/installers/tests updated for 22 commands and 26 skills.
+
+> Legacy V5.0.0 certification details remain below for audit purposes.
 
 ---
 
-## ✅ CERTIFICATION CRITERIA
+## ✅ CERTIFICATION CRITERIA (Legacy V5.0.0)
 
 ### ✅ 1. Fixed Session Start Hardcoded Path
 - **Requirement**: Remove `/Users/nick/.claude/` hardcoded path

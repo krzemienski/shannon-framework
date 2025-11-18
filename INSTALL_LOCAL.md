@@ -84,7 +84,7 @@ In Claude Code, start a new session and run:
 
 **Expected output:**
 ```
-Shannon Framework v5.0 active
+Shannon Framework v5.4 active
 ```
 
 ### Step 4: Configure MCP Servers
@@ -540,5 +540,5 @@ MIT License - See LICENSE file in repository root.
 
 ---
 
-**Shannon Framework v5.0** - Quantitative, Enforced, Production-Ready Development
+**Shannon Framework v5.4** - Quantitative, Enforced, Production-Ready Development
 

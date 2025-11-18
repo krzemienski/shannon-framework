@@ -1,7 +1,12 @@
----
 name: shannon:ultrathink
 description: Deep debugging with sequential thinking, systematic debugging, and forced reading
 usage: /shannon:ultrathink "problem description" [--thoughts N] [--verify]
+tags: [debugging, parity, testing, root-cause]
+version: "5.4.0"
+delegates_to:
+  - systematic-debugging
+  - root-cause-analysis
+  - forced-reading-sentinel
 ---
 
 # Shannon UltraThink: Deep Debugging Command
@@ -11,6 +16,8 @@ usage: /shannon:ultrathink "problem description" [--thoughts N] [--verify]
 **Ultra-deep debugging** for hard problems, complex bugs, and root cause analysis. Combines sequential thinking MCP (150+ thoughts), systematic debugging protocol, forced complete reading, and root cause tracing to solve problems other approaches miss.
 
 **When Standard Debugging Fails**: Use /shannon:ultrathink
+
+> Automatically activates `skills/systematic-debugging`, `skills/root-cause-analysis`, and `skills/forced-reading-sentinel`. Refer to those skills for checklists and response patterns.
 
 ## Prerequisites
 

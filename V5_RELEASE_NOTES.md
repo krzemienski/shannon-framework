@@ -1,14 +1,25 @@
-# Shannon Framework V5.0.0 - Release Notes
+# Shannon Framework V5 Release Notes
 
-**Release Date**: November 18, 2025
-**Status**: ✅ RELEASED
-**Breaking Changes**: YES (Command Namespacing)
+## 5.4.0 – November 18, 2025
+
+**Status**: ✅ Released • **Breaking Changes**: None (additive)
+
+### Highlights
+- **Planning Parity**: `/shannon:brainstorm`, `/shannon:write_plan`, `/shannon:execute_plan` bring superpowers-style brainstorming/writing/execution into Shannon with NO MOCKS + wave-aware guidance.
+- **New Skills**: `brainstorming`, `writing-plans`, `executing-plans`, `systematic-debugging`, `root-cause-analysis`, and `forced-reading-sentinel`.
+- **Forced Reading Sentinel**: `hooks/user_prompt_submit.py` now detects prompts ≥10k characters, ≥400 lines, large code blocks, or explicit line ranges and enforces `core/FORCED_READING_PROTOCOL.md` before any response.
+- **UltraThink Upgrade**: Command delegates to the new debugging skills for hypothesis tracking, root cause logging, and guardrail recommendations.
+- **Docs & Installers**: README, `docs/COMMAND_ORCHESTRATION.md`, release summaries, and installers updated for 22 commands / 26 skills. Added hook unit test + installer smoke tests.
+
+### Upgrade Notes
+- Run `/shannon:discover_skills` (or `/shannon:prime`) to load six new skills.
+- Use `/shannon:brainstorm` before `/shannon:write_plan` for complex features; hand off to `/shannon:execute_plan` for deterministic execution.
+- Pay attention to the sentinel banner—ignoring it violates the Forced Reading Iron Law.
 
 ---
 
-## 🎯 Executive Summary
-
-Shannon Framework V5.0.0 represents a major evolution in command orchestration, debugging capabilities, and project-specific customization. This release introduces command namespacing for better plugin isolation, a powerful deep debugging command, and auto-generated project-specific instructions that persist across sessions.
+## 5.0.0 – January 12 & November 18, 2025 (Command Namespacing Launch)
+**Breaking Changes**: YES (Command Namespacing)
 
 ---
 
@@ -294,7 +305,7 @@ claude plugin update shannon@shannon-framework
 
 ```bash
 /shannon:status
-# Should show: "Shannon Framework v5.0.0 active"
+# Should show: "Shannon Framework v5.4.0 active"
 ```
 
 ### Step 4: Optional - Generate Custom Instructions

@@ -278,7 +278,7 @@ After installation and restart, users verify with:
 
 Expected output:
 ```
-Shannon Framework v5.0 active
+Shannon Framework v5.4 active
 ```
 
 ## Benefits of Local Installation
@@ -425,5 +425,5 @@ Shannon Framework can now be installed reliably to any user's system, bypassing 
 
 ---
 
-**Shannon Framework v5.0** - Now with reliable local installation
+**Shannon Framework v5.4** - Now with reliable local installation
 

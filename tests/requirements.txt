@@ -1,4 +1,4 @@
-# Shannon Framework v5.0 Test Dependencies
+# Shannon Framework v5.4 Test Dependencies
 # Python SDK for programmatic Claude agent testing
 
 # Core dependency

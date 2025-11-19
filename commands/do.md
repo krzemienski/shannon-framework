@@ -8,6 +8,7 @@ description: |
 usage: |
   /shannon:do "task description"
   /shannon:do "task" --auto
+  /shannon:do "task" --skip-init-check
 
 examples:
   - /shannon:do "create authentication system"
@@ -17,7 +18,7 @@ examples:
 delegates_to:
   - intelligent-do
 
-version: "5.0.0"
+version: "5.5.0"
 ---
 
 # /shannon:do - Intelligent Task Execution

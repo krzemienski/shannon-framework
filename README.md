@@ -1,9 +1,9 @@
 # Shannon Framework
 
-**Version 5.0.0** | [Installation](#installation) | [Quick Start](#quick-start) | [Documentation](#documentation) | [GitHub](https://github.com/krzemienski/shannon-framework)
+**Version 5.4.0** | [Installation](#installation) | [Quick Start](#quick-start) | [Documentation](#documentation) | [GitHub](https://github.com/krzemienski/shannon-framework)
 
-> **🚨 V5.0.0 Breaking Change**: All commands now require `shannon:` prefix (e.g., `/shannon:do`, `/shannon:wave`).
-> See [V5_RELEASE_NOTES.md](V5_RELEASE_NOTES.md) for migration guide.
+> **🎉 V5.4.0 "Superpowers Parity" Release**: 8 new skills, forced reading auto-activation, enhanced testing patterns.
+> See [docs/v5.4/CHANGELOG.md](docs/v5.4/CHANGELOG.md) for complete details.
 
 ---
 
@@ -75,8 +75,8 @@ Shannon Framework is a **Claude Code plugin** that transforms AI-assisted develo
 
 | Layer | Count | Purpose | Examples |
 |-------|-------|---------|----------|
-| **Commands** | 19 | User entry points | shannon:do, shannon:wave, shannon:spec, shannon:ultrathink |
-| **Skills** | 20 | Workflow implementation | spec-analysis, wave-orchestration, intelligent-do |
+| **Commands** | 21 | User entry points | shannon:do, shannon:wave, shannon:spec, shannon:ultrathink |
+| **Skills** | 39+ | Workflow implementation | spec-analysis, wave-orchestration, condition-based-waiting, forced-reading-auto-activation |
 | **Hooks** | 5 | Automatic enforcement | post_tool_use (NO MOCKS), precompact |
 | **Core Files** | 9 | Reference specs (11K lines) | TESTING_PHILOSOPHY, SPEC_ANALYSIS |
 | **Agent Guides** | 25 | Agent usage documentation | WAVE_COORDINATOR, TEST_GUARDIAN |

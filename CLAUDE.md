@@ -2,10 +2,14 @@
 
 **This is the Shannon Framework repository.**
 
-**Current Work**: Shannon v5.0 Functional Verification (feature/v5.0-functional-testing branch)
-- Building ALL 4 test applications to verify Shannon's complete capabilities
-- Three-layer verification: Flow + Artifacts + Functionality
-- See: `.serena/memories/SHANNON_V5_COMPREHENSIVE_VERIFICATION_PLAN.md`
+**Current Version**: Shannon v5.4.0 "Superpowers Parity" Release
+
+**Latest Release Highlights**:
+- ✅ 8 new skills (condition-based-waiting, testing-anti-patterns, forced-reading-auto-activation, etc.)
+- ✅ Auto-activation hook for large files/prompts
+- ✅ Enhanced testing and coordination patterns
+- ✅ Complete feature parity with superpowers framework
+- See: `docs/v5.4/CHANGELOG.md` for complete details
 
 For Shannon users: **Install via plugin system** (recommended)
 For Shannon developers: This directory contains plugin source code
@@ -127,14 +131,16 @@ async for message in query(
 
 ## Version
 
-**Current**: v4.1.0
+**Current**: v5.4.0
 
-**V4.1 Enhancements**:
-- 🔴 Forced Complete Reading Protocol
-- 🔴 Automatic Skill Discovery & Invocation
-- 🔴 Unified /shannon:prime Command
+**V5.4 "Superpowers Parity" Enhancements**:
+- ✅ 8 New Skills (testing, coordination, reading comprehension)
+- ✅ Forced Reading Auto-Activation (large file/prompt detection)
+- ✅ Enhanced Testing Patterns (condition-based-waiting, anti-patterns)
+- ✅ Parallel Agent Coordination (dispatching, subagent-driven-development)
+- ✅ Branch Completion Workflow (systematic validation gates)
 
-**See**: [SHANNON_V4.1_FINAL_SUMMARY.md](SHANNON_V4.1_FINAL_SUMMARY.md) for details
+**See**: [docs/v5.4/CHANGELOG.md](docs/v5.4/CHANGELOG.md) for complete details
 
 ---
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Shannon Framework - Local Installation Script
-# Version: 5.0.0
+# Version: 5.5.0
 # Purpose: Install Shannon Framework directly to user's Claude configuration
 #          instead of using the plugin system (which has discovery issues)
 

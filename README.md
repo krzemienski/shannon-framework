@@ -1,9 +1,9 @@
 # Shannon Framework
 
-**Version 5.5.0** | [Installation](#installation) | [Quick Start](#quick-start) | [Documentation](#documentation) | [GitHub](https://github.com/krzemienski/shannon-framework)
+**Version 5.6.0** | [Installation](#installation) | [Quick Start](#quick-start) | [Documentation](#documentation) | [GitHub](https://github.com/krzemienski/shannon-framework)
 
-> **✨ V5.5.0 NEW**: Project onboarding with `/shannon:init` - Transform any codebase into Shannon-ready in minutes!
-> See [V5.5_RELEASE_NOTES.md](V5.5_RELEASE_NOTES.md) for what's new.
+> **🚀 V5.6.0 "Comprehensive Quality & Intelligence"**: 14 new skills, `/shannon:health` dashboard, advanced testing, security automation!
+> See [docs/v5.6/CHANGELOG.md](docs/v5.6/CHANGELOG.md) for complete details.
 
 ---
 

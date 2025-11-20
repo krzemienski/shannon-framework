@@ -2,10 +2,15 @@
 
 **This is the Shannon Framework repository.**
 
-**Current Work**: Shannon v5.0 Functional Verification (feature/v5.0-functional-testing branch)
-- Building ALL 4 test applications to verify Shannon's complete capabilities
-- Three-layer verification: Flow + Artifacts + Functionality
-- See: `.serena/memories/SHANNON_V5_COMPREHENSIVE_VERIFICATION_PLAN.md`
+**Current Version**: Shannon v5.6.0 "Comprehensive Quality & Intelligence"
+
+**Latest Release Highlights**:
+- ✅ 14 new skills (testing, security, architecture, coordination)
+- ✅ `/shannon:health` command for real-time health dashboard
+- ✅ Auto-activation hook for large files/prompts
+- ✅ Advanced testing: mutation, performance regression, anti-patterns
+- ✅ Security automation: vulnerability detection, compliance
+- See: `docs/v5.6/CHANGELOG.md` for complete details
 
 For Shannon users: **Install via plugin system** (recommended)
 For Shannon developers: This directory contains plugin source code

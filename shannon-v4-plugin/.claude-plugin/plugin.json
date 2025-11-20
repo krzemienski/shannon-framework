@@ -1,0 +1,133 @@
+{
+  "name": "shannon-v4",
+  "version": "4.0.0",
+  "display_name": "Shannon Framework v4 (Skill-Based Architecture)",
+  "description": "Enterprise-grade specification-driven development framework with progressive disclosure, skill-based orchestration, and zero-context-loss wave execution",
+  "author": "Shannon Framework Team",
+  "license": "MIT",
+  "homepage": "https://github.com/krzemienski/shannon-framework",
+  "documentation": "https://github.com/krzemienski/shannon-framework/blob/main/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/krzemienski/shannon-framework"
+  },
+  "architecture": {
+    "paradigm": "skill-based",
+    "disclosure": "progressive",
+    "orchestration": "wave-parallel",
+    "context_preservation": "zero-loss"
+  },
+  "components": {
+    "commands": 34,
+    "agents": 19,
+    "skills": 25,
+    "hooks": 7,
+    "core_patterns": 8
+  },
+  "requirements": {
+    "claude_code_version": ">=2.0.0",
+    "mcp_servers": {
+      "tier1_mandatory": [
+        {
+          "name": "serena",
+          "purpose": "Context preservation and memory",
+          "tools": ["write_memory", "read_memory", "list_memories", "create_entities", "create_relations"]
+        }
+      ],
+      "tier2_recommended": [
+        {
+          "name": "sequential-thinking",
+          "purpose": "Multi-step reasoning",
+          "tools": ["sequentialthinking"]
+        },
+        {
+          "name": "context7",
+          "purpose": "Framework documentation",
+          "tools": ["get_doc", "search_docs"]
+        },
+        {
+          "name": "puppeteer",
+          "purpose": "Real browser testing (NO MOCKS)",
+          "tools": ["puppeteer_navigate", "puppeteer_screenshot", "puppeteer_click"]
+        }
+      ],
+      "tier3_project_specific": [
+        {
+          "name": "shadcn-ui",
+          "purpose": "React component generation",
+          "condition": "Frontend domain ≥ 50% AND React detected"
+        },
+        {
+          "name": "xcode",
+          "purpose": "iOS build automation",
+          "condition": "iOS/Swift project detected"
+        }
+      ]
+    }
+  },
+  "progressive_disclosure": {
+    "enabled": true,
+    "base_tokens": 5000,
+    "metadata_only": true,
+    "on_demand_loading": true,
+    "target_reduction": "60-80%"
+  },
+  "hooks": {
+    "SessionStart": {
+      "file": "hooks/session_start.py",
+      "description": "Restores context from PreCompact checkpoint, initializes Shannon v4 environment"
+    },
+    "PreCompact": {
+      "file": "hooks/precompact.py",
+      "description": "Zero-context-loss: Saves state to Serena MCP before auto-compaction"
+    },
+    "PreWave": {
+      "file": "hooks/pre_wave.py",
+      "description": "NEW: Validates dependencies, injects context, performs readiness checks"
+    },
+    "PostWave": {
+      "file": "hooks/post_wave.py",
+      "description": "NEW: Collects results, validates outputs, updates project state"
+    },
+    "QualityGate": {
+      "file": "hooks/quality_gate.py",
+      "description": "NEW: Enforces validation gates (Spec, Phase, Wave, Quality, Project)"
+    },
+    "PreToolUse": {
+      "file": "hooks/pre_tool_use.py",
+      "description": "Skill activation logic, MCP availability checks"
+    },
+    "PostToolUse": {
+      "file": "hooks/post_tool_use.py",
+      "description": "Result validation, error learning via Reflexion pattern"
+    }
+  },
+  "skills": {
+    "auto_generation": true,
+    "meta_skill": "shannon-skill-generator",
+    "spec_driven": true,
+    "tdd_validation": true
+  },
+  "features": {
+    "8d_complexity_analysis": true,
+    "5_phase_planning": true,
+    "wave_orchestration": true,
+    "zero_context_loss": true,
+    "no_mocks_testing": true,
+    "confidence_checking": true,
+    "reflexion_learning": true,
+    "meta_programming": true
+  },
+  "system_prompt_hierarchy": [
+    "User CLAUDE.md (highest priority)",
+    "Project CLAUDE.md",
+    "Plugin core patterns (minimal, progressive)",
+    "Skills (on-demand, context-specific)"
+  ],
+  "token_budget": {
+    "session_start": "~5K tokens (metadata only)",
+    "on_demand_max": "+20K tokens (full content when needed)",
+    "v3_comparison": "~50K tokens upfront (v3) vs ~5K base (v4)",
+    "reduction_target": "60-80%"
+  }
+}

@@ -132,9 +132,16 @@ async for message in query(
 
 ## Version
 
-**Current**: v4.1.0
+**Current**: v5.6.0
 
-**V4.1 Enhancements**:
+**V5.6 Enhancements**:
+- ✅ 14 new skills (testing, security, architecture, coordination)
+- ✅ `/shannon:health` command for real-time health dashboard
+- ✅ Auto-activation hook for large files/prompts
+- ✅ Advanced testing: mutation, performance regression, anti-patterns
+- ✅ Security automation: vulnerability detection, compliance
+
+**Previous V4.1 Enhancements**:
 - 🔴 Forced Complete Reading Protocol
 - 🔴 Automatic Skill Discovery & Invocation
 - 🔴 Unified /shannon:prime Command

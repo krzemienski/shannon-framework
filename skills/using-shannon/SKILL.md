@@ -869,12 +869,12 @@ def validate_shannon_active(session_context):
 
 ## References
 
-- Complete 8D algorithm: shannon-plugin/core/SPEC_ANALYSIS.md
-- Wave orchestration: shannon-plugin/core/WAVE_ORCHESTRATION.md
-- NO MOCKS philosophy: shannon-plugin/core/TESTING_PHILOSOPHY.md
-- Context preservation: shannon-plugin/core/CONTEXT_MANAGEMENT.md
-- SITREP protocol: shannon-plugin/skills/sitrep-reporting/SKILL.md
-- Hook system: shannon-plugin/core/HOOK_SYSTEM.md
+- Complete 8D algorithm: core/SPEC_ANALYSIS.md
+- Wave orchestration: core/WAVE_ORCHESTRATION.md
+- NO MOCKS philosophy: core/TESTING_PHILOSOPHY.md
+- Context preservation: core/CONTEXT_MANAGEMENT.md
+- SITREP protocol: skills/sitrep-reporting/SKILL.md
+- Hook system: core/HOOK_SYSTEM.md
 
 ---
 
@@ -892,7 +892,7 @@ Shannon v5.4 adds systematic workflows from the Superpowers framework with Shann
 - Team collaboration (plan as communication)
 - When you want review checkpoints during execution
 
-**Output**: 
+**Output**:
 - Plan file with 8D complexity scoring
 - Bite-sized tasks (2-5 min each)
 - Complete code examples

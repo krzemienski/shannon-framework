@@ -1,8 +1,10 @@
 {
+  "$schema": "https://claude.ai/hooks-schema.json",
+  "$comment": "Shannon Framework v5.6.0 Hooks Configuration. NOTE: ${CLAUDE_PLUGIN_ROOT} is replaced by Claude Code plugin system. For local installation, install_local.sh generates hooks.json with absolute paths.",
   "hooks": {
     "UserPromptSubmit": [
       {
-        "description": "Shannon context injection and forced reading protocol activation (v5.4 enhanced)",
+        "description": "Shannon context injection and forced reading protocol activation (v5.6)",
         "hooks": [
           {
             "type": "command",

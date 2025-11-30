@@ -1,7 +1,41 @@
 # Shannon Framework v5.6.0 - "Comprehensive Quality & Intelligence" Release
 
 **Release Date**: 2025-11-20
+**Latest Patch**: v5.6.1 (2025-11-29)
 **Branch**: `claude/shannon-v5.6-comprehensive-enhancement`
+
+---
+
+## 🔧 v5.6.1 Patch Notes (2025-11-29)
+
+### Installation System Overhaul (Major)
+- ✅ **Complete rewrite of install_local.sh** (Script v2.0.0)
+  - Version tracking via `~/.claude/shannon_version`
+  - Comprehensive plugin detection (directories + marketplace.json)
+  - Automatic removal of ALL conflicting installations
+  - Unified install/update behavior (same command)
+  - `--status` command to check installation state
+  - `--force` flag for non-interactive use
+  - `--quiet` flag for minimal output
+  - Smart version comparison for updates
+  - Idempotent - safe to run multiple times
+  - Ensures only ONE installation exists on system
+
+### Bug Fixes
+- ✅ **CLAUDE.md**: Updated version from v4.1.0 to v5.6.0
+- ✅ **precompact.py**: Fixed dead code - moved `_log_warning` and `_log_to_file` methods inside class
+- ✅ **hooks/hooks.json**: Added schema and documentation comment
+- ✅ **using-shannon/SKILL.md**: Fixed `shannon-plugin/` path references
+- ✅ **Moderate Projects agent count**: Fixed inconsistency (2-3 → 2-4 agents)
+
+### Documentation Updates
+- ✅ **INSTALL_LOCAL.md**: Complete rewrite reflecting new installation system
+- ✅ **docs/analysis/*.md**: Full audit documentation created
+
+### Comprehensive Audit Completed
+- Full audit of 108+ files across all components
+- Documentation: See `docs/analysis/COMPREHENSIVE_AUDIT_V5.6.md`
+- All identified issues have been resolved
 
 ---
 

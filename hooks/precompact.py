@@ -293,6 +293,26 @@ Execute ALL steps above before allowing compaction to proceed.
         """
         self._write_log("ERROR", message)
 
+    def _log_warning(self, message: str) -> None:
+        """Log warning message to stderr"""
+        print(f"[WARNING] {message}", file=sys.stderr)
+
+    def _log_to_file(self, event_type: str, data: Dict[str, Any]) -> None:
+        """Log to structured file for analytics"""
+        try:
+            log_file = self.log_dir / f"{datetime.now(UTC).date()}.jsonl"
+            entry = {
+                "timestamp": datetime.now(UTC).isoformat(),
+                "event": event_type,
+                "data": data,
+                "checkpoint_key": self.checkpoint_key
+            }
+            with open(log_file, 'a') as f:
+                f.write(json.dumps(entry) + '\n')
+        except Exception as e:
+            # Logging failure shouldn't break hook
+            print(f"[WARNING] Failed to write log: {e}", file=sys.stderr)
+
     def _write_log(self, level: str, message: str):
         """
         Write log message to Shannon log file
@@ -367,22 +387,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    def _log_warning(self, message: str) -> None:
-        """Log warning message"""
-        print(f"[WARNING] {message}", file=sys.stderr)
-
-    def _log_to_file(self, event_type: str, data: Dict[str, Any]) -> None:
-        """Log to structured file for analytics"""
-        try:
-            log_file = self.log_dir / f"{datetime.now(UTC).date()}.jsonl"
-            entry = {
-                "timestamp": datetime.now(UTC).isoformat(),
-                "event": event_type,
-                "data": data,
-                "checkpoint_key": self.checkpoint_key
-            }
-            with open(log_file, 'a') as f:
-                f.write(json.dumps(entry) + '\n')
-        except Exception as e:
-            # Logging failure shouldn't break hook
-            print(f"[WARNING] Failed to write log: {e}", file=sys.stderr)

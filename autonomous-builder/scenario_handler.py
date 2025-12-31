@@ -351,8 +351,8 @@ class ScenarioHandler:
                 lines = progress.strip().split('\n')[-10:]
                 notes_parts.append("Recent progress:")
                 notes_parts.extend(f"  {line}" for line in lines)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning(f"Failed to read or process progress file '{progress_file}': {e}", exc_info=True)
 
         return ExecutionPlan(
             scenario_type=ScenarioType.CONTINUATION,

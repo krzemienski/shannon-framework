@@ -387,8 +387,8 @@ class SerenaContextManager:
                             symbol_type="unknown",
                             name=symbol_name
                         ))
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning(f"Failed to read file {file_path}: {e}")
 
         self._symbols_cache[symbol_name] = locations
         return locations

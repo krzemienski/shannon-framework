@@ -383,13 +383,37 @@ class SecurityManager:
                 command=command
             )
 
-        # This is a simplified check - could be more sophisticated
-        # For now, just check for obvious escapes
-        if '../..' in command:
+        # Tokenize the command to extract possible file paths
+        tokens = shlex.split(command)
+        project_dir = Path(self.project_dir).resolve()
+        blocked_paths = []
+
+        for token in tokens:
+            # Skip flags and options (start with - or --)
+            if token.startswith('-'):
+                continue
+            # Skip URLs
+            if re.match(r'^[a-zA-Z]+://', token):
+                continue
+            # Try to resolve as a path
+            try:
+                path = Path(token)
+                # Only check if it's a relative or absolute path (not just a word/command)
+                if path.is_absolute() or any(sep in token for sep in ('/', '\\')):
+                    resolved_path = path.resolve()
+                    try:
+                        resolved_path.relative_to(project_dir)
+                    except ValueError:
+                        blocked_paths.append(str(resolved_path))
+            except Exception:
+                continue
+
+        if blocked_paths:
             return ValidationResult(
                 allowed=False,
-                reason="Deep path traversal detected",
-                command=command
+                reason=f"Path traversal detected: {blocked_paths}",
+                command=command,
+                blocked_commands=blocked_paths
             )
 
         return ValidationResult(

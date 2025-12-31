@@ -11,7 +11,7 @@ Implements defense-in-depth security based on Claude Quickstart patterns:
 import shlex
 import re
 from dataclasses import dataclass
-from typing import List, Set, Optional, Dict, Any, Tuple
+from typing import List, Set, Optional, Dict, Any
 from pathlib import Path
 import logging
 

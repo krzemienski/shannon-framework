@@ -6,7 +6,7 @@ determining the appropriate approach for each.
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any
+from typing import List, Optional
 from pathlib import Path
 from enum import Enum
 import logging
@@ -96,7 +96,6 @@ class ScenarioHandler:
         # Check what exists
         is_empty = self._is_empty_directory(target_dir)
         has_project = self._has_project_markers(target_dir)
-        has_autonomous = self._has_autonomous_markers(target_dir)
         has_git = (target_dir / ".git").exists()
 
         # Check for specific config files
@@ -133,8 +132,6 @@ class ScenarioHandler:
         Returns:
             ExecutionPlan with recommended approach
         """
-        scenario = await self.detect_scenario(target_dir)
-
         # Determine scenario type
         if self._has_autonomous_markers(target_dir):
             scenario_type = ScenarioType.CONTINUATION

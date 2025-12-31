@@ -40,7 +40,7 @@ class ExecutionConfig:
     auto_continue_delay_seconds: float = 3.0
     max_cost_usd: Optional[float] = None
     max_tokens: Optional[int] = None
-    model: str = "claude-sonnet-4-5-20250929"
+    model: str = "claude-sonnet-4-5"
     halt_on_error: bool = False
     checkpoint_frequency: int = 1  # Create checkpoint every N waves
 
@@ -182,7 +182,7 @@ class BuilderConfig:
             auto_continue_delay_seconds=exec_data.get("auto_continue_delay_seconds", 3.0),
             max_cost_usd=exec_data.get("max_cost_usd"),
             max_tokens=exec_data.get("max_tokens"),
-            model=exec_data.get("model", "claude-sonnet-4-5-20250929"),
+            model=exec_data.get("model", "claude-sonnet-4-5"),
             halt_on_error=exec_data.get("halt_on_error", False),
             checkpoint_frequency=exec_data.get("checkpoint_frequency", 1)
         )

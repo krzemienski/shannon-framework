@@ -10,6 +10,7 @@ Implements defense-in-depth security based on Claude Quickstart patterns:
 
 import shlex
 import re
+import ipaddress
 from dataclasses import dataclass
 from typing import List, Set, Optional, Dict, Any
 from pathlib import Path
@@ -163,6 +164,11 @@ class SecurityManager:
                 continue
 
             # Handle subshell commands
+            # Note: This only matches simple $() subshells and does not handle:
+            # - Nested subshells like $(echo $(date))
+            # - Backtick syntax like `command`
+            # - Complex command substitution patterns
+            # For comprehensive handling, consider using a full shell parser.
             subshell_match = re.search(r'\$\((.+?)\)', part)
             if subshell_match:
                 sub_commands = self._extract_commands(subshell_match.group(1))
@@ -353,28 +359,30 @@ class SecurityManager:
     def _validate_network(self, command: str) -> ValidationResult:
         """Validate curl/wget commands don't access dangerous URLs."""
         # Extract URLs from command
-        url_pattern = r'https?://[^\s]+'
+        url_pattern = r'https?://([^/:\s]+)'
         urls = re.findall(url_pattern, command)
 
-        blocked_domains = [
-            'localhost', '127.0.0.1', '0.0.0.0',
-            '169.254.',  # Link-local
-            '10.',       # Private
-            '172.16.', '172.17.', '172.18.', '172.19.',
-            '172.20.', '172.21.', '172.22.', '172.23.',
-            '172.24.', '172.25.', '172.26.', '172.27.',
-            '172.28.', '172.29.', '172.30.', '172.31.',
-            '192.168.',  # Private
-        ]
-
-        for url in urls:
-            for domain in blocked_domains:
-                if domain in url:
+        for host in urls:
+            # Check for localhost variants
+            if host.lower() in ['localhost', '127.0.0.1', '0.0.0.0']:
+                return ValidationResult(
+                    allowed=False,
+                    reason=f"Cannot access localhost URL: {host}",
+                    command=command
+                )
+            
+            # Try to parse as IP address and check if it's private
+            try:
+                ip = ipaddress.ip_address(host)
+                if ip.is_private or ip.is_link_local or ip.is_loopback:
                     return ValidationResult(
                         allowed=False,
-                        reason=f"Cannot access internal/private URL: {url}",
+                        reason=f"Cannot access private/internal IP: {host}",
                         command=command
                     )
+            except ValueError:
+                # Not an IP address, continue (domain names are ok)
+                pass
 
         return ValidationResult(
             allowed=True,

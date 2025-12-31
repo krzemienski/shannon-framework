@@ -20,7 +20,6 @@ import sys
 import json
 import logging
 from pathlib import Path
-from typing import Optional
 
 from .builder import AutonomousBuilder
 from .config import BuilderConfig
@@ -321,7 +320,10 @@ async def cmd_status(args: argparse.Namespace) -> int:
         print(f"  Total:     {total}")
         print(f"  Completed: {completed}")
         print(f"  Pending:   {pending}")
-        print(f"  Progress:  {completed/total*100:.1f}%")
+        if total == 0:
+            print("  Progress:  N/A (no features found)")
+        else:
+            print(f"  Progress:  {completed/total*100:.1f}%")
 
         # Show incomplete features
         if pending > 0:

@@ -67,7 +67,7 @@ def parse_args() -> argparse.Namespace:
     )
     build_parser.add_argument(
         "--model", "-m",
-        default="claude-sonnet-4-5-20250929",
+        default="claude-sonnet-4-5",
         help="Claude model to use"
     )
     build_parser.add_argument(

@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any
 from pathlib import Path
 import json
+import re
 import logging
 from .xml_transformer import CodebaseContext
 
@@ -262,7 +263,6 @@ class SerenaContextManager:
                     if line and not line.startswith('#'):
                         # Parse package with various operators (==, >=, <=, >, <, ~=, !=)
                         # Split on common operators to extract package name
-                        import re
                         match = re.match(r'^([a-zA-Z0-9_\-\.]+)([=<>!~]+.+)?$', line)
                         if match:
                             pkg_name = match.group(1).strip()

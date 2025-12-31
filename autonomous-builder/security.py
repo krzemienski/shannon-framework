@@ -297,10 +297,18 @@ class SecurityManager:
         tokens = shlex.split(command)
 
         # Dangerous flags
-        dangerous_flags = {'-rf', '-fr', '--recursive', '-r'}
-        has_force = '-f' in tokens or '--force' in tokens
-        has_recursive = any(flag in tokens for flag in dangerous_flags)
+        recursive_flags = {'-rf', '-fr', '--recursive', '-r'}
+        force_flags = {'-f', '--force', '-rf', '-fr'}
+        has_recursive = any(flag in tokens for flag in recursive_flags)
+        has_force = any(flag in tokens for flag in force_flags)
 
+        # Block if both recursive and force flags are present (in any form)
+        if has_recursive and has_force:
+            return ValidationResult(
+                allowed=False,
+                reason="Use of rm with both recursive and force flags is not allowed",
+                command=command
+            )
         # Get target paths
         targets = [t for t in tokens[1:] if not t.startswith('-')]
 

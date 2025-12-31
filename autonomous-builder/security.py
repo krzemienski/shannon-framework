@@ -359,12 +359,21 @@ class SecurityManager:
     def _validate_network(self, command: str) -> ValidationResult:
         """Validate curl/wget commands don't access dangerous URLs."""
         # Extract URLs from command
-        url_pattern = r'https?://([^/:\s]+)'
+        # Pattern captures hostname (with optional port) from URLs
+        # Handles domains, IPv4, and IPv6 (in brackets) with optional ports
+        url_pattern = r'https?://([^\s/]+)'
         urls = re.findall(url_pattern, command)
 
-        for host in urls:
+        for host_with_port in urls:
+            # Strip port if present (for IPv4 and domain names)
+            host = host_with_port.split(':')[0] if ':' in host_with_port and not host_with_port.startswith('[') else host_with_port
+            
+            # For IPv6, extract from brackets if present
+            if host.startswith('['):
+                host = host.strip('[]').split(']')[0]
+            
             # Check for localhost variants
-            if host.lower() in ['localhost', '127.0.0.1', '0.0.0.0']:
+            if host.lower() in ['localhost', '127.0.0.1', '0.0.0.0', '::1']:
                 return ValidationResult(
                     allowed=False,
                     reason=f"Cannot access localhost URL: {host}",

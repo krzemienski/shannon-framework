@@ -467,7 +467,9 @@ class SerenaContextManager:
 ## Progress
 - Features Completed: {len(features_completed)}
 - Features Remaining: {features_remaining}
-- Completion: {len(features_completed) / (len(features_completed) + features_remaining) * 100:.1f}%
+- Completion: {(
+    f"{len(features_completed) / denom * 100:.1f}%" if (denom := (len(features_completed) + features_remaining)) > 0 else "N/A"
+)}
 
 ## Completed This Session
 {chr(10).join(f'- {f}' for f in features_completed) if features_completed else '- None'}

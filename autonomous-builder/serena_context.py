@@ -10,8 +10,6 @@ from typing import Dict, List, Optional, Any, Set
 from pathlib import Path
 import json
 import logging
-import asyncio
-
 from .xml_transformer import CodebaseContext
 
 logger = logging.getLogger(__name__)

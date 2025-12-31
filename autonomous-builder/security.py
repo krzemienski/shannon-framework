@@ -365,12 +365,25 @@ class SecurityManager:
         urls = re.findall(url_pattern, command)
 
         for host_with_port in urls:
-            # Strip port if present (for IPv4 and domain names)
-            host = host_with_port.split(':')[0] if ':' in host_with_port and not host_with_port.startswith('[') else host_with_port
-            
-            # For IPv6, extract from brackets if present
-            if host.startswith('['):
-                host = host.strip('[]').split(']')[0]
+            # Handle different URL formats:
+            # - IPv6 with port: [2001:db8::1]:8080 -> extract 2001:db8::1
+            # - IPv6 without port: [2001:db8::1] -> extract 2001:db8::1
+            # - IPv4/domain with port: example.com:8080 -> extract example.com
+            # - IPv4/domain without port: example.com -> keep as is
+            if host_with_port.startswith('['):
+                # IPv6 address in brackets
+                if ']:' in host_with_port:
+                    # IPv6 with port: [addr]:port
+                    host = host_with_port.split(']:')[0][1:]  # Remove leading [ and everything after ]:
+                else:
+                    # IPv6 without port: [addr]
+                    host = host_with_port.strip('[]')
+            elif ':' in host_with_port:
+                # IPv4 or domain with port
+                host = host_with_port.split(':')[0]
+            else:
+                # No port specified
+                host = host_with_port
             
             # Check for localhost variants
             if host.lower() in ['localhost', '127.0.0.1', '0.0.0.0', '::1']:

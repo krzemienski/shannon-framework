@@ -11,6 +11,7 @@ Orchestrates the complete autonomous build process:
 
 import asyncio
 import json
+import re
 import time
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any
@@ -482,7 +483,6 @@ class AutonomousBuilder:
         try:
             content = progress_file.read_text()
             # Look for session markers
-            import re
             matches = re.findall(r'Session (\d+)', content)
             if matches:
                 return max(int(m) for m in matches)

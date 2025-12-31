@@ -490,8 +490,9 @@ class AutonomousBuilder:
             matches = re.findall(r'Session (\d+)', content)
             if matches:
                 return max(int(m) for m in matches)
-        except Exception:
-            pass
+        except Exception as e:
+            # If reading or parsing the progress file fails, default to session 1.
+            logger.warning(f"Failed to read or parse progress file '{progress_file}': {e}")
 
         return 1
 

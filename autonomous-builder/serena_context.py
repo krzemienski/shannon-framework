@@ -263,7 +263,8 @@ class SerenaContextManager:
                     if line and not line.startswith('#'):
                         # Parse package with various operators (==, >=, <=, >, <, ~=, !=)
                         # Split on common operators to extract package name
-                        match = re.match(r'^([a-zA-Z0-9_\-\.]+)([=<>!~]+.+)?$', line)
+                        # Character class: alphanumeric, underscore, hyphen (at end), and dot
+                        match = re.match(r'^([a-zA-Z0-9_.-]+)([=<>!~]+.+)?$', line)
                         if match:
                             pkg_name = match.group(1).strip()
                             version = match.group(2).strip() if match.group(2) else "*"

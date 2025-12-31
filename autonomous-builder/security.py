@@ -373,10 +373,12 @@ class SecurityManager:
             if host_with_port.startswith('['):
                 # IPv6 address in brackets
                 if ']:' in host_with_port:
-                    # IPv6 with port: [addr]:port
-                    host = host_with_port.split(']:')[0][1:]  # Remove leading [ and everything after ]:
+                    # IPv6 with port: [addr]:port -> extract just the addr part
+                    # Split on ']:' gives ['[addr', 'port'], take first element and remove leading '['
+                    bracketed_addr = host_with_port.split(']:')[0]
+                    host = bracketed_addr[1:]  # Remove the leading '['
                 else:
-                    # IPv6 without port: [addr]
+                    # IPv6 without port: [addr] -> just strip the brackets
                     host = host_with_port.strip('[]')
             elif ':' in host_with_port:
                 # IPv4 or domain with port

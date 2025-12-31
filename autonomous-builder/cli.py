@@ -264,7 +264,10 @@ async def cmd_resume(args: argparse.Namespace) -> int:
     total = len(features.get("features", []))
     completed = sum(1 for f in features.get("features", []) if f.get("passes"))
 
-    print(f"\nProgress: {completed}/{total} features ({completed/total*100:.1f}%)")
+    if total == 0:
+        print("\nProgress: 0/0 features (N/A%) - No features found.")
+    else:
+        print(f"\nProgress: {completed}/{total} features ({completed/total*100:.1f}%)")
 
     if completed >= total:
         print("All features complete!")

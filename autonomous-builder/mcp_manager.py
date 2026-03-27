@@ -6,9 +6,6 @@ Maps task types to required MCPs and manages their lifecycle.
 """
 
 import asyncio
-import subprocess
-import json
-import re
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Set, Any
 from pathlib import Path
@@ -444,7 +441,11 @@ Tools are accessed via `mcp__{mcp_name}__<tool_name>`.
         return MCPConfig(
             name=mcp_name,
             command=install_info["command"],
-            args=install_info["args"][:2] if install_info["args"] else [],  # First args only
+            # Only the first two arguments are used here because MCPConfig expects at most two arguments
+            # for MCP startup based on the current design of MCP_INSTALL_COMMANDS. The first two args
+            # typically represent the main execution command and its primary argument (e.g., ["uvx", "serena"]).
+            # If future MCPs require more arguments, this logic should be revisited.
+            args=install_info["args"][:2] if install_info["args"] else [],
             required=mcp_name == "serena"
         )
 

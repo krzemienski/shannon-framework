@@ -6,9 +6,10 @@ Provides semantic code understanding and cross-session memory.
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any, Set
+from typing import Dict, List, Optional, Any
 from pathlib import Path
 import json
+import re
 import logging
 from .xml_transformer import CodebaseContext
 
@@ -260,14 +261,17 @@ class SerenaContextManager:
                 for line in req_txt.read_text().splitlines():
                     line = line.strip()
                     if line and not line.startswith('#'):
-                        # Parse package==version or package>=version etc.
-                        parts = line.split('==')
-                        if len(parts) == 2:
-                            deps[parts[0].strip()] = parts[1].strip()
+                        # Parse package with various operators (==, >=, <=, >, <, ~=, !=)
+                        # Split on common operators to extract package name
+                        # Character class: alphanumeric, underscore, dot, and hyphen (at end to avoid range)
+                        match = re.match(r'^([a-zA-Z0-9_.\-]+)([=<>!~]+.+)?$', line)
+                        if match:
+                            pkg_name = match.group(1).strip()
+                            version = match.group(2).strip() if match.group(2) else "*"
+                            deps[pkg_name] = version
                         else:
-                            parts = line.split('>=')
-                            if len(parts) >= 1:
-                                deps[parts[0].strip()] = "*"
+                            # Fallback: treat entire line as package name if no operator found
+                            deps[line] = "*"
             except Exception as e:
                 logger.debug(f"Could not parse requirements.txt: {e}")
 
@@ -503,7 +507,13 @@ class SerenaContextManager:
             return None
 
         # Sort by session number and get latest
-        summaries.sort(key=lambda p: int(p.stem.split('_')[1]), reverse=True)
+        def extract_session_number(p):
+            try:
+                return int(p.stem.split('_')[1])
+            except (IndexError, ValueError):
+                logger.warning(f"Malformed session summary filename: {p.name}")
+                return -1  # Malformed files sort to the end
+        summaries.sort(key=extract_session_number, reverse=True)
         latest = summaries[0]
 
         try:

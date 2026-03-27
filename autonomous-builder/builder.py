@@ -11,9 +11,10 @@ Orchestrates the complete autonomous build process:
 
 import asyncio
 import json
+import re
 import time
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any, AsyncIterator
+from typing import Dict, List, Optional, Any
 from pathlib import Path
 from datetime import datetime
 import logging
@@ -243,12 +244,8 @@ class AutonomousBuilder:
                 errors.append(coding_result.error or f"Coding session {iteration} failed")
                 # Continue to next session on error (resilience pattern)
 
-        # Count completed features
-        if feature_list_path.exists():
-            features = json.loads(feature_list_path.read_text())
-            completed = sum(1 for f in features.get("features", []) if f.get("passes"))
-        else:
-            completed = 0
+        # Count completed features (reuse features from earlier read)
+        completed = sum(1 for f in features.get("features", []) if f.get("passes"))
 
         return {
             "success": len(errors) == 0,
@@ -349,7 +346,7 @@ class AutonomousBuilder:
             scenario = await self.scenario_handler.detect_scenario(self.config.target_dir)
 
             # Generate XML prompt
-            xml_prompt = self.xml_transformer.transform(
+            self.xml_transformer.transform(
                 request=user_request,
                 context=context,
                 scenario=scenario,
@@ -409,7 +406,7 @@ class AutonomousBuilder:
             previous_progress = await self.serena.get_continuation_context()
 
             # Generate XML prompt
-            xml_prompt = self.xml_transformer.transform_for_coding(
+            self.xml_transformer.transform_for_coding(
                 target_dir=self.config.target_dir,
                 session_number=session_number,
                 previous_progress=previous_progress
@@ -486,7 +483,6 @@ class AutonomousBuilder:
         try:
             content = progress_file.read_text()
             # Look for session markers
-            import re
             matches = re.findall(r'Session (\d+)', content)
             if matches:
                 return max(int(m) for m in matches)

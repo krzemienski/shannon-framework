@@ -6,7 +6,7 @@ following best practices from Claude documentation:
 - Consistent tag naming
 - Hierarchical structure
 - Meaningful content organization
-- Easy parseability
+- Easy parsability
 """
 
 from dataclasses import dataclass

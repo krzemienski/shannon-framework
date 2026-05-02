@@ -1,5 +1,13 @@
 # Shannon Framework
 
+> Claude Code plugin for mission-critical domains — replaces subjective AI-development judgments with objective measurements.
+
+Live site: [withagents.dev/posts/post-07-prompt-engineering-stack](https://withagents.dev/posts/post-07-prompt-engineering-stack)
+Field journal entry: [withagents.dev/posts/post-07-prompt-engineering-stack](https://withagents.dev/posts/post-07-prompt-engineering-stack)
+
+---
+
+
 **Version 5.6.0** | [Installation](#installation) | [Quick Start](#quick-start) | [Documentation](#documentation) | [GitHub](https://github.com/krzemienski/shannon-framework)
 
 > **🚀 V5.6.0 "Comprehensive Quality & Intelligence"**: 14 new skills, `/shannon:health` dashboard, advanced testing, security automation!

@@ -1,74 +1,122 @@
 {
-  "$schema": "https://claude.ai/hooks-schema.json",
-  "$comment": "Shannon Framework v5.6.0 Hooks Configuration. NOTE: ${CLAUDE_PLUGIN_ROOT} is replaced by Claude Code plugin system. For local installation, install_local.sh generates hooks.json with absolute paths.",
   "hooks": {
-    "UserPromptSubmit": [
-      {
-        "description": "Shannon context injection and forced reading protocol activation (v5.6)",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/user_prompt_submit.py",
-            "description": "Injects North Star goal, active wave context, and auto-activates forced-reading-protocol for large prompts (>3000 chars) or large file references (>5000 lines)",
-            "timeout": 3000
-          }
-        ]
-      }
-    ],
-
-    "PreCompact": [
-      {
-        "description": "Shannon context preservation - Saves comprehensive checkpoint before auto-compaction to prevent information loss",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/precompact.py",
-            "description": "Triggers CONTEXT_GUARDIAN agent to create Serena MCP checkpoint with complete session state",
-            "timeout": 15000,
-            "continueOnError": false
-          }
-        ]
-      }
-    ],
-
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit|MultiEdit",
-        "description": "Shannon NO MOCKS testing philosophy enforcement",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post_tool_use.py",
-            "description": "Detects and blocks mock usage in test files to enforce functional testing",
-            "timeout": 3000
-          }
-        ]
-      }
-    ],
-
-    "Stop": [
-      {
-        "description": "Shannon wave validation gate enforcement",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/stop.py",
-            "description": "Blocks completion until wave validation gates are satisfied",
-            "timeout": 2000
-          }
-        ]
-      }
-    ],
-
     "SessionStart": [
       {
-        "description": "Shannon V5 meta-skill loader - loads using-shannon into every session",
+        "matcher": "startup|resume|clear|compact",
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/session_start.sh",
-            "description": "Loads using-shannon meta-skill to enforce Shannon workflows",
-            "timeout": 5000
+            "command": "PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH\" node \"${CLAUDE_PLUGIN_ROOT}/hooks/session-context-inject.cjs\""
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH\" node \"${CLAUDE_PLUGIN_ROOT}/hooks/skill-activation-check.js\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH\" node \"${CLAUDE_PLUGIN_ROOT}/hooks/block-fab-files.js\""
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH\" node \"${CLAUDE_PLUGIN_ROOT}/hooks/read-before-edit.js\""
+          }
+        ]
+      },
+      {
+        "matcher": "TaskUpdate",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH\" node \"${CLAUDE_PLUGIN_ROOT}/hooks/evidence-gate-reminder.js\""
+          }
+        ]
+      },
+      {
+        "matcher": "Task|Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH\" node \"${CLAUDE_PLUGIN_ROOT}/hooks/subagent-governance-inject.js\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH\" node \"${CLAUDE_PLUGIN_ROOT}/hooks/validation-not-compilation.js\""
+          },
+          {
+            "type": "command",
+            "command": "PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH\" node \"${CLAUDE_PLUGIN_ROOT}/hooks/validation-skill-tripwire.js\""
+          },
+          {
+            "type": "command",
+            "command": "PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH\" node \"${CLAUDE_PLUGIN_ROOT}/hooks/completion-claim-validator.js\""
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH\" node \"${CLAUDE_PLUGIN_ROOT}/hooks/fab-pattern-detection.js\""
+          },
+          {
+            "type": "command",
+            "command": "PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH\" node \"${CLAUDE_PLUGIN_ROOT}/hooks/evidence-quality-check.js\""
+          }
+        ]
+      },
+      {
+        "matcher": "TaskCreate|TaskUpdate",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH\" node \"${CLAUDE_PLUGIN_ROOT}/hooks/task-list-tracker.js\""
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH\" node \"${CLAUDE_PLUGIN_ROOT}/hooks/hooks-fired-log.js\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH\" node \"${CLAUDE_PLUGIN_ROOT}/hooks/stop-task-semantics.js\""
           }
         ]
       }

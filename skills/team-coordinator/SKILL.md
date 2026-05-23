@@ -1,0 +1,1 @@
+../../modules/orchestration/skills/team-coordinator/SKILL.md

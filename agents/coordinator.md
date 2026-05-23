@@ -1,0 +1,1 @@
+../modules/orchestration/agents/coordinator.md

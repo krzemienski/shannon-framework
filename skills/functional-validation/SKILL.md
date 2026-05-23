@@ -1,0 +1,1 @@
+../../modules/validation/skills/functional-validation/SKILL.md

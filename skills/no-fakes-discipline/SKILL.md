@@ -1,0 +1,1 @@
+../../modules/validation/skills/no-fakes-discipline/SKILL.md

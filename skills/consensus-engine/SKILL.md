@@ -1,0 +1,1 @@
+../../modules/validation/skills/consensus-engine/SKILL.md

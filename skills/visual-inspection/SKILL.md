@@ -1,0 +1,1 @@
+../../modules/validation/skills/visual-inspection/SKILL.md

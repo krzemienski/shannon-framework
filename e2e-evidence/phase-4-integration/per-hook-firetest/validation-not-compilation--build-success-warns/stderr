@@ -1,0 +1,1 @@
+[shannon] validation-not-compilation: build succeeded, but compilation is NOT functional validation. Invoke /shannon:validate to verify through real interfaces.

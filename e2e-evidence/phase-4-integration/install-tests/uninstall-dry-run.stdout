@@ -1,0 +1,5 @@
+=== Shannon uninstall plan ===
+  - (already absent) enabledPlugins["shannon@shannon-local"]
+  - (already absent) extraKnownMarketplaces["shannon-local"]
+
+[dry-run] no changes made

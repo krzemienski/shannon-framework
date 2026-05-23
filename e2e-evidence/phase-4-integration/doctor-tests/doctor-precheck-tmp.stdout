@@ -1,0 +1,19 @@
+  PASS  target-exists
+  PASS  plugin.json-valid
+  plugin name=shannon version=6.0.0
+  PASS  hooks.json-valid
+  PASS  hook-scripts-exist (16)
+  PASS  dir-modules
+  PASS  dir-commands
+  PASS  dir-skills
+  PASS  dir-agents
+  PASS  dir-lib
+  PASS  dir-core
+  PASS  log-dir-writable
+
+=== doctor-precheck summary ===
+PASS: 11
+FAIL: 1
+
+Failures:
+  - marketplace-declared: extraKnownMarketplaces.shannon-local missing in /Users/nick/.claude/settings.json

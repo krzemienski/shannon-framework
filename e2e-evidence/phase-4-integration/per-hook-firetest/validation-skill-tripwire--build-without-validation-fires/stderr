@@ -1,0 +1,1 @@
+[shannon] TRIPWIRE: build succeeded but functional-validation skill has not been invoked since last build. Run /shannon:validate or invoke functional-validation skill before claiming completion.

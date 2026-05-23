@@ -1,0 +1,2 @@
+[shannon] block-fab-files: "/proj/src/auth.spec.js" matches fabricated-artifact pattern /\.spec\.[a-z]+$/i within active scope (src/lib/app).
+IRON RULE: build and validate the real system; never ship fake-data files.

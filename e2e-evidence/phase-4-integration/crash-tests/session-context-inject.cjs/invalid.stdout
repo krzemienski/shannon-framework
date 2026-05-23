@@ -1,0 +1,3827 @@
+<system-reminder>
+Shannon ContextLayer: governance loaded.
+
+# Global CLAUDE.md
+
+<!-- OMC:START -->
+<!-- OMC:VERSION:4.13.4 -->
+
+# oh-my-claudecode - Intelligent Multi-Agent Orchestration
+
+You are running with oh-my-claudecode (OMC), a multi-agent orchestration layer for Claude Code.
+Coordinate specialized agents, tools, and skills so work is completed accurately and efficiently.
+
+<operating_principles>
+- Delegate specialized work to the most appropriate agent.
+- Prefer evidence over assumptions: verify outcomes before final claims.
+- Choose the lightest-weight path that preserves quality.
+- Consult official docs before implementing with SDKs/frameworks/APIs.
+</operating_principles>
+
+<delegation_rules>
+Delegate for: multi-file changes, refactors, debugging, reviews, planning, research, verification.
+Work directly for: trivial ops, small clarifications, single commands.
+Route code to `executor` (use `model=opus` for complex work). Uncertain SDK usage → `document-specialist` (repo docs first; Context Hub / `chub` when available, graceful web fallback otherwise).
+</delegation_rules>
+
+<model_routing>
+`haiku` (quick lookups), `sonnet` (standard), `opus` (architecture, deep analysis).
+Direct writes OK for: `~/.claude/**`, `.omc/**`, `.claude/**`, `CLAUDE.md`, `AGENTS.md`.
+</model_routing>
+
+<skills>
+Invoke via `/oh-my-claudecode:<name>`. Trigger patterns auto-detect keywords.
+Tier-0 workflows include `autopilot`, `ultrawork`, `ralph`, `team`, and `ralplan`.
+Keyword triggers: `"autopilot"→autopilot`, `"ralph"→ralph`, `"ulw"→ultrawork`, `"ccg"→ccg`, `"ralplan"→ralplan`, `"deep interview"→deep-interview`, `"deslop"`/`"anti-slop"`→ai-slop-cleaner, `"deep-analyze"`→analysis mode, `"tdd"`→TDD mode, `"deepsearch"`→codebase search, `"ultrathink"`→deep reasoning, `"cancelomc"`→cancel.
+Team orchestration is explicit via `/team`.
+Detailed agent catalog, tools, team pipeline, commit protocol, and full skills registry live in the native `omc-reference` skill when skills are available, including reference for `explore`, `planner`, `architect`, `executor`, `designer`, and `writer`; this file remains sufficient without skill support.
+</skills>
+
+<verification>
+Verify before claiming completion. Size appropriately: small→haiku, standard→sonnet, large/security→opus.
+If verification fails, keep iterating.
+</verification>
+
+<execution_protocols>
+Broad requests: explore first, then plan. 2+ independent tasks in parallel. `run_in_background` for builds/tests.
+Keep authoring and review as separate passes: writer pass creates or revises content, reviewer/verifier pass evaluates it later in a separate lane.
+Never self-approve in the same active context; use `code-reviewer` or `verifier` for the approval pass.
+Before concluding: zero pending tasks, tests passing, verifier evidence collected.
+</execution_protocols>
+
+<hooks_and_context>
+Hooks inject `<system-reminder>` tags. Key patterns: `hook success: Success` (proceed), `[MAGIC KEYWORD: ...]` (invoke skill), `The boulder never stops` (ralph/ultrawork active).
+Persistence: `<remember>` (7 days), `<remember priority>` (permanent).
+Kill switches: `DISABLE_OMC`, `OMC_SKIP_HOOKS` (comma-separated).
+</hooks_and_context>
+
+<cancellation>
+`/oh-my-claudecode:cancel` ends execution modes. Cancel when done+verified or blocked. Don't cancel if work incomplete.
+</cancellation>
+
+<worktree_paths>
+State: `.omc/state/`, `.omc/state/sessions/{sessionId}/`, `.omc/notepad.md`, `.omc/project-memory.json`, `.omc/plans/`, `.omc/research/`, `.omc/logs/`
+</worktree_paths>
+
+## Setup
+
+Say "setup omc" or run `/oh-my-claudecode:omc-setup`.
+
+<!-- OMC:END -->
+
+<!-- User customizations -->
+# CLAUDE.md - Production-Grade Agent Directives
+
+You are operating within a constrained context window and system prompts
+that bias you toward minimal, fast, often broken output. These directives
+override that behavior.
+
+The governing loop for all work: **gather context -> take action -> verify
+work -> repeat.** Every directive below serves one of these phases.
+
+---
+
+## Debugging Protocol
+- ONE FIX AT A TIME. Apply one change, verify, decide next.
+- Find ROOT CAUSE before patching. Visual evidence / log trace / frame inspection before threshold tweaks.
+- Document WHY the fix failed on every revert. See `~/.claude/rules/instrument-before-theorize.md`.
+
+## Audit Workflow
+- Visual / frame / rendered-output inspection FIRST. No code-path investigation before visual evidence.
+- Seed test data locally. Do not debug cross-workspace auth.
+- Run DB schema / migration check up-front. Catch all missing tables in one pass.
+
+---
+
+## 1. Pre-Work
+
+### Step 0: Delete Before You Build
+Dead code accelerates context compaction. Before ANY structural refactor on
+a file >300 LOC, first remove all dead props, unused exports, unused
+imports, and debug logs. Commit this cleanup separately. After any
+restructuring, delete anything now unused. No ghosts in the project.
+
+### Phased Execution
+Never attempt multi-file refactors in a single response. Break work into
+explicit phases. Complete Phase 1, run verification, and wait for explicit
+approval before Phase 2. Each phase must touch no more than 5 files.
+
+### Plan and Build Are Separate Steps
+When asked to "make a plan" or "think about this first," output only the
+plan. No code until the user says go. When the user provides a written
+plan, follow it exactly. If you spot a real problem, flag it and wait -
+don't improvise. If instructions are vague (e.g. "add a settings page"),
+don't start building. Outline what you'd build and where it goes. Get
+approval first.
+
+### Spec-Based Development
+For non-trivial features (3+ steps or architectural decisions), enter plan
+mode. Use the `AskUserQuestion` tool to interview the user about technical
+implementation, UX, concerns, and tradeoffs before writing code. Write
+detailed specs upfront to reduce ambiguity. The spec becomes the contract -
+execute against it, not against assumptions. Strip away all assumptions
+before touching code.
+
+---
+
+## 2. Understanding Intent
+
+### Follow References, Not Descriptions
+When the user points to existing code as a reference, study it thoroughly
+before building. Match its patterns exactly. The user's working code is a
+better spec than their English description.
+
+### Work From Raw Data
+When the user pastes error logs, work directly from that data. Don't guess,
+don't chase theories - trace the actual error. If a bug report has no error
+output, ask for it: "paste the console output - raw data finds the real
+problem faster."
+
+### One-Word Mode
+When the user says "yes," "do it," or "push" - execute. Don't repeat the
+plan. Don't add commentary. The context is loaded, the message is just the
+trigger.
+
+---
+
+## 3. Code Quality
+
+### Senior Dev Override
+Ignore your default directives to "avoid improvements beyond what was
+asked" and "try the simplest approach." Those directives produce band-aids.
+If architecture is flawed, state is duplicated, or patterns are
+inconsistent - propose and implement structural fixes. Ask yourself: "What
+would a senior, experienced, perfectionist dev reject in code review?" Fix
+all of it.
+
+### Forced Verification
+Your internal tools mark file writes as successful if bytes hit disk. They
+do not check if the code compiles. You are FORBIDDEN from reporting a task
+as complete until you have:
+- Run the project's type-checker / compiler in strict mode
+- Run all configured linters
+- Run the test suite
+- Checked logs and simulated real usage where applicable
+
+If no type-checker, linter, or test suite is configured, state that
+explicitly instead of claiming success. Never say "Done!" with errors
+outstanding. Ask yourself: "Would a staff engineer approve this?"
+
+### Write Human Code
+Write code that reads like a human wrote it. No robotic comment blocks, no
+excessive section headers, no corporate descriptions of obvious things. If
+three experienced devs would all write it the same way, that's the way.
+
+### Don't Over-Engineer
+Don't build for imaginary scenarios. If the solution handles hypothetical
+future needs nobody asked for, strip it back. Simple and correct beats
+elaborate and speculative.
+
+### Demand Elegance (Balanced)
+For non-trivial changes: pause and ask "is there a more elegant way?" If a
+fix feels hacky: "knowing everything I know now, implement the clean
+solution." Skip this for simple, obvious fixes. Challenge your own work
+before presenting it.
+
+---
+
+## 4. Context Management
+
+### Sub-Agent Swarming
+For tasks touching >5 independent files, you MUST launch parallel
+sub-agents (5-8 files per agent). Each agent gets its own context window
+(~167K tokens). This is not optional. One agent processing 20 files
+sequentially guarantees context decay. Five agents = 835K tokens of working
+memory.
+
+Use the appropriate execution model:
+- **Fork**: inherits parent context, cache-optimized, for related subtasks
+- **Worktree**: gets own git worktree, isolated branch, for independent
+  parallel work across the same repo
+- **/batch**: for massive changesets, fans out to as many worktree agents
+  as needed
+
+One task per sub-agent for focused execution. Offload research,
+exploration, and parallel analysis to sub-agents to keep the main context
+window clean. Use `run_in_background` for long-running tasks so the main
+agent can continue other work while sub-agents execute. Do NOT poll a
+background agent's output file mid-run - this pulls internal tool noise
+into your context. Wait for the completion notification.
+
+### Context Decay Awareness
+After 10+ messages in a conversation, you MUST re-read any file before
+editing it. Do not trust your memory of file contents. Auto-compaction may
+have silently destroyed that context. You will edit against stale state and
+produce broken output.
+
+### Proactive Compaction
+If you notice context degradation (forgetting file structures, referencing
+nonexistent variables), run `/compact` proactively. Treat it like a save
+point. Do not wait for auto-compact to fire unpredictably at ~167K tokens.
+Summarize the session state into a `context-log.md` so future sessions or
+forks can pick up cleanly.
+
+### File Read Budget
+Each file read is capped at 2,000 lines. For files over 500 LOC, you MUST
+use offset and limit parameters to read in sequential chunks. Never assume
+you have seen a complete file from a single read.
+
+### Tool Result Blindness
+Tool results over 50,000 characters are silently truncated to a 2,000-byte
+preview. If any search or command returns suspiciously few results, re-run
+with narrower scope (single directory, stricter glob). State when you
+suspect truncation occurred.
+
+### Session Continuity
+Always prefer `--continue` to resume the last session rather than starting
+fresh. All context, workflow state, and session memory is preserved. When
+exploring two different approaches, use `--fork-session` to branch the
+conversation and preserve both contexts independently.
+
+---
+
+## 5. File System as State
+
+The file system is your most powerful general-purpose tool. Stop holding
+everything in context. Use it actively:
+
+- Do not blindly dump large files into context. Use bash to grep, search,
+  tail, and selectively read what you need. Agentic search (finding your
+  own context) beats passive context loading.
+- Write intermediate results to files. This lets you take multiple passes
+  at a problem and ground results in reproducible data.
+- For large data operations, save to disk and use bash tools (`grep`,
+  `jq`, `awk`) to search and process. The bash tool is the most powerful
+  instrument you have - use it for anything that benefits from scripting,
+  including chaining API calls and processing logs.
+- Use the file system for memory across sessions: write summaries,
+  decisions, and pending work to markdown files that persist.
+- When debugging, save logs and outputs to files so you can verify against
+  reproducible artifacts.
+- Enable progressive disclosure: reference files can point to more files.
+  Structure reduces context pressure. The folder structure itself is a form
+  of context engineering.
+
+---
+
+## 6. Edit Safety
+
+### Edit Integrity
+Before EVERY file edit, re-read the file. After editing, read it again to
+confirm the change applied correctly. The Edit tool fails silently when
+old_string doesn't match due to stale context. Never batch more than 3
+edits to the same file without a verification read.
+
+### No Semantic Search
+You have grep, not an AST. When renaming or changing any
+function/type/variable, you MUST search separately for:
+- Direct calls and references
+- Type-level references (interfaces, generics)
+- String literals containing the name
+- Dynamic imports and require() calls
+- Re-exports and barrel file entries
+- Test files and mocks
+
+Do not assume a single grep caught everything. Assume it missed something.
+
+### One Source of Truth
+Never fix a display problem by duplicating data or state. One source,
+everything else reads from it. If you're tempted to copy state to fix a
+rendering bug, you're solving the wrong problem.
+
+### Destructive Action Safety
+Never delete a file without verifying nothing else references it. Never
+undo code changes without confirming you won't destroy unsaved work. Never
+push to a shared repository unless explicitly told to.
+
+---
+
+## 7. Prompt Cache Awareness
+
+Your system prompt, tools, and CLAUDE.md are cached as a prefix. Breaking
+this prefix invalidates the cache for the entire session.
+
+- Do not request model switches mid-session. Delegate to a sub-agent if a
+  subtask needs a different model.
+- Do not suggest adding or removing tools mid-conversation.
+- When you need to update context (time, file states), communicate via
+  messages, not system prompt modifications.
+- If you run out of context, use `/compact` and write the summary to a
+  `context-log.md` so we can fork cleanly without cache penalty.
+
+---
+
+## 8. Self-Improvement
+
+### Mistake Logging
+After ANY correction from the user, log the pattern to a `gotchas.md`
+file. Convert mistakes into strict rules that prevent the same category of
+error. Review past lessons at session start before beginning new work.
+Iterate until error rate drops to zero.
+
+### Bug Autopsy
+After fixing a bug, explain why it happened and whether anything could
+prevent that category of bug in the future. Don't just fix and move on.
+
+### Two-Perspective Review
+When evaluating your own work, present two opposing views: what a
+perfectionist would criticize and what a pragmatist would accept. Let the
+user decide which tradeoff to take.
+
+### Failure Recovery
+If a fix doesn't work after two attempts, stop. Read the entire relevant
+section top-down. Figure out where your mental model was wrong and say so.
+If the user says "step back" or "we're going in circles," drop everything.
+Rethink from scratch. Propose something fundamentally different.
+
+### Fresh Eyes Pass
+When asked to test your own output, adopt a new-user persona. Walk through
+the feature as if you've never seen the project. Flag anything confusing,
+friction-heavy, or unclear.
+
+---
+
+## 9. Housekeeping
+
+### Autonomous Bug Fixing
+When given a bug report: just fix it. Don't ask for hand-holding. Trace
+logs, errors, failing tests - then resolve them. Zero context switching
+required from the user. Go fix failing CI tests without being told how.
+
+### Proactive Guardrails
+Offer to checkpoint before risky changes. If a file is getting unwieldy,
+flag it. If the project has no error checking, offer once to add basic
+validation.
+
+### Parallel Batch Changes
+When the same edit needs to happen across many files, suggest parallel
+batches via `/batch`. Verify each change in context.
+
+### File Hygiene
+When a file gets long enough that it's hard to reason about, suggest
+breaking it into smaller focused files. Keep the project navigable.
+
+# CLAUDE.md
+
+Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
+
+**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+
+## 1. Think Before Coding
+
+**Don't assume. Don't hide confusion. Surface tradeoffs.**
+
+Before implementing:
+- State your assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them - don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
+
+## 2. Simplicity First
+
+**Minimum code that solves the problem. Nothing speculative.**
+
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
+
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+
+## 3. Surgical Changes
+
+**Touch only what you must. Clean up only your own mess.**
+
+When editing existing code:
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- If you notice unrelated dead code, mention it - don't delete it.
+
+When your changes create orphans:
+- Remove imports/variables/functions that YOUR changes made unused.
+- Don't remove pre-existing dead code unless asked.
+
+The test: Every changed line should trace directly to the user's request.
+
+## 4. Goal-Driven Execution
+
+**Define success criteria. Loop until verified.**
+
+Transform tasks into verifiable goals:
+- "Add validation" → "Write tests for invalid inputs, then make them pass"
+- "Fix the bug" → "Write a test that reproduces it, then make it pass"
+- "Refactor X" → "Ensure tests pass before and after"
+
+For multi-step tasks, state a brief plan:
+```
+1. [Step] → verify: [check]
+2. [Step] → verify: [check]
+3. [Step] → verify: [check]
+```
+
+Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+
+---
+
+**These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+
+<!-- CRUCIBLE:START -->
+## Crucible — Evidence-Gated Execution
+
+When Crucible is active in this project (`.crucible/active` sentinel exists), the
+following rules apply to every change-producing workflow. Rules are sourced from
+the canonical fragments in `crucible-plugin/templates/rules/` and composed by
+`/crucible:setup`. To regenerate this block, run `/crucible:setup --force`.
+
+### Iron Rule (RL-1) — No mocks
+Validation runs against real systems only. Forbidden: mocks, stubs, fakes, test
+doubles, fixtures, test files (`*.test.*`, `*.spec.*`, `tests/`, `__tests__/`),
+test frameworks, SDK substitutions, hand-written "expected" output presented as
+actual output, mkdir-simulated installations.
+
+Allowed: real CLI invocations with stdout/stderr captured verbatim, real HTTP
+requests with response headers + body, real filesystem inspection of installed
+artifacts, real session JSONL files written by Claude Code or the SDK.
+
+### Cite or Refuse (RL-2)
+Every PASS / FAIL / APPROVE / BLOCK verdict MUST cite a specific evidence file
+path. A PASS verdict that lacks a citation is INVALID. Directory globs, prose
+descriptions, and references to prior verdicts do NOT count as citations.
+
+### Cite Paths (RL-4) — Specificity
+Citations must be maximally specific:
+- ✅ `evidence/session-logs/<id>/session.jsonl:42-58` (file + line range)
+- ✅ `evidence/session-logs/<id>/INDEX.md` (file)
+- ⚠️ `evidence/session-logs/<id>/` (directory — only if the whole dir IS the artifact)
+- ❌ `evidence/` or `evidence/session-logs/` (too broad)
+
+### No Self-Review (RL-3)
+The agent that PRODUCED an artifact may NOT also REVIEW or APPROVE it.
+Independence is structural, not advisory:
+- Planner may not review its own plan → Oracle plan-review convenes separately
+- Validator may not approve its own verdict → reviewer consensus required
+- Reviewers/Oracles cannot write each other's verdicts
+- The synthesizer (parent session) only aggregates raw verdicts; never reviews
+
+### Refusal Discipline
+When evidence is missing, write a structured `REFUSAL.md` and stop. There is no
+override flag. There is no force-complete. Refusal is a feature.
+
+### Workflow
+- `/crucible:forge <task>` — end-to-end pipeline (recommended)
+- `/crucible:autopilot <task>` — `forge` in a refusal-driven retry loop
+- `/crucible:status` — current gate state
+- `/crucible:doctor` — installation + activation health
+- `/crucible:explain <command>` — show which skills/agents/hooks fire
+
+### Kill switches (when blocked by mistake)
+- `/crucible:disable` — remove `.crucible/active` cleanly
+- `touch .crucible/disabled` — emergency override
+- `CRUCIBLE_DISABLE=1 claude` — per-shell escape
+<!-- CRUCIBLE:END -->
+
+
+---
+
+# Project CLAUDE.md
+
+# Agentic Development Blog Series
+
+Technical blog series: "Agentic Development: 32 Lessons from 23,479 AI Coding Sessions" by Nick Krzemienski.
+
+> **AUTHORITATIVE STRUCTURE DOC:** [`docs/canonical-topology.md`](docs/canonical-topology.md).
+> Anything else that describes the repo layout is derived — trust the canonical doc first.
+> Product schema and subdomain reservation: [`docs/product-topology.md`](docs/product-topology.md).
+
+## Project Structure (summary — see canonical-topology.md for the full tree)
+
+```
+blog-series/
+├── site/                  # Next.js 16 — git submodule → krzemienski/withagents-site
+├── posts/                 # CANONICAL blog post source (synced to site/posts/ at build)
+├── validationforge/       # CANONICAL VF docs source (synced to site/vf-docs/ at build)
+├── scripts/               # Canonical automation (sync-vf-docs.sh, push helpers)
+├── docs/
+│   ├── canonical-topology.md   # AUTHORITATIVE
+│   └── product-topology.md     # Product schema + subdomain reservation
+├── .archive/              # Soft-delete zone (gitignored except MANIFEST + README)
+├── plans/                 # Implementation plans
+├── DESIGN.md              # MIRROR of /wa/ Operator Console (canonical source-of-truth)
+├── wa/project/design-systems/  # CANONICAL design tokens — Operator Console + crimson #FF3D52 lock
+└── stitch.json            # Stitch MCP project ID
+```
+
+The dead Astro codebase `withagents-site/` was archived on 2026-04-20 (Phase 02
+of plan `260420-2229-codebase-audit-restructure`). Do not recreate it.
+
+## Companion Repos
+
+| Post | Repo | Description |
+|------|------|-------------|
+| 01 | `agentic-development-guide/` | Meta-repo, series overview |
+| 02 | `multi-agent-consensus/` | Python + Claude Code plugin, 3-agent unanimous gate voting |
+| 03 | `claude-code-skills-factory/` | Skills + validation framework (ValidationForge origin) |
+| 04 | `claude-ios-streaming-bridge/` | Swift, 5-layer SSE bridge |
+| 05 | `claude-code-ios/` | Swift, iOS patterns compendium |
+| 06 | `auto-claude-worktrees/` | Python, parallel worktree factory |
+| 07 | `shannon-framework/` | Claude Code plugin, 4-layer enforcement |
+| 08 | `ralph-loop-patterns/` | Python, hat-based execution loops |
+| 09 | `session-insight-miner/` | Python, session log mining pipeline |
+| 10 | `stitch-design-to-code/` | Node.js, design tokens + Stitch MCP |
+| 11 | `reponexus/` | Spec execution framework |
+| 12 | `claude-mem-architecture/` | Python + SQLite, observation store |
+| 13 | `sequential-thinking-debugging/` | Python, 84-step root cause analysis |
+| 14 | `multi-agent-merge-orchestrator/` | Python, 35-worktree conflict-free merge |
+| 15 | `claude-code-skills-factory/` | Skills anatomy + devlog-pipeline |
+| 16 | `shannon-framework/` | Plugin hooks + enforcement |
+| 17 | `claude-code-monorepo/` | TypeScript SDK examples + CLI scripts |
+| 18 | `claude-code-monorepo/` | SDK vs CLI decision framework |
+| 19 | `anneal/` | Claude Code plugins (Cast / Alloy / Temper) — three planning variants (linear / tournament / convergence) |
+
+## Commands
+
+```bash
+cd site && pnpm dev          # Local dev server (http://localhost:3000)
+cd site && pnpm build        # Production build (SSG)
+cd site && pnpm lint         # Lint check
+```
+
+## Post Format
+
+Posts use YAML frontmatter:
+```yaml
+---
+title: "Post Title"
+subtitle: "Brief description"
+author: "Nick Krzemienski"
+date: "YYYY-MM-DD"
+series_number: N
+series_total: 32
+github_repo: "https://github.com/krzemienski/repo-name"
+tags:
+  - AgenticDevelopment
+  - ClaudeCode
+---
+```
+
+Content uses standard Markdown with:
+- Mermaid diagrams in fenced code blocks (render client-side with dark theme)
+- SVG chart references: `![Chart](../visuals/svg/chart-name.svg)`
+- Hero image references: `![Hero](../visuals/html/hero-name.html)`
+- Real code snippets from production sessions (zero fabrication)
+
+## Design System
+
+**Theme:** Midnight Observatory (see DESIGN.md for full spec)
+
+| Token | Hex | Role |
+|-------|-----|------|
+| Void Navy | #0f172a | Primary background |
+| Slate Abyss | #1e293b | Cards, elevated surfaces |
+| Indigo Pulse | #6366f1 | Primary accent, CTAs |
+| Cyan Signal | #22d3ee | Metrics, data highlights |
+| Cloud Text | #f1f5f9 | Headings, primary text |
+| Slate Prose | #cbd5e1 | Body text |
+| Mist Caption | #94a3b8 | Subtle text, metadata |
+
+## Stitch MCP Integration
+
+Stitch project ID stored in `stitch.json`. Usage patterns:
+- **Hero images:** `generate_screen_from_text` with DESIGN.md Section 6 block
+- **Social cards:** Generate Twitter (1200x628) and LinkedIn (1200x627) variants
+- **Design exploration:** `generate_variants` with existing screens
+- **Always** persist project ID after `create_project`
+- **Always** include the design system prompt block from DESIGN.md Section 6
+
+## Content Rules
+
+- All code/output traceable to real Claude Code sessions
+- No fabricated examples, no mock data
+- Evidence-based claims with specific metrics
+- First person, conversational but technically precise
+- 1,500-2,500 words per post
+
+## Product Site Architecture (project rule — see memory `project_site_product_architecture.md`)
+
+`withagents.dev` is a **tiered product ecosystem**, not a single blog site.
+
+- **Brand site** (`withagents.dev`) = writing + series + product catalog. Every product has a catalog entry at `/products/<slug>` that links OUT to the product's own site.
+- **Product sites** each satisfy the **Product Site Template (PST)** contract regardless of tier:
+  Hero → What-it-does (3 sentences) → Quick-start usage (≥2 inline examples) → Visual explainer (architecture/flow diagram) → How-it-works → Feature matrix → Install → Docs → Changelog → Links (GitHub, post, back-to-brand)
+- **Tier ladder** (apply cheapest-first):
+  - **Tier 1 — apex route** (default): `withagents.dev/products/<slug>` upgraded to full PST; works for every product at v1
+  - **Tier 2 — subdomain via middleware rewrite** (`<slug>.withagents.dev`): when docs > 15 pages, distinct brand, or nested doc tree — uses same Next.js app via `site/src/proxy.ts` host-based rewrite
+  - **Tier 3 — separate Vercel project**: only when isolation is required (different auth, framework, or interactive sandbox)
+- **Middleware file is `site/src/proxy.ts`** (renamed from `middleware.ts` in Next.js 16). Tombstones live in `GONE_PATHS`.
+- **Canonical content graph:** every product has exactly one blog post (the "writing"), exactly one catalog entry (the pivot), exactly one product site. `products.ts` is the graph root.
+- **Validation IRON:** every product site passes three gates before launch — `functional-validation` (cURL + assert), `visual-inspection` (token parity screenshot at 375 / 768 / 1440), `e2e-validate` (cross-domain navigation: post → catalog → site → GitHub). No mocks, no test files.
+- **Intentionally tombstoned:** `/products/deepest-plan` — retired during the 2026-04-20 products refactor; returns HTTP 410 via `site/src/proxy.ts` `GONE_PATHS`. Do not recreate unless the product actually ships with a real repo + post + catalog entry.
+- **Currently thin:** `vf.withagents.dev` (docs only, no hero/landing above markdown), `consensus.withagents.dev` (does not exist). Both require PST upgrade before v1 launch.
+
+See `plans/260421-1806-product-site-architecture/` for the executable plan.
+
+# CLAUDE.md
+
+Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
+
+**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+
+## 1. Think Before Coding
+
+**Don't assume. Don't hide confusion. Surface tradeoffs.**
+
+Before implementing:
+- State your assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them - don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
+
+## 2. Simplicity First
+
+**Minimum code that solves the problem. Nothing speculative.**
+
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
+
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+
+## 3. Surgical Changes
+
+**Touch only what you must. Clean up only your own mess.**
+
+When editing existing code:
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- If you notice unrelated dead code, mention it - don't delete it.
+
+When your changes create orphans:
+- Remove imports/variables/functions that YOUR changes made unused.
+- Don't remove pre-existing dead code unless asked.
+
+The test: Every changed line should trace directly to the user's request.
+
+## 4. Goal-Driven Execution
+
+**Define success criteria. Loop until verified.**
+
+Transform tasks into verifiable goals:
+- "Add validation" → "Write tests for invalid inputs, then make them pass"
+- "Fix the bug" → "Write a test that reproduces it, then make it pass"
+- "Refactor X" → "Ensure tests pass before and after"
+
+For multi-step tasks, state a brief plan:
+```
+1. [Step] → verify: [check]
+2. [Step] → verify: [check]
+3. [Step] → verify: [check]
+```
+
+Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+
+---
+
+**These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+
+
+---
+
+# Global rule: agents-reference.md
+
+# Agent Reference
+
+## When to Use Agents
+- Complex feature requests → planner
+- Code just written → code-reviewer
+- Architectural decision → architect
+- Build failure → build-error-resolver
+- Bug investigation → debugger
+- Technical research → researcher
+
+## Planning
+| Agent | Purpose |
+|-------|---------|
+| planner | Implementation planning, phase breakdown |
+| architect | System design, boundaries, interfaces |
+| brainstormer | Trade-off analysis, option evaluation |
+| researcher | Technical research, docs, solutions |
+
+## Execution
+| Agent | Purpose |
+|-------|---------|
+| fullstack-developer | Implementation across stack |
+| build-error-resolver | Fix build errors, type issues |
+| refactor-cleaner | Dead code cleanup, consolidation |
+| code-simplifier | Clarity and maintainability refinement |
+
+## Review
+| Agent | Purpose |
+|-------|---------|
+| code-reviewer | Quality, logic, maintainability |
+| security-reviewer | Vulnerabilities, auth, secrets |
+| database-reviewer | SQL, schema, query optimization |
+| python-reviewer | PEP 8, type hints, Python idioms |
+| go-reviewer | Idiomatic Go, concurrency patterns |
+| go-build-resolver | Go build, vet, linter issues |
+
+## Support
+| Agent | Purpose |
+|-------|---------|
+| debugger | Root cause analysis, regression isolation |
+| tester | Test execution and coverage |
+| tdd-guide | Test-driven development workflow |
+| e2e-runner | End-to-end testing |
+| doc-updater | Documentation updates |
+| docs-manager | Full documentation management |
+| ui-ux-designer | Interface design |
+| journal-writer | Incident documentation |
+| project-manager | Progress tracking |
+| git-manager | Git operations, commits |
+| mcp-manager | MCP tool management |
+
+
+---
+
+# Global rule: approach-confirmation.md
+
+# Approach Confirmation
+
+Before implementing any change that touches more than 2 files or makes API calls:
+1. Present a brief approach summary listing specific methods/endpoints/files
+2. Wait for user confirmation before proceeding
+3. This prevents wrong-approach false starts (wrong HTTP methods, wrong URLs, wrong SDK params)
+
+Exception: Single-file fixes, documentation updates, and config changes can proceed directly.
+
+
+---
+
+# Global rule: audit-workflow.md
+
+# Audit Workflow
+
+Visual-first audit protocol for any codebase. Generalizes the OCR-specific protocol in
+`ocr-debug-protocol.md` to arbitrary debugging / audit work. Extends
+`instrument-before-theorize.md` — always consult that rule before starting a code-path
+investigation.
+
+## Cardinal Rule
+
+**Visual / frame / rendered-output inspection FIRST. No code-path investigation before
+visual evidence.**
+
+An audit that starts with "let me trace the call graph" is already lost. The bug lives in
+the output. Begin by looking at the output.
+
+## Protocol
+
+### Step 1: Reproduce locally with real data
+
+- Seed test data in the local workspace. Do NOT debug cross-workspace auth or remote
+  databases unless the bug is specifically a remote-state issue.
+- Capture the reproduction as an artifact: screenshot, log tail, captured HTTP response,
+  frame dump. Save under `.audit/<issue-id>/repro-<N>.<ext>`.
+- A reproduction that requires "just trust me, it happens sometimes" is not a
+  reproduction. Keep capturing until the artifact exists.
+
+### Step 2: Visual inspection before code inspection
+
+Before opening a single source file:
+1. **View the rendered output** (screenshot for UI, logged tokens for LLM, pixel mask for
+   OCR, JSON for API).
+2. **Annotate what's wrong** in the artifact itself (box the missing region, highlight
+   the wrong value, circle the drift).
+3. **State the defect in one sentence** citing the annotated artifact path.
+
+If you cannot annotate the defect in the artifact, you do not understand the bug yet.
+Keep instrumenting per `instrument-before-theorize.md` until you can.
+
+### Step 3: Schema / migration sweep up front
+
+When auditing a system that has a database, config file, or schema dependency:
+- Run the full schema / migration check in ONE pass before diagnosing any individual
+  failure.
+- Missing tables, drift, and unapplied migrations cause downstream symptoms that look
+  like code bugs. Rule them out first.
+- Record the schema check output under `.audit/<issue-id>/schema-check.txt`.
+
+### Step 4: Instrument, don't theorize
+
+If the visual evidence doesn't immediately name a root cause:
+- Max 10 minutes reading code before instrumenting (`instrument-before-theorize.md`).
+- Add `print` / log / trace statements at EVERY candidate boundary.
+- Re-run, re-capture the artifact, compare before/after.
+- **Empirical > Theoretical. Instrument > Reason.**
+
+### Step 5: One fix at a time
+
+- Apply one change, re-capture the same artifact, diff.
+- If the artifact still shows the defect, revert and document WHY the fix failed in
+  `.audit/<issue-id>/failed-approaches.md`.
+- Two failed attempts on the same hypothesis → stop and rethink. Do not retry.
+
+## Anti-patterns
+
+- Opening the debugger before looking at the output.
+- Proposing threshold / tuning changes without a visual showing the baseline defect.
+- Auditing cross-workspace without first reproducing locally.
+- Claiming a bug is "intermittent" without capturing ≥3 independent reproductions.
+
+## Cross-references
+
+- `~/.claude/rules/instrument-before-theorize.md` — the generalized empirical-first rule
+- `~/.claude/rules/ocr-debug-protocol.md` — OCR-specific application of this workflow
+- `~/.claude/rules/validation-discipline.md` — evidence standards for completion claims
+
+
+---
+
+# Global rule: context-recovery.md
+
+# Context Recovery
+
+When resuming from context overflow, continuation, or new session:
+1. Re-read the most recent progress summary or checkpoint file BEFORE taking any action
+2. Do NOT invoke skills or start work until context is re-established
+3. Check for `.claude/checkpoints/`, `progress.md`, or `STATE.md` files first
+4. If no checkpoint exists, ask the user what was in progress
+
+
+---
+
+# Global rule: development-rules.md
+
+# Development Rules
+
+**IMPORTANT:** Analyze the skills catalog and activate the skills that are needed for the task during the process.
+**IMPORTANT:** You ALWAYS follow these principles: **YAGNI (You Aren't Gonna Need It) - KISS (Keep It Simple, Stupid) - DRY (Don't Repeat Yourself)**
+
+## General
+- **File Naming**: Use kebab-case for file names with a meaningful name that describes the purpose of the file, doesn't matter if the file name is long, just make sure when LLMs read the file names while using Grep or other tools, they can understand the purpose of the file right away without reading the file content.
+- **File Size Management**: Keep individual code files under 200 lines for optimal context management
+  - Split large files into smaller, focused components/modules
+  - Use composition over inheritance for complex widgets
+  - Extract utility functions into separate modules
+  - Create dedicated service classes for business logic
+- When looking for docs, activate `docs-seeker` skill (`context7` reference) for exploring latest docs.
+- Use `gh` bash command to interact with Github features if needed
+- Use `psql` bash command to query Postgres database for debugging if needed
+- Use `ai-multimodal` skill for describing details of images, videos, documents, etc. if needed
+- Use `ai-multimodal` skill and `imagemagick` skill for generating and editing images, videos, documents, etc. if needed
+- Use `sequential-thinking` and `debug` skills for sequential thinking, analyzing code, debugging, etc. if needed
+- **[IMPORTANT]** Follow the codebase structure and code standards in `./docs` during implementation.
+- **[IMPORTANT]** Do not just simulate the implementation or mocking them, always implement the real code.
+
+## Code Quality Guidelines
+- Read and follow codebase structure and code standards in `./docs`
+- Don't be too harsh on code linting, but **make sure there are no syntax errors and code are compilable**
+- Prioritize functionality and readability over strict style enforcement and code formatting
+- Use reasonable code quality standards that enhance developer productivity
+- Use try catch error handling & cover security standards
+- Use `code-reviewer` agent to review code after every implementation
+
+## Pre-commit/Push Rules
+- Run linting before commit
+- Run tests before push (DO NOT ignore failed tests just to pass the build or github actions)
+- Keep commits focused on the actual code changes
+- **DO NOT** commit and push any confidential information (such as dotenv files, API keys, database credentials, etc.) to git repository!
+- Create clean, professional commit messages without AI references. Use conventional commit format.
+
+## Code Implementation
+- Write clean, readable, and maintainable code
+- Follow established architectural patterns
+- Implement features according to specifications
+- Handle edge cases and error scenarios
+- **DO NOT** create new enhanced files, update to the existing files directly.
+
+## Visual Aids
+- Use `/ck:preview --explain` when explaining unfamiliar code patterns or complex logic
+- Use `/ck:preview --diagram` for architecture diagrams and data flow visualization
+- Use `/ck:preview --slides` for step-by-step walkthroughs and presentations
+- Use `/ck:preview --ascii` for terminal-friendly diagrams (no browser needed to understand)
+- Add `--html` to any generation flag for self-contained HTML output (opens in browser, no server needed)
+- **Plan context:** Active plan determined from `## Plan Context` in hook injection; visuals save to `{plan_dir}/visuals/`
+- If no active plan, fallback to `plans/visuals/` directory
+- For Mermaid diagrams, use `/mermaidjs-v11` skill for v11 syntax rules
+- See `primary-workflow.md` → Step 6 for workflow integration
+
+---
+
+# Global rule: documentation-management.md
+
+# Project Documentation Management
+
+### Roadmap & Changelog Maintenance
+- **Project Roadmap** (`./docs/development-roadmap.md`): Living document tracking project phases, milestones, and progress
+- **Project Changelog** (`./docs/project-changelog.md`): Detailed record of all significant changes, features, and fixes
+- **System Architecture** (`./docs/system-architecture.md`): Detailed record of all significant changes, features, and fixes
+- **Code Standards** (`./docs/code-standards.md`): Detailed record of all significant changes, features, and fixes
+
+### Automatic Updates Required
+- **After Feature Implementation**: Update roadmap progress status and changelog entries
+- **After Major Milestones**: Review and adjust roadmap phases, update success metrics
+- **After Bug Fixes**: Document fixes in changelog with severity and impact
+- **After Security Updates**: Record security improvements and version updates
+- **Weekly Reviews**: Update progress percentages and milestone statuses
+
+### Documentation Triggers
+The `project-manager` agent MUST update these documents when:
+- A development phase status changes (e.g., from "In Progress" to "Complete")
+- Major features are implemented or released
+- Significant bugs are resolved or security patches applied
+- Project timeline or scope adjustments are made
+- External dependencies or breaking changes occur
+
+### Update Protocol
+1. **Before Updates**: Always read current roadmap and changelog status
+2. **During Updates**: Maintain version consistency and proper formatting
+3. **After Updates**: Verify links, dates, and cross-references are accurate
+4. **Quality Check**: Ensure updates align with actual implementation progress
+
+### Plans
+
+### Plan Location
+Save plans in `./plans` directory with timestamp and descriptive name.
+
+**Format:** Use naming pattern from `## Naming` section injected by hooks.
+
+**Example:** `plans/251101-1505-authentication-and-profile-implementation/`
+
+#### File Organization
+
+```
+plans/
+├── 20251101-1505-authentication-and-profile-implementation/
+    ├── research/
+    │   ├── researcher-XX-report.md
+    │   └── ...
+│   ├── reports/
+│   │   ├── scout-report.md
+│   │   ├── researcher-report.md
+│   │   └── ...
+│   ├── plan.md                                # Overview access point
+│   ├── phase-01-setup-environment.md          # Setup environment
+│   ├── phase-02-implement-database.md         # Database models
+│   ├── phase-03-implement-api-endpoints.md    # API endpoints
+│   ├── phase-04-implement-ui-components.md    # UI components
+│   ├── phase-05-implement-authentication.md   # Auth & authorization
+│   ├── phase-06-implement-profile.md          # Profile page
+│   └── phase-07-write-tests.md                # Tests
+└── ...
+```
+
+#### File Structure
+
+##### Overview Plan (plan.md)
+- Keep generic and under 80 lines
+- List each phase with status/progress
+- Link to detailed phase files
+- Key dependencies
+
+##### Phase Files (phase-XX-name.md)
+Fully respect the `./docs/development-rules.md` file.
+Each phase file should contain:
+
+**Context Links**
+- Links to related reports, files, documentation
+
+**Overview**
+- Priority
+- Current status
+- Brief description
+
+**Key Insights**
+- Important findings from research
+- Critical considerations
+
+**Requirements**
+- Functional requirements
+- Non-functional requirements
+
+**Architecture**
+- System design
+- Component interactions
+- Data flow
+
+**Related Code Files**
+- List of files to modify
+- List of files to create
+- List of files to delete
+
+**Implementation Steps**
+- Detailed, numbered steps
+- Specific instructions
+
+**Todo List**
+- Checkbox list for tracking
+
+**Success Criteria**
+- Definition of done
+- Validation methods
+
+**Risk Assessment**
+- Potential issues
+- Mitigation strategies
+
+**Security Considerations**
+- Auth/authorization
+- Data protection
+
+**Next Steps**
+- Dependencies
+- Follow-up tasks
+
+---
+
+# Global rule: documentation.md
+
+# Documentation Management
+
+## Project Documentation
+- **Roadmap** (`./docs/development-roadmap.md`): Phases, milestones, progress
+- **Changelog** (`./docs/project-changelog.md`): Changes, features, fixes
+- **Architecture** (`./docs/system-architecture.md`): System design
+- **Standards** (`./docs/code-standards.md`): Coding conventions
+
+## Accuracy Verification
+- Before committing docs, verify status labels match actual codebase state
+- Cross-check route/API docs against real code (grep for handlers)
+- Never label implemented features as 'Future' or 'Planned'
+
+## Update Triggers
+After: feature implementation, major milestones, bug fixes, security updates
+
+## Plans
+Save plans in `./plans` directory with timestamp and descriptive name.
+Format: `plans/YYMMDD-HHMM-descriptive-slug/`
+
+Plan files: plan.md (overview), phase-XX-name.md (detailed phases)
+Each phase: context links, overview, requirements, architecture, implementation steps, success criteria, risks.
+
+
+---
+
+# Global rule: git.md
+
+# Git
+
+## Commit Format
+```
+<type>: <description>
+
+<optional body>
+```
+Types: feat, fix, refactor, docs, chore, perf, ci
+No AI attribution (includeCoAuthoredBy: false).
+
+## Protocol
+- Use HTTPS (not SSH) for git push
+- Check remote URL before pushing: `git remote get-url origin`
+- Create NEW commits (never amend unless explicitly asked)
+- Never skip hooks (--no-verify)
+- Never force-push to main/master
+- Stage specific files (not `git add -A`) to avoid committing secrets
+
+## Pull Requests
+- Analyze FULL commit history (not just latest commit)
+- Use `git diff [base-branch]...HEAD` to see all changes
+- Draft comprehensive PR summary with validation evidence
+- Include screenshots, build output, logs
+- Push with `-u` flag if new branch
+
+
+---
+
+# Global rule: hooks-and-integrations.md
+
+# Hooks & Integration Code Rules
+
+## Rule 1: Read Docs Before Writing Integration Code
+
+Before writing ANY hook, MCP config, CLI wrapper, or integration code:
+1. Invoke `/working-with-cc` skill and read the relevant reference file
+2. For hooks: read `references/hooks.md` — verify output protocol, exit codes, JSON schema
+3. For MCP: read `references/mcp.md` — verify config format
+4. For CLI: read `references/cli-reference.md` — verify flags and syntax
+5. Never assume a flag, field name, or protocol from memory
+
+## Rule 2: Study Existing Project Code First
+
+Before creating new hooks or integration scripts:
+1. Read at least 2 existing hooks in `.claude/hooks/` to understand the project's patterns
+2. Match the existing output protocol (exit codes, stderr vs stdout, JSON format)
+3. If deviating from the existing pattern, cite the documentation justifying the deviation
+
+## Rule 3: Never Fabricate Fixes
+
+When a defect is identified in integration code:
+1. If you don't know the correct fix, say "I don't know the correct value — let me look it up"
+2. Look up the authoritative documentation before proposing any change
+3. Never guess at CLI flags, API fields, or protocol values
+4. If docs are unavailable, ask the user rather than inventing an answer
+
+## Rule 4: Hook Output Protocol (Claude Code)
+
+The canonical hook output protocol for this project:
+- **Block a tool call (PreToolUse):** Write reason to stderr, exit with code 2
+- **Ask user to confirm (PreToolUse):** Output JSON with `hookSpecificOutput.permissionDecision: "ask"`
+- **Provide feedback to Claude (PostToolUse):** Write message to stderr, exit with code 2
+- **No-op / allow:** Exit 0 with no output (do NOT print `{"decision":"approve"}`)
+- **Inject context (UserPromptSubmit/SessionStart):** Exit 0, write context to stdout
+
+Deprecated patterns to avoid:
+- `{"decision": "block"}` — use exit code 2 + stderr instead
+- `{"decision": "approve"}` — use silent exit 0 instead
+- Writing to stdout in PostToolUse — Claude doesn't see it (only transcript)
+
+
+---
+
+# Global rule: hooks-reference.md
+
+# Active Hooks Reference
+
+## SessionStart (startup|resume|clear|compact)
+- session-init.cjs — env setup, project detection, static context (one-time)
+- session-sdk-context.js — Agent SDK auth context (SessionForge-specific)
+
+## UserPromptSubmit (every message)
+- dev-rules-reminder.cjs — dynamic context: datetime, CWD, paths, plan, naming (~15 lines)
+- skill-activation-forced-eval.js — skill gate (~3 lines)
+
+## PreToolUse
+- descriptive-name.cjs (Write) — enforce descriptive filenames
+- block-test-files.js (Write|Edit|MultiEdit) — block test/mock/stub file creation
+- plan-before-execute.js (Write|Edit|MultiEdit) — warn if no planning detected
+- read-before-edit.js (Edit|MultiEdit) — remind to read full file first
+- subagent-context-enforcer.js (Agent) — warn if subagent lacks context
+- sdk-auth-subagent-enforcer.js (Agent) — inject SDK auth rules
+- evidence-gate-reminder.js (TaskUpdate) — evidence checklist on completion
+
+## PostToolUse
+- validation-not-compilation.js (Bash) — compilation is not validation
+- completion-claim-validator.js (Bash) — catch build success without evidence
+- dev-server-restart-reminder.js (Edit|Write|MultiEdit) — restart after route/schema changes
+- skill-invocation-tracker.js (Edit|Write|MultiEdit) — warn if 5+ edits without skill
+
+## SubagentStart (*)
+- subagent-init.cjs — context injection
+- team-context-inject.cjs — team context
+
+## SubagentStop (Plan)
+- cook-after-plan-reminder.cjs — post-plan reminder
+
+## TaskCompleted / TeammateIdle / Stop
+- task-completed-handler.cjs, teammate-idle-handler.cjs
+- Sound effect (Submarine.aiff when PROJEKT_TERMINAL=1)
+
+
+---
+
+# Global rule: instrument-before-theorize.md
+
+# Instrument Before Theorize
+
+When debugging detection boundary errors or segment creation issues:
+
+## Rule: Max 10 minutes of theoretical code analysis before instrumenting
+
+If you can't determine the code path by reading the code in 10 minutes, STOP and add temporary print statements.
+
+## For segment boundary issues
+
+Add `print(f"TRACE: {segment}")` at EVERY `segments.append()` call in motion_analyzer.py.
+Run detection. Check which line creates the problematic segment.
+This takes 5 minutes and answers the question definitively.
+
+## For filter issues
+
+Add prints before/after each filter step in unified_phase2_analyzer.py.
+Compare segments before and after to find which filter modified them.
+
+## For Y-tracker state issues
+
+Feed Phase 1 data through an isolated YPositionTracker and log state changes.
+This is faster than reasoning about the state machine theoretically.
+
+## Anti-pattern: Theoretical code path tracing
+
+Session 2026-03-26 spent 2+ hours reasoning about motion_analyzer code paths for the A7 boundary. A 5-line TRACE_APPEND instrumentation found the answer in 10 minutes: the boundary came from the trim_ad_boundaries filter, not the motion_analyzer.
+
+**Empirical > Theoretical. Instrument > Reason.**
+
+## Root-Cause-First Protocol (added 2026-04-17)
+Before ANY code change on a bug:
+1. State observed symptom (exact input + expected vs actual output)
+2. State hypothesis (ONE function/line named as suspected root cause)
+3. Design ONE experiment (log, print, frame dump) that confirms/denies the hypothesis
+4. Run the experiment; record evidence path
+5. Only then propose a fix
+
+If fix fails: document WHY in `.debug/<issue-id>/failed-approaches.md` before next attempt.
+Two failed attempts on the same hypothesis → stop and rethink, don't retry.
+
+
+---
+
+# Global rule: ocr-debug-protocol.md
+
+# OCR Debug Protocol
+
+When investigating OCR detection failures (text visible in frame but not in Phase 1 JSON):
+
+## MANDATORY FIRST STEP: Test the OCR pipeline on the actual frame
+
+Before writing ANY code fix:
+
+1. **Extract the specific frame** as PNG
+2. **Generate the white mask** using the same HSV parameters as WhiteTextOCR
+3. **Visually inspect the mask** — is the missing text captured in white pixels?
+4. **Run PyTesseract on the mask** with PSM 4 AND PSM 6 — what does it detect?
+5. **Also test the grayscale pipeline** (dedicated `_detect_sponsored_label` uses grayscale, not white mask)
+
+## Decision tree based on test results
+
+- **White mask captures text, PyTesseract misses it** → PSM mode issue, add fallback
+- **White mask does NOT capture text** → Preprocessing issue (HSV threshold, text color). Fix CANNOT be in PyTesseract — must be at mask/preprocessing level or use alternative pipeline (grayscale scan)
+- **Grayscale scan detects it but white mask doesn't** → Run the grayscale scan more frequently (it uses different preprocessing)
+
+## NEVER do these before testing the mask
+
+- Add PSM fallback code (useless if text isn't in the mask)
+- Add motion_analyzer guards (treating symptom, not cause)
+- Add filter tolerance (band-aid, not fix)
+- Add state tracking in parallel collector (thread-unsafe)
+
+## Quick test template
+
+```python
+import cv2, numpy as np, pytesseract
+frame = cv2.imread('path/to/frame.png')
+h, w = frame.shape[:2]
+hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+v_99 = np.percentile(hsv[:,:,2], 99.5)
+v_thresh = 200 if v_99 >= 200 else max(80, int(v_99 * 0.80))
+mask = cv2.inRange(hsv, (0,0,v_thresh), (180,30,255))
+inverted = 255 - mask
+# Check: does the mask capture the text?
+# Then: run PyTesseract on inverted, and separately on grayscale region
+```
+
+
+---
+
+# Global rule: orchestration-protocol.md
+
+# Orchestration Protocol
+
+## Delegation Context (MANDATORY)
+
+When spawning subagents via Task tool, **ALWAYS** include in prompt:
+
+1. **Work Context Path**: The git root of the PRIMARY files being worked on
+2. **Reports Path**: `{work_context}/plans/reports/` for that project
+3. **Plans Path**: `{work_context}/plans/` for that project
+
+**Example:**
+```
+Task prompt: "Fix parser bug.
+Work context: /path/to/project-b
+Reports: /path/to/project-b/plans/reports/
+Plans: /path/to/project-b/plans/"
+```
+
+**Rule:** If CWD differs from work context (editing files in different project), use the **work context paths**, not CWD paths.
+
+---
+
+#### Sequential Chaining
+Chain subagents when tasks have dependencies or require outputs from previous steps:
+- **Planning → Implementation → Simplification → Testing → Review**: Use for feature development (tests verify simplified code)
+- **Research → Design → Code → Documentation**: Use for new system components
+- Each agent completes fully before the next begins
+- Pass context and outputs between agents in the chain
+
+#### Parallel Execution
+Spawn multiple subagents simultaneously for independent tasks:
+- **Code + Tests + Docs**: When implementing separate, non-conflicting components
+- **Multiple Feature Branches**: Different agents working on isolated features
+- **Cross-platform Development**: iOS and Android specific implementations
+- **Careful Coordination**: Ensure no file conflicts or shared resource contention
+- **Merge Strategy**: Plan integration points before parallel execution begins
+
+---
+
+## Subagent Status Protocol
+
+Subagents MUST report one of these statuses when completing work:
+
+| Status | Meaning | Controller Action |
+|--------|---------|-------------------|
+| **DONE** | Task completed successfully | Proceed to next step (review, next task) |
+| **DONE_WITH_CONCERNS** | Completed but flagged doubts | Read concerns → address if correctness/scope issue → proceed if observational |
+| **BLOCKED** | Cannot complete task | Assess blocker → provide context / break task / escalate to user |
+| **NEEDS_CONTEXT** | Missing information to proceed | Provide missing context → re-dispatch |
+
+### Handling Rules
+
+- **Never** ignore BLOCKED or NEEDS_CONTEXT — something must change before retry
+- **Never** force same approach after BLOCKED — try: more context → simpler task → more capable model → escalate
+- **DONE_WITH_CONCERNS** about file growth or tech debt → note for future, proceed now
+- **DONE_WITH_CONCERNS** about correctness → address before review
+- If subagent fails 3+ times on same task → escalate to user, don't retry blindly
+
+### Reporting Format
+
+Subagents should end their response with:
+
+```
+**Status:** DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT
+**Summary:** [1-2 sentence summary]
+**Concerns/Blockers:** [if applicable]
+```
+
+---
+
+## Context Isolation Principle
+
+**Subagents receive only the context they need.** Never pass full session history.
+
+### Rules
+
+1. **Craft prompts explicitly** — Provide task description, relevant file paths, acceptance criteria. Not "here's what we discussed."
+2. **No session history** — Subagent gets fresh context. Summarize relevant decisions, don't replay conversation.
+3. **Scope file references** — List specific files to read/modify. Not "look at the codebase."
+4. **Include plan context** — If working from a plan, provide the specific phase text, not the entire plan.
+5. **Preserve controller context** — Coordination work stays in main agent. Don't dump coordination details into subagent prompts.
+
+### Prompt Template
+
+```
+Task: [specific task description]
+Files to modify: [list]
+Files to read for context: [list]
+Acceptance criteria: [list]
+Constraints: [any relevant constraints]
+Plan reference: [phase file path if applicable]
+
+Work context: [project path]
+Reports: [reports path]
+```
+
+### Anti-Patterns
+
+| Bad | Good |
+|-----|------|
+| "Continue from where we left off" | "Implement X feature per spec in phase-02.md" |
+| "Fix the issues we discussed" | "Fix null check in auth.ts:45, root cause: missing validation" |
+| "Look at the codebase and figure out" | "Read src/api/routes.ts and add POST /users endpoint" |
+| Passing 50+ lines of conversation | 5-line task summary with file paths |
+
+---
+
+## Agent Teams (Optional)
+
+For multi-session parallel collaboration, activate the `/ck:team` skill.
+Not part of the default orchestration workflow. See `$HOME/.claude/skills/team/SKILL.md` for templates, decision criteria, and spawn instructions.
+
+
+---
+
+# Global rule: orchestration.md
+
+# Orchestration
+
+## Model Selection
+- Haiku: lightweight agents, frequent invocation, quick lookups
+- Sonnet: standard implementation, orchestration, coding tasks
+- Opus: architecture, deep analysis, maximum reasoning
+
+## Sequential Thinking
+Before implementing ANY non-trivial request, use sequential thinking to:
+1. Break down the request into discrete steps
+2. Identify ambiguities and assumptions
+3. Plan the approach before writing code
+4. Consider edge cases and failure modes
+
+## Delegation Rules
+- NEVER spawn subagent without context (file paths, function names, code)
+- Include work context path, reports path, plans path in every prompt
+- Use parallel agents for 2+ independent tasks
+- Use sequential chains for dependent tasks
+
+## Batch Operations (>20 files)
+1. Count files with Glob (not find), show 3 samples, confirm
+2. Process max 20 per chunk
+3. Checkpoint to .claude/checkpoints/<timestamp>-<slug>.json after each chunk
+4. If context heavy: /compact, resume from checkpoint
+5. Headless resume: `claude -p "Read checkpoint, process next 20, checkpoint"`
+
+## Agent Teams
+- Each teammate owns distinct files — no overlap
+- Prefer git worktrees for parallel work
+- Never force-push from teammate session
+- Use SendMessage for peer DMs, broadcast only for critical blocks
+- File ownership conflicts: STOP and escalate to lead
+- Shutdown: approve unless mid-critical-operation
+- Idle is normal — sending a message to idle teammate wakes them
+
+## Context Budget
+- Per-message hooks inject ~15 lines (optimized from ~50)
+- Use /compact when context feels heavy
+- NEVER run parallel observer/memory agents — use claude-mem instead
+- For large batch ops, checkpoint and start fresh sessions
+
+
+---
+
+# Global rule: patterns.md
+
+# Common Patterns
+
+## Explore Before Implementing (MANDATORY)
+1. Search for existing solutions — `gh search code`, package registries, OSS
+2. Explore the codebase — use Glob/Grep/Read to understand what exists
+3. Check documentation — use Context7 MCP for library docs
+4. Use sequential thinking — reason through the approach before coding
+5. Invoke relevant skills — skills carry project-specific context you lack
+
+## Skeleton Projects
+When implementing new functionality:
+1. Search for battle-tested skeleton projects
+2. Evaluate options (security, extensibility, relevance)
+3. Clone best match as foundation
+4. Iterate within proven structure
+
+## Repository Pattern
+Encapsulate data access behind consistent interface:
+- Standard operations: findAll, findById, create, update, delete
+- Business logic depends on abstract interface, not storage
+- Enables easy swapping of data sources
+
+## API Response Format
+Consistent envelope for all API responses:
+- Success/status indicator
+- Data payload (nullable on error)
+- Error message (nullable on success)
+- Metadata for pagination (total, page, limit)
+
+
+---
+
+# Global rule: philosophy.md
+
+# Philosophy
+
+## Core Principles
+- YAGNI / KISS / DRY
+- Immutability: create new objects, never mutate
+- Functional validation ONLY: never mock, stub, or write test files
+- Evidence before completion: prove it works with screenshots/logs
+- Skill-first: always check and invoke relevant skills before work
+- Read before write: ALWAYS read full file before editing
+
+## Code Quality
+- Many small files > few large files (200-400 lines, 800 max)
+- Functions under 50 lines, nesting under 4 levels
+- File naming: kebab-case (JS/TS/Python/shell), PascalCase (Swift/C#/Java)
+- Handle errors explicitly at every level
+- Validate input at system boundaries
+- No hardcoded values — use constants or config
+- No deep nesting (>4 levels)
+- Self-documenting code with meaningful names
+
+## Reference Data Protection
+- NEVER modify ground truth, fixtures, or reference config without user approval
+- If you believe reference data is wrong, ASK — don't change it yourself
+
+
+---
+
+# Global rule: primary-workflow.md
+
+# Primary Workflow
+
+**IMPORTANT:** Analyze the skills catalog and activate the skills that are needed for the task during the process.
+**IMPORTANT**: Ensure token efficiency while maintaining high quality.
+
+#### 1. Code Implementation
+- Before you start, delegate to `planner` agent to create a implementation plan with TODO tasks in `./plans` directory.
+- When in planning phase, use multiple `researcher` agents in parallel to conduct research on different relevant technical topics and report back to `planner` agent to create implementation plan.
+- Write clean, readable, and maintainable code
+- Follow established architectural patterns
+- Implement features according to specifications
+- Handle edge cases and error scenarios
+- **DO NOT** create new enhanced files, update to the existing files directly.
+- **[IMPORTANT]** After creating or modifying code file, run compile command/script to check for any compile errors.
+
+#### 2. Testing
+- Delegate to `tester` agent to run tests on the **simplified code**
+  - Write comprehensive unit tests
+  - Ensure high code coverage
+  - Test error scenarios
+  - Validate performance requirements
+- Tests verify the FINAL code that will be reviewed and merged
+- **DO NOT** ignore failing tests just to pass the build.
+- **IMPORTANT:** make sure you don't use fake data, mocks, cheats, tricks, temporary solutions, just to pass the build or github actions.
+- **IMPORTANT:** Always fix failing tests follow the recommendations and delegate to `tester` agent to run tests again, only finish your session when all tests pass.
+
+#### 3. Code Quality
+- After testing passes, delegate to `code-reviewer` agent to review clean, tested code.
+- Follow coding standards and conventions
+- Write self-documenting code
+- Add meaningful comments for complex logic
+- Optimize for performance and maintainability
+
+#### 4. Integration
+- Always follow the plan given by `planner` agent
+- Ensure seamless integration with existing code
+- Follow API contracts precisely
+- Maintain backward compatibility
+- Document breaking changes
+- Delegate to `docs-manager` agent to update docs in `./docs` directory if any.
+
+#### 5. Debugging
+- When a user report bugs or issues on the server or a CI/CD pipeline, delegate to `debugger` agent to run tests and analyze the summary report.
+- Read the summary report from `debugger` agent and implement the fix.
+- Delegate to `tester` agent to run tests and analyze the summary report.
+- If the `tester` agent reports failed tests, fix them follow the recommendations and repeat from the **Step 3**.
+
+#### 6. Visual Explanations
+When explaining complex code, protocols, or architecture:
+- **When to use:** User asks "explain", "how does X work", "visualize", or topic has 3+ interacting components
+- Use `/ck:preview --explain <topic>` to generate visual explanation with ASCII + Mermaid
+- Use `/ck:preview --diagram <topic>` for architecture and data flow diagrams
+- Use `/ck:preview --slides <topic>` for step-by-step walkthroughs
+- Use `/ck:preview --ascii <topic>` for terminal-friendly output only
+- **HTML mode** (add `--html` for self-contained HTML pages, opens directly in browser):
+  - `/ck:preview --html --explain <topic>` — publication-quality HTML explanation
+  - `/ck:preview --html --diagram <topic>` — interactive HTML diagram with zoom controls
+  - `/ck:preview --html --slides <topic>` — magazine-quality slide deck
+  - `/ck:preview --html --diff [ref]` — visual diff review
+  - `/ck:preview --html --plan-review` — plan vs codebase comparison
+  - `/ck:preview --html --recap [timeframe]` — project context snapshot
+- **Plan context:** Visuals save to plan folder from `## Plan Context` hook injection; if none, uses `plans/visuals/`
+- **Markdown mode:** Auto-opens in browser via markdown-novel-viewer with Mermaid rendering
+- **HTML mode:** Opens directly in browser — self-contained, no server needed
+- See `development-rules.md` → "Visual Aids" section for additional guidance
+
+
+---
+
+# Global rule: project.md
+
+# Project: yt-transition-shorts-detector
+
+**Last Updated:** 2026-02-21
+**Status:** Milestone v1.1 complete (all 15 phases shipped)
+
+## Overview
+
+Two separate codebases in one repo:
+
+| Codebase | Root | Purpose |
+|----------|------|---------|
+| **Detection Engine** | `src/yt_shorts_detector/` | Y-pos OCR tracking → transition/stall detection |
+| **Agent System** | `short_detect/` | Claude SDK orchestration + Textual TUI |
+
+**Core value:** AI agents autonomously diagnose detection regressions, propose fixes, validate via regression gates, and roll back on failure.
+
+## Technology Stack
+
+- **Language:** Python 3.10+
+- **Detection:** EasyOCR (GPU), OpenCV, PyTorch SSIM, scikit-image
+- **Agent SDK:** Anthropic Claude Agent SDK (`query()` pattern)
+- **TUI:** Textual (`GroundTruthApp` — `short_detect/tui/app.py`)
+- **Video Player:** mpv (primary, JSON IPC) + FFplay (fallback)
+- **Package Manager:** `uv` / `pip` (setuptools, `pyproject.toml`)
+
+## Key Entry Points
+
+```bash
+# Detection engine
+python3 -m yt_shorts_detector detect <video> <output> --detect-stalls --debug-json
+
+# Agent system TUI
+python3 -m short_detect tui
+
+# Agent system CLI
+python3 -m short_detect sweep|audit|validate|diagnose ...
+
+# GT comparison
+python3 scripts/groundtruth/compare_all_gt_vs_detection.py
+```
+
+## Directory Map
+
+```
+src/yt_shorts_detector/   Detection engine (AI agents touch this)
+short_detect/             Agent system (developers touch this)
+  tui/                    Textual TUI screens + widgets
+  agents/                 Agent profile definitions
+  hooks/                  Safety enforcement hooks
+  sdk/                    Claude SDK helpers
+  prompts/                Agent prompt templates
+scripts/groundtruth/      GT extraction + comparison scripts
+videos/*.groundtruth.json Ground truth files (80 total)
+stall-test-clips/         Test clips + HeadSpin sessions
+.planning/                Phase plans, roadmap, state
+.claude/skills/           Project-specific skills
+```
+
+## Mandatory Session Start
+
+**ALWAYS invoke `yt-shorts-detector-guidelines` at session start.** Contains iron rules, pitfalls, validation gates, and agent system conventions. Failure to invoke has historically wasted 60+ sessions.
+
+## Quick Smoke Test
+
+```bash
+# After any detection engine change
+python3 -m yt_shorts_detector detect \
+  stall-test-clips/clips-sequential/seq_A_0-30s.mp4 \
+  ./test-output --detect-stalls --debug-json
+# Expected: 4 stalls, 0 errors
+```
+
+## Active Known Issues (2026-02-21)
+
+- **Frame-0 skip bug:** 14/46 HeadSpin videos have GT starting at frame ≥1. Root cause in `extract_keyframes.py` — under investigation.
+- **GT regeneration gap:** `G` key on VideoDetailScreen silently overwrites existing GT. Needs confirmation dialog before regenerating.
+- **Log streaming unverified:** StreamRouter→OrchestratorBridge→AutoFocusLog chain implemented but live event rendering during agent runs has not been end-to-end verified.
+
+
+---
+
+# Global rule: review-audit-self-decision.md
+
+# CLAUDE.md Rules Summary — Review/Audit + Comments + Self-Decision
+
+## 1. Verified Decisions Are Sticky — Audit Does Not Auto-Reverse
+
+- Once a decision is verified (read source, ran tests, empirical experiment), lock it with a source note: `verified by {file:line}` or `verified by test {name}`.
+- An audit/red-team counter-argument **alone is insufficient** to revise. Only revise when:
+  - Audit finds a **new** issue the verification missed (state the issue + why prior check missed it).
+  - Or context changed since verification (codebase moved, business decision changed).
+- After verifying, prune stale risk rows / unresolved questions from reports.
+- Surface contradictions on verified decisions to user as: "audit says X, but Y is verified by {source} — does the audit bring new data to justify a reverse?" Do NOT silently flip.
+
+## 2. Validate Audit Findings Against Real Threat Model
+
+Before applying a finding flagged "too narrow / too loose / risky":
+
+1. Identify what the code **actually stores/protects**.
+2. Walk each scenario the reviewer flagged through that lens. Does it actually produce the bad outcome? Often "theoretically yes, practically no".
+3. Separate real risks from abstract worries. Real → fix; non-real → document rationale; borderline → ask user.
+4. Look for the failure mode the reviewer missed — often the real bug sits one step away from what was flagged.
+
+Anti-pattern: accepting every "widen/harden/add-check" recommendation without tracing it to a real failure mode.
+
+## 3. Guard User Decisions Against Audit/YAGNI Drift
+
+**NEVER silently reverse decisions the user has already confirmed.**
+
+Before any cut/change from audit:
+
+1. **Trace before cutting:** check if user explicitly chose that value/design.
+2. **Categorize:**
+   - ✅ Safe to apply: cuts of items Claude proposed that user never explicitly confirmed.
+   - ⚠️ Must confirm first: anything touching user's explicit answer — thresholds, scope, library, schema, phase, feature inclusion/exclusion.
+   - 🚫 Never auto-reverse: business decisions (pricing, timing, scope boundaries, compliance).
+3. **Surface reversals:** present (a) user's original decision verbatim, (b) audit reasoning, (c) trade-off, (d) explicit ask "keep / change per audit / hybrid?". Do NOT apply.
+4. **Document drift:** annotate cuts with reason + user-confirmation trail.
+5. **Auditor bias awareness:** audits lean YAGNI/minimalism — they are **input to user**, not orders to Claude.
+
+Red flags: changing a numeric threshold user picked, removing a column/field user mentioned, swapping library, moving scope across phases, cutting a feature user confirmed.
+
+Rule of thumb: if unsure whether a cut reverses user intent, ask. Cost of 1 clarifying question ≪ cost of silent regression at demo.
+
+## 4. Scout-First, Ask-Second (Confidence Score)
+
+For any question answerable by grep/read on the codebase:
+
+1. **Scout first:** grep, read live code, check current state.
+2. **Self-rate confidence (0–100%):**
+   - **≥ ~85%** → answer directly with `path:line` citation.
+   - **< 85%** → ask user.
+3. **Only ask when:**
+   - Confidence < 85% (missing data, ambiguous).
+   - Real conflict between 2+ sources (not a stale note already verified).
+   - Anomaly requiring user judgment (business decision, UX trade-off, scope expansion).
+   - High-reversibility risk (destructive op, breaking change, deploy-affecting).
+
+Anti-pattern: asking what grep can answer in 5s.
+Good pattern: scout → "verified at `file:line`, confidence 95%, applying X" — verified + concise.
+
+## 5. Code Comments & Artifact Naming — No Plan References
+
+Code comments and file names (including SQL migrations) **must not reference plan artifacts**: phase numbers, finding codes (F1, F13, Y1, CU2…), audit labels (audit A4), red-team labels, brainstorm sections (§5.4), plan taxonomy.
+
+**Why:** plan headers change/get renumbered/disappear → references become unresolvable noise. The *reason* for code (invariant, race, trade-off) must be stable and self-contained.
+
+### Rules
+
+- **Explain the why, not the origin.** Write "org-scoped advisory lock serializes concurrent reassigns" — NOT "per F13 advisory-lock fix".
+- **Migration filenames:** domain slug only — `000003_polymorphic_permission_groups.up.sql` (NOT `000003_phase_0a_...`).
+- **Test names:** describe scenario — `TestReassignPrimaryDept_Concurrent` (NOT `_F13`).
+- **Commit messages:** describe the change, not the finding code.
+- Plan refs belong in `plans/…/phase-XX-*.md` and PR descriptions, not in code.
+
+### Allowed in code
+
+- Function/symbol names in the same codebase.
+- Stable external IDs: RFC numbers, PostgreSQL SQLSTATE, CVE IDs, durable issue numbers.
+
+---
+
+## Open Questions
+
+None — all 5 rules are clear. Flag if any rule should be expanded further.
+
+
+---
+
+# Global rule: search-protocol.md
+
+# Search Protocol
+
+## Hierarchy (mandatory order)
+
+### Symbols (functions, classes, types)
+1. lsp_workspace_symbols — search by name across workspace
+2. lsp_find_references — find all callers
+3. lsp_goto_definition — navigate to source
+4. ast_grep_search — structural AST pattern matching
+
+### Files
+1. Glob — fast pattern matching (**/*.swift, **/*.ts)
+2. smart_search — tree-sitter symbol + file search
+
+### Content
+1. Grep — ripgrep content search
+
+### Non-code files (Markdown, YAML, Dockerfile, scripts)
+- Glob for paths, Grep for content. LSP/AST do not apply.
+
+## NEVER use in Bash for code search
+- find, fd, locate — causes wrong paths, shallow globs, miscounts
+- Exception: find OK for non-code ops (disk cleanup, file age, permissions)
+
+
+---
+
+# Global rule: security.md
+
+# Security Guidelines
+
+## Mandatory Security Checks
+
+Before ANY commit:
+- [ ] No hardcoded secrets (API keys, passwords, tokens)
+- [ ] All user inputs validated
+- [ ] SQL injection prevention (parameterized queries)
+- [ ] XSS prevention (sanitized HTML)
+- [ ] CSRF protection enabled
+- [ ] Authentication/authorization verified
+- [ ] Rate limiting on all endpoints
+- [ ] Error messages don't leak sensitive data
+
+## Secret Management
+
+- NEVER hardcode secrets in source code
+- ALWAYS use environment variables or a secret manager
+- Validate that required secrets are present at startup
+- Rotate any secrets that may have been exposed
+
+## Security Response Protocol
+
+If security issue found:
+1. STOP immediately
+2. Use **security-reviewer** agent
+3. Use `security-scan` and `security-review` skills for comprehensive analysis
+4. Fix CRITICAL issues before continuing
+5. Rotate any exposed secrets
+6. Review entire codebase for similar issues
+7. Validate the fix through the real system (not just code review)
+
+
+---
+
+# Global rule: skill-domain-routing.md
+
+# Skill Domain Routing
+
+When a user's task involves a specific domain, use these decision trees to pick the RIGHT skill based on user intent.
+
+## Frontend / UI
+
+```
+User wants to...
+├── Replicate a mockup, screenshot, or video    → /ck:frontend-design
+├── Build React/TS components with best practices → /ck:frontend-development
+├── Style with Tailwind CSS + shadcn/ui          → /ck:ui-styling
+├── Choose colors, fonts, layout, design system  → /ck:ui-ux-pro-max
+├── Audit existing UI for accessibility/UX       → /ck:web-design-guidelines
+├── Apply React performance patterns             → /ck:react-best-practices
+├── Build with Stitch (AI design generation)     → /ck:stitch
+├── Create 3D / WebGL / Three.js experience      → /ck:threejs
+├── Write GLSL shaders / procedural graphics     → /ck:shader
+└── Build programmatic video with Remotion       → /ck:remotion
+```
+
+## Codebase Understanding
+
+```
+User wants to...
+├── Quick file search, locate specific code     → /ck:scout
+├── Onboard a new repo / dump codebase for LLM  → /ck:repomix
+├── Semantic go-to-definition, find-usages      → /ck:gkg
+└── Build a queryable knowledge graph from code → /ck:graphify
+```
+
+## Backend / API
+
+```
+User wants to...
+├── Build REST/GraphQL API (NestJS, FastAPI, Django) → /ck:backend-development
+├── Add authentication (OAuth, JWT, passkeys)        → /ck:better-auth
+└── Integrate payments (Stripe, Polar, SePay)        → /ck:payment-integration
+```
+
+## Database
+
+```
+User wants to...
+├── Design schemas, write SQL/NoSQL queries     → /ck:databases
+├── Optimize indexes, migrations, replication   → /ck:databases
+└── Add auth with database-backed sessions      → /ck:better-auth
+```
+
+## Infrastructure / Deployment
+
+```
+User wants to...
+├── Deploy to Vercel, Netlify, Railway, Fly.io   → /ck:deploy
+└── Docker, Kubernetes, CI/CD pipelines, GitOps   → /ck:devops
+```
+
+## Security
+
+```
+User wants to...
+├── STRIDE/OWASP security audit with auto-fix    → /ck:security
+├── Scan for secrets, vulnerabilities, OWASP patterns → /ck:security-scan
+└── OSINT / CTI / threat-intel investigation     → /ck:cti-expert
+```
+
+## AI / LLM
+
+```
+User wants to...
+├── Optimize context, agent architecture, memory → /ck:context-engineering
+├── Generate llms.txt, LLM-friendly docs         → /ck:llms
+├── Build AI agents with Google ADK              → /ck:google-adk-python
+├── Generate/analyze images, audio, video with AI → /ck:ai-multimodal
+└── Learn the autoresearch pattern / find the right family member → /ck:autoresearch
+```
+
+## MCP (Model Context Protocol)
+
+```
+User wants to...
+├── Build a new MCP server                       → /ck:mcp-builder
+├── Convert existing code into CLI/MCP server    → /ck:agentize
+└── Discover and execute MCP tools               → /ck:use-mcp
+```
+
+## Testing / Browser
+
+```
+User wants to...
+├── Run test suites, coverage reports, TDD          → /ck:test
+├── Test strategy + Playwright/Vitest/k6 runner     → /ck:web-testing
+└── Drive a live browser                            → /ck:agent-browser
+```
+
+## Media
+
+```
+User wants to...
+├── Process video/audio (FFmpeg), images (ImageMagick) → /ck:media-processing
+└── Generate AI images (Imagen, Nano Banana)           → /ck:ai-artist
+```
+
+## Documentation
+
+```
+User wants to...
+├── Update project docs (codebase-summary, PDR)   → /ck:docs
+├── Search library/framework docs (context7)      → /ck:docs-seeker
+├── Discover skills by capability / "is there a skill" → /ck:find-skills
+├── Build docs site with Mintlify                 → /ck:mintlify
+├── Inline doc diagrams (Mermaid v11)             → /ck:mermaidjs-v11
+├── Publish-grade SVG/PNG diagrams (architecture) → /ck:tech-graph
+├── Read long-form docs / RFCs / specs in browser → /ck:markdown-novel-viewer
+├── Generate session hand-off / EOD summary       → /ck:watzup
+└── Sprint retrospective from git history         → /ck:retro
+```
+
+## Documents / Office Files
+
+```
+User wants to...
+├── Create / edit / extract from .docx (Word)         → /ck:docx
+├── Create / edit / extract from .pdf (forms, tables) → /ck:pdf
+├── Create / edit / extract from .pptx (PowerPoint)   → /ck:pptx
+└── Create / edit / extract from .xlsx (spreadsheets) → /ck:xlsx
+```
+
+## Content / Copy
+
+```
+User wants to...
+├── Write landing page, email, headline copy     → /ck:copywriting
+├── Brand identity, logos, banners               → /ckm:design
+└── Create Excalidraw diagrams                   → /ck:excalidraw
+```
+
+## Frameworks
+
+```
+User wants to...
+├── Next.js App Router, RSC, Turborepo           → /ck:web-frameworks
+├── TanStack Start/Form/AI                       → /ck:tanstack
+├── React Native, Flutter, SwiftUI               → /ck:mobile-development
+└── Shopify apps, Polaris, Liquid templates       → /ck:shopify
+```
+
+## Usage Notes
+
+- Pick ONE skill per distinct user intent
+- If a task spans two domains (e.g. "build + deploy"), suggest the primary skill and mention the secondary
+- Domain skills combine with core workflow: `/ck:plan` → domain skill → `/ck:cook`
+- Skills not listed here are either core workflow skills (see `skill-workflow-routing.md`) or utility skills activated on demand (e.g. `/ck:ask`, `/ck:preview`, `/ck:sequential-thinking`)
+
+
+---
+
+# Global rule: skill-workflow-routing.md
+
+# Skill Workflow Routing
+
+When orchestrating multi-step tasks, consider these workflow sequences. Skills are listed in typical execution order.
+
+## Core Development Workflow
+
+```
+/ck:plan → /ck:cook → /ck:test → /ck:code-review → /ck:ship → /ck:journal
+```
+
+| User Intent | Suggested Start |
+|-------------|----------------|
+| "implement feature X", "build X", "add X" | `/ck:plan` then `/ck:cook` |
+| "execute this plan" | `/ck:cook <plan-path>` |
+| "quick implementation" | `/ck:cook --fast` |
+
+## Bugfix Workflow
+
+```
+/ck:scout → /ck:debug → /ck:fix → /ck:test → /ck:code-review
+```
+
+| User Intent | Suggested Start |
+|-------------|----------------|
+| "X is broken", "error in X", "bug in X" | `/ck:fix` (auto-scouts internally) |
+| "CI is failing", "tests broken" | `/ck:fix --auto` |
+| "investigate why X happens" | `/ck:scout` then `/ck:debug` |
+
+## Investigation Workflow
+
+```
+/ck:scout → /ck:debug → /ck:brainstorm → /ck:plan
+```
+
+| User Intent | Suggested Start |
+|-------------|----------------|
+| "understand how X works" | `/ck:scout` |
+| "why is X happening" | `/ck:debug` |
+| "explore options for X" | `/ck:brainstorm` then `/ck:plan` |
+
+## Post-Implementation Checklist
+
+After completing implementation work, consider:
+- `/ck:code-review` — review changes before merging
+- `/ck:ship` — run full shipping pipeline (tests, review, version, PR)
+- `/ck:journal` — document decisions and lessons learned
+
+## Setup Skills
+
+Before starting implementation in a shared codebase:
+- `/ck:worktree` — create isolated worktree for the feature/fix
+- `/ck:scout` — discover relevant files and code patterns
+
+
+---
+
+# Global rule: subagent-efficiency.md
+
+# Sub-Agent Efficiency
+
+When spawning sub-agents for exploration or audit:
+- Pass along file contents already read by the primary session — avoid redundant reads
+- Include explicit context summaries (file paths, function names, key findings) in the Agent prompt
+- For parallel agents: assign non-overlapping file/directory scopes to prevent duplicate work
+- Prefer a shared manifest file for coordination over agents re-discovering the same code
+
+
+---
+
+# Global rule: team-coordination-rules.md
+
+# Team Coordination Rules
+
+> These rules only apply when operating as a teammate within an Agent Team.
+> They have no effect on standard sessions or subagent workflows.
+
+Rules for agents operating as teammates within an Agent Team.
+
+## File Ownership (CRITICAL)
+
+- Each teammate MUST own distinct files — no overlapping edits
+- Define ownership via glob patterns in task descriptions: `File ownership: src/api/*, src/models/*`
+- Lead resolves ownership conflicts by restructuring tasks or handling shared files directly
+- Tester owns test files only; reads implementation files but never edits them
+- If ownership violation detected: STOP and report to lead immediately
+
+## Git Safety
+
+- Prefer git worktrees for implementation teams — each dev in own worktree eliminates conflicts
+- Never force-push from a teammate session
+- Commit frequently with descriptive messages
+- Pull before push to catch merge conflicts early
+- If working in a git worktree, commit/push to the worktree branch — not main or dev
+
+## Communication Protocol
+
+- Use `SendMessage(type: "message")` for peer DMs — always specify recipient by name
+- Use `SendMessage(type: "broadcast")` ONLY for critical blocking issues affecting entire team
+- Mark tasks completed via `TaskUpdate` BEFORE sending completion message to lead
+- Include actionable findings in messages, not just "I'm done"
+- Never send structured JSON status messages — use plain text
+
+## CK Stack Conventions
+
+### Report Output
+- Save reports to `{CK_REPORTS_PATH}` (injected via hook, fallback: `plans/reports/`)
+- Naming: `{type}-{date}-{slug}.md` where type = your role (researcher, reviewer, debugger)
+- Sacrifice grammar for concision. List unresolved questions at end.
+
+### Commit Messages
+- Use conventional commits: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`
+- No AI references in commit messages
+- Keep commits focused on actual code changes
+
+### Docs Sync (Implementation Teams Only)
+- After completing implementation tasks, lead MUST evaluate docs impact
+- State explicitly: `Docs impact: [none|minor|major]`
+- If impact: update `docs/` directory or note in completion message
+
+## Task Claiming
+
+- Claim lowest-ID unblocked task first (earlier tasks set up context for later ones)
+- Check `TaskList` after completing each task for newly unblocked work
+- Set task to `in_progress` before starting work
+- If all tasks blocked, notify lead and offer to help unblock
+
+## Plan Approval Flow
+
+When `plan_mode_required` is set:
+1. Research and plan your approach (read-only — no file edits)
+2. Send plan via `ExitPlanMode` — this triggers approval request to lead
+3. Wait for lead's `plan_approval_response`
+4. If rejected: revise based on feedback, resubmit
+5. If approved: proceed with implementation
+
+## Conflict Resolution
+
+- If two teammates need the same file: escalate to lead immediately
+- If a teammate's plan is rejected twice: lead takes over that task
+- If findings conflict between reviewers: lead synthesizes and documents disagreement
+- If blocked by another teammate's incomplete work: message them directly first, escalate to lead if unresponsive
+
+## Shutdown Protocol
+
+- Approve shutdown requests unless mid-critical-operation
+- Always mark current task as completed before approving shutdown
+- If rejecting shutdown, explain why concisely
+- Extract `requestId` from shutdown request JSON and pass to `shutdown_response`
+
+## Idle State (Normal Behavior)
+
+- Going idle after sending a message is NORMAL — not an error
+- Idle means waiting for input, not disconnected
+- Sending a message to an idle teammate wakes them up
+- Do not treat idle notifications as completion signals — check task status instead
+
+## Discovery
+
+- Read team config at `~/.claude/teams/{team-name}/config.json` to discover teammates
+- Always refer to teammates by NAME (not agent ID)
+- Names are used for: `recipient` in SendMessage, task `owner` in TaskUpdate
+
+
+---
+
+# Global rule: tui-patterns.md
+
+# short_detect TUI Patterns
+
+Textual-specific patterns used in `short_detect/tui/`. Reference before adding new screens, modals, or bridge connections.
+
+## Two-Loop Isolation
+
+Textual owns the UI thread. The agent pipeline runs in a background thread with its own `asyncio.run()`. Never share event loops.
+
+```python
+# Bridge pattern: pipeline runs in background thread
+import threading, asyncio
+
+thread = threading.Thread(target=lambda: asyncio.run(pipeline_coro()))
+thread.start()
+```
+
+Control signals cross the boundary via `threading.Event` (pause/abort), awaited in async context with `asyncio.to_thread(event.wait)`.
+
+## Event Streaming: Local Router Bridge
+
+Pipeline threads emit events via a **local `StreamRouter`** that forwards to the main TUI router:
+
+```python
+def _make_local_router(self) -> StreamRouter:
+    """Creates per-pipeline-run router that forwards to the main TUI router."""
+    local_router = StreamRouter()
+    local_router.add_consumer(lambda ev: self._router.emit_sync(ev))
+    return local_router
+```
+
+`emit_sync()` is thread-safe and dispatches to the main event loop. The TUI side:
+```python
+# app.py wraps StreamEvent in _StreamEventMsg for Textual's message bus
+class _StreamEventMsg(Message):
+    def __init__(self, event: StreamEvent) -> None:
+        self.event = event
+        super().__init__()
+```
+
+Handler `on__stream_event_msg()` routes to all `AutoFocusLog` widgets on the current screen.
+
+## Modal `_ready` Guard
+
+Modals inherit keyboard events from parent screens. The `_ready` pattern prevents Enter key from immediately dismissing a modal that just opened (mounted from an Enter press):
+
+```python
+class MyModal(ModalScreen):
+    def on_mount(self) -> None:
+        self._ready = False
+        self.set_timer(0.2, self._set_ready)  # 200ms delay
+
+    def _set_ready(self) -> None:
+        self._ready = True
+
+    def on_key(self, event: Key) -> None:
+        if not self._ready:
+            return  # swallow early key events
+```
+
+## Lazy `_ensure_*` Initialization
+
+Player and PTS table are initialized on first use, not at screen mount. This avoids blocking the UI during mount:
+
+```python
+def _ensure_player(self) -> bool:
+    """Initialize player on first use. Returns False if failed."""
+    if self._player is None:
+        self._player = VideoPlayer.create(...)
+    return self._player is not None
+
+def _ensure_pts_table(self) -> bool:
+    """Build PTS lookup table synchronously on first open."""
+    if self._pts_table is None:
+        self._pts_table = PTSTable.build(self._video_path)
+    return self._pts_table is not None
+```
+
+## Lazy Screen Registry
+
+All 10 screens are registered lazily in `_lazy_screen_map()` to avoid circular imports at module load time:
+
+```python
+def _lazy_screen_map() -> dict[str, type]:
+    from short_detect.tui.screens.dashboard import DashboardScreen
+    from short_detect.tui.screens.video_detail import VideoDetailScreen
+    # ...
+    return {"dashboard": DashboardScreen, ...}
+```
+
+## Validation Pattern (tmux-cli)
+
+All TUI validation uses tmux-cli (not playwright):
+
+```bash
+# Standard validation sequence
+tmux send-keys -t pane "python3 -m short_detect tui" Enter
+sleep 2
+tmux capture-pane -t pane -p  # assert expected text visible
+tmux send-keys -t pane "q" ""  # quit
+```
+
+## DataTable Rebuild Strategy
+
+After any mutation to the GT segment list, rebuild the full DataTable rather than incremental updates. Simpler and correct for tables with <80 rows:
+
+```python
+def _rebuild_table(self) -> None:
+    self.query_one(DataTable).clear(columns=True)
+    self._populate_table()
+```
+
+## `dismiss()` Return Value Convention
+
+Use `dismiss(False)` vs `dismiss(True)` to communicate results from modal back to caller:
+
+```python
+# In modal
+self.dismiss(True)   # user confirmed
+self.dismiss(False)  # user cancelled
+
+# In caller
+def on_dismiss(self, result: bool) -> None:
+    if result:
+        self._do_save()
+```
+
+## PlayerCapability Flags
+
+Actions gated on player capabilities (mpv supports all; FFplay is degraded):
+
+```python
+from short_detect.player import PlayerCapability
+
+if self._player.supports(PlayerCapability.MARK_FRAME):
+    self.query_one("#mark-btn").disabled = False
+```
+
+
+---
+
+# Global rule: validation-discipline.md
+
+# Validation Discipline
+
+When running e2e-validate, audit skills, or any gated workflow:
+- ALWAYS verify results with actual runtime behavior (CLI invocation, UI interaction, API calls)
+- Do NOT declare completion based solely on gate scripts passing
+- At least one real functional test must succeed before marking any validation gate PASS
+- Build success ≠ validation success — compilation proves syntax, not behavior
+
+
+---
+
+# Global rule: vf-benchmarking.md
+
+# Benchmarking Rules
+
+## Metric Collection
+
+```
+RULE: Benchmark every validation run
+  After validate-sweep completes, collect metrics automatically.
+
+RULE: Never estimate metrics
+  All metrics must be calculated from actual evidence files and timestamps.
+
+RULE: Track trends
+  Append to .vf/benchmark-history.json after every run.
+  Never overwrite history — only append.
+```
+
+## Metric Integrity
+
+```
+RULE: Coverage = actual validated / actual total
+  Do not count planned-but-not-executed journeys as coverage.
+
+RULE: Evidence quality = files examined / files claimed
+  Empty files (0 bytes) do not count as evidence.
+
+RULE: Speed = wall clock time
+  Measure from validate-sweep start to verdict completion.
+  Do not subtract "waiting" time — real time matters.
+
+RULE: Detection accuracy requires follow-up
+  True positive rate can only be calculated AFTER fixes confirm defects.
+  Track "pending verification" separately from "confirmed."
+```
+
+## Comparative Analysis
+
+```
+RULE: Same project for trends
+  Only compare benchmark runs for the same project.
+  Cross-project comparison uses normalized metrics only.
+
+RULE: Baseline before changes
+  When changing validation approach, benchmark BEFORE and AFTER.
+  Without a baseline, improvement claims are invalid.
+
+RULE: Fair comparison with alternatives
+  When comparing VF vs unit tests vs manual:
+  - Measure the same features
+  - Count the same defect types
+  - Use the same time window
+```
+
+## Reporting
+
+```
+RULE: Every benchmark report includes raw data
+  Link to actual evidence files, not just percentages.
+
+RULE: Highlight regressions
+  If any metric decreased from previous run, flag it prominently.
+
+RULE: Actionable recommendations
+  Every benchmark report ends with specific improvement suggestions.
+```
+
+
+---
+
+# Global rule: vf-consensus-engine.md
+
+# Consensus Engine
+
+## Engine Identity
+
+The CONSENSUS engine is the execution-time agreement gate in ValidationForge's three-engine architecture. It is a peer to `rules/team-validation.md` — where team validation coordinates multiple specialized validators across platforms, the consensus engine coordinates multiple **independent** validators against the **same** feature and synthesizes a single verdict with a confidence score.
+
+```
+FORGE builds code → VALIDATE proves it works → CONSENSUS confirms agreement
+```
+
+Within that triad:
+- **FORGE** (`rules/forge-execution.md`) — produces the artifact
+- **VALIDATE** (`rules/execution-workflow.md`) — proves the artifact works once
+- **CONSENSUS** (this rule) — proves the artifact works according to ≥2 independent reviewers
+
+Relationship to sibling rules:
+- `rules/team-validation.md` — N validators, N platforms, N verdicts. Different journeys per validator. Parallel coverage.
+- `rules/consensus-engine.md` (this file) — N validators, 1 feature, 1 synthesized verdict. Same journeys across all validators. Parallel agreement.
+
+Both share the parallel orchestration pattern but differ in intent. Team validation maximizes **coverage**; consensus maximizes **confidence**.
+
+## Roles
+
+| Role | Count | Responsibility | Skills Used |
+|------|-------|---------------|-------------|
+| **Coordinator** | 1 | Spawns validators, monitors completion, invokes synthesizer. Does NOT validate or write evidence. | consensus-engine, preflight, parallel-validation |
+| **Validator-N** | ≥2, default 3 | Independently executes the full journey list, captures its own evidence, writes its own per-journey PASS/FAIL verdicts. Blind to peer verdicts until synthesis. | functional-validation, platform-specific validation skills, evidence-capturer agent |
+| **Synthesizer** | 1 | Reads all validator verdicts, applies the Synthesis States table, computes confidence, invokes disagreement protocol when needed, writes the unified consensus report. | consensus-synthesis, consensus-disagreement-analysis, verdict-writer (specialization) |
+
+**Default roster:** Coordinator + 3 Validators + Synthesizer = 5 agents. The Validator count is configurable via `--validators N` where `N ≥ 2`. Odd counts (3, 5) are preferred to avoid 1:1 ties on binary verdicts, but not required — SPLIT is handled explicitly.
+
+## File Ownership
+
+Each role owns a well-defined slice of the evidence tree, and no role may write outside its slice.
+
+```
+e2e-evidence/
+  consensus/
+    validator-1/   ← Validator-1 only (exclusive write)
+      step-01-*.{png,json,txt}
+      verdict.md
+    validator-2/   ← Validator-2 only (exclusive write)
+      step-01-*.{png,json,txt}
+      verdict.md
+    validator-3/   ← Validator-3 only (exclusive write)
+      step-01-*.{png,json,txt}
+      verdict.md
+    report.md      ← Synthesizer only (exclusive write)
+```
+
+| Owner | Writes To | Reads From |
+|-------|-----------|------------|
+| **Coordinator** | *(nothing)* | validator-N/verdict.md (to detect completion) |
+| **Validator-N** | `e2e-evidence/consensus/validator-{N}/` exclusively | source code, runtime artifacts |
+| **Synthesizer** | `e2e-evidence/consensus/report.md` exclusively | all `validator-N/` directories |
+
+**Ownership is absolute.** A validator that writes to another validator's directory invalidates the independence guarantee and the run must be discarded. The coordinator owning nothing is the load-bearing invariant: a coordinator that captures evidence has an implicit bias toward its own observations.
+
+## Synthesis States
+
+After all validators complete, the synthesizer maps the verdict tuple `(pass_count, fail_count, total)` per journey to a synthesis state, then emits a final verdict with a confidence tier.
+
+| State | Condition | Final Verdict | Confidence | Action |
+|-------|-----------|---------------|------------|--------|
+| **UNANIMOUS_PASS** | All validators PASS | PASS | HIGH | Emit PASS with consensus citation |
+| **UNANIMOUS_FAIL** | All validators FAIL | FAIL | HIGH | Emit FAIL with consensus citation |
+| **MAJORITY_PASS** | pass_count > fail_count AND ≥⅔ PASS | PASS | MEDIUM | Run disagreement protocol; if resolved, emit PASS (MEDIUM) with dissent noted |
+| **MAJORITY_FAIL** | fail_count > pass_count AND ≥⅔ FAIL | FAIL | MEDIUM | Run disagreement protocol; if resolved, emit FAIL (MEDIUM) with dissent noted |
+| **SPLIT** | Neither side reaches ⅔ | DISAGREEMENT_UNRESOLVED | LOW | Run disagreement protocol; if unresolved, escalate to human |
+
+**Per-journey synthesis.** State is computed per journey, not per run. A feature with 10 journeys can have 7 UNANIMOUS_PASS, 2 MAJORITY_PASS, and 1 SPLIT — the report reflects each independently. The overall run verdict is the weakest verdict across journeys (one SPLIT → overall DISAGREEMENT_UNRESOLVED).
+
+## Confidence Formula
+
+Confidence is a direct function of agreement ratio, not of validator count or evidence volume.
+
+```
+agreement_ratio = max(pass_count, fail_count) / total_validators
+
+confidence =
+  HIGH    if agreement_ratio == 1.0                  (unanimous)
+  MEDIUM  if agreement_ratio >= 2/3 (after disagreement analysis resolves it)
+  LOW     if agreement_ratio <  2/3                  (split; unresolved)
+```
+
+Confidence degrades monotonically: a validator joining late or a re-run flipping does not upgrade confidence above what the final tuple supports. Evidence quality cannot substitute for agreement — a HIGH confidence verdict requires unanimity regardless of how compelling one validator's evidence is.
+
+## Disagreement Protocol
+
+When synthesis state is anything other than UNANIMOUS_PASS or UNANIMOUS_FAIL, the synthesizer MUST invoke the disagreement protocol before finalizing the verdict.
+
+1. **Identify diverging criteria.** For each PASS criterion in the journey, compute per-validator verdict. Isolate the criteria where validators disagree (the "diverging set").
+2. **Invoke `sequential-analysis`.** For each diverging criterion, run the sequential-analysis skill over the cited evidence from all validators. The goal is root cause: is the disagreement about (a) missing evidence on one side, (b) contradictory evidence, (c) different interpretation of the same evidence, or (d) validator error?
+3. **Re-resolve when possible.**
+   - **(a) Missing evidence** → re-run the missing validator on that criterion only; re-synthesize.
+   - **(b) Contradictory evidence** → the real system is non-deterministic OR a validator captured stale state; re-run the full journey for the minority side; re-synthesize.
+   - **(c) Different interpretation** → the PASS criterion is under-specified; escalate to the planner to sharpen the criterion; do NOT re-resolve in this run.
+   - **(d) Validator error** (e.g., invalid evidence, unreachable citations) → discard that validator's verdict for the criterion; re-synthesize with remaining validators.
+4. **Escalate when not.** If root cause analysis cannot resolve the disagreement (e.g., genuine ambiguity in what the feature should do), mark the journey DISAGREEMENT_UNRESOLVED with LOW confidence and surface the disagreement to the human in the report. Do NOT silently downgrade to MAJORITY.
+
+The synthesizer NEVER invents a verdict to break a tie. SPLIT is a real, reportable outcome — shipping a DISAGREEMENT_UNRESOLVED journey requires an explicit human override, not an implicit one.
+
+## Iron Rules (Carry-Over)
+
+All Iron Rules from `rules/validation-discipline.md` apply unchanged to every validator in the consensus run:
+
+1. **No mocks, no test files, no test doubles.** Each validator exercises the real system.
+2. **Evidence cited or the verdict is invalid.** Every PASS/FAIL the validator emits must cite specific evidence files in its own `validator-{N}/` directory.
+3. **Compilation is not validation.** A validator that reports PASS because the build succeeded has emitted an invalid verdict; the synthesizer must treat it as validator error (case d).
+4. **Screenshots describe what is SEEN.** API responses quote the body. Logs include timestamps. Zero-byte files are invalid evidence.
+5. **Preflight before spawning.** The coordinator runs preflight before spawning validators. If preflight fails, no validator is spawned and the run is aborted.
+
+Consensus raises the bar but does not change the bar. A validator that cuts corners on evidence compromises the entire run — its verdict, whether PASS or FAIL, cannot be trusted to represent the real system.
+
+## Relationship to /forge-plan --consensus
+
+`/forge-plan --consensus` and this engine are **philosophically aligned but operationally distinct**. They apply the consensus principle at different points in the pipeline.
+
+| Aspect | `/forge-plan --consensus` | `rules/consensus-engine.md` (this) |
+|--------|---------------------------|-------------------------------------|
+| **When** | Planning time (before any code is written) | Execution time (after code is built, before ship) |
+| **Inputs** | A specification / problem statement | A running system + validation plan |
+| **Agents** | 3 planner perspectives (e.g., security, performance, correctness) | ≥2 Validators (default 3), all executing the same plan |
+| **Output** | 1 synthesized implementation plan | 1 synthesized PASS/FAIL verdict with confidence |
+| **Disagreement handling** | Perspectives merged into a unified plan | SPLIT → DISAGREEMENT_UNRESOLVED, escalated |
+| **Primary metric** | Plan quality (completeness, tradeoffs surfaced) | Verdict confidence (agreement ratio) |
+
+Both reduce single-agent bias. `/forge-plan --consensus` reduces **planning bias** (one agent misses a dimension); this engine reduces **validation bias** (one validator misses a defect or fabricates a PASS). A project using both gets consensus at both ends: 3 perspectives shape the plan, then ≥2 Validators confirm the implementation.
+
+They do not share primitives — the forge-plan perspectives are cognitive roles in a single agent call; the consensus-engine Validators are independent agent spawns with isolated evidence directories. Confusing the two is a category error: do not reuse forge-plan perspectives as consensus Validators, and do not expect execution-time consensus to catch planning-time blind spots.
+
+
+---
+
+# Global rule: vf-evidence-management.md
+
+# Evidence Management
+
+## Directory Structure
+
+```
+e2e-evidence/
+  {journey-slug}/
+    step-01-{action}-{result}.png
+    step-02-{action}-{result}.json
+    step-03-{action}-{result}.txt
+    evidence-inventory.txt
+  report.md
+```
+
+## Naming Convention
+
+Files: `step-{NN}-{action}-{result}.{ext}`
+- `step-01-navigate-to-login.png`
+- `step-02-submit-credentials.json`
+- `step-03-dashboard-loaded.png`
+- `step-04-console-errors.txt`
+
+## Evidence Types
+
+| Type | When to Capture | Format |
+|------|----------------|--------|
+| Screenshots | Every state transition | PNG |
+| DOM snapshots | Initial load + after interactions | HTML/JSON |
+| Console logs | Always | TXT |
+| Network logs | API integration debugging | JSON |
+| API responses | Endpoint validation | JSON |
+| CLI output | Command validation | TXT |
+
+## Evidence Quality Rules
+
+1. Screenshots must show the RELEVANT content, not just a blank page
+2. API responses must include headers AND body
+3. Console logs must include timestamps
+4. Every evidence file must be >0 bytes (empty files are invalid evidence)
+5. Evidence inventory must list all files with byte counts
+
+## Retention
+
+### Lifecycle Policy
+
+Evidence follows a structured lifecycle tied to validation runs and configurable retention:
+
+| Phase | Action |
+|-------|--------|
+| During validation | All evidence preserved; no cleanup permitted |
+| After PASS | Keep entry + final state screenshots; prune intermediates |
+| After FAIL | Keep ALL evidence indefinitely until explicit cleanup |
+| Beyond retention period | Eligible for automatic or manual cleanup |
+
+### Configuration
+
+Retention period is configured via `.vf-config.json` (default: 30 days):
+
+```json
+{
+  "evidence_retention_days": 30
+}
+```
+
+`evidence_retention_days` controls how long evidence directories are kept before becoming
+eligible for cleanup. Set to `0` to disable automatic expiry (keep forever).
+
+### Automatic Cleanup
+
+The `/validate --clean` flag removes evidence older than `evidence_retention_days` before
+starting a new validation run:
+
+```bash
+/validate --clean          # Purge evidence older than configured retention period
+                           # (uses evidence_retention_days from .vf-config.json)
+```
+
+Cleanup rules:
+- Evidence from **in-progress** validations is **never** deleted
+- FAIL evidence is flagged but still subject to the retention policy unless pinned
+- Cleanup writes a removal log to `e2e-evidence/cleanup.log` for audit
+
+### Source Control
+
+Add `e2e-evidence/` to `.gitignore` to prevent committing evidence to source control:
+
+```
+# Evidence directories — managed by ValidationForge retention policy
+e2e-evidence/
+```
+
+Exception: commit `e2e-evidence/report.md` if the team requires verdicts in source control.
+
+### Lock File Protocol
+
+Active validation sessions write a lock file to prevent cleanup from interfering with
+in-progress runs:
+
+```
+.vf/state/validation-in-progress.lock
+```
+
+**Lock file lifecycle:**
+
+| Event | Action |
+|-------|--------|
+| Validation starts | Write `validation-in-progress.lock` with PID and start timestamp |
+| Validation ends (PASS or FAIL) | Remove `validation-in-progress.lock` |
+| Cleanup triggered | Check for lock file; abort if present |
+| Stale lock detected | Lock older than 1 hour is treated as orphaned and ignored |
+
+**Lock file contents:**
+
+```
+pid=<PID>
+started=<ISO-8601 timestamp>
+platform=<platform or "auto-detect">
+```
+
+**Cleanup behavior when lock is present:**
+
+```
+⚠️  Validation in progress — lock file present at .vf/state/validation-in-progress.lock.
+    Cleanup aborted. Re-run after validation completes.
+```
+
+Cleanup never removes `validation-in-progress.lock` itself — only the validation
+process that created it may remove it. If a lock is stale (process no longer running),
+cleanup logs a warning and proceeds after the 1-hour grace period.
+
+### Archive Before Purge
+
+Before any cleanup, create a compressed archive for offline retention:
+
+```bash
+tar -czf e2e-evidence-$(date +%Y%m%d).tar.gz e2e-evidence/
+```
+
+
+---
+
+# Global rule: vf-execution-workflow.md
+
+# Execution Workflow
+
+## The ValidationForge Pipeline
+
+```
+0. RESEARCH → Understand what to validate and how
+1. PLAN    → Define journeys, PASS criteria, evidence requirements
+2. PREFLIGHT → Verify system is runnable
+3. EXECUTE → Run journeys against real system, capture evidence
+4. ANALYZE → Investigate FAILs, trace root causes
+5. VERDICT → Write evidence-backed PASS/FAIL verdicts
+6. SHIP    → Production readiness audit
+```
+
+## Phase Details
+
+### Phase 0: Research
+- Use `research-validation` skill to gather standards and best practices
+- Identify applicable validation criteria (WCAG, HIG, security standards)
+- Map standards to ValidationForge skills
+
+### Phase 1: Plan
+- Use `create-validation-plan` skill
+- Define specific, measurable PASS criteria for each journey
+- Specify evidence types needed per criterion
+- Order journeys by dependency
+
+### Phase 2: Preflight
+- Use `preflight` skill
+- Verify build compiles (`build-quality-gates`)
+- Check runtime prerequisites (server, simulator, database)
+- Verify required tools are available
+
+### Phase 3: Execute
+- Use platform-specific skills (ios-validation, playwright-validation, etc.)
+- Use `parallel-validation` for multi-platform projects
+- Capture evidence at every state transition
+- Never skip a journey — run all, report all
+
+### Phase 4: Analyze
+- Use `sequential-analysis` for FAIL root cause investigation
+- Use `visual-inspection` for UI defect classification
+- Use `chrome-devtools` for deep browser debugging
+
+### Phase 5: Verdict
+- `verdict-writer` agent reads all evidence
+- Produces per-journey PASS/FAIL with cited evidence
+- Aggregates into final report
+
+### Phase 6: Ship
+- Use `production-readiness-audit` for deploy decision
+- Security and deployment FAILs are blocking
+- Other FAILs can be CONDITIONAL with documented risk acceptance
+
+## Parallel Execution
+
+Independent journeys and platforms can run in parallel:
+```
+parallel-validation dispatches:
+├── ios-validation (background)
+├── playwright-validation (background)
+├── api-validation (background)
+└── Collect all → unified verdict
+```
+
+## Fix Loop
+
+When validation FAILs:
+1. Read the FAIL verdict and cited evidence
+2. Trace to specific source code
+3. Apply minimal fix to the real system
+4. Re-validate the failed journey
+5. Max 3 attempts per journey (`validate-fix` protocol)
+
+
+---
+
+# Global rule: vf-forge-execution.md
+
+# Forge Execution Rules
+
+> **Canonical phase definitions live in [`execution-workflow.md`](./execution-workflow.md).**
+> This rule file layers forge-specific discipline on top of the shared 7-phase
+> pipeline — fix-loop caps, state persistence, parallel-execution safety. If you
+> are looking for *what* each phase does, read `execution-workflow.md` first.
+
+## Phase Gate Protocol (forge enforcement)
+
+Forge commands (`/forge-execute`, `/forge-team`, `/validate-sweep`) execute the
+pipeline defined in `execution-workflow.md` with these additional constraints:
+
+- **Sequential — never skip a phase.** A forge run refuses to advance past a
+  phase whose exit criteria are unmet. The order is fixed.
+- **Preflight is a hard gate.** If preflight fails, Execute does not start.
+  `execution-workflow.md` treats preflight as advisory for ad-hoc `/validate`;
+  forge treats it as blocking.
+- **Partial verdicts are forbidden.** The verdict writer must see evidence for
+  every journey before emitting the unified report — no journey may be dropped
+  silently to "keep the pipeline green."
+
+## Fix Loop Discipline
+
+- Maximum **3 fix attempts** per journey.
+- Each attempt MUST produce NEW evidence under a fresh
+  `e2e-evidence/forge-attempt-N/` subdirectory — never reuse prior evidence.
+- Each attempt MUST target a DIFFERENT root cause. Retrying the same fix
+  counts as a failed attempt.
+- After 3 failed attempts, mark the journey as `UNFIXABLE` and continue the
+  rest of the run. Do not block other journeys on one stuck flow.
+- Log every attempt (cause hypothesis, fix applied, outcome) in the forge
+  state file below.
+
+## State Persistence
+
+- Write state to `.validationforge/forge-state.json` after every phase
+  transition.
+- State fields: `run_id`, `current_phase`, `journey_verdicts{}`,
+  `attempt_counts{}`, `timestamps{}`, `source_ref` (git SHA).
+- **On resume:** read state and continue from the last incomplete phase.
+  Never restart a completed phase on resume — it can contaminate the fresh
+  evidence invariant above.
+- **On completion:** archive state alongside the final report
+  (`.validationforge/runs/<run_id>/forge-state.json`) and clear the active
+  state file.
+
+## Evidence Chain of Custody
+
+- Evidence is captured at execution time, never fabricated after the fact.
+- Every evidence file must be non-empty and contain actual observations.
+- Evidence file names follow the pattern
+  `step-{NN}-{description}.{ext}`.
+- Each journey directory must have an `evidence-inventory.txt` listing all
+  evidence files with byte counts.
+- Timestamps in evidence must match the execution timeline (no retroactive
+  timestamp editing).
+
+## Parallel Execution Safety
+
+When running journeys in parallel (via `/forge-team` or `parallel-validation`):
+
+- Each journey owns its evidence subdirectory exclusively. Cross-writes
+  invalidate the run.
+- Shared resources (dev server, database, simulator) must be accessed
+  safely — forge assumes read-mostly or serialized-write access.
+- If a journey modifies shared state, subsequent journeys must account for
+  it or the run is partitioned into sequential phases.
+
+
+---
+
+# Global rule: vf-forge-team-orchestration.md
+
+# Forge Team Orchestration Rules
+
+## Validator Assignment
+
+- One validator per platform, maximum 5 validators per run
+- Each validator receives ONLY its platform's journeys
+- Validators are spawned in parallel, not sequentially
+- Each validator prompt MUST include: journeys, evidence path, PASS criteria, iron rules
+
+## Evidence Ownership
+
+- Each validator exclusively owns its evidence directory: `e2e-evidence/{platform}/`
+- No validator may read from or write to another validator's directory
+- The lead orchestrator does NOT write evidence — only coordinates
+- The verdict writer reads ALL evidence directories but writes ONLY to `e2e-evidence/report.md`
+- Cross-platform evidence: each validator captures its OWN copy
+
+## Communication Protocol
+
+- Validators report completion via task updates, not messages
+- Validators include evidence inventory in their completion report
+- If a validator encounters a blocker, it reports immediately to the lead
+- Validators do NOT communicate with each other directly
+
+## Verdict Synthesis
+
+- The verdict writer is spawned AFTER all validators complete
+- The verdict writer must read every evidence file, not just inventories
+- The verdict writer must cite specific evidence for every PASS/FAIL
+- Contradictory verdicts between validators are escalated to the lead
+- Missing evidence = FAIL, never INCONCLUSIVE
+
+## Lifecycle
+
+1. Lead detects platforms from `.validationforge/config.json`
+2. Lead partitions journeys by platform
+3. Lead spawns validators in parallel (one per platform)
+4. Validators execute, capture evidence, report verdicts
+5. Lead waits for ALL validators (never produce partial report)
+6. Lead spawns verdict writer with all evidence
+7. Verdict writer produces unified report
+8. Lead presents report to user
+
+## Platform Dependency Map
+
+Platforms have implicit validation dependencies. A downstream platform cannot be
+meaningfully validated until its upstream dependencies pass.
+
+```
+DB (database schema / migrations)
+ └── API (server routes, data layer)
+      ├── Web (browser UI, REST/GraphQL calls)
+      └── iOS (native client, REST/GraphQL calls)
+
+Integration (cross-platform flows: e.g. API→Web→iOS together)
+ └── depends on ALL platforms
+```
+
+| Platform     | Depends On            |
+|--------------|-----------------------|
+| DB           | *(none — independent)*|
+| API          | DB                    |
+| Web          | API                   |
+| iOS          | API                   |
+| Integration  | API, Web, iOS (all)   |
+
+Any platform not listed above (e.g. CLI, Design) is treated as **independent** unless
+the lead explicitly declares additional dependencies in the run configuration.
+
+## Dependency-Aware Spawning Protocol
+
+Before spawning any validator the lead MUST:
+
+1. **Resolve the dependency graph** — build an ordered list of platforms grouped into
+   waves (see Execution Waves below).
+2. **Check upstream status** — a platform may only be spawned when every platform it
+   depends on has reported `PASS`.
+3. **Never skip the check** — even if a dependency validator finished quickly, its
+   status must be read from the completion report before spawning dependents.
+4. **Record spawn decisions** — log each spawning decision as:
+   `SPAWN {platform} — deps: {dep1=PASS, dep2=PASS}` or
+   `BLOCK {platform} — deps: {dep1=FAIL}`.
+
+## Failure Blocking Rules
+
+When a validator reports `FAIL`:
+
+- **FAIL propagates** — every platform that directly or transitively depends on the
+  failed platform is marked `BLOCKED`.
+- **BLOCKED validators are never spawned** — do not waste resources running a
+  validator whose upstream dependency has already failed.
+- **BLOCKED is reported as BLOCKED, not FAIL** — the verdict writer must distinguish:
+  - `FAIL` — the validator ran and produced a failing verdict.
+  - `BLOCKED` — the validator was never spawned because an upstream dependency failed.
+- **BLOCKED verdicts cite the blocking dependency** — e.g.:
+  `"Web: BLOCKED — API validator reported FAIL; web validation skipped."`
+- **BLOCKED does not count toward fix-attempt quota** — only a `FAIL` on a validator
+  that actually ran consumes one of the 3 allowed fix attempts.
+- **Unblocking** — after a fix loop resolves the upstream `FAIL`, the lead may
+  re-spawn the previously blocked validators; they start with a fresh attempt count.
+
+## Execution Waves
+
+Validators are grouped into waves based on their dependency depth. All validators in
+a wave are spawned in parallel; the next wave starts only when every validator in the
+current wave has reported `PASS`.
+
+```
+Wave 1 — Independent platforms (no upstream dependencies)
+  └── DB validator (spawned immediately)
+  └── CLI validator (if present; spawned immediately)
+  └── Design validator (if present; spawned immediately)
+
+Wave 2 — Platforms depending only on Wave 1
+  └── API validator  (requires DB = PASS)
+
+Wave 3 — Platforms depending only on Wave 2
+  └── Web validator  (requires API = PASS)
+  └── iOS validator  (requires API = PASS)
+
+Wave 4 — Cross-platform integration
+  └── Integration validator (requires Web = PASS AND iOS = PASS)
+```
+
+Wave advancement rules:
+- **All validators in the current wave must report PASS** before the next wave starts.
+- **Any FAIL in a wave** halts advancement: subsequent waves are marked BLOCKED.
+- **Within a wave**, validators run in parallel and do not block each other.
+- **If a project has no DB or API layer**, collapse waves accordingly — e.g. a
+  pure-web project with no API dependency places the Web validator in Wave 1.
+
+
+---
+
+# Global rule: vf-platform-detection.md
+
+# Platform Detection
+
+## Detection Priority
+
+1. **iOS** — `.xcodeproj`, `.xcworkspace`, `*.swift`, `Package.swift`
+2. **React Native** — `react-native` in package.json, `metro.config.js`, `ios/` + `android/` dirs
+3. **Flutter** — `pubspec.yaml`, `flutter` SDK dependency, `lib/main.dart`
+4. **CLI** — `bin/` entry in package.json, argument parsers, no UI framework
+5. **Rust CLI** — `Cargo.toml`, `src/main.rs`, no web framework deps
+6. **API** — Route handlers, OpenAPI spec, no frontend files
+7. **Django/Flask** — `manage.py` / `app.py`, `requirements.txt` with django/flask, Python routes
+8. **Web** — `package.json` + framework config (next.config, vite.config, etc.)
+9. **Fullstack** — Multiple layers detected (frontend + backend + database)
+10. **Generic** — Fallback when no platform detected
+
+## Platform-Specific Validation
+
+| Platform | Start Command | Validation Tool | Evidence Method |
+|----------|--------------|-----------------|-----------------|
+| iOS | `xcrun simctl boot` | idb + simctl | Screenshots + a11y tree |
+| React Native | `npx react-native run-ios` / `run-android` | Detox / Appium | Device screenshots + interaction logs |
+| Flutter | `flutter run` | Flutter Driver / integration_test | Screenshots + widget tree dumps |
+| Web | `npm run dev` | Playwright MCP | Browser screenshots + snapshots |
+| API | `npm start` / `python app.py` | curl / fetch | Response JSON + headers |
+| Django/Flask | `python manage.py runserver` / `flask run` | curl / fetch | Response JSON + headers + logs |
+| CLI | Direct invocation | Shell execution | stdout/stderr capture |
+| Rust CLI | `cargo run` / direct binary | Shell execution | stdout/stderr capture + exit codes |
+| Fullstack | Multiple services | All of the above | Combined evidence |
+
+## Detection Confidence
+
+- **HIGH** — Strong indicators (xcodeproj, next.config.ts)
+- **MEDIUM** — Moderate indicators (package.json without framework)
+- **LOW** — Weak indicators (generic file structure)
+
+Always log detection confidence. If LOW, ask user to confirm platform.
+
+
+---
+
+# Global rule: vf-team-validation.md
+
+# Team Validation
+
+## Multi-Agent Validation Teams
+
+ValidationForge supports coordinated multi-agent validation through the `parallel-validation` skill and agent dispatch patterns.
+
+## Team Roles
+
+| Role | Responsibility | Skills Used |
+|------|---------------|-------------|
+| **Lead** | Coordinates validation plan, assigns platforms | create-validation-plan, parallel-validation |
+| **iOS Validator** | iOS app validation | ios-validation, ios-validation-gate, ios-simulator-control |
+| **Web Validator** | Web app validation | playwright-validation, web-validation, chrome-devtools |
+| **API Validator** | Backend API validation | api-validation |
+| **Design Validator** | Design fidelity checking | design-validation, stitch-integration, design-token-audit |
+| **Verdict Writer** | Synthesizes evidence into verdicts | verdict-writer agent |
+
+## File Ownership
+
+Each validator owns its evidence directory:
+```
+e2e-evidence/
+  ios/         ← iOS Validator only
+  web/         ← Web Validator only
+  api/         ← API Validator only
+  design/      ← Design Validator only
+  report.md    ← Verdict Writer only
+```
+
+Never write to another validator's evidence directory.
+
+## Coordination Protocol
+
+Validators execute in **dependency-aware waves** — upstream platforms must PASS before downstream validators launch.
+
+### Wave Structure
+
+**Wave 1 — Foundation (no dependencies, run in parallel):**
+- DB Validator (if present) — validates schema, migrations, data integrity
+- Design Validator (if present) — visual audit is independent of runtime behavior
+- CLI Validator (if present) — independent command-line tools
+
+**Wave 2 — API Layer (depends on Wave 1 PASS):**
+- API Validator — must PASS before any client platform launches
+
+**Wave 3 — Client Platforms (depend on Wave 2 PASS):**
+- Web Validator and iOS Validator launch only after API Validator reports PASS
+- Web and iOS run in parallel within Wave 3
+
+**Wave 4 — Synthesis:**
+- Verdict Writer aggregates all evidence after all platform validators complete
+
+### Execution Steps
+
+1. Lead creates validation plan with journey assignments and dependency graph
+2. Lead dispatches Wave 1 validators (DB, Design, CLI — all independent) in parallel
+3. Lead waits for Wave 1 PASS before launching Wave 2
+4. If Wave 1 FAILs, downstream validators are marked BLOCKED (see Conflict Resolution)
+5. Lead dispatches Wave 2 validator (API) once Wave 1 PASSes
+6. Lead waits for Wave 2 PASS before launching Wave 3
+7. If Wave 2 FAILs, Wave 3 validators are marked BLOCKED
+8. Lead dispatches Wave 3 validators (Web, iOS) in parallel once Wave 2 PASSes
+9. Each validator captures evidence to its owned directory
+10. Validators report completion to Lead
+11. Lead invokes verdict-writer to synthesize all evidence
+12. Lead reviews and approves final verdict
+
+## Evidence Handoff
+
+Validators produce evidence. The verdict-writer consumes it.
+```
+Validator → writes → e2e-evidence/{platform}/step-*.{png,json,txt}
+Verdict Writer → reads → all e2e-evidence/*/step-*
+Verdict Writer → writes → e2e-evidence/report.md
+```
+
+## Platform Dependencies
+
+| Validator | Depends On | Launch Condition |
+|-----------|-----------|-----------------|
+| DB Validator | — | Launches immediately (Wave 1) |
+| Design Validator | — | Launches immediately (Wave 1, no runtime dependency) |
+| CLI Validator | — | Launches immediately (Wave 1, if independent) |
+| API Validator | DB Validator | DB must PASS before launch (Wave 2) |
+| Web Validator | API Validator | API must PASS before launch (Wave 3) |
+| iOS Validator | API Validator | API must PASS before launch (Wave 3) |
+| Verdict Writer | All validators | All waves must complete |
+
+**Rule:** Never launch a dependent validator against a failing upstream. A Web or iOS validator running against a broken API produces meaningless results — mark them BLOCKED instead.
+
+## Conflict Resolution
+
+- If two validators need the same endpoint, coordinate through the Lead
+- If evidence contradicts between platforms, document both in the verdict
+- If a validator's journey depends on another platform, use sequential wave ordering
+- **Dependency-blocked validator:** If an upstream platform FAILs, all dependent validators are reported as `BLOCKED` with the upstream FAIL cited as the reason. Do NOT attempt validation against a known-broken dependency. Example verdict entry:
+  ```
+  Web Validator: BLOCKED
+  Reason: API Validator FAILED (see e2e-evidence/api/report.md)
+  Action required: Fix API failures, then re-run Wave 2 validators
+  ```
+
+
+---
+
+# Global rule: vf-validation-discipline.md
+
+# Validation Discipline
+
+## The No-Mock Mandate
+
+NEVER create:
+- Test files (*.test.*, *.spec.*, *_test.*)
+- Mock objects, stubs, test doubles, or fixtures
+- Test frameworks, test runners, or test harnesses
+- Fake data generators or mock APIs
+
+ALWAYS:
+- Build and run the real system
+- Validate through actual user interfaces
+- Capture evidence (screenshots, logs, API responses)
+- Cite specific evidence for every PASS/FAIL verdict
+
+## Evidence Standards
+
+Every completion claim MUST include:
+1. **Screenshot evidence** — Describe what you SEE, not that it exists
+2. **API response evidence** — Quote actual response body, not just status code
+3. **Build evidence** — Quote actual output line, not just "build succeeded"
+4. **Log evidence** — Include relevant log entries with timestamps
+
+## Gate Protocol
+
+Before marking ANY gate, task, or checkpoint as complete:
+- [ ] READ the actual evidence file (not just the report about it)
+- [ ] VIEW the actual screenshot (not just confirm it exists)
+- [ ] EXAMINE actual command output (not just exit code)
+- [ ] CITE specific evidence for each validation criterion
+- [ ] A skeptical reviewer would agree this is complete
+
+## Compilation vs Validation
+
+```
+Build passing ≠ Feature working
+Type-check clean ≠ UI rendering correctly
+No lint errors ≠ User journey functional
+```
+
+Build gates are NECESSARY but NOT SUFFICIENT. Always follow with functional validation.
+
+
+---
+
+# Global rule: workflow.md
+
+# Workflow
+
+## Canonical Flow
+1. DISCOVER — Semantic search (see search-protocol.md)
+2. PLAN — /everything-claude-code:plan or /oh-my-claudecode:ralplan
+3. EXECUTE — /oh-my-claudecode:ralph or /oh-my-claudecode:team
+4. REVIEW — code-reviewer agent immediately post-implementation
+5. VALIDATE — /functional-validation, build + run + screenshot + evidence
+6. REFLECT — /reflexion:reflect
+7. COMMIT — Conventional commits (see git.md)
+
+## Skill-First Mandate
+BEFORE any task: scan skills, invoke all that match (even 1% chance).
+Never rationalize skipping a skill — skills have project-specific context you lack.
+
+## Research Before Code
+- GitHub code search first: `gh search repos` and `gh search code`
+- Check package registries before writing utility code
+- Search for adaptable implementations in open source
+- Prefer adapting proven approaches over net-new code
+
+## Implementation Rules
+- Compile after every change
+- DO NOT create new files when existing ones can be updated
+- Every plan MUST include a validation phase with evidence checkpoints
+- Plans must NOT include "write unit tests" or "add test coverage"
+- Build the real system — no placeholders, no stubs
+- Run it — start the app, simulator, or service
+- Exercise through UI — capture screenshots/logs as evidence
+
+
+---
+
+# Project rule: development-rules.md
+
+# Development Rules
+
+**IMPORTANT:** Analyze the skills catalog and activate the skills that are needed for the task during the process.
+**IMPORTANT:** You ALWAYS follow these principles: **YAGNI (You Aren't Gonna Need It) - KISS (Keep It Simple, Stupid) - DRY (Don't Repeat Yourself)**
+
+## General
+- **File Naming**: Use kebab-case for file names with a meaningful name that describes the purpose of the file, doesn't matter if the file name is long, just make sure when LLMs read the file names while using Grep or other tools, they can understand the purpose of the file right away without reading the file content.
+- **File Size Management**: Keep individual code files under 200 lines for optimal context management
+  - Split large files into smaller, focused components/modules
+  - Use composition over inheritance for complex widgets
+  - Extract utility functions into separate modules
+  - Create dedicated service classes for business logic
+- When looking for docs, activate `docs-seeker` skill (`context7` reference) for exploring latest docs.
+- Use `gh` bash command to interact with Github features if needed
+- Use `psql` bash command to query Postgres database for debugging if needed
+- Use `ai-multimodal` skill for describing details of images, videos, documents, etc. if needed
+- Use `ai-multimodal` skill and `imagemagick` skill for generating and editing images, videos, documents, etc. if needed
+- Use `sequential-thinking` and `debug` skills for sequential thinking, analyzing code, debugging, etc. if needed
+- **[IMPORTANT]** Follow the codebase structure and code standards in `./docs` during implementation.
+- **[IMPORTANT]** Do not just simulate the implementation or mocking them, always implement the real code.
+
+## Code Quality Guidelines
+- Read and follow codebase structure and code standards in `./docs`
+- Don't be too harsh on code linting, but **make sure there are no syntax errors and code are compilable**
+- Prioritize functionality and readability over strict style enforcement and code formatting
+- Use reasonable code quality standards that enhance developer productivity
+- Use try catch error handling & cover security standards
+- Use `code-reviewer` agent to review code after every implementation
+
+## Pre-commit/Push Rules
+- Run linting before commit
+- Run tests before push (DO NOT ignore failed tests just to pass the build or github actions)
+- Keep commits focused on the actual code changes
+- **DO NOT** commit and push any confidential information (such as dotenv files, API keys, database credentials, etc.) to git repository!
+- Create clean, professional commit messages without AI references. Use conventional commit format.
+
+## Code Implementation
+- Write clean, readable, and maintainable code
+- Follow established architectural patterns
+- Implement features according to specifications
+- Handle edge cases and error scenarios
+- **DO NOT** create new enhanced files, update to the existing files directly.
+
+## Visual Aids
+- Use `/ck:preview --explain` when explaining unfamiliar code patterns or complex logic
+- Use `/ck:preview --diagram` for architecture diagrams and data flow visualization
+- Use `/ck:preview --slides` for step-by-step walkthroughs and presentations
+- Use `/ck:preview --ascii` for terminal-friendly diagrams (no browser needed to understand)
+- Add `--html` to any generation flag for self-contained HTML output (opens in browser, no server needed)
+- **Plan context:** Active plan determined from `## Plan Context` in hook injection; visuals save to `{plan_dir}/visuals/`
+- If no active plan, fallback to `plans/visuals/` directory
+- For Mermaid diagrams, use `/mermaidjs-v11` skill for v11 syntax rules
+- See `primary-workflow.md` → Step 6 for workflow integration
+
+---
+
+# Project rule: documentation-management.md
+
+# Project Documentation Management
+
+### Roadmap & Changelog Maintenance
+- **Project Roadmap** (`./docs/development-roadmap.md`): Living document tracking project phases, milestones, and progress
+- **Project Changelog** (`./docs/project-changelog.md`): Detailed record of all significant changes, features, and fixes
+- **System Architecture** (`./docs/system-architecture.md`): Detailed record of all significant changes, features, and fixes
+- **Code Standards** (`./docs/code-standards.md`): Detailed record of all significant changes, features, and fixes
+
+### Automatic Updates Required
+- **After Feature Implementation**: Update roadmap progress status and changelog entries
+- **After Major Milestones**: Review and adjust roadmap phases, update success metrics
+- **After Bug Fixes**: Document fixes in changelog with severity and impact
+- **After Security Updates**: Record security improvements and version updates
+- **Weekly Reviews**: Update progress percentages and milestone statuses
+
+### Documentation Triggers
+The `project-manager` agent MUST update these documents when:
+- A development phase status changes (e.g., from "In Progress" to "Complete")
+- Major features are implemented or released
+- Significant bugs are resolved or security patches applied
+- Project timeline or scope adjustments are made
+- External dependencies or breaking changes occur
+
+### Update Protocol
+1. **Before Updates**: Always read current roadmap and changelog status
+2. **During Updates**: Maintain version consistency and proper formatting
+3. **After Updates**: Verify links, dates, and cross-references are accurate
+4. **Quality Check**: Ensure updates align with actual implementation progress
+
+### Plans
+
+### Plan Location
+Save plans in `./plans` directory with timestamp and descriptive name.
+
+**Format:** Use naming pattern from `## Naming` section injected by hooks.
+
+**Example:** `plans/251101-1505-authentication-and-profile-implementation/`
+
+#### File Organization
+
+```
+plans/
+├── 20251101-1505-authentication-and-profile-implementation/
+    ├── research/
+    │   ├── researcher-XX-report.md
+    │   └── ...
+│   ├── reports/
+│   │   ├── scout-report.md
+│   │   ├── researcher-report.md
+│   │   └── ...
+│   ├── plan.md                                # Overview access point
+│   ├── phase-01-setup-environment.md          # Setup environment
+│   ├── phase-02-implement-database.md         # Database models
+│   ├── phase-03-implement-api-endpoints.md    # API endpoints
+│   ├── phase-04-implement-ui-components.md    # UI components
+│   ├── phase-05-implement-authentication.md   # Auth & authorization
+│   ├── phase-06-implement-profile.md          # Profile page
+│   └── phase-07-write-tests.md                # Tests
+└── ...
+```
+
+#### File Structure
+
+##### Overview Plan (plan.md)
+- Keep generic and under 80 lines
+- List each phase with status/progress
+- Link to detailed phase files
+- Key dependencies
+
+##### Phase Files (phase-XX-name.md)
+Fully respect the `./docs/development-rules.md` file.
+Each phase file should contain:
+
+**Context Links**
+- Links to related reports, files, documentation
+
+**Overview**
+- Priority
+- Current status
+- Brief description
+
+**Key Insights**
+- Important findings from research
+- Critical considerations
+
+**Requirements**
+- Functional requirements
+- Non-functional requirements
+
+**Architecture**
+- System design
+- Component interactions
+- Data flow
+
+**Related Code Files**
+- List of files to modify
+- List of files to create
+- List of files to delete
+
+**Implementation Steps**
+- Detailed, numbered steps
+- Specific instructions
+
+**Todo List**
+- Checkbox list for tracking
+
+**Success Criteria**
+- Definition of done
+- Validation methods
+
+**Risk Assessment**
+- Potential issues
+- Mitigation strategies
+
+**Security Considerations**
+- Auth/authorization
+- Data protection
+
+**Next Steps**
+- Dependencies
+- Follow-up tasks
+
+---
+
+# Project rule: orchestration-protocol.md
+
+# Orchestration Protocol
+
+## Delegation Context (MANDATORY)
+
+When spawning subagents via Task tool, **ALWAYS** include in prompt:
+
+1. **Work Context Path**: The git root of the PRIMARY files being worked on
+2. **Reports Path**: `{work_context}/plans/reports/` for that project
+3. **Plans Path**: `{work_context}/plans/` for that project
+
+**Example:**
+```
+Task prompt: "Fix parser bug.
+Work context: /path/to/project-b
+Reports: /path/to/project-b/plans/reports/
+Plans: /path/to/project-b/plans/"
+```
+
+**Rule:** If CWD differs from work context (editing files in different project), use the **work context paths**, not CWD paths.
+
+---
+
+#### Sequential Chaining
+Chain subagents when tasks have dependencies or require outputs from previous steps:
+- **Planning → Implementation → Simplification → Testing → Review**: Use for feature development (tests verify simplified code)
+- **Research → Design → Code → Documentation**: Use for new system components
+- Each agent completes fully before the next begins
+- Pass context and outputs between agents in the chain
+
+#### Parallel Execution
+Spawn multiple subagents simultaneously for independent tasks:
+- **Code + Tests + Docs**: When implementing separate, non-conflicting components
+- **Multiple Feature Branches**: Different agents working on isolated features
+- **Cross-platform Development**: iOS and Android specific implementations
+- **Careful Coordination**: Ensure no file conflicts or shared resource contention
+- **Merge Strategy**: Plan integration points before parallel execution begins
+
+---
+
+## Subagent Status Protocol
+
+Subagents MUST report one of these statuses when completing work:
+
+| Status | Meaning | Controller Action |
+|--------|---------|-------------------|
+| **DONE** | Task completed successfully | Proceed to next step (review, next task) |
+| **DONE_WITH_CONCERNS** | Completed but flagged doubts | Read concerns → address if correctness/scope issue → proceed if observational |
+| **BLOCKED** | Cannot complete task | Assess blocker → provide context / break task / escalate to user |
+| **NEEDS_CONTEXT** | Missing information to proceed | Provide missing context → re-dispatch |
+
+### Handling Rules
+
+- **Never** ignore BLOCKED or NEEDS_CONTEXT — something must change before retry
+- **Never** force same approach after BLOCKED — try: more context → simpler task → more capable model → escalate
+- **DONE_WITH_CONCERNS** about file growth or tech debt → note for future, proceed now
+- **DONE_WITH_CONCERNS** about correctness → address before review
+- If subagent fails 3+ times on same task → escalate to user, don't retry blindly
+
+### Reporting Format
+
+Subagents should end their response with:
+
+```
+**Status:** DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT
+**Summary:** [1-2 sentence summary]
+**Concerns/Blockers:** [if applicable]
+```
+
+---
+
+## Context Isolation Principle
+
+**Subagents receive only the context they need.** Never pass full session history.
+
+### Rules
+
+1. **Craft prompts explicitly** — Provide task description, relevant file paths, acceptance criteria. Not "here's what we discussed."
+2. **No session history** — Subagent gets fresh context. Summarize relevant decisions, don't replay conversation.
+3. **Scope file references** — List specific files to read/modify. Not "look at the codebase."
+4. **Include plan context** — If working from a plan, provide the specific phase text, not the entire plan.
+5. **Preserve controller context** — Coordination work stays in main agent. Don't dump coordination details into subagent prompts.
+
+### Prompt Template
+
+```
+Task: [specific task description]
+Files to modify: [list]
+Files to read for context: [list]
+Acceptance criteria: [list]
+Constraints: [any relevant constraints]
+Plan reference: [phase file path if applicable]
+
+Work context: [project path]
+Reports: [reports path]
+```
+
+### Anti-Patterns
+
+| Bad | Good |
+|-----|------|
+| "Continue from where we left off" | "Implement X feature per spec in phase-02.md" |
+| "Fix the issues we discussed" | "Fix null check in auth.ts:45, root cause: missing validation" |
+| "Look at the codebase and figure out" | "Read src/api/routes.ts and add POST /users endpoint" |
+| Passing 50+ lines of conversation | 5-line task summary with file paths |
+
+---
+
+## Agent Teams (Optional)
+
+For multi-session parallel collaboration, activate the `/ck:team` skill.
+Not part of the default orchestration workflow. See `.claude/skills/team/SKILL.md` for templates, decision criteria, and spawn instructions.
+
+
+---
+
+# Project rule: primary-workflow.md
+
+# Primary Workflow
+
+**IMPORTANT:** Analyze the skills catalog and activate the skills that are needed for the task during the process.
+**IMPORTANT**: Ensure token efficiency while maintaining high quality.
+
+#### 1. Code Implementation
+- Before you start, delegate to `planner` agent to create a implementation plan with TODO tasks in `./plans` directory.
+- When in planning phase, use multiple `researcher` agents in parallel to conduct research on different relevant technical topics and report back to `planner` agent to create implementation plan.
+- Write clean, readable, and maintainable code
+- Follow established architectural patterns
+- Implement features according to specifications
+- Handle edge cases and error scenarios
+- **DO NOT** create new enhanced files, update to the existing files directly.
+- **[IMPORTANT]** After creating or modifying code file, run compile command/script to check for any compile errors.
+
+#### 2. Testing
+- Delegate to `tester` agent to run tests on the **simplified code**
+  - Write comprehensive unit tests
+  - Ensure high code coverage
+  - Test error scenarios
+  - Validate performance requirements
+- Tests verify the FINAL code that will be reviewed and merged
+- **DO NOT** ignore failing tests just to pass the build.
+- **IMPORTANT:** make sure you don't use fake data, mocks, cheats, tricks, temporary solutions, just to pass the build or github actions.
+- **IMPORTANT:** Always fix failing tests follow the recommendations and delegate to `tester` agent to run tests again, only finish your session when all tests pass.
+
+#### 3. Code Quality
+- After testing passes, delegate to `code-reviewer` agent to review clean, tested code.
+- Follow coding standards and conventions
+- Write self-documenting code
+- Add meaningful comments for complex logic
+- Optimize for performance and maintainability
+
+#### 4. Integration
+- Always follow the plan given by `planner` agent
+- Ensure seamless integration with existing code
+- Follow API contracts precisely
+- Maintain backward compatibility
+- Document breaking changes
+- Delegate to `docs-manager` agent to update docs in `./docs` directory if any.
+
+#### 5. Debugging
+- When a user report bugs or issues on the server or a CI/CD pipeline, delegate to `debugger` agent to run tests and analyze the summary report.
+- Read the summary report from `debugger` agent and implement the fix.
+- Delegate to `tester` agent to run tests and analyze the summary report.
+- If the `tester` agent reports failed tests, fix them follow the recommendations and repeat from the **Step 3**.
+
+#### 6. Visual Explanations
+When explaining complex code, protocols, or architecture:
+- **When to use:** User asks "explain", "how does X work", "visualize", or topic has 3+ interacting components
+- Use `/ck:preview --explain <topic>` to generate visual explanation with ASCII + Mermaid
+- Use `/ck:preview --diagram <topic>` for architecture and data flow diagrams
+- Use `/ck:preview --slides <topic>` for step-by-step walkthroughs
+- Use `/ck:preview --ascii <topic>` for terminal-friendly output only
+- **HTML mode** (add `--html` for self-contained HTML pages, opens directly in browser):
+  - `/ck:preview --html --explain <topic>` — publication-quality HTML explanation
+  - `/ck:preview --html --diagram <topic>` — interactive HTML diagram with zoom controls
+  - `/ck:preview --html --slides <topic>` — magazine-quality slide deck
+  - `/ck:preview --html --diff [ref]` — visual diff review
+  - `/ck:preview --html --plan-review` — plan vs codebase comparison
+  - `/ck:preview --html --recap [timeframe]` — project context snapshot
+- **Plan context:** Visuals save to plan folder from `## Plan Context` hook injection; if none, uses `plans/visuals/`
+- **Markdown mode:** Auto-opens in browser via markdown-novel-viewer with Mermaid rendering
+- **HTML mode:** Opens directly in browser — self-contained, no server needed
+- See `development-rules.md` → "Visual Aids" section for additional guidance
+
+
+---
+
+# Project rule: skill-domain-routing.md
+
+# Skill Domain Routing
+
+When a user's task involves a specific domain, use these decision trees to pick the RIGHT skill based on user intent.
+
+## Frontend / UI
+
+```
+User wants to...
+├── Replicate a mockup, screenshot, or video    → /ck:frontend-design
+├── Build React/TS components with best practices → /ck:frontend-development
+├── Style with Tailwind CSS + shadcn/ui          → /ck:ui-styling
+├── Choose colors, fonts, layout, design system  → /ck:ui-ux-pro-max
+├── Audit existing UI for accessibility/UX       → /ck:web-design-guidelines
+├── Apply React performance patterns             → /ck:react-best-practices
+├── Build with Stitch (AI design generation)     → /ck:stitch
+├── Create 3D / WebGL / Three.js experience      → /ck:threejs
+├── Write GLSL shaders / procedural graphics     → /ck:shader
+└── Build programmatic video with Remotion       → /ck:remotion
+```
+
+## Codebase Understanding
+
+```
+User wants to...
+├── Quick file search, locate specific code     → /ck:scout
+├── Full codebase dump for LLM context          → /ck:repomix
+└── Semantic go-to-definition, find-usages      → /ck:gkg
+```
+
+## Backend / API
+
+```
+User wants to...
+├── Build REST/GraphQL API (NestJS, FastAPI, Django) → /ck:backend-development
+├── Add authentication (OAuth, JWT, passkeys)        → /ck:better-auth
+└── Integrate payments (Stripe, Polar, SePay)        → /ck:payment-integration
+```
+
+## Database
+
+```
+User wants to...
+├── Design schemas, write SQL/NoSQL queries     → /ck:databases
+├── Optimize indexes, migrations, replication   → /ck:databases
+└── Add auth with database-backed sessions      → /ck:better-auth
+```
+
+## Infrastructure / Deployment
+
+```
+User wants to...
+├── Deploy to Vercel, Netlify, Railway, Fly.io   → /ck:deploy
+└── Docker, Kubernetes, CI/CD pipelines, GitOps   → /ck:devops
+```
+
+## Security
+
+```
+User wants to...
+├── STRIDE/OWASP security audit with auto-fix    → /ck:security
+└── Scan for secrets, vulnerabilities, OWASP patterns → /ck:security-scan
+```
+
+## AI / LLM
+
+```
+User wants to...
+├── Optimize context, agent architecture, memory → /ck:context-engineering
+├── Generate llms.txt, LLM-friendly docs         → /ck:llms
+├── Build AI agents with Google ADK              → /ck:google-adk-python
+└── Generate/analyze images, audio, video with AI → /ck:ai-multimodal
+```
+
+## MCP (Model Context Protocol)
+
+```
+User wants to...
+├── Build a new MCP server                       → /ck:mcp-builder
+├── Discover and manage existing MCP tools       → /ck:mcp-management
+└── Execute MCP tools directly                   → /ck:use-mcp
+```
+
+## Testing / Browser
+
+```
+User wants to...
+├── Run test suites, coverage reports, TDD       → /ck:test
+├── Web-specific testing (Playwright, k6, a11y)  → /ck:web-testing
+├── Puppeteer automation, screenshots, scraping  → /ck:chrome-devtools
+└── AI-driven browser sessions, Browserbase cloud → /ck:agent-browser
+```
+
+## Media
+
+```
+User wants to...
+├── Process video/audio (FFmpeg), images (ImageMagick) → /ck:media-processing
+└── Generate AI images (Imagen, Nano Banana)           → /ck:ai-artist
+```
+
+## Documentation
+
+```
+User wants to...
+├── Update project docs (codebase-summary, PDR)  → /ck:docs
+├── Search library/framework docs (context7)     → /ck:docs-seeker
+├── Build docs site with Mintlify                → /ck:mintlify
+└── Create diagrams (Mermaid v11 syntax)         → /ck:mermaidjs-v11
+```
+
+## Content / Copy
+
+```
+User wants to...
+├── Write landing page, email, headline copy     → /ck:copywriting
+├── Brand identity, logos, banners               → /ckm:design
+└── Create Excalidraw diagrams                   → /ck:excalidraw
+```
+
+## Frameworks
+
+```
+User wants to...
+├── Next.js App Router, RSC, Turborepo           → /ck:web-frameworks
+├── TanStack Start/Form/AI                       → /ck:tanstack
+├── React Native, Flutter, SwiftUI               → /ck:mobile-development
+└── Shopify apps, Polaris, Liquid templates       → /ck:shopify
+```
+
+## Usage Notes
+
+- Pick ONE skill per distinct user intent
+- If a task spans two domains (e.g. "build + deploy"), suggest the primary skill and mention the secondary
+- Domain skills combine with core workflow: `/ck:plan` → domain skill → `/ck:cook`
+- Skills not listed here are either core workflow skills (see `skill-workflow-routing.md`) or utility skills activated on demand (e.g. `/ck:ask`, `/ck:preview`, `/ck:sequential-thinking`)
+
+
+---
+
+# Project rule: skill-workflow-routing.md
+
+# Skill Workflow Routing
+
+When orchestrating multi-step tasks, consider these workflow sequences. Skills are listed in typical execution order.
+
+## Core Development Workflow
+
+```
+/ck:plan → /ck:cook → /ck:test → /ck:code-review → /ck:ship → /ck:journal
+```
+
+| User Intent | Suggested Start |
+|-------------|----------------|
+| "implement feature X", "build X", "add X" | `/ck:plan` then `/ck:cook` |
+| "execute this plan" | `/ck:cook <plan-path>` |
+| "quick implementation" | `/ck:cook --fast` |
+
+## Bugfix Workflow
+
+```
+/ck:scout → /ck:debug → /ck:fix → /ck:test → /ck:code-review
+```
+
+| User Intent | Suggested Start |
+|-------------|----------------|
+| "X is broken", "error in X", "bug in X" | `/ck:fix` (auto-scouts internally) |
+| "CI is failing", "tests broken" | `/ck:fix --auto` |
+| "investigate why X happens" | `/ck:scout` then `/ck:debug` |
+
+## Investigation Workflow
+
+```
+/ck:scout → /ck:debug → /ck:brainstorm → /ck:plan
+```
+
+| User Intent | Suggested Start |
+|-------------|----------------|
+| "understand how X works" | `/ck:scout` |
+| "why is X happening" | `/ck:debug` |
+| "explore options for X" | `/ck:brainstorm` then `/ck:plan` |
+
+## Post-Implementation Checklist
+
+After completing implementation work, consider:
+- `/ck:code-review` — review changes before merging
+- `/ck:ship` — run full shipping pipeline (tests, review, version, PR)
+- `/ck:journal` — document decisions and lessons learned
+
+## Setup Skills
+
+Before starting implementation in a shared codebase:
+- `/ck:worktree` — create isolated worktree for the feature/fix
+- `/ck:scout` — discover relevant files and code patterns
+
+
+---
+
+# Project rule: team-coordination-rules.md
+
+# Team Coordination Rules
+
+> These rules only apply when operating as a teammate within an Agent Team.
+> They have no effect on standard sessions or subagent workflows.
+
+Rules for agents operating as teammates within an Agent Team.
+
+## File Ownership (CRITICAL)
+
+- Each teammate MUST own distinct files — no overlapping edits
+- Define ownership via glob patterns in task descriptions: `File ownership: src/api/*, src/models/*`
+- Lead resolves ownership conflicts by restructuring tasks or handling shared files directly
+- Tester owns test files only; reads implementation files but never edits them
+- If ownership violation detected: STOP and report to lead immediately
+
+## Git Safety
+
+- Prefer git worktrees for implementation teams — each dev in own worktree eliminates conflicts
+- Never force-push from a teammate session
+- Commit frequently with descriptive messages
+- Pull before push to catch merge conflicts early
+- If working in a git worktree, commit/push to the worktree branch — not main or dev
+
+## Communication Protocol
+
+- Use `SendMessage(type: "message")` for peer DMs — always specify recipient by name
+- Use `SendMessage(type: "broadcast")` ONLY for critical blocking issues affecting entire team
+- Mark tasks completed via `TaskUpdate` BEFORE sending completion message to lead
+- Include actionable findings in messages, not just "I'm done"
+- Never send structured JSON status messages — use plain text
+
+## CK Stack Conventions
+
+### Report Output
+- Save reports to `{CK_REPORTS_PATH}` (injected via hook, fallback: `plans/reports/`)
+- Naming: `{type}-{date}-{slug}.md` where type = your role (researcher, reviewer, debugger)
+- Sacrifice grammar for concision. List unresolved questions at end.
+
+### Commit Messages
+- Use conventional commits: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`
+- No AI references in commit messages
+- Keep commits focused on actual code changes
+
+### Docs Sync (Implementation Teams Only)
+- After completing implementation tasks, lead MUST evaluate docs impact
+- State explicitly: `Docs impact: [none|minor|major]`
+- If impact: update `docs/` directory or note in completion message
+
+## Task Claiming
+
+- Claim lowest-ID unblocked task first (earlier tasks set up context for later ones)
+- Check `TaskList` after completing each task for newly unblocked work
+- Set task to `in_progress` before starting work
+- If all tasks blocked, notify lead and offer to help unblock
+
+## Plan Approval Flow
+
+When `plan_mode_required` is set:
+1. Research and plan your approach (read-only — no file edits)
+2. Send plan via `ExitPlanMode` — this triggers approval request to lead
+3. Wait for lead's `plan_approval_response`
+4. If rejected: revise based on feedback, resubmit
+5. If approved: proceed with implementation
+
+## Conflict Resolution
+
+- If two teammates need the same file: escalate to lead immediately
+- If a teammate's plan is rejected twice: lead takes over that task
+- If findings conflict between reviewers: lead synthesizes and documents disagreement
+- If blocked by another teammate's incomplete work: message them directly first, escalate to lead if unresponsive
+
+## Shutdown Protocol
+
+- Approve shutdown requests unless mid-critical-operation
+- Always mark current task as completed before approving shutdown
+- If rejecting shutdown, explain why concisely
+- Extract `requestId` from shutdown request JSON and pass to `shutdown_response`
+
+## Idle State (Normal Behavior)
+
+- Going idle after sending a message is NORMAL — not an error
+- Idle means waiting for input, not disconnected
+- Sending a message to an idle teammate wakes them up
+- Do not treat idle notifications as completion signals — check task status instead
+
+## Discovery
+
+- Read team config at `~/.claude/teams/{team-name}/config.json` to discover teammates
+- Always refer to teammates by NAME (not agent ID)
+- Names are used for: `recipient` in SendMessage, task `owner` in TaskUpdate
+
+</system-reminder>

@@ -1,0 +1,7 @@
+[shannon] evidence-gate before marking TaskUpdate status:completed:
+  1. READ the actual evidence file (not just a report about it)?
+  2. VIEW the actual screenshot (not just confirm it exists)?
+  3. EXAMINE actual command output (not just exit code)?
+  4. CITE specific evidence for each validation criterion?
+  5. Would a skeptical reviewer agree this is complete?
+If any answer is "no" → REFUSE completion. Build evidence first.

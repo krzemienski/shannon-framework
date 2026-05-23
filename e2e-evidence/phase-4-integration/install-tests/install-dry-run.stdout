@@ -1,0 +1,11 @@
+=== Shannon install orchestrator ===
+  shannon root: /tmp/shannon-test-v6
+  dry-run:      1
+  auto:         0
+  phase:        1 (setup)
+[dry-run] bash /tmp/shannon-test-v6/scripts/setup.sh
+
+Next steps (manual):
+  1. In Claude Code, run: /plugin install shannon@shannon-local
+  2. Then re-run: /tmp/shannon-test-v6/scripts/install.sh --resume-after-cc-install
+

@@ -1,0 +1,19 @@
+About to disable 16 plugins:
+  - kaizen@context-engineering-kit
+  - sadd@context-engineering-kit
+  - sdd@context-engineering-kit
+  - reflexion@context-engineering-kit
+  - deepest-plan@deepest-plan-dev
+  - start@the-startup
+  - autoresearch@autoresearch
+  - anneal-cast@anneal-umbrella-dev
+  - anneal-alloy@anneal-umbrella-dev
+  - anneal-temper@anneal-umbrella-dev
+  - planning-with-files@planning-with-files
+  - prd-generator
+  - claude-hud@claude-hud
+  - validationforge@validationforge
+  - crucible@crucible-local
+  - oh-my-claudecode@omc
+
+[dry-run] no changes made

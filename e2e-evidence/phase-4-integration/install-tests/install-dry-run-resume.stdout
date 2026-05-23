@@ -1,0 +1,14 @@
+=== Shannon install orchestrator ===
+  shannon root: /tmp/shannon-test-v6
+  dry-run:      1
+  auto:         0
+  phase:        2 (resume)
+[dry-run] would REFUSE: shannon plugin install not detected
+shannon plugin detected at: /Users/nick/.claude/plugins/shannon-framework
+
+=== doctor-precheck ===
+[dry-run] would run: bash /tmp/shannon-test-v6/scripts/doctor-precheck.sh --target /Users/nick/.claude/plugins/shannon-framework
+
+skipped: uninstall-others.sh
+
+Install complete. Restart Claude Code to fully activate.

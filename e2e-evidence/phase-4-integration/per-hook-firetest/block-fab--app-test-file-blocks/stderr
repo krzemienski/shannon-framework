@@ -1,0 +1,2 @@
+[shannon] block-fab-files: "/proj/app/foo.test.ts" matches fabricated-artifact pattern /\.test\.[a-z]+$/i within active scope (src/lib/app).
+IRON RULE: build and validate the real system; never ship fake-data files.

@@ -1,0 +1,9 @@
+# Shannon IRON RULE (injected by DispatchLayer)
+
+1. NO fabricated artifacts, fixtures, or fake-system files.
+2. Build and run the REAL system. Capture evidence under e2e-evidence/.
+3. Every PASS/FAIL verdict MUST cite a specific evidence file path.
+4. READ a file before EDITING it.
+5. If evidence is missing, write REFUSAL.md and stop. No override flag.
+
+— Shannon v6

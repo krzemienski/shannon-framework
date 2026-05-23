@@ -1,0 +1,33 @@
+{
+  "pluginName": "shannon",
+  "pluginVersion": "6.0.0",
+  "marketplaceName": "shannon-local",
+  "hookEvents": [
+    "SessionStart",
+    "UserPromptSubmit",
+    "PreToolUse",
+    "PostToolUse",
+    "Stop"
+  ],
+  "hookScriptCount": 16,
+  "hookScripts": [
+    "block-fab-files.js",
+    "completion-claim-validator.js",
+    "context-threshold-warn.js",
+    "evidence-gate-reminder.js",
+    "evidence-quality-check.js",
+    "fab-pattern-detection.js",
+    "hooks-fired-log.js",
+    "plan-before-execute.js",
+    "read-before-edit.js",
+    "session-context-inject.cjs",
+    "skill-activation-check.js",
+    "stop-task-semantics.js",
+    "subagent-governance-inject.js",
+    "task-list-tracker.js",
+    "validation-not-compilation.js",
+    "validation-skill-tripwire.js"
+  ],
+  "errors": [],
+  "ok": true
+}

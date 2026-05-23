@@ -1,0 +1,15 @@
+[0;34m[INFO][0m Shannon Framework v5.0 - Installation
+[0;34m[INFO][0m Installing from: /Users/nick/Desktop/shannon-framework
+[0;34m[INFO][0m Installing to: /Users/nick/.claude
+
+[0;34m[INFO][0m Checking for Shannon plugin installation...
+[0;34m[INFO][0m No Shannon plugin installation found
+[0;34m[INFO][0m Creating installation directories...
+[0;32m[SUCCESS][0m Directories created
+
+[0;34m[INFO][0m Installing skills...
+[0;34m[INFO][0m   Installing skill: brainstorming
+[0;34m[INFO][0m   Installing skill: confidence-check
+[0;34m[INFO][0m   Installing skill: context-preservation
+[0;34m[INFO][0m   Installing skill: context-restoration
+cp: /Users/nick/Desktop/shannon-framework/skills/context-restoration/references/CONTEXT_MANAGEMENT.md: No such file or directory

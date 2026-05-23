@@ -1,0 +1,250 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1779565430434,
+  "projectRoot": "/Users/nick/Desktop/shannon-framework",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": "camelCase",
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "docs",
+      "lib",
+      "scripts",
+      "spec",
+      "tests"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "agents": {
+      "path": "agents",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1779565430429,
+      "keyFiles": []
+    },
+    "commands": {
+      "path": "commands",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1779565430429,
+      "keyFiles": []
+    },
+    "core": {
+      "path": "core",
+      "purpose": null,
+      "fileCount": 10,
+      "lastAccessed": 1779565430430,
+      "keyFiles": [
+        "CONTEXT_MANAGEMENT.md",
+        "FORCED_READING_PROTOCOL.md",
+        "HOOK_SYSTEM.md",
+        "MCP_DISCOVERY.md",
+        "PHASE_PLANNING.md"
+      ]
+    },
+    "dashboard": {
+      "path": "dashboard",
+      "purpose": null,
+      "fileCount": 9,
+      "lastAccessed": 1779565430430,
+      "keyFiles": [
+        "index.html",
+        "package-lock.json",
+        "package.json",
+        "postcss.config.js",
+        "tailwind.config.js"
+      ]
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 12,
+      "lastAccessed": 1779565430430,
+      "keyFiles": [
+        "CLEANUP_COMPLETE_FINAL.md",
+        "COMMAND_ORCHESTRATION.md",
+        "CONTINUATION_READY.md",
+        "FINAL_SESSION_AUDIT.md",
+        "SDK_PATTERNS_EXTRACTED.md"
+      ]
+    },
+    "e2e-evidence": {
+      "path": "e2e-evidence",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1779565430430,
+      "keyFiles": []
+    },
+    "hooks": {
+      "path": "hooks",
+      "purpose": null,
+      "fileCount": 25,
+      "lastAccessed": 1779565430430,
+      "keyFiles": [
+        "HOOK_VERIFICATION_RESULTS.md",
+        "README.md",
+        "block-fab-files.js",
+        "completion-claim-validator.js",
+        "context-threshold-warn.js"
+      ]
+    },
+    "lib": {
+      "path": "lib",
+      "purpose": "Library code",
+      "fileCount": 2,
+      "lastAccessed": 1779565430431,
+      "keyFiles": [
+        "hook-runner.js",
+        "logger.js"
+      ]
+    },
+    "logs": {
+      "path": "logs",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1779565430431,
+      "keyFiles": []
+    },
+    "modes": {
+      "path": "modes",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1779565430431,
+      "keyFiles": [
+        "SHANNON_INTEGRATION.md",
+        "WAVE_EXECUTION.md"
+      ]
+    },
+    "modules": {
+      "path": "modules",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1779565430431,
+      "keyFiles": []
+    },
+    "orchestration": {
+      "path": "orchestration",
+      "purpose": null,
+      "fileCount": 4,
+      "lastAccessed": 1779565430431,
+      "keyFiles": [
+        "__init__.py",
+        "decision_engine.py",
+        "orchestrator.py",
+        "state_manager.py"
+      ]
+    },
+    "research": {
+      "path": "research",
+      "purpose": null,
+      "fileCount": 4,
+      "lastAccessed": 1779565430432,
+      "keyFiles": [
+        "live-cc-audit.md",
+        "prior-art.md",
+        "shannon-current.md",
+        "withagent-claims.md"
+      ]
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 11,
+      "lastAccessed": 1779565430432,
+      "keyFiles": [
+        "README.md",
+        "_validate-manifest.js",
+        "check-agents.js",
+        "check-commands.js",
+        "check-seven-layer.js"
+      ]
+    },
+    "server": {
+      "path": "server",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1779565430432,
+      "keyFiles": [
+        "__init__.py",
+        "websocket.py"
+      ]
+    },
+    "skills": {
+      "path": "skills",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1779565430432,
+      "keyFiles": []
+    },
+    "spec": {
+      "path": "spec",
+      "purpose": "Test specifications",
+      "fileCount": 5,
+      "lastAccessed": 1779565430432,
+      "keyFiles": [
+        "SHANNON-V6-ARCHITECTURE.md",
+        "SHANNON-V6-COMMANDS.md",
+        "SHANNON-V6-HOOKS.md",
+        "SHANNON-V6-INVENTORY.md",
+        "SHANNON-V6-SKILLS-AGENTS.md"
+      ]
+    },
+    "templates": {
+      "path": "templates",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1779565430432,
+      "keyFiles": [
+        "SKILL_TEMPLATE.md"
+      ]
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 20,
+      "lastAccessed": 1779565430433,
+      "keyFiles": [
+        "COMPREHENSIVE_VALIDATION_RESULTS.md",
+        "DEPENDENCY_GRAPH.md",
+        "INTEGRATION_HEALTH_SUMMARY.md",
+        "INTEGRATION_TEST_RESULTS.md",
+        "README.md"
+      ]
+    },
+    "dashboard/src": {
+      "path": "dashboard/src",
+      "purpose": "Source code",
+      "fileCount": 2,
+      "lastAccessed": 1779565430433,
+      "keyFiles": [
+        "index.css",
+        "main.tsx"
+      ]
+    }
+  },
+  "hotPaths": [],
+  "userDirectives": []
+}

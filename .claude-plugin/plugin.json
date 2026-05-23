@@ -1,7 +1,7 @@
 {
   "name": "shannon",
   "version": "6.0.0",
-  "description": "Shannon Framework v6 — single-plugin consolidation replacing OMC + VF + Crucible + 13 others. 26 commands, 22 skills, 10 agents, 14 hooks across 7 domain modules + 4 enforcement layers.",
+  "description": "Shannon Framework v6 \u2014 single-plugin consolidation replacing OMC + VF + Crucible + 13 others. 26 commands, 22 skills, 10 agents, 14 hooks across 7 domain modules + 4 enforcement layers.",
   "author": {
     "name": "Nick Krzemienski",
     "url": "https://github.com/krzemienski"
@@ -19,8 +19,5 @@
     "orchestration",
     "hooks"
   ],
-  "commands": "./commands/",
-  "skills": "./skills/",
-  "agents": "./agents/",
   "hooks": "./hooks/hooks.json"
 }

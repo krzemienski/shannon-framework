@@ -1,0 +1,1 @@
+../../modules/observability/skills/observability-report/SKILL.md

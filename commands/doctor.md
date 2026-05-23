@@ -1,0 +1,1 @@
+../modules/observability/commands/doctor.md

@@ -6,11 +6,29 @@
 # - Disables each plugin in settings.json (enabledPlugins → false).
 # - Optionally removes plugin install dirs from ~/.claude/plugins/.
 # - NO --parallel mode (atomic only — user is sole user).
-set -euo pipefail
+set -uo pipefail
 
 SETTINGS="${CLAUDE_SETTINGS:-$HOME/.claude/settings.json}"
 INSTALLED="${CLAUDE_INSTALLED:-$HOME/.claude/plugins/installed_plugins.json}"
 TS="$(date +%Y%m%d-%H%M%S)"
+
+DRY_RUN=0
+for arg in "$@"; do
+  case "$arg" in
+    --dry-run) DRY_RUN=1 ;;
+    -h|--help)
+      cat <<EOF
+Usage: $(basename "$0") [--dry-run]
+
+  --dry-run   Print the 16 plugins that would be disabled; mutate nothing.
+
+Disables the 16 Shannon-superseded plugins in ~/.claude/settings.json.
+Requires Shannon plugin already installed (precondition).
+EOF
+      exit 0
+      ;;
+  esac
+done
 
 PLUGINS_TO_REMOVE=(
   "kaizen@context-engineering-kit"
@@ -36,18 +54,25 @@ if ! command -v jq >/dev/null 2>&1; then
   exit 1
 fi
 
-# Precondition: Shannon plugin must be installed.
-if ! jq -e '.enabledPlugins["shannon@shannon-local"]' "$SETTINGS" >/dev/null 2>&1 && \
-   ! find "$HOME/.claude/plugins" -maxdepth 4 -type d -name shannon 2>/dev/null | grep -q .; then
-  echo "REFUSE: Shannon plugin not installed yet. Run scripts/setup.sh then '/plugin install shannon@shannon-local' first." >&2
-  echo "       This script refuses to uninstall replacements while Shannon is absent." >&2
-  exit 1
+# Precondition: Shannon plugin must be installed (skip check in dry-run).
+if [ "$DRY_RUN" = "0" ]; then
+  if ! jq -e '.enabledPlugins["shannon@shannon-local"]' "$SETTINGS" >/dev/null 2>&1 && \
+     ! find "$HOME/.claude/plugins" -maxdepth 4 -type d -name shannon 2>/dev/null | grep -q .; then
+    echo "REFUSE: Shannon plugin not installed yet. Run scripts/setup.sh then '/plugin install shannon@shannon-local' first." >&2
+    echo "       This script refuses to uninstall replacements while Shannon is absent." >&2
+    exit 1
+  fi
 fi
 
 # Print plan.
 echo "About to disable ${#PLUGINS_TO_REMOVE[@]} plugins:"
 for p in "${PLUGINS_TO_REMOVE[@]}"; do echo "  - $p"; done
 echo ""
+
+if [ "$DRY_RUN" = "1" ]; then
+  echo "[dry-run] no changes made"
+  exit 0
+fi
 
 # Confirm (skip when SHANNON_AUTO=1 — used by /shannon:install)
 if [ "${SHANNON_AUTO:-0}" != "1" ]; then

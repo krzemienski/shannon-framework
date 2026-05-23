@@ -1,13 +1,26 @@
 {
   "name": "shannon",
-  "description": "Shannon Framework for mission-critical AI development with 8D complexity analysis and wave orchestration",
-  "version": "5.0.0",
+  "version": "6.0.0",
+  "description": "Shannon Framework v6 — single-plugin consolidation replacing OMC + VF + Crucible + 13 others. 26 commands, 22 skills, 10 agents, 14 hooks across 7 domain modules + 4 enforcement layers.",
   "author": {
-    "name": "Shannon Framework Team",
-    "email": "info@shannon-framework.dev"
+    "name": "Nick Krzemienski",
+    "url": "https://github.com/krzemienski"
   },
   "homepage": "https://github.com/krzemienski/shannon-framework",
   "repository": "https://github.com/krzemienski/shannon-framework",
   "license": "MIT",
-  "keywords": ["specification-analysis", "wave-orchestration", "testing", "complexity-scoring"]
+  "keywords": [
+    "claude-code",
+    "agent-governance",
+    "validation",
+    "no-mocks",
+    "evidence-gated",
+    "consensus",
+    "orchestration",
+    "hooks"
+  ],
+  "commands": "./commands/",
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "hooks": "./hooks/hooks.json"
 }

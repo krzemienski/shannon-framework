@@ -1,13 +1,16 @@
 {
-  "name": "shannon-framework",
+  "name": "shannon-local",
   "owner": {
-    "name": "Shannon Framework Team"
+    "name": "Nick Krzemienski",
+    "url": "https://github.com/krzemienski"
   },
+  "description": "Shannon Framework local marketplace — single-plugin consolidation",
   "plugins": [
     {
       "name": "shannon",
       "source": "./",
-      "description": "Shannon Framework for mission-critical AI development"
+      "version": "6.0.0",
+      "description": "Shannon v6 — agent governance framework (replaces OMC + VF + Crucible + 13 others)"
     }
   ]
 }

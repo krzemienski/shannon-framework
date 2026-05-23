@@ -1,0 +1,8 @@
+{"ts":"2026-05-23T21:05:51Z","event":"session_start","cwd":"/Users/nick/Desktop/shannon-framework/fixtures/enabled"}
+{"ts":"2026-05-23T21:05:55Z","event":"user_prompt_submit"}
+{"ts":"2026-05-23T21:06:05Z","event":"pre_tool_use","tool":"Bash","tool_input":{"command":"cd /Users/nick/Desktop/shannon-framework && find . -name \"gate-proof.md\" 2>/dev/null | grep -v node_modules","description":"Locate gate-proof.md"}}
+{"ts":"2026-05-23T21:06:14Z","event":"pre_tool_use","tool":"Bash","tool_input":{"command":"find /Users/nick/Desktop/shannon-framework -name \"gate-proof.md\" 2>/dev/null | head -20","description":"Find gate-proof.md anywhere in repo"}}
+{"ts":"2026-05-23T21:06:15Z","event":"pre_tool_use","tool":"Bash","tool_input":{"command":"grep -r \"csd proof at 165942\" /Users/nick/Desktop/shannon-framework/ 2>/dev/null | head -5","description":"Grep prior proof line to find file"}}
+{"ts":"2026-05-23T21:06:19Z","event":"pre_tool_use","tool":"Read","tool_input":{"file_path":"/Users/nick/.claude/projects/-Users-nick-Desktop-shannon-framework/memory/gate-proof.md"}}
+{"ts":"2026-05-23T21:06:28Z","event":"pre_tool_use","tool":"Edit","tool_input":{"file_path":"/Users/nick/.claude/projects/-Users-nick-Desktop-shannon-framework/memory/gate-proof.md","old_string":"- csd proof at 165942","new_string":"- csd proof at 165942\n- csd proof at 170550","replace_all":false}}
+{"ts":"2026-05-23T21:06:35Z","event":"stop"}

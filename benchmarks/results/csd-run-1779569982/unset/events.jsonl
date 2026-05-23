@@ -1,0 +1,7 @@
+{"ts":"2026-05-23T21:02:47Z","event":"session_start","cwd":"/Users/nick/Desktop/shannon-framework/fixtures/unset"}
+{"ts":"2026-05-23T21:02:50Z","event":"user_prompt_submit"}
+{"ts":"2026-05-23T21:03:01Z","event":"pre_tool_use","tool":"Bash","tool_input":{"command":"ls /Users/nick/.claude/projects/-Users-nick-Desktop-shannon-framework/memory/ 2>/dev/null || echo \"empty\"","description":"Check memory dir"}}
+{"ts":"2026-05-23T21:03:18Z","event":"pre_tool_use","tool":"Read","tool_input":{"file_path":"/Users/nick/.claude/projects/-Users-nick-Desktop-shannon-framework/memory/MEMORY.md"}}
+{"ts":"2026-05-23T21:03:22Z","event":"pre_tool_use","tool":"Read","tool_input":{"file_path":"/Users/nick/.claude/projects/-Users-nick-Desktop-shannon-framework/memory/gate-proof.md"}}
+{"ts":"2026-05-23T21:03:28Z","event":"pre_tool_use","tool":"Edit","tool_input":{"file_path":"/Users/nick/.claude/projects/-Users-nick-Desktop-shannon-framework/memory/gate-proof.md","old_string":"- gate proof 1779569465\n- gate proof 1779569507","new_string":"- gate proof 1779569465\n- gate proof 1779569507\n- csd proof at 165942","replace_all":false}}
+{"ts":"2026-05-23T21:03:33Z","event":"stop"}

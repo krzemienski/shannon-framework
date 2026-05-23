@@ -1,0 +1,12 @@
+fixture=enabled
+sentinel=active
+converse_exit=1
+events_total=2
+events_user_prompt=1
+events_pre_tool=0
+0
+events_stop=0
+0
+shannon_skill_activation_fires=1
+shannon_log_delta=1
+prompt=remember this: csd proof at 165942

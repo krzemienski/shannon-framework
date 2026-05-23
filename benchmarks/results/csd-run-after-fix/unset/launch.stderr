@@ -1,0 +1,6 @@
+Worker launched.
+  tmux:       shannon-unset-31927
+  session_id: 125de596-055e-475d-8571-cf149e86bd70
+  cwd:        /Users/nick/Desktop/shannon-framework/fixtures/unset
+  events:     /tmp/claude-workers/125de596-055e-475d-8571-cf149e86bd70.events.jsonl
+  reproduce: /Users/nick/.claude/plugins/cache/superpowers-marketplace/claude-session-driver/3.0.0/skills/driving-claude-code-sessions/scripts/csd launch shannon-unset-31927 /Users/nick/Desktop/shannon-framework/fixtures/unset -- --plugin-dir /Users/nick/Desktop/shannon-framework

@@ -1,0 +1,5 @@
+{"ts":"2026-05-23T21:03:36Z","event":"session_start","cwd":"/Users/nick/Desktop/shannon-framework/fixtures/disabled"}
+{"ts":"2026-05-23T21:03:40Z","event":"user_prompt_submit"}
+{"ts":"2026-05-23T21:03:55Z","event":"pre_tool_use","tool":"Bash","tool_input":{"command":"cat /Users/nick/.claude/projects/-Users-nick-Desktop-shannon-framework/memory/MEMORY.md 2>/dev/null; echo \"---LS---\"; ls /Users/nick/.claude/projects/-Users-nick-Desktop-shannon-framework/memory/ 2>/dev/null","description":"Read MEMORY.md index and list memory dir"}}
+{"ts":"2026-05-23T21:04:05Z","event":"pre_tool_use","tool":"Bash","tool_input":{"command":"tail -30 /Users/nick/.claude/projects/-Users-nick-Desktop-shannon-framework/memory/gate-proof.md","description":"Tail gate-proof.md for context"}}
+{"ts":"2026-05-23T21:04:09Z","event":"stop"}

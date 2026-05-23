@@ -1,0 +1,6 @@
+Worker launched.
+  tmux:       shannon-enabled-17578
+  session_id: 47e62d0b-362d-4a27-bdc1-e02ce9532131
+  cwd:        /Users/nick/Desktop/shannon-framework/fixtures/enabled
+  events:     /tmp/claude-workers/47e62d0b-362d-4a27-bdc1-e02ce9532131.events.jsonl
+  reproduce: /Users/nick/.claude/plugins/cache/superpowers-marketplace/claude-session-driver/3.0.0/skills/driving-claude-code-sessions/scripts/csd launch shannon-enabled-17578 /Users/nick/Desktop/shannon-framework/fixtures/enabled -- --plugin-dir /Users/nick/Desktop/shannon-framework

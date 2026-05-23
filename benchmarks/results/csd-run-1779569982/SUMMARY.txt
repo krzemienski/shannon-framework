@@ -1,0 +1,58 @@
+=== enabled (sentinel=active, tag=shannon-enabled-17578) ===
+  shim=/tmp/claude-workers/bin/shannon-enabled-17578
+  fixture=enabled
+  sentinel=active
+  converse_exit=1
+  events_total=2
+  events_user_prompt=1
+  events_pre_tool=0
+  0
+  events_stop=0
+  0
+  shannon_skill_activation_fires=1
+  shannon_log_delta=1
+  prompt=remember this: csd proof at 165942
+  --- turn.md head ---
+
+=== unset (sentinel=none, tag=shannon-unset-26801) ===
+  shim=/tmp/claude-workers/bin/shannon-unset-26801
+  fixture=unset
+  sentinel=none
+  converse_exit=0
+  events_total=7
+  events_user_prompt=1
+  events_pre_tool=4
+  events_stop=1
+  shannon_skill_activation_fires=0
+  0
+  shannon_log_delta=0
+  prompt=remember this: csd proof at 165942
+  --- turn.md head ---
+    ---
+    
+    **Prompt:** remember this: csd proof at 165942
+    
+    Saving memory.
+
+=== disabled (sentinel=disabled, tag=shannon-disabled-10655) ===
+  shim=/tmp/claude-workers/bin/shannon-disabled-10655
+  fixture=disabled
+  sentinel=disabled
+  converse_exit=0
+  events_total=5
+  events_user_prompt=1
+  events_pre_tool=2
+  events_stop=1
+  shannon_skill_activation_fires=0
+  0
+  shannon_log_delta=0
+  prompt=remember this: csd proof at 165942
+  --- turn.md head ---
+    ---
+    
+    **Prompt:** remember this: csd proof at 165942
+    
+    > **Thinking:** 
+
+===========================
+evidence root: /Users/nick/Desktop/shannon-framework/benchmarks/results/csd-run-1779569982

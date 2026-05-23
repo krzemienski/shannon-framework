@@ -1,0 +1,7 @@
+{"ts":"2026-05-23T21:06:37Z","event":"session_start","cwd":"/Users/nick/Desktop/shannon-framework/fixtures/unset"}
+{"ts":"2026-05-23T21:06:41Z","event":"user_prompt_submit"}
+{"ts":"2026-05-23T21:06:53Z","event":"pre_tool_use","tool":"Bash","tool_input":{"command":"find /Users/nick/Desktop/shannon-framework/fixtures/unset -name \"gate-proof.md\" 2>/dev/null | head -5","description":"Find gate-proof.md location"}}
+{"ts":"2026-05-23T21:07:05Z","event":"pre_tool_use","tool":"Bash","tool_input":{"command":"find /Users/nick/Desktop/shannon-framework -name \"gate-proof.md\" 2>/dev/null","description":"Find gate-proof.md anywhere in repo"}}
+{"ts":"2026-05-23T21:07:11Z","event":"pre_tool_use","tool":"Bash","tool_input":{"command":"find /Users/nick/.claude -name \"gate-proof.md\" 2>/dev/null; ls /Users/nick/.claude/projects/-Users-nick-Desktop-shannon-framework-fixtures-unset/ 2>/dev/null","description":"Find gate-proof.md in claude dirs"}}
+{"ts":"2026-05-23T21:07:15Z","event":"pre_tool_use","tool":"Read","tool_input":{"file_path":"/Users/nick/.claude/projects/-Users-nick-Desktop-shannon-framework/memory/gate-proof.md"}}
+{"ts":"2026-05-23T21:07:19Z","event":"stop"}

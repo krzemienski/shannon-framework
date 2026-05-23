@@ -1,0 +1,62 @@
+=== enabled (sentinel=active, tag=shannon-enabled-21436) ===
+  shim=/tmp/claude-workers/bin/shannon-enabled-21436
+  fixture=enabled
+  sentinel=active
+  converse_exit=0
+  events_total=8
+  events_user_prompt=1
+  events_pre_tool=5
+  events_stop=1
+  shannon_skill_activation_fires=1
+  shannon_log_delta=26
+  prompt=remember this: csd proof at 170550
+  --- turn.md head ---
+    ---
+    
+    **Prompt:** remember this: csd proof at 170550
+    
+    > **Thinking:** 
+
+=== unset (sentinel=none, tag=shannon-unset-31927) ===
+  shim=/tmp/claude-workers/bin/shannon-unset-31927
+  fixture=unset
+  sentinel=none
+  converse_exit=0
+  events_total=7
+  events_user_prompt=1
+  events_pre_tool=4
+  events_stop=1
+  shannon_skill_activation_fires=0
+  0
+  shannon_log_delta=0
+  prompt=remember this: csd proof at 170550
+  --- turn.md head ---
+    ---
+    
+    **Prompt:** remember this: csd proof at 170550
+    
+    > **Thinking:** 
+
+=== disabled (sentinel=disabled, tag=shannon-disabled-23304) ===
+  shim=/tmp/claude-workers/bin/shannon-disabled-23304
+  fixture=disabled
+  sentinel=disabled
+  converse_exit=0
+  events_total=3
+  events_user_prompt=1
+  events_pre_tool=0
+  0
+  events_stop=1
+  shannon_skill_activation_fires=0
+  0
+  shannon_log_delta=0
+  prompt=remember this: csd proof at 170550
+  --- turn.md head ---
+    ---
+    
+    **Prompt:** remember this: csd proof at 170550
+    
+    Saved. `gate-proof.md` line 13 already has `csd proof at 170550` — duplicate. No write.
+
+===========================
+evidence root: /Users/nick/Desktop/shannon-framework/benchmarks/results/csd-run-after-fix

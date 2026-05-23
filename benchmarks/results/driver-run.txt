@@ -1,0 +1,9 @@
+=== fixture: enabled (cwd=/Users/nick/Desktop/shannon-framework/fixtures/enabled) ===
+  sentinel=active exit=0 log-delta=1 skill-activation-fires=1
+RESULT|enabled|sentinel=active|fires=1|exit=0
+=== fixture: unset (cwd=/Users/nick/Desktop/shannon-framework/fixtures/unset) ===
+  sentinel=none exit=0 log-delta=0 skill-activation-fires=0
+RESULT|unset|sentinel=none|fires=0|exit=0
+=== fixture: disabled (cwd=/Users/nick/Desktop/shannon-framework/fixtures/disabled) ===
+  sentinel=disabled exit=0 log-delta=0 skill-activation-fires=0
+RESULT|disabled|sentinel=disabled|fires=0|exit=0

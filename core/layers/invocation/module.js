@@ -29,8 +29,12 @@ function readTriggers() {
   }
 }
 
+function escRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
 function matchSkills(prompt) {
-  // Regex-match each skill's triggers against the user prompt. Return [{skill, trigger}].
+  // Word-boundary match each skill's triggers against the prompt. Return [{skill, trigger}].
+  // \b prevents substring false positives (e.g. "trace" matching "retraced"); multi-word
+  // triggers still work because regex anchors only attach at word-char start/end.
   if (!prompt || typeof prompt !== 'string') return [];
   const triggers = readTriggers();
   const matches = [];
@@ -39,10 +43,12 @@ function matchSkills(prompt) {
     for (const trigger of triggers[skill]) {
       const t = String(trigger).toLowerCase().trim();
       if (!t) continue;
-      // Strip quotes/colon prefixes the spec uses around trigger phrases.
       const clean = t.replace(/^["'\s]+|["'\s]+$/g, '');
       if (!clean) continue;
-      if (lower.includes(clean)) {
+      const left  = /^\w/.test(clean) ? '\\b' : '';
+      const right = /\w$/.test(clean) ? '\\b' : '';
+      const re = new RegExp(left + escRe(clean) + right, 'i');
+      if (re.test(lower)) {
         matches.push({ skill, trigger: clean });
         break;
       }

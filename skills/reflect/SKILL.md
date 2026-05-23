@@ -4,9 +4,9 @@ description: Self-refinement pass on prior output. Read last turn, identify gaps
 triggers:
   - "reflect on this"
   - "self-refine"
-  - "iterate"
-  - "self-improve"
+  - "self-improve this"
   - "what could be better"
+  - "reflection pass"
 ---
 
 # reflect

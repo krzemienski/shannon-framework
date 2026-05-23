@@ -3,9 +3,9 @@ name: completion-gate
 description: Evaluate the completion gate. Refuses on any missing MSC. Reads evidence tree; emits machine-readable report.json. No override flag.
 triggers:
   - "completion gate"
-  - "final gate"
   - "ship gate"
   - "evaluate completion"
+  - "final completion gate"
 ---
 
 # completion-gate

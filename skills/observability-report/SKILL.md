@@ -2,11 +2,13 @@
 name: observability-report
 description: Shannon-specific log reader. Powers /shannon:trace, /shannon:doctor, retrospective session analysis. Reads hooks.jsonl, hook-errors.jsonl, session JSONLs.
 triggers:
-  - "trace"
-  - "doctor"
+  - "session trace"
+  - "shannon doctor"
   - "session log audit"
   - "hooks fired log"
-  - "observability"
+  - "observability report"
+  - "trace the session"
+  - "run doctor"
 ---
 
 # observability-report

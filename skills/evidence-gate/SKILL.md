@@ -7,7 +7,8 @@ triggers:
   - "ready to ship"
   - "PR ready"
   - "ready for review"
-  - "done"
+  - "mark as done"
+  - "claim completion"
 ---
 
 # evidence-gate

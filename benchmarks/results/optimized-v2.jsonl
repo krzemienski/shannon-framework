@@ -1,0 +1,322 @@
+{"tier":"recall","skill":"autopilot-runner","trigger":"autopilot","variant":"terse","prompt":"autopilot","matched":["autopilot-runner"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"autopilot-runner","trigger":"autopilot","variant":"wrapped","prompt":"Hey, can you autopilot for me?","matched":["autopilot-runner"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"autopilot-runner","trigger":"run autonomously","variant":"terse","prompt":"run autonomously","matched":["autopilot-runner"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"autopilot-runner","trigger":"run autonomously","variant":"wrapped","prompt":"I would like to run autonomously now.","matched":["autopilot-runner"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"autopilot-runner","trigger":"keep retrying until it works","variant":"terse","prompt":"keep retrying until it works","matched":["autopilot-runner"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"autopilot-runner","trigger":"keep retrying until it works","variant":"wrapped","prompt":"I would like to keep retrying until it works now.","matched":["autopilot-runner"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"autopilot-runner","trigger":"refusal-driven retry","variant":"terse","prompt":"refusal-driven retry","matched":["autopilot-runner"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"autopilot-runner","trigger":"refusal-driven retry","variant":"wrapped","prompt":"Please refusal-driven retry when you can.","matched":["autopilot-runner"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"codebase-analysis","trigger":"analyze codebase","variant":"terse","prompt":"analyze codebase","matched":["codebase-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"codebase-analysis","trigger":"analyze codebase","variant":"wrapped","prompt":"I would like to analyze codebase now.","matched":["codebase-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"codebase-analysis","trigger":"repo context","variant":"terse","prompt":"repo context","matched":["codebase-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"codebase-analysis","trigger":"repo context","variant":"wrapped","prompt":"Hey, can you repo context for me?","matched":["codebase-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"codebase-analysis","trigger":"module map","variant":"terse","prompt":"module map","matched":["codebase-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"codebase-analysis","trigger":"module map","variant":"wrapped","prompt":"I would like to module map now.","matched":["codebase-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"codebase-analysis","trigger":"hot path identification","variant":"terse","prompt":"hot path identification","matched":["codebase-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"codebase-analysis","trigger":"hot path identification","variant":"wrapped","prompt":"Please hot path identification when you can.","matched":["codebase-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"codebase-analysis","trigger":"dependency manifest survey","variant":"terse","prompt":"dependency manifest survey","matched":["codebase-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"codebase-analysis","trigger":"dependency manifest survey","variant":"wrapped","prompt":"Please dependency manifest survey when you can.","matched":["codebase-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"completion-gate","trigger":"completion gate","variant":"terse","prompt":"completion gate","matched":["completion-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"completion-gate","trigger":"completion gate","variant":"wrapped","prompt":"Hey, can you completion gate for me?","matched":["completion-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"completion-gate","trigger":"ship gate","variant":"terse","prompt":"ship gate","matched":["completion-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"completion-gate","trigger":"ship gate","variant":"wrapped","prompt":"Hey, can you ship gate for me?","matched":["completion-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"completion-gate","trigger":"evaluate completion","variant":"terse","prompt":"evaluate completion","matched":["completion-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"completion-gate","trigger":"evaluate completion","variant":"wrapped","prompt":"I would like to evaluate completion now.","matched":["completion-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"completion-gate","trigger":"final completion gate","variant":"terse","prompt":"final completion gate","matched":["completion-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"completion-gate","trigger":"final completion gate","variant":"wrapped","prompt":"Hey, can you final completion gate for me?","matched":["completion-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"consensus-engine","trigger":"consensus validation","variant":"terse","prompt":"consensus validation","matched":["consensus-engine"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"consensus-engine","trigger":"consensus validation","variant":"wrapped","prompt":"Please consensus validation when you can.","matched":["consensus-engine"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"consensus-engine","trigger":"validate with n reviewers","variant":"terse","prompt":"validate with n reviewers","matched":["consensus-engine"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"consensus-engine","trigger":"validate with n reviewers","variant":"wrapped","prompt":"I would like to validate with n reviewers now.","matched":["consensus-engine"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"consensus-engine","trigger":"agreement gate","variant":"terse","prompt":"agreement gate","matched":["consensus-engine"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"consensus-engine","trigger":"agreement gate","variant":"wrapped","prompt":"Please agreement gate when you can.","matched":["consensus-engine"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"consensus-engine","trigger":"high-confidence validation","variant":"terse","prompt":"high-confidence validation","matched":["consensus-engine"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"consensus-engine","trigger":"high-confidence validation","variant":"wrapped","prompt":"Please high-confidence validation when you can.","matched":["consensus-engine"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"consensus-engine","trigger":"consensus gate","variant":"terse","prompt":"consensus gate","matched":["consensus-engine"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"consensus-engine","trigger":"consensus gate","variant":"wrapped","prompt":"Please consensus gate when you can.","matched":["consensus-engine"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"create-validation-plan","trigger":"create validation plan","variant":"terse","prompt":"create validation plan","matched":["create-validation-plan"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"create-validation-plan","trigger":"create validation plan","variant":"wrapped","prompt":"I would like to create validation plan now.","matched":["create-validation-plan"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"create-validation-plan","trigger":"validation phases","variant":"terse","prompt":"validation phases","matched":["create-validation-plan"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"create-validation-plan","trigger":"validation phases","variant":"wrapped","prompt":"Please validation phases when you can.","matched":["create-validation-plan"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"create-validation-plan","trigger":"inject validation gates","variant":"terse","prompt":"inject validation gates","matched":["create-validation-plan"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"create-validation-plan","trigger":"inject validation gates","variant":"wrapped","prompt":"Please inject validation gates when you can.","matched":["create-validation-plan"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"create-validation-plan","trigger":"plan with gates","variant":"terse","prompt":"plan with gates","matched":["create-validation-plan"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"create-validation-plan","trigger":"plan with gates","variant":"wrapped","prompt":"Hey, can you plan with gates for me?","matched":["create-validation-plan"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"critique","trigger":"critique this","variant":"terse","prompt":"critique this","matched":["critique"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"critique","trigger":"critique this","variant":"wrapped","prompt":"I would like to critique this now.","matched":["critique"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"critique","trigger":"find holes","variant":"terse","prompt":"find holes","matched":["critique"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"critique","trigger":"find holes","variant":"wrapped","prompt":"I would like to find holes now.","matched":["critique"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"critique","trigger":"what's wrong","variant":"terse","prompt":"what's wrong","matched":["critique"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"critique","trigger":"what's wrong","variant":"wrapped","prompt":"Hey, can you what's wrong for me?","matched":["critique"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"critique","trigger":"adversarial review","variant":"terse","prompt":"adversarial review","matched":["critique"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"critique","trigger":"adversarial review","variant":"wrapped","prompt":"Hey, can you adversarial review for me?","matched":["critique"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"critique","trigger":"tear it apart","variant":"terse","prompt":"tear it apart","matched":["critique"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"critique","trigger":"tear it apart","variant":"wrapped","prompt":"I would like to tear it apart now.","matched":["critique"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"dispatch-parallel","trigger":"do in parallel","variant":"terse","prompt":"do in parallel","matched":["dispatch-parallel"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"dispatch-parallel","trigger":"do in parallel","variant":"wrapped","prompt":"Please do in parallel when you can.","matched":["dispatch-parallel"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"dispatch-parallel","trigger":"parallel subagents","variant":"terse","prompt":"parallel subagents","matched":["dispatch-parallel"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"dispatch-parallel","trigger":"parallel subagents","variant":"wrapped","prompt":"Hey, can you parallel subagents for me?","matched":["dispatch-parallel"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"dispatch-parallel","trigger":"fan out tasks","variant":"terse","prompt":"fan out tasks","matched":["dispatch-parallel"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"dispatch-parallel","trigger":"fan out tasks","variant":"wrapped","prompt":"I would like to fan out tasks now.","matched":["dispatch-parallel"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"dispatch-parallel","trigger":"competitive dispatch","variant":"terse","prompt":"competitive dispatch","matched":["dispatch-parallel"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"dispatch-parallel","trigger":"competitive dispatch","variant":"wrapped","prompt":"Please competitive dispatch when you can.","matched":["dispatch-parallel"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"documentation-research","trigger":"documentation research","variant":"terse","prompt":"documentation research","matched":["documentation-research"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"documentation-research","trigger":"documentation research","variant":"wrapped","prompt":"I would like to documentation research now.","matched":["documentation-research"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"documentation-research","trigger":"fetch upstream docs","variant":"terse","prompt":"fetch upstream docs","matched":["documentation-research"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"documentation-research","trigger":"fetch upstream docs","variant":"wrapped","prompt":"I would like to fetch upstream docs now.","matched":["documentation-research"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"documentation-research","trigger":"research api","variant":"terse","prompt":"research api","matched":["documentation-research"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"documentation-research","trigger":"research api","variant":"wrapped","prompt":"Hey, can you research api for me?","matched":["documentation-research"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"documentation-research","trigger":"verify sdk usage","variant":"terse","prompt":"verify sdk usage","matched":["documentation-research"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"documentation-research","trigger":"verify sdk usage","variant":"wrapped","prompt":"I would like to verify sdk usage now.","matched":["documentation-research"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"documentation-research","trigger":"library docs","variant":"terse","prompt":"library docs","matched":["documentation-research"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"documentation-research","trigger":"library docs","variant":"wrapped","prompt":"Hey, can you library docs for me?","matched":["documentation-research"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-gate","trigger":"marking complete","variant":"terse","prompt":"marking complete","matched":["evidence-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-gate","trigger":"marking complete","variant":"wrapped","prompt":"I would like to marking complete now.","matched":["evidence-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-gate","trigger":"task complete","variant":"terse","prompt":"task complete","matched":["evidence-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-gate","trigger":"task complete","variant":"wrapped","prompt":"I would like to task complete now.","matched":["evidence-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-gate","trigger":"ready to ship","variant":"terse","prompt":"ready to ship","matched":["evidence-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-gate","trigger":"ready to ship","variant":"wrapped","prompt":"I would like to ready to ship now.","matched":["evidence-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-gate","trigger":"pr ready","variant":"terse","prompt":"pr ready","matched":["evidence-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-gate","trigger":"pr ready","variant":"wrapped","prompt":"Please pr ready when you can.","matched":["evidence-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-gate","trigger":"ready for review","variant":"terse","prompt":"ready for review","matched":["evidence-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-gate","trigger":"ready for review","variant":"wrapped","prompt":"I would like to ready for review now.","matched":["evidence-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-gate","trigger":"mark as done","variant":"terse","prompt":"mark as done","matched":["evidence-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-gate","trigger":"mark as done","variant":"wrapped","prompt":"Hey, can you mark as done for me?","matched":["evidence-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-gate","trigger":"claim completion","variant":"terse","prompt":"claim completion","matched":["evidence-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-gate","trigger":"claim completion","variant":"wrapped","prompt":"I would like to claim completion now.","matched":["evidence-gate"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-indexing","trigger":"index evidence","variant":"terse","prompt":"index evidence","matched":["evidence-indexing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-indexing","trigger":"index evidence","variant":"wrapped","prompt":"Please index evidence when you can.","matched":["evidence-indexing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-indexing","trigger":"write evidence index","variant":"terse","prompt":"write evidence index","matched":["evidence-indexing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-indexing","trigger":"write evidence index","variant":"wrapped","prompt":"Please write evidence index when you can.","matched":["evidence-indexing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-indexing","trigger":"evidence index.md","variant":"terse","prompt":"evidence index.md","matched":["evidence-indexing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-indexing","trigger":"evidence index.md","variant":"wrapped","prompt":"Please evidence index.md when you can.","matched":["evidence-indexing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-indexing","trigger":"enumerate artifacts","variant":"terse","prompt":"enumerate artifacts","matched":["evidence-indexing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"evidence-indexing","trigger":"enumerate artifacts","variant":"wrapped","prompt":"I would like to enumerate artifacts now.","matched":["evidence-indexing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"functional-validation","trigger":"validate this","variant":"terse","prompt":"validate this","matched":["functional-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"functional-validation","trigger":"validate this","variant":"wrapped","prompt":"I would like to validate this now.","matched":["functional-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"functional-validation","trigger":"prove it works","variant":"terse","prompt":"prove it works","matched":["functional-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"functional-validation","trigger":"prove it works","variant":"wrapped","prompt":"Please prove it works when you can.","matched":["functional-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"functional-validation","trigger":"functional validation","variant":"terse","prompt":"functional validation","matched":["functional-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"functional-validation","trigger":"functional validation","variant":"wrapped","prompt":"Hey, can you functional validation for me?","matched":["functional-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"functional-validation","trigger":"no mocks","variant":"terse","prompt":"no mocks","matched":["functional-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"functional-validation","trigger":"no mocks","variant":"wrapped","prompt":"Please no mocks when you can.","matched":["functional-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"functional-validation","trigger":"ensure feature works","variant":"terse","prompt":"ensure feature works","matched":["functional-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"functional-validation","trigger":"ensure feature works","variant":"wrapped","prompt":"Please ensure feature works when you can.","matched":["functional-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"functional-validation","trigger":"validate the feature","variant":"terse","prompt":"validate the feature","matched":["functional-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"functional-validation","trigger":"validate the feature","variant":"wrapped","prompt":"Please validate the feature when you can.","matched":["functional-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"judge","trigger":"judge outputs","variant":"terse","prompt":"judge outputs","matched":["judge"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"judge","trigger":"judge outputs","variant":"wrapped","prompt":"I would like to judge outputs now.","matched":["judge"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"judge","trigger":"evaluate candidates","variant":"terse","prompt":"evaluate candidates","matched":["judge"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"judge","trigger":"evaluate candidates","variant":"wrapped","prompt":"I would like to evaluate candidates now.","matched":["judge"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"judge","trigger":"rank subagent results","variant":"terse","prompt":"rank subagent results","matched":["judge"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"judge","trigger":"rank subagent results","variant":"wrapped","prompt":"Hey, can you rank subagent results for me?","matched":["judge"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"judge","trigger":"judge with debate","variant":"terse","prompt":"judge with debate","matched":["judge"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"judge","trigger":"judge with debate","variant":"wrapped","prompt":"Please judge with debate when you can.","matched":["judge"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"loop-runner","trigger":"ralph loop","variant":"terse","prompt":"ralph loop","matched":["loop-runner"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"loop-runner","trigger":"ralph loop","variant":"wrapped","prompt":"I would like to ralph loop now.","matched":["loop-runner"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"loop-runner","trigger":"iterate until done","variant":"terse","prompt":"iterate until done","matched":["loop-runner"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"loop-runner","trigger":"iterate until done","variant":"wrapped","prompt":"Hey, can you iterate until done for me?","matched":["loop-runner"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"loop-runner","trigger":"do-verify-reflect","variant":"terse","prompt":"do-verify-reflect","matched":["loop-runner"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"loop-runner","trigger":"do-verify-reflect","variant":"wrapped","prompt":"Please do-verify-reflect when you can.","matched":["loop-runner"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"loop-runner","trigger":"self-referential loop","variant":"terse","prompt":"self-referential loop","matched":["loop-runner"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"loop-runner","trigger":"self-referential loop","variant":"wrapped","prompt":"Hey, can you self-referential loop for me?","matched":["loop-runner"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"memorize","trigger":"remember this","variant":"terse","prompt":"remember this","matched":["memorize"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"memorize","trigger":"remember this","variant":"wrapped","prompt":"I would like to remember this now.","matched":["memorize"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"memorize","trigger":"save lesson","variant":"terse","prompt":"save lesson","matched":["memorize"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"memorize","trigger":"save lesson","variant":"wrapped","prompt":"Please save lesson when you can.","matched":["memorize"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"memorize","trigger":"memorize pattern","variant":"terse","prompt":"memorize pattern","matched":["memorize"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"memorize","trigger":"memorize pattern","variant":"wrapped","prompt":"I would like to memorize pattern now.","matched":["memorize"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"memorize","trigger":"save to memory","variant":"terse","prompt":"save to memory","matched":["memorize"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"memorize","trigger":"save to memory","variant":"wrapped","prompt":"Please save to memory when you can.","matched":["memorize"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"memorize","trigger":"add to memory","variant":"terse","prompt":"add to memory","matched":["memorize"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"memorize","trigger":"add to memory","variant":"wrapped","prompt":"I would like to add to memory now.","matched":["memorize"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"no-fakes-discipline","trigger":"add a fake","variant":"terse","prompt":"add a fake","matched":["no-fakes-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"no-fakes-discipline","trigger":"add a fake","variant":"wrapped","prompt":"I would like to add a fake now.","matched":["no-fakes-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"no-fakes-discipline","trigger":"substitute the call","variant":"terse","prompt":"substitute the call","matched":["no-fakes-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"no-fakes-discipline","trigger":"substitute the call","variant":"wrapped","prompt":"I would like to substitute the call now.","matched":["no-fakes-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"no-fakes-discipline","trigger":"fixture-based response","variant":"terse","prompt":"fixture-based response","matched":["no-fakes-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"no-fakes-discipline","trigger":"fixture-based response","variant":"wrapped","prompt":"I would like to fixture-based response now.","matched":["no-fakes-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"no-fakes-discipline","trigger":"fallback mode","variant":"terse","prompt":"fallback mode","matched":["no-fakes-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"no-fakes-discipline","trigger":"fallback mode","variant":"wrapped","prompt":"I would like to fallback mode now.","matched":["no-fakes-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"no-fakes-discipline","trigger":"fake the response","variant":"terse","prompt":"fake the response","matched":["no-fakes-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"no-fakes-discipline","trigger":"fake the response","variant":"wrapped","prompt":"Please fake the response when you can.","matched":["no-fakes-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"no-fakes-discipline","trigger":"shim the endpoint","variant":"terse","prompt":"shim the endpoint","matched":["no-fakes-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"no-fakes-discipline","trigger":"shim the endpoint","variant":"wrapped","prompt":"Please shim the endpoint when you can.","matched":["no-fakes-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"observability-report","trigger":"session trace","variant":"terse","prompt":"session trace","matched":["observability-report"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"observability-report","trigger":"session trace","variant":"wrapped","prompt":"I would like to session trace now.","matched":["observability-report"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"observability-report","trigger":"shannon doctor","variant":"terse","prompt":"shannon doctor","matched":["observability-report"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"observability-report","trigger":"shannon doctor","variant":"wrapped","prompt":"Please shannon doctor when you can.","matched":["observability-report"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"observability-report","trigger":"session log audit","variant":"terse","prompt":"session log audit","matched":["observability-report"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"observability-report","trigger":"session log audit","variant":"wrapped","prompt":"Please session log audit when you can.","matched":["observability-report"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"observability-report","trigger":"hooks fired log","variant":"terse","prompt":"hooks fired log","matched":["observability-report"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"observability-report","trigger":"hooks fired log","variant":"wrapped","prompt":"Hey, can you hooks fired log for me?","matched":["observability-report"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"observability-report","trigger":"observability report","variant":"terse","prompt":"observability report","matched":["observability-report"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"observability-report","trigger":"observability report","variant":"wrapped","prompt":"Please observability report when you can.","matched":["observability-report"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"observability-report","trigger":"trace the session","variant":"terse","prompt":"trace the session","matched":["observability-report"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"observability-report","trigger":"trace the session","variant":"wrapped","prompt":"Please trace the session when you can.","matched":["observability-report"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"observability-report","trigger":"run doctor","variant":"terse","prompt":"run doctor","matched":["observability-report"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"observability-report","trigger":"run doctor","variant":"wrapped","prompt":"I would like to run doctor now.","matched":["observability-report"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"oracle-review","trigger":"oracle review","variant":"terse","prompt":"oracle review","matched":["oracle-review"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"oracle-review","trigger":"oracle review","variant":"wrapped","prompt":"I would like to oracle review now.","matched":["oracle-review"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"oracle-review","trigger":"plan review","variant":"terse","prompt":"plan review","matched":["oracle-review"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"oracle-review","trigger":"plan review","variant":"wrapped","prompt":"Please plan review when you can.","matched":["oracle-review"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"oracle-review","trigger":"evidence audit","variant":"terse","prompt":"evidence audit","matched":["oracle-review"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"oracle-review","trigger":"evidence audit","variant":"wrapped","prompt":"Please evidence audit when you can.","matched":["oracle-review"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"oracle-review","trigger":"quorum review","variant":"terse","prompt":"quorum review","matched":["oracle-review"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"oracle-review","trigger":"quorum review","variant":"wrapped","prompt":"I would like to quorum review now.","matched":["oracle-review"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"oracle-review","trigger":"final gate audit","variant":"terse","prompt":"final gate audit","matched":["oracle-review"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"oracle-review","trigger":"final gate audit","variant":"wrapped","prompt":"I would like to final gate audit now.","matched":["oracle-review"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-author","trigger":"plan this","variant":"terse","prompt":"plan this","matched":["plan-author"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-author","trigger":"plan this","variant":"wrapped","prompt":"Hey, can you plan this for me?","matched":["plan-author"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-author","trigger":"create plan","variant":"terse","prompt":"create plan","matched":["plan-author"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-author","trigger":"create plan","variant":"wrapped","prompt":"Please create plan when you can.","matched":["plan-author"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-author","trigger":"implementation plan","variant":"terse","prompt":"implementation plan","matched":["plan-author"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-author","trigger":"implementation plan","variant":"wrapped","prompt":"I would like to implementation plan now.","matched":["plan-author"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-author","trigger":"write a plan","variant":"terse","prompt":"write a plan","matched":["plan-author"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-author","trigger":"write a plan","variant":"wrapped","prompt":"Hey, can you write a plan for me?","matched":["plan-author"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-author","trigger":"draft plan","variant":"terse","prompt":"draft plan","matched":["plan-author"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-author","trigger":"draft plan","variant":"wrapped","prompt":"I would like to draft plan now.","matched":["plan-author"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-converge","trigger":"plan converge","variant":"terse","prompt":"plan converge","matched":["plan-converge"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-converge","trigger":"plan converge","variant":"wrapped","prompt":"I would like to plan converge now.","matched":["plan-converge"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-converge","trigger":"iteratively refine plan","variant":"terse","prompt":"iteratively refine plan","matched":["plan-converge"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-converge","trigger":"iteratively refine plan","variant":"wrapped","prompt":"Please iteratively refine plan when you can.","matched":["plan-converge"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-converge","trigger":"anneal temper","variant":"terse","prompt":"anneal temper","matched":["plan-converge"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-converge","trigger":"anneal temper","variant":"wrapped","prompt":"I would like to anneal temper now.","matched":["plan-converge"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-converge","trigger":"converge plan","variant":"terse","prompt":"converge plan","matched":["plan-converge"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-converge","trigger":"converge plan","variant":"wrapped","prompt":"I would like to converge plan now.","matched":["plan-converge"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-do-check-act","trigger":"iterate experiment","variant":"terse","prompt":"iterate experiment","matched":["plan-do-check-act"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-do-check-act","trigger":"iterate experiment","variant":"wrapped","prompt":"Hey, can you iterate experiment for me?","matched":["plan-do-check-act"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-do-check-act","trigger":"pdca","variant":"terse","prompt":"pdca","matched":["plan-do-check-act"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-do-check-act","trigger":"pdca","variant":"wrapped","prompt":"I would like to pdca now.","matched":["plan-do-check-act"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-do-check-act","trigger":"continuous improvement","variant":"terse","prompt":"continuous improvement","matched":["plan-do-check-act"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-do-check-act","trigger":"continuous improvement","variant":"wrapped","prompt":"I would like to continuous improvement now.","matched":["plan-do-check-act"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-do-check-act","trigger":"kaizen cycle","variant":"terse","prompt":"kaizen cycle","matched":["plan-do-check-act"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-do-check-act","trigger":"kaizen cycle","variant":"wrapped","prompt":"Hey, can you kaizen cycle for me?","matched":["plan-do-check-act"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-do-check-act","trigger":"next experiment","variant":"terse","prompt":"next experiment","matched":["plan-do-check-act"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-do-check-act","trigger":"next experiment","variant":"wrapped","prompt":"Hey, can you next experiment for me?","matched":["plan-do-check-act"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-tournament","trigger":"plan tournament","variant":"terse","prompt":"plan tournament","matched":["plan-tournament"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-tournament","trigger":"plan tournament","variant":"wrapped","prompt":"Hey, can you plan tournament for me?","matched":["plan-tournament"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-tournament","trigger":"compare plans","variant":"terse","prompt":"compare plans","matched":["plan-tournament"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-tournament","trigger":"compare plans","variant":"wrapped","prompt":"I would like to compare plans now.","matched":["plan-tournament"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-tournament","trigger":"anneal cast","variant":"terse","prompt":"anneal cast","matched":["plan-tournament"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-tournament","trigger":"anneal cast","variant":"wrapped","prompt":"Please anneal cast when you can.","matched":["plan-tournament"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-tournament","trigger":"competing plans","variant":"terse","prompt":"competing plans","matched":["plan-tournament"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"plan-tournament","trigger":"competing plans","variant":"wrapped","prompt":"Hey, can you competing plans for me?","matched":["plan-tournament"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"reflect","trigger":"reflect on this","variant":"terse","prompt":"reflect on this","matched":["reflect"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"reflect","trigger":"reflect on this","variant":"wrapped","prompt":"Hey, can you reflect on this for me?","matched":["reflect"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"reflect","trigger":"self-refine","variant":"terse","prompt":"self-refine","matched":["reflect"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"reflect","trigger":"self-refine","variant":"wrapped","prompt":"Please self-refine when you can.","matched":["reflect"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"reflect","trigger":"self-improve this","variant":"terse","prompt":"self-improve this","matched":["reflect"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"reflect","trigger":"self-improve this","variant":"wrapped","prompt":"Please self-improve this when you can.","matched":["reflect"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"reflect","trigger":"what could be better","variant":"terse","prompt":"what could be better","matched":["reflect"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"reflect","trigger":"what could be better","variant":"wrapped","prompt":"Please what could be better when you can.","matched":["reflect"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"reflect","trigger":"reflection pass","variant":"terse","prompt":"reflection pass","matched":["reflect"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"reflect","trigger":"reflection pass","variant":"wrapped","prompt":"Hey, can you reflection pass for me?","matched":["reflect"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"refusal-discipline","trigger":"evidence gap","variant":"terse","prompt":"evidence gap","matched":["refusal-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"refusal-discipline","trigger":"evidence gap","variant":"wrapped","prompt":"Hey, can you evidence gap for me?","matched":["refusal-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"refusal-discipline","trigger":"missing citation","variant":"terse","prompt":"missing citation","matched":["refusal-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"refusal-discipline","trigger":"missing citation","variant":"wrapped","prompt":"I would like to missing citation now.","matched":["refusal-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"refusal-discipline","trigger":"gate unmet","variant":"terse","prompt":"gate unmet","matched":["refusal-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"refusal-discipline","trigger":"gate unmet","variant":"wrapped","prompt":"I would like to gate unmet now.","matched":["refusal-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"refusal-discipline","trigger":"refusal needed","variant":"terse","prompt":"refusal needed","matched":["refusal-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"refusal-discipline","trigger":"refusal needed","variant":"wrapped","prompt":"Please refusal needed when you can.","matched":["refusal-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"refusal-discipline","trigger":"block completion","variant":"terse","prompt":"block completion","matched":["refusal-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"refusal-discipline","trigger":"block completion","variant":"wrapped","prompt":"I would like to block completion now.","matched":["refusal-discipline"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"research-validation","trigger":"research validation standards","variant":"terse","prompt":"research validation standards","matched":["research-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"research-validation","trigger":"research validation standards","variant":"wrapped","prompt":"Please research validation standards when you can.","matched":["research-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"research-validation","trigger":"applicable criteria","variant":"terse","prompt":"applicable criteria","matched":["research-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"research-validation","trigger":"applicable criteria","variant":"wrapped","prompt":"I would like to applicable criteria now.","matched":["research-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"research-validation","trigger":"wcag criteria","variant":"terse","prompt":"wcag criteria","matched":["research-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"research-validation","trigger":"wcag criteria","variant":"wrapped","prompt":"I would like to wcag criteria now.","matched":["research-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"research-validation","trigger":"hig criteria","variant":"terse","prompt":"hig criteria","matched":["research-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"research-validation","trigger":"hig criteria","variant":"wrapped","prompt":"Hey, can you hig criteria for me?","matched":["research-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"research-validation","trigger":"security standards","variant":"terse","prompt":"security standards","matched":["research-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"research-validation","trigger":"security standards","variant":"wrapped","prompt":"Hey, can you security standards for me?","matched":["research-validation"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"root-cause-tracing","trigger":"why is x happening","variant":"terse","prompt":"why is x happening","matched":["root-cause-tracing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"root-cause-tracing","trigger":"why is x happening","variant":"wrapped","prompt":"Hey, can you why is x happening for me?","matched":["root-cause-tracing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"root-cause-tracing","trigger":"root cause","variant":"terse","prompt":"root cause","matched":["root-cause-tracing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"root-cause-tracing","trigger":"root cause","variant":"wrapped","prompt":"I would like to root cause now.","matched":["root-cause-tracing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"root-cause-tracing","trigger":"five whys","variant":"terse","prompt":"five whys","matched":["root-cause-tracing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"root-cause-tracing","trigger":"five whys","variant":"wrapped","prompt":"Hey, can you five whys for me?","matched":["root-cause-tracing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"root-cause-tracing","trigger":"cause and effect","variant":"terse","prompt":"cause and effect","matched":["root-cause-tracing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"root-cause-tracing","trigger":"cause and effect","variant":"wrapped","prompt":"I would like to cause and effect now.","matched":["root-cause-tracing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"root-cause-tracing","trigger":"fishbone analysis","variant":"terse","prompt":"fishbone analysis","matched":["root-cause-tracing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"root-cause-tracing","trigger":"fishbone analysis","variant":"wrapped","prompt":"Please fishbone analysis when you can.","matched":["root-cause-tracing"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"sequential-analysis","trigger":"sequential analysis","variant":"terse","prompt":"sequential analysis","matched":["sequential-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"sequential-analysis","trigger":"sequential analysis","variant":"wrapped","prompt":"I would like to sequential analysis now.","matched":["sequential-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"sequential-analysis","trigger":"step by step reasoning","variant":"terse","prompt":"step by step reasoning","matched":["sequential-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"sequential-analysis","trigger":"step by step reasoning","variant":"wrapped","prompt":"I would like to step by step reasoning now.","matched":["sequential-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"sequential-analysis","trigger":"complex problem","variant":"terse","prompt":"complex problem","matched":["sequential-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"sequential-analysis","trigger":"complex problem","variant":"wrapped","prompt":"Hey, can you complex problem for me?","matched":["sequential-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"sequential-analysis","trigger":"ambiguous scope","variant":"terse","prompt":"ambiguous scope","matched":["sequential-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"sequential-analysis","trigger":"ambiguous scope","variant":"wrapped","prompt":"Hey, can you ambiguous scope for me?","matched":["sequential-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"sequential-analysis","trigger":"revision capability","variant":"terse","prompt":"revision capability","matched":["sequential-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"sequential-analysis","trigger":"revision capability","variant":"wrapped","prompt":"I would like to revision capability now.","matched":["sequential-analysis"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"team-coordinator","trigger":"spawn team","variant":"terse","prompt":"spawn team","matched":["team-coordinator"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"team-coordinator","trigger":"spawn team","variant":"wrapped","prompt":"I would like to spawn team now.","matched":["team-coordinator"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"team-coordinator","trigger":"coordinate teammates","variant":"terse","prompt":"coordinate teammates","matched":["team-coordinator"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"team-coordinator","trigger":"coordinate teammates","variant":"wrapped","prompt":"Please coordinate teammates when you can.","matched":["team-coordinator"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"team-coordinator","trigger":"multi-agent team","variant":"terse","prompt":"multi-agent team","matched":["team-coordinator"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"team-coordinator","trigger":"multi-agent team","variant":"wrapped","prompt":"I would like to multi-agent team now.","matched":["team-coordinator"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"team-coordinator","trigger":"team charter","variant":"terse","prompt":"team charter","matched":["team-coordinator"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"team-coordinator","trigger":"team charter","variant":"wrapped","prompt":"Hey, can you team charter for me?","matched":["team-coordinator"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"tree-of-thoughts","trigger":"tree of thoughts","variant":"terse","prompt":"tree of thoughts","matched":["tree-of-thoughts"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"tree-of-thoughts","trigger":"tree of thoughts","variant":"wrapped","prompt":"I would like to tree of thoughts now.","matched":["tree-of-thoughts"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"tree-of-thoughts","trigger":"explore branches","variant":"terse","prompt":"explore branches","matched":["tree-of-thoughts"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"tree-of-thoughts","trigger":"explore branches","variant":"wrapped","prompt":"I would like to explore branches now.","matched":["tree-of-thoughts"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"tree-of-thoughts","trigger":"tot reasoning","variant":"terse","prompt":"tot reasoning","matched":["tree-of-thoughts"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"tree-of-thoughts","trigger":"tot reasoning","variant":"wrapped","prompt":"I would like to tot reasoning now.","matched":["tree-of-thoughts"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"tree-of-thoughts","trigger":"branch and prune","variant":"terse","prompt":"branch and prune","matched":["tree-of-thoughts"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"tree-of-thoughts","trigger":"branch and prune","variant":"wrapped","prompt":"I would like to branch and prune now.","matched":["tree-of-thoughts"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"visual-inspection","trigger":"visual audit","variant":"terse","prompt":"visual audit","matched":["visual-inspection"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"visual-inspection","trigger":"visual audit","variant":"wrapped","prompt":"Hey, can you visual audit for me?","matched":["visual-inspection"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"visual-inspection","trigger":"screenshot review","variant":"terse","prompt":"screenshot review","matched":["visual-inspection"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"visual-inspection","trigger":"screenshot review","variant":"wrapped","prompt":"Please screenshot review when you can.","matched":["visual-inspection"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"visual-inspection","trigger":"hig check","variant":"terse","prompt":"hig check","matched":["visual-inspection"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"visual-inspection","trigger":"hig check","variant":"wrapped","prompt":"Hey, can you hig check for me?","matched":["visual-inspection"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"visual-inspection","trigger":"wcag check","variant":"terse","prompt":"wcag check","matched":["visual-inspection"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"visual-inspection","trigger":"wcag check","variant":"wrapped","prompt":"I would like to wcag check now.","matched":["visual-inspection"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"visual-inspection","trigger":"design review","variant":"terse","prompt":"design review","matched":["visual-inspection"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"visual-inspection","trigger":"design review","variant":"wrapped","prompt":"I would like to design review now.","matched":["visual-inspection"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"visual-inspection","trigger":"ui audit","variant":"terse","prompt":"ui audit","matched":["visual-inspection"],"target_hit":true,"spurious":[]}
+{"tier":"recall","skill":"visual-inspection","trigger":"ui audit","variant":"wrapped","prompt":"Please ui audit when you can.","matched":["visual-inspection"],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"How do I iterate over a JavaScript array?","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"I'm done with lunch, what's next on the agenda?","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Please review my pull request","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"The stack trace shows a null pointer exception","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"I went to the doctor yesterday for a checkup","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Show me the git branches in this repo","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"What's the difference between let and const?","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Can you explain Big-O notation?","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"I need to refactor this function for clarity","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"The build is failing on CI","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"What does this regex match?","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"I want to deploy to production tomorrow","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Compare bubble sort and quicksort","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Format this JSON for readability","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"I'm working on a research paper about graph algorithms","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"The async function never resolves","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"How do I configure webpack?","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Translate this Python code to Go","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Document the API endpoints","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"What's the runtime complexity here?","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"I'd like to refactor the auth flow","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Generate TypeScript types from this schema","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Why does the test fail intermittently?","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Set up a Docker compose file","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"I need to fix a memory leak","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"What's the keyboard shortcut for that?","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Help me understand recursion","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Show the dependency tree for this package","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Write a SQL query that joins three tables","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"How do I handle errors in async code?","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Tell me about Rust ownership rules","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"I want to learn about message queues","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"What's a good library for date parsing?","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Explain the observer pattern","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Show me how to mock a function in Jest","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"How does HTTPS work under the hood?","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"What's the best way to paginate API results?","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Refactor this React component into hooks","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Compile and run this Go program","matched":[],"target_hit":true,"spurious":[]}
+{"tier":"precision","variant":"innocent","prompt":"Generate sample data for testing","matched":[],"target_hit":true,"spurious":[]}

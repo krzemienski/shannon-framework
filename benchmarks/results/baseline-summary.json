@@ -1,0 +1,315 @@
+{
+  "run_ts": "2026-05-23T20:47:15.651Z",
+  "framework_root": "/Users/nick/Desktop/shannon-framework",
+  "total_rows": 316,
+  "global": {
+    "recall": 1,
+    "recall_hits": 276,
+    "recall_total": 276,
+    "innocent_precision": 0.9,
+    "innocent_clean": 36,
+    "innocent_total": 40,
+    "innocent_fp": 4
+  },
+  "per_skill": [
+    {
+      "skill": "completion-gate",
+      "hit": 8,
+      "total": 8,
+      "recall": 1,
+      "fp": 4,
+      "precision": 0.667,
+      "f1": 0.8
+    },
+    {
+      "skill": "reflect",
+      "hit": 10,
+      "total": 10,
+      "recall": 1,
+      "fp": 5,
+      "precision": 0.667,
+      "f1": 0.8
+    },
+    {
+      "skill": "evidence-gate",
+      "hit": 12,
+      "total": 12,
+      "recall": 1,
+      "fp": 3,
+      "precision": 0.8,
+      "f1": 0.889
+    },
+    {
+      "skill": "consensus-engine",
+      "hit": 10,
+      "total": 10,
+      "recall": 1,
+      "fp": 2,
+      "precision": 0.833,
+      "f1": 0.909
+    },
+    {
+      "skill": "observability-report",
+      "hit": 10,
+      "total": 10,
+      "recall": 1,
+      "fp": 2,
+      "precision": 0.833,
+      "f1": 0.909
+    },
+    {
+      "skill": "autopilot-runner",
+      "hit": 8,
+      "total": 8,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "codebase-analysis",
+      "hit": 10,
+      "total": 10,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "create-validation-plan",
+      "hit": 8,
+      "total": 8,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "critique",
+      "hit": 10,
+      "total": 10,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "dispatch-parallel",
+      "hit": 8,
+      "total": 8,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "documentation-research",
+      "hit": 10,
+      "total": 10,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "evidence-indexing",
+      "hit": 8,
+      "total": 8,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "functional-validation",
+      "hit": 12,
+      "total": 12,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "judge",
+      "hit": 8,
+      "total": 8,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "loop-runner",
+      "hit": 8,
+      "total": 8,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "memorize",
+      "hit": 10,
+      "total": 10,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "no-fakes-discipline",
+      "hit": 12,
+      "total": 12,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "oracle-review",
+      "hit": 10,
+      "total": 10,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "plan-author",
+      "hit": 10,
+      "total": 10,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "plan-converge",
+      "hit": 8,
+      "total": 8,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "plan-do-check-act",
+      "hit": 10,
+      "total": 10,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "plan-tournament",
+      "hit": 8,
+      "total": 8,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "refusal-discipline",
+      "hit": 10,
+      "total": 10,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "research-validation",
+      "hit": 10,
+      "total": 10,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "root-cause-tracing",
+      "hit": 10,
+      "total": 10,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "sequential-analysis",
+      "hit": 10,
+      "total": 10,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "team-coordinator",
+      "hit": 8,
+      "total": 8,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "tree-of-thoughts",
+      "hit": 8,
+      "total": 8,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    },
+    {
+      "skill": "visual-inspection",
+      "hit": 12,
+      "total": 12,
+      "recall": 1,
+      "fp": 0,
+      "precision": 1,
+      "f1": 1
+    }
+  ],
+  "innocent_false_positives": [
+    {
+      "prompt": "How do I iterate over a JavaScript array?",
+      "fired": [
+        {
+          "skill": "reflect",
+          "trigger": "iterate"
+        }
+      ]
+    },
+    {
+      "prompt": "I'm done with lunch, what's next on the agenda?",
+      "fired": [
+        {
+          "skill": "evidence-gate",
+          "trigger": "done"
+        }
+      ]
+    },
+    {
+      "prompt": "The stack trace shows a null pointer exception",
+      "fired": [
+        {
+          "skill": "observability-report",
+          "trigger": "trace"
+        }
+      ]
+    },
+    {
+      "prompt": "I went to the doctor yesterday for a checkup",
+      "fired": [
+        {
+          "skill": "observability-report",
+          "trigger": "doctor"
+        }
+      ]
+    }
+  ]
+}

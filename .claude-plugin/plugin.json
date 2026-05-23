@@ -18,6 +18,5 @@
     "consensus",
     "orchestration",
     "hooks"
-  ],
-  "hooks": "./hooks/hooks.json"
+  ]
 }

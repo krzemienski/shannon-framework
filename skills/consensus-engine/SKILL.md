@@ -6,7 +6,7 @@ triggers:
   - "validate with N reviewers"
   - "agreement gate"
   - "high-confidence validation"
-  - "ship gate"
+  - "consensus gate"
 ---
 
 # consensus-engine

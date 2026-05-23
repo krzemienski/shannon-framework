@@ -1,0 +1,13 @@
+=== Domain: reflection ===
+commands: 3
+reflect.md
+retro.md
+why.md
+skills: 5
+critique
+memorize
+plan-do-check-act
+reflect
+root-cause-tracing
+agents: 1
+critic.md

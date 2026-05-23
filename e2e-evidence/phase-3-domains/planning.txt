@@ -1,0 +1,19 @@
+=== Domain: planning ===
+commands: 6
+plan-converge.md
+plan-deep.md
+plan-tournament.md
+plan.md
+prd.md
+research.md
+skills: 6
+create-validation-plan
+plan-author
+plan-converge
+plan-tournament
+research-validation
+sequential-analysis
+agents: 3
+planner.md
+red-teamer.md
+researcher.md

@@ -1,0 +1,11 @@
+=== Domain: dispatch ===
+commands: 3
+dispatch-competitive.md
+dispatch-parallel.md
+dispatch.md
+skills: 3
+dispatch-parallel
+judge
+tree-of-thoughts
+agents: 1
+dispatch-judge.md

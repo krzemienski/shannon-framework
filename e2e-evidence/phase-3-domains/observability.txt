@@ -1,0 +1,8 @@
+=== Domain: observability ===
+commands: 3
+doctor.md
+install.md
+trace.md
+skills: 1
+observability-report
+agents: 0

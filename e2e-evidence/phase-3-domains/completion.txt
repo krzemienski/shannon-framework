@@ -1,0 +1,15 @@
+=== Domain: completion ===
+commands: 3
+audit-completion.md
+forge.md
+resume.md
+skills: 6
+codebase-analysis
+completion-gate
+documentation-research
+evidence-indexing
+oracle-review
+refusal-discipline
+agents: 2
+oracle.md
+reviewer.md

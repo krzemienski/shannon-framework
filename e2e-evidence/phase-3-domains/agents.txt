@@ -1,0 +1,58 @@
+{
+  "total": 10,
+  "ok": 10,
+  "errors": 0,
+  "agents": [
+    {
+      "agent": "coordinator.md",
+      "name": "coordinator",
+      "model": "opus"
+    },
+    {
+      "agent": "critic.md",
+      "name": "critic",
+      "model": "opus"
+    },
+    {
+      "agent": "dispatch-judge.md",
+      "name": "dispatch-judge",
+      "model": "opus"
+    },
+    {
+      "agent": "executor.md",
+      "name": "executor",
+      "model": "opus"
+    },
+    {
+      "agent": "oracle.md",
+      "name": "oracle",
+      "model": "opus"
+    },
+    {
+      "agent": "planner.md",
+      "name": "planner",
+      "model": "opus"
+    },
+    {
+      "agent": "red-teamer.md",
+      "name": "red-teamer",
+      "model": "opus"
+    },
+    {
+      "agent": "researcher.md",
+      "name": "researcher",
+      "model": "opus"
+    },
+    {
+      "agent": "reviewer.md",
+      "name": "reviewer",
+      "model": "opus"
+    },
+    {
+      "agent": "validator.md",
+      "name": "validator",
+      "model": "opus"
+    }
+  ],
+  "errorDetails": []
+}

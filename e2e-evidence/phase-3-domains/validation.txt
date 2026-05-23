@@ -1,0 +1,13 @@
+=== Domain: validation ===
+commands: 3
+audit.md
+fix.md
+validate.md
+skills: 5
+consensus-engine
+evidence-gate
+functional-validation
+no-fakes-discipline
+visual-inspection
+agents: 1
+validator.md

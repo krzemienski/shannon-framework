@@ -1,0 +1,13 @@
+=== Domain: orchestration ===
+commands: 4
+autopilot.md
+cook.md
+loop.md
+team.md
+skills: 3
+autopilot-runner
+loop-runner
+team-coordinator
+agents: 2
+coordinator.md
+executor.md

@@ -1,0 +1,124 @@
+{
+  "total": 29,
+  "ok": 29,
+  "errors": 0,
+  "skills": [
+    {
+      "skill": "autopilot-runner",
+      "name": "autopilot-runner"
+    },
+    {
+      "skill": "codebase-analysis",
+      "name": "codebase-analysis"
+    },
+    {
+      "skill": "completion-gate",
+      "name": "completion-gate"
+    },
+    {
+      "skill": "consensus-engine",
+      "name": "consensus-engine"
+    },
+    {
+      "skill": "create-validation-plan",
+      "name": "create-validation-plan"
+    },
+    {
+      "skill": "critique",
+      "name": "critique"
+    },
+    {
+      "skill": "dispatch-parallel",
+      "name": "dispatch-parallel"
+    },
+    {
+      "skill": "documentation-research",
+      "name": "documentation-research"
+    },
+    {
+      "skill": "evidence-gate",
+      "name": "evidence-gate"
+    },
+    {
+      "skill": "evidence-indexing",
+      "name": "evidence-indexing"
+    },
+    {
+      "skill": "functional-validation",
+      "name": "functional-validation"
+    },
+    {
+      "skill": "judge",
+      "name": "judge"
+    },
+    {
+      "skill": "loop-runner",
+      "name": "loop-runner"
+    },
+    {
+      "skill": "memorize",
+      "name": "memorize"
+    },
+    {
+      "skill": "no-fakes-discipline",
+      "name": "no-fakes-discipline"
+    },
+    {
+      "skill": "observability-report",
+      "name": "observability-report"
+    },
+    {
+      "skill": "oracle-review",
+      "name": "oracle-review"
+    },
+    {
+      "skill": "plan-author",
+      "name": "plan-author"
+    },
+    {
+      "skill": "plan-converge",
+      "name": "plan-converge"
+    },
+    {
+      "skill": "plan-do-check-act",
+      "name": "plan-do-check-act"
+    },
+    {
+      "skill": "plan-tournament",
+      "name": "plan-tournament"
+    },
+    {
+      "skill": "reflect",
+      "name": "reflect"
+    },
+    {
+      "skill": "refusal-discipline",
+      "name": "refusal-discipline"
+    },
+    {
+      "skill": "research-validation",
+      "name": "research-validation"
+    },
+    {
+      "skill": "root-cause-tracing",
+      "name": "root-cause-tracing"
+    },
+    {
+      "skill": "sequential-analysis",
+      "name": "sequential-analysis"
+    },
+    {
+      "skill": "team-coordinator",
+      "name": "team-coordinator"
+    },
+    {
+      "skill": "tree-of-thoughts",
+      "name": "tree-of-thoughts"
+    },
+    {
+      "skill": "visual-inspection",
+      "name": "visual-inspection"
+    }
+  ],
+  "errorDetails": []
+}

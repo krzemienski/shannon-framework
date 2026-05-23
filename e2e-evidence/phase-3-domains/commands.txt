@@ -1,0 +1,108 @@
+{
+  "total": 25,
+  "ok": 25,
+  "errors": 0,
+  "commands": [
+    {
+      "file": "audit-completion.md",
+      "name": "audit-completion"
+    },
+    {
+      "file": "audit.md",
+      "name": "audit"
+    },
+    {
+      "file": "autopilot.md",
+      "name": "autopilot"
+    },
+    {
+      "file": "cook.md",
+      "name": "cook"
+    },
+    {
+      "file": "dispatch-competitive.md",
+      "name": "dispatch-competitive"
+    },
+    {
+      "file": "dispatch-parallel.md",
+      "name": "dispatch-parallel"
+    },
+    {
+      "file": "dispatch.md",
+      "name": "dispatch"
+    },
+    {
+      "file": "doctor.md",
+      "name": "doctor"
+    },
+    {
+      "file": "fix.md",
+      "name": "fix"
+    },
+    {
+      "file": "forge.md",
+      "name": "forge"
+    },
+    {
+      "file": "install.md",
+      "name": "install"
+    },
+    {
+      "file": "loop.md",
+      "name": "loop"
+    },
+    {
+      "file": "plan-converge.md",
+      "name": "plan-converge"
+    },
+    {
+      "file": "plan-deep.md",
+      "name": "plan-deep"
+    },
+    {
+      "file": "plan-tournament.md",
+      "name": "plan-tournament"
+    },
+    {
+      "file": "plan.md",
+      "name": "plan"
+    },
+    {
+      "file": "prd.md",
+      "name": "prd"
+    },
+    {
+      "file": "reflect.md",
+      "name": "reflect"
+    },
+    {
+      "file": "research.md",
+      "name": "research"
+    },
+    {
+      "file": "resume.md",
+      "name": "resume"
+    },
+    {
+      "file": "retro.md",
+      "name": "retro"
+    },
+    {
+      "file": "team.md",
+      "name": "team"
+    },
+    {
+      "file": "trace.md",
+      "name": "trace"
+    },
+    {
+      "file": "validate.md",
+      "name": "validate"
+    },
+    {
+      "file": "why.md",
+      "name": "why"
+    }
+  ],
+  "errorDetails": []
+}

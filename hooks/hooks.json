@@ -42,6 +42,15 @@
         ]
       },
       {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH\" node \"${CLAUDE_PLUGIN_ROOT}/hooks/plan-before-execute.js\""
+          }
+        ]
+      },
+      {
         "matcher": "TaskUpdate",
         "hooks": [
           {
@@ -106,6 +115,10 @@
           {
             "type": "command",
             "command": "PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH\" node \"${CLAUDE_PLUGIN_ROOT}/hooks/hooks-fired-log.js\""
+          },
+          {
+            "type": "command",
+            "command": "PATH=\"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH\" node \"${CLAUDE_PLUGIN_ROOT}/hooks/context-threshold-warn.js\""
           }
         ]
       }

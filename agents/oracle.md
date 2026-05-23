@@ -1,0 +1,1 @@
+../modules/completion/agents/oracle.md

@@ -1,0 +1,1 @@
+../../modules/completion/skills/oracle-review/SKILL.md

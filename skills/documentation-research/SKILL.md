@@ -1,0 +1,1 @@
+../../modules/completion/skills/documentation-research/SKILL.md

@@ -1,0 +1,1 @@
+../../modules/completion/skills/codebase-analysis/SKILL.md

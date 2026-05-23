@@ -1,0 +1,1 @@
+../../modules/completion/skills/completion-gate/SKILL.md

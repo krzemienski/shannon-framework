@@ -1,0 +1,1 @@
+../modules/dispatch/commands/dispatch-competitive.md

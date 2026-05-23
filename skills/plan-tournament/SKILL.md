@@ -1,0 +1,1 @@
+../../modules/planning/skills/plan-tournament/SKILL.md

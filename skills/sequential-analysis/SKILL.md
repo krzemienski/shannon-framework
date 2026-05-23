@@ -1,0 +1,1 @@
+../../modules/planning/skills/sequential-analysis/SKILL.md

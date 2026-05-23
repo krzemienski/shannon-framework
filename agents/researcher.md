@@ -1,0 +1,1 @@
+../modules/planning/agents/researcher.md

@@ -1,0 +1,1 @@
+../modules/planning/agents/red-teamer.md

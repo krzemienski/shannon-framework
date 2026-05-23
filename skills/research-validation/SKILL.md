@@ -1,0 +1,1 @@
+../../modules/planning/skills/research-validation/SKILL.md

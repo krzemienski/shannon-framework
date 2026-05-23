@@ -1,0 +1,1 @@
+../../modules/planning/skills/plan-author/SKILL.md

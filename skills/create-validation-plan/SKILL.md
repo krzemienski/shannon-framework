@@ -1,0 +1,1 @@
+../../modules/planning/skills/create-validation-plan/SKILL.md

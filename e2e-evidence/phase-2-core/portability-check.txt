@@ -1,0 +1,17 @@
+=== PORTABILITY: run scaffold from isolated install ===
+PWD=/tmp/shannon-test-install
+
+--- manifest validator (run from /tmp install) ---
+    "validation-skill-tripwire.js"
+  ],
+  "errors": [],
+  "ok": true
+}
+rc=0
+
+--- hook fire test (from /tmp install path) ---
+[shannon] block-fab-files: "src/foo.spec.js" matches fabricated-artifact pattern /\.spec\.[a-z]+$/i.
+IRON RULE: build and validate the real system; never ship fake-data files.
+rc=2
+
+{"ts":"2026-05-23T09:31:57.442Z","script":"block-fab-files","matchedTool":null,"decision":"block","exitCode":2,"ms":0,"sessionId":null}

@@ -1,0 +1,2 @@
+matchSkills probe: [{"skill":"functional-validation","trigger":"validate this"},{"skill":"evidence-gate","trigger":"marking complete"}]
+PASS: InvocationLayer — 2 skill(s) matched from real cache

@@ -1,0 +1,3 @@
+# Shannon log directory.
+# Runtime logs: hooks.jsonl, hook-errors.jsonl, skill-triggers.json, open-tasks.txt, tripwires.jsonl.
+# Generated at runtime by lib/hook-runner.js; .gitkeep ensures dir exists in worktree.

@@ -1,0 +1,49 @@
+=== INSTALL SCAFFOLD CHECK ===
+Source: /Users/nick/Desktop/shannon-framework
+Dest: /tmp/shannon-test-install
+
+Layout:
+/tmp/shannon-test-install/.claude-plugin/.mimirs/config.json
+/tmp/shannon-test-install/.claude-plugin/marketplace.json
+/tmp/shannon-test-install/.claude-plugin/plugin.json
+/tmp/shannon-test-install/core/layers/context/module.js
+/tmp/shannon-test-install/core/layers/context/validate.sh
+/tmp/shannon-test-install/core/layers/dispatch/module.js
+/tmp/shannon-test-install/core/layers/dispatch/validate.sh
+/tmp/shannon-test-install/core/layers/hook/.mimirs/config.json
+/tmp/shannon-test-install/core/layers/hook/module.js
+/tmp/shannon-test-install/core/layers/hook/validate.sh
+/tmp/shannon-test-install/core/layers/invocation/.mimirs/config.json
+/tmp/shannon-test-install/core/layers/invocation/module.js
+/tmp/shannon-test-install/core/layers/invocation/validate.sh
+/tmp/shannon-test-install/hooks/block-fab-files.js
+/tmp/shannon-test-install/hooks/completion-claim-validator.js
+/tmp/shannon-test-install/hooks/evidence-gate-reminder.js
+/tmp/shannon-test-install/hooks/evidence-quality-check.js
+/tmp/shannon-test-install/hooks/fab-pattern-detection.js
+/tmp/shannon-test-install/hooks/hooks-fired-log.js
+/tmp/shannon-test-install/hooks/hooks.json
+/tmp/shannon-test-install/hooks/read-before-edit.js
+/tmp/shannon-test-install/hooks/session_start.sh
+/tmp/shannon-test-install/hooks/session-context-inject.cjs
+/tmp/shannon-test-install/hooks/skill-activation-check.js
+/tmp/shannon-test-install/hooks/stop-task-semantics.js
+/tmp/shannon-test-install/hooks/subagent-governance-inject.js
+/tmp/shannon-test-install/hooks/task-list-tracker.js
+/tmp/shannon-test-install/hooks/user-prompt-submit-hook.sh
+/tmp/shannon-test-install/hooks/validation-not-compilation.js
+/tmp/shannon-test-install/hooks/validation-skill-tripwire.js
+/tmp/shannon-test-install/lib/.mimirs/config.json
+/tmp/shannon-test-install/lib/hook-runner.js
+/tmp/shannon-test-install/lib/logger.js
+/tmp/shannon-test-install/scripts/_validate-manifest.js
+/tmp/shannon-test-install/scripts/install.sh
+/tmp/shannon-test-install/scripts/setup.sh
+/tmp/shannon-test-install/scripts/uninstall-others.sh
+
+Counts:
+  hooks:       14
+  layer modules:        4
+  layer validate.sh:        4
+  scripts:        3
+  lib:        2

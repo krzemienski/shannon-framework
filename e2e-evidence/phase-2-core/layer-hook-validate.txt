@@ -1,0 +1,17 @@
+HookLayer OK — 11 HookLayer-bound scripts present
+hooks.json references 14 distinct scripts:
+  block-fab-files.js
+  completion-claim-validator.js
+  evidence-gate-reminder.js
+  evidence-quality-check.js
+  fab-pattern-detection.js
+  hooks-fired-log.js
+  read-before-edit.js
+  session-context-inject.cjs
+  skill-activation-check.js
+  stop-task-semantics.js
+  subagent-governance-inject.js
+  task-list-tracker.js
+  validation-not-compilation.js
+  validation-skill-tripwire.js
+PASS: HookLayer — 14 scripts wired, all present on disk

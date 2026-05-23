@@ -1,0 +1,3 @@
+DispatchLayer probe: {"afterAppend":["task-001","task-002"],"finalCount":1,"midA":true,"midB":false,"ironLen":368}
+asserts OK
+PASS: DispatchLayer — open-tasks tracker + isMidAction + IRON_RULE all OK

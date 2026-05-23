@@ -1,0 +1,2 @@
+ContextLayer probe: {"contextBytes":122110,"triggersCache":"/tmp/shannon-validate-context/skill-triggers.json","hasContent":true}
+PASS: ContextLayer — 122110 bytes context, triggers cache at /tmp/shannon-validate-context/skill-triggers.json

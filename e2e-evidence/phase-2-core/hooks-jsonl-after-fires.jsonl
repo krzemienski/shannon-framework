@@ -1,0 +1,4 @@
+{"ts":"2026-05-23T09:31:16.230Z","script":"block-fab-files","matchedTool":null,"decision":"allow","exitCode":0,"ms":0,"sessionId":null}
+{"ts":"2026-05-23T09:31:16.271Z","script":"block-fab-files","matchedTool":null,"decision":"block","exitCode":2,"ms":0,"sessionId":null}
+{"ts":"2026-05-23T09:31:16.312Z","script":"subagent-governance-inject","matchedTool":"Task","decision":"allow","exitCode":2,"ms":0,"sessionId":null}
+{"ts":"2026-05-23T09:31:16.356Z","script":"hooks-fired-log","matchedTool":"Read","decision":"allow","exitCode":0,"ms":0,"sessionId":null}

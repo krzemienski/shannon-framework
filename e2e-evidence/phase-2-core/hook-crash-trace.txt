@@ -1,0 +1,20 @@
+=== CRASH TEST: hook throws ===
+Expectation: rc=0 (never block CC), error logged to hook-errors.jsonl
+
+rc=0  (expect 0)
+
+=== hook-errors.jsonl after crash ===
+{"ts":"2026-05-23T09:31:32.878Z","script":"crash-probe","error":"synthetic crash to prove hook-runner does not block CC","stack":"Error: synthetic crash to prove hook-runner does not block CC\n    at /private/tmp/shannon-crash-test/crash-hook.js:4:9\n    at runHook (/Users/nick/Desktop/shannon-framework/lib/hook-runner.js:96:15)\n    at Object.<anonymous> (/private/tmp/shannon-crash-test/crash-hook.js:3:1)\n    at Module._compile (node:internal/modules/cjs/loader:1829:14)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)\n    at Module.load (node:internal/modules/cjs/loader:1552:32)\n    at Module._load (node:internal/modules/cjs/loader:1354:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47","context":"handler"}
+
+=== hooks.jsonl after crash (should NOT contain the crashed fire) ===
+(empty — expected, fire log only on success)
+
+=== SLOW HOOK TEST: hook sleeps >100ms triggers slow-fire log ===
+rc=0
+
+=== hooks.jsonl (should contain slow-probe fire with ms>100) ===
+{"ts":"2026-05-23T09:31:33.074Z","script":"slow-probe","matchedTool":"SlowProbe","decision":"allow","exitCode":0,"ms":150,"sessionId":null}
+
+=== hook-errors.jsonl (should contain slow:true entry) ===
+{"ts":"2026-05-23T09:31:32.878Z","script":"crash-probe","error":"synthetic crash to prove hook-runner does not block CC","stack":"Error: synthetic crash to prove hook-runner does not block CC\n    at /private/tmp/shannon-crash-test/crash-hook.js:4:9\n    at runHook (/Users/nick/Desktop/shannon-framework/lib/hook-runner.js:96:15)\n    at Object.<anonymous> (/private/tmp/shannon-crash-test/crash-hook.js:3:1)\n    at Module._compile (node:internal/modules/cjs/loader:1829:14)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1969:10)\n    at Module.load (node:internal/modules/cjs/loader:1552:32)\n    at Module._load (node:internal/modules/cjs/loader:1354:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47","context":"handler"}
+{"ts":"2026-05-23T09:31:33.074Z","script":"slow-probe","slow":true,"ms":150,"budget":100}

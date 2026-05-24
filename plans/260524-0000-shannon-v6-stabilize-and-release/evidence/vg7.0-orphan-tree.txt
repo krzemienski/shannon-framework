@@ -1,0 +1,79 @@
+=== /Users/nick/Desktop/blog-series/shannon-framework/ (root) ===
+total 24
+drwxr-xr-x   11 nick  staff   352 May 23 21:14 .
+drwxr-xr-x@ 180 nick  staff  5760 May 23 16:39 ..
+drwxr-xr-x@   3 nick  staff    96 Apr 20 04:06 .claude
+drwxr-xr-x@  12 nick  staff   384 May 23 21:14 .git
+drwxr-xr-x@   2 nick  staff    64 May 23 22:55 .omc
+drwxr-xr-x    3 nick  staff    96 Mar  6 18:50 agents
+drwxr-xr-x    7 nick  staff   224 Mar  6 18:51 hooks
+-rw-r--r--    1 nick  staff  1073 Mar  6 18:42 LICENSE
+-rw-r--r--    1 nick  staff   948 Mar  6 18:52 plugin.json
+-rw-r--r--    1 nick  staff  3911 Mar  6 18:52 README.md
+drwxr-xr-x    3 nick  staff    96 Mar  6 18:42 skills
+
+=== plugin.json ===
+{
+  "name": "shannon-framework",
+  "version": "1.0.0",
+  "description": "Reference Claude Code plugin demonstrating the 4-layer enforcement pyramid: hooks, skills, agents, commands",
+  "author": "Nick Krzemienski",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "script": "hooks/block-test-files.js"
+      },
+      {
+        "matcher": "Edit|MultiEdit",
+        "script": "hooks/read-before-edit.js"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "script": "hooks/validation-not-compilation.js"
+      }
+    ],
+    "TaskUpdate": [
+      {
+        "matcher": "*",
+        "script": "hooks/evidence-gate-reminder.js"
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "script": "hooks/skill-activation-check.js"
+      }
+    ]
+  },
+  "skills": [
+    "skills/functional-validation/SKILL.md"
+  ],
+  "agents": [
+    "agents/code-reviewer.md"
+  ]
+}
+
+=== hooks/ ===
+total 40
+drwxr-xr-x   7 nick  staff   224 Mar  6 18:51 .
+drwxr-xr-x  11 nick  staff   352 May 23 21:14 ..
+-rw-r--r--   1 nick  staff  1950 Mar  6 18:50 block-test-files.js
+-rw-r--r--   1 nick  staff  1434 Mar  6 18:50 evidence-gate-reminder.js
+-rw-r--r--   1 nick  staff  1727 Mar  6 18:50 read-before-edit.js
+-rw-r--r--   1 nick  staff  1278 Mar  6 18:51 skill-activation-check.js
+-rw-r--r--   1 nick  staff  1781 Mar  6 18:50 validation-not-compilation.js
+
+=== skills/ ===
+total 0
+drwxr-xr-x   3 nick  staff   96 Mar  6 18:42 .
+drwxr-xr-x  11 nick  staff  352 May 23 21:14 ..
+drwxr-xr-x   3 nick  staff   96 Mar  6 18:50 functional-validation
+
+=== agents/ ===
+total 8
+drwxr-xr-x   3 nick  staff    96 Mar  6 18:50 .
+drwxr-xr-x  11 nick  staff   352 May 23 21:14 ..
+-rw-r--r--   1 nick  staff  1467 Mar  6 18:50 code-reviewer.md

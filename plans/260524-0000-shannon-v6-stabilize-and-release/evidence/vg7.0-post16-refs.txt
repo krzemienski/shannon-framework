@@ -1,0 +1,64 @@
+=== grep shannon-framework refs in posts/post-16-claude-code-plugins/post.md ===
+11:github_repo: "https://github.com/krzemienski/shannon-framework"
+46:> - The four-layer Shannon Framework (CLAUDE.md → hooks → skills → commands) reached 95%+ combined compliance; the stdin/stdout contract is `exit 2` to block or inject, `exit 0` to allow.
+62:Here's what a hook actually does. This is `validation-not-compilation.js` from the [shannon-framework](https://github.com/krzemienski/shannon-framework). It fires after every Bash command, watches for build success, and injects a reminder that "it compiled" is not "it works."
+175:A single enforcement mechanism isn't enough. CLAUDE.md instructions get forgotten. Hooks are too rigid for nuanced decisions. Skills require invocation. Commands require user action. The Shannon Framework — named after Claude Shannon, who proved reliable communication requires redundant encoding — layers all four:
+195:The Shannon Framework ships five hooks total. `validation-not-compilation.js` is covered above. Here are the other four.
+356:Hooks enforce boundaries. Skills provide workflows. The functional-validation skill in the Shannon Framework is a SKILL.md file, a markdown document with trigger patterns, context, and execution steps:
+396:## The Shannon Insight
+398:Claude Shannon proved you can transmit information reliably over a noisy channel by adding redundant encoding. Same principle applies here. A single instruction in CLAUDE.md is a signal in a noisy channel. Long context, competing priorities, complex task chains. By the time the agent is deep in an implementation, that instruction is noise.
+417:*The [Shannon Framework](https://github.com/krzemienski/shannon-framework) is a reference Claude Code plugin with 5 hooks, 1 skill, and 1 agent template. Install it. Try to create a test file, skip a planning phase, claim completion without evidence. Watch the hooks catch each one before the tool executes. That's the difference between instructions the agent reads and enforcement the agent can't skip.*
+
+=== grep shannon refs in site/src/lib/post-bodies/post-16.ts ===
+19:      "The four-layer Shannon Framework (CLAUDE.md → hooks → skills → commands) reached 95%+ combined compliance; the stdin/stdout contract is `exit 2` to block or inject, `exit 0` to allow.",
+41:  { type: "p", text: "Here’s what a hook actually does. This is validation-not-compilation.js from the shannon-framework. It fires after every Bash command, watches for build success, and injects a reminder that “it compiled” is not “it works.”" },
+132:  { type: "p", text: "A single enforcement mechanism isn’t enough. CLAUDE.md instructions get forgotten. Hooks are too rigid for nuanced decisions. Skills require invocation. Commands require user action. The Shannon Framework — named after Claude Shannon, who proved reliable communication requires redundant encoding — layers all four." },
+161:      sysId: "post-16-shannon-stack",
+163:    caption: "Shannon Framework: four redundant enforcement layers. Each catches what the previous one misses; combined compliance hits 95%+.",
+167:  { type: "p", text: "The Shannon Framework ships five hooks total. validation-not-compilation.js is covered above. Here are the other four." },
+285:  { type: "p", text: "Hooks enforce boundaries. Skills provide workflows. The functional-validation skill in the Shannon Framework is a SKILL.md file, a markdown document with trigger patterns, context, and execution steps:" },
+312:  { type: "h2", text: "The Shannon Insight" },
+313:  { type: "p", text: "Claude Shannon proved you can transmit information reliably over a noisy channel by adding redundant encoding. Same principle applies here. A single instruction in CLAUDE.md is a signal in a noisy channel. Long context, competing priorities, complex task chains. By the time the agent is deep in an implementation, that instruction is noise." },
+
+=== Hook filenames cited inside post-16 prose / code blocks ===
+45:> - Hooks ride mandatory tool calls: 19,979 Edits and 82,552 Bash invocations went through PreToolUse/PostToolUse layers versus only 1,370 (opt-in) skill calls — every build success triggered `validation-not-compilation.js` against 12 build-command regexes.
+62:Here's what a hook actually does. This is `validation-not-compilation.js` from the [shannon-framework](https://github.com/krzemienski/shannon-framework). It fires after every Bash command, watches for build success, and injects a reminder that "it compiled" is not "it works."
+69:// .claude/hooks/validation-not-compilation.js
+137:            "command": "node .claude/hooks/validation-not-compilation.js"
+186:3. **Skills** provide structured workflows with context the agent lacks. They require invocation, and agents skip them under pressure. The `skill-activation-check.js` hook closes this gap.
+195:The Shannon Framework ships five hooks total. `validation-not-compilation.js` is covered above. Here are the other four.
+197:### block-test-files.js — The Hard Stop
+249:### read-before-edit.js — The Context Guardian
+255:### evidence-gate-reminder.js — The Completion Checkpoint
+280:### skill-activation-check.js — The Skill Enforcer
+348:**The hook that cried wolf.** Too many warnings train the agent to ignore them all. Each of my five hooks targets a specific, dangerous behavior with a clear trigger. A hook that warns on every file edit becomes noise. `validation-not-compilation.js` fires only after build commands that succeed, not after every Bash call.
+350:**State management gotchas.** The `read-before-edit.js` hook tracks state in a module-level Set. Works because Claude Code loads hooks once per session and keeps them in memory. Restart the session, the Set is empty. Don't rely on hook state across sessions. Use the filesystem or an MCP server.
+356:Hooks enforce boundaries. Skills provide workflows. The functional-validation skill in the Shannon Framework is a SKILL.md file, a markdown document with trigger patterns, context, and execution steps:
+359:# functional-validation
+378:Skills and hooks reinforce each other. The skill tells the agent *how* to validate. The `block-test-files.js` hook prevents shortcuts. The `validation-not-compilation.js` hook catches build success declared as validation. The `evidence-gate-reminder.js` hook catches tasks marked complete without evidence. Together, they create an enforcement surface that's hard to circumvent.
+403:2. The `block-test-files.js` hook blocks test file creation at the tool boundary.
+404:3. The `functional-validation` skill provides an alternative workflow.
+411:Before hooks, every agent ignored at least two rules per session. After hooks, zero violations on blocked behaviors. The 19,979 Edit calls all passed through `read-before-edit.js`. The 82,552 Bash calls all passed through `validation-not-compilation.js`. Every single call, without me watching, without the agent choosing to comply.
+---ts---
+18:      "Hooks ride mandatory tool calls: 19,979 Edits and 82,552 Bash invocations went through PreToolUse/PostToolUse layers versus only 1,370 (opt-in) skill calls — every build success triggered `validation-not-compilation.js` against 12 build-command regexes.",
+41:  { type: "p", text: "Here’s what a hook actually does. This is validation-not-compilation.js from the shannon-framework. It fires after every Bash command, watches for build success, and injects a reminder that “it compiled” is not “it works.”" },
+44:  { type: "code", lang: "javascript", caption: ".claude/hooks/validation-not-compilation.js", text:
+45:`// .claude/hooks/validation-not-compilation.js
+110:            "command": "node .claude/hooks/validation-not-compilation.js"
+137:    "Skills provide structured workflows with context the agent lacks. They require invocation, and agents skip them under pressure. The skill-activation-check.js hook closes this gap.",
+167:  { type: "p", text: "The Shannon Framework ships five hooks total. validation-not-compilation.js is covered above. Here are the other four." },
+168:  { type: "p", text: "block-test-files.js — The Hard Stop. PreToolUse on Write, Edit, and MultiEdit. Checks the file path against 12 test patterns. Allows exceptions for Playwright and E2E files (functional validation is fine; unit test harnesses aren’t). Violation rate went from non-zero to zero." },
+169:  { type: "code", lang: "javascript", caption: "block-test-files.js · pattern matcher", text:
+214:  { type: "p", text: "read-before-edit.js — The Context Guardian. PreToolUse on Edit and MultiEdit. Tracks which files have been Read in the current session. When an Edit targets a file not in that Set, the hook warns. It doesn’t block — sometimes you need a quick edit. But the warning is specific enough to change behavior." },
+216:  { type: "p", text: "evidence-gate-reminder.js — The Completion Checkpoint. PostToolUse on TaskUpdate. Fires when a subagent marks a task complete. Injects a five-question evidence checklist before the orchestrating agent can rubber-stamp the claim." },
+217:  { type: "code", lang: "javascript", caption: "evidence-gate-reminder.js · TaskUpdate gate", text:
+235:  { type: "p", text: "skill-activation-check.js — The Skill Enforcer. UserPromptSubmit. Watches for implementation-related prompts and reminds the agent to scan the skill list. Bridges Layer 2 (automatic hooks) and Layer 3 (invocable skills). A hook can’t invoke a skill on its own — but it can remind the agent that skills exist at the moment the agent is about to start implementing without them." },
+281:  { type: "p", text: "The hook that cried wolf. Too many warnings train the agent to ignore them all. Each of my five hooks targets a specific, dangerous behavior with a clear trigger. A hook that warns on every file edit becomes noise. validation-not-compilation.js fires only after build commands that succeed, not after every Bash call." },
+282:  { type: "p", text: "State management gotchas. The read-before-edit.js hook tracks state in a module-level Set. Works because Claude Code loads hooks once per session and keeps them in memory. Restart the session, the Set is empty. Don’t rely on hook state across sessions. Use the filesystem or an MCP server." },
+285:  { type: "p", text: "Hooks enforce boundaries. Skills provide workflows. The functional-validation skill in the Shannon Framework is a SKILL.md file, a markdown document with trigger patterns, context, and execution steps:" },
+286:  { type: "code", lang: "markdown", caption: "functional-validation · SKILL.md sketch", text:
+287:`# functional-validation
+303:  { type: "p", text: "Skills and hooks reinforce each other. The skill tells the agent how to validate. The block-test-files.js hook prevents shortcuts. The validation-not-compilation.js hook catches build success declared as validation. The evidence-gate-reminder.js hook catches tasks marked complete without evidence. Together, they create an enforcement surface that’s hard to circumvent." },
+317:    "The block-test-files.js hook blocks test file creation at the tool boundary.",
+318:    "The functional-validation skill provides an alternative workflow.",
+323:  { type: "p", text: "Before hooks, every agent ignored at least two rules per session. After hooks, zero violations on blocked behaviors. The 19,979 Edit calls all passed through read-before-edit.js. The 82,552 Bash calls all passed through validation-not-compilation.js. Every single call, without me watching, without the agent choosing to comply." },

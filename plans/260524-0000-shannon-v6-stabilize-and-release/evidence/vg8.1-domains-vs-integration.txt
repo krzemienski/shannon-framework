@@ -1,0 +1,12 @@
+VG-8.1 domains vs integration (command 4)
+git log --left-right --oneline wt/shannon-rebuild-domains...wt/shannon-rebuild-integration
+"<" = only-in-domains ; ">" = only-in-integration
+
+< 477f4ea fix(hooks): UserPromptSubmit hint exit-0 + stdout (was exit-2 blocking)
+< a2d9626 feat(opt-in): project-level gate + word-boundary matcher + benchmark suite
+< 9fdedc2 fix(plugin): remove dir-path fields; CC auto-discovers from convention
+< b0ca463 fix(plugin): flatten symlinks to real files for CC installer cache compatibility
+
+(no ">" lines — integration has ZERO commits not in domains)
+
+Result: domains is a STRICT SUPERSET of integration. integration carries no unique commits.

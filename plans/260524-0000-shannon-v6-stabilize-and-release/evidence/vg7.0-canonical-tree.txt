@@ -1,0 +1,87 @@
+=== /Users/nick/Desktop/shannon-framework/hooks/ ===
+total 320
+drwxr-xr-x   3 nick  staff     96 Nov 30 08:54 __pycache__
+drwxr-xr-x  29 nick  staff    928 May 23 17:05 .
+drwxr-xr-x  63 nick  staff   2016 May 23 16:26 ..
+drwxr-xr-x@  4 nick  staff    128 May 23 17:05 .mimirs
+-rwxr-xr-x@  1 nick  staff   2961 May 23 15:43 block-fab-files.js
+-rwxr-xr-x@  1 nick  staff    827 May 23 15:43 completion-claim-validator.js
+-rwxr-xr-x@  1 nick  staff   1728 May 23 15:43 context-threshold-warn.js
+-rwxr-xr-x@  1 nick  staff    966 May 23 15:43 evidence-gate-reminder.js
+-rwxr-xr-x@  1 nick  staff    957 May 23 15:43 evidence-quality-check.js
+-rwxr-xr-x@  1 nick  staff    926 May 23 15:43 fab-pattern-detection.js
+-rw-r--r--   1 nick  staff   1937 Nov 17  2025 HOOK_VERIFICATION_RESULTS.md
+-rwxr-xr-x@  1 nick  staff    227 May 23 15:43 hooks-fired-log.js
+-rw-r--r--@  1 nick  staff   4399 May 23 15:43 hooks.json
+-rwxr-xr-x@  1 nick  staff   2008 May 23 15:43 plan-before-execute.js
+-rwxr-xr-x   1 nick  staff   4535 Nov 17  2025 post_tool_use.py
+-rwxr-xr-x   1 nick  staff  12594 Nov 30 08:54 precompact.py
+-rwxr-xr-x@  1 nick  staff    603 May 23 15:43 read-before-edit.js
+-rw-r--r--   1 nick  staff  30853 Nov 17  2025 README.md
+-rwxr-xr-x   1 nick  staff    427 Nov 19  2025 session_start.sh
+-rwxr-xr-x@  1 nick  staff    467 May 23 15:43 session-context-inject.cjs
+-rwxr-xr-x@  1 nick  staff   1257 May 23 17:05 skill-activation-check.js
+-rwxr-xr-x@  1 nick  staff    795 May 23 15:43 stop-task-semantics.js
+-rwxr-xr-x   1 nick  staff   2744 Nov 17  2025 stop.py
+-rwxr-xr-x@  1 nick  staff    331 May 23 15:43 subagent-governance-inject.js
+-rwxr-xr-x@  1 nick  staff    838 May 23 15:43 task-list-tracker.js
+-rwxr-xr-x   1 nick  staff   9899 Nov 19  2025 user_prompt_submit.py
+-rwxr-xr-x   1 nick  staff   4194 Nov 29 15:34 user-prompt-submit-hook.sh
+-rwxr-xr-x@  1 nick  staff   1097 May 23 15:43 validation-not-compilation.js
+-rwxr-xr-x@  1 nick  staff   1306 May 23 15:43 validation-skill-tripwire.js
+
+=== /Users/nick/Desktop/shannon-framework/skills/ ===
+total 0
+drwxr-xr-x@ 31 nick  staff   992 May 23 13:50 .
+drwxr-xr-x  63 nick  staff  2016 May 23 16:26 ..
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 autopilot-runner
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 codebase-analysis
+drwxr-xr-x@  4 nick  staff   128 May 23 16:49 completion-gate
+drwxr-xr-x@  4 nick  staff   128 May 23 16:49 consensus-engine
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 create-validation-plan
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 critique
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 dispatch-parallel
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 documentation-research
+drwxr-xr-x@  4 nick  staff   128 May 23 16:48 evidence-gate
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 evidence-indexing
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 functional-validation
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 judge
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 loop-runner
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 memorize
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 no-fakes-discipline
+drwxr-xr-x@  4 nick  staff   128 May 23 16:49 observability-report
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 oracle-review
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 plan-author
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 plan-converge
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 plan-do-check-act
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 plan-tournament
+drwxr-xr-x@  4 nick  staff   128 May 23 16:48 reflect
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 refusal-discipline
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 research-validation
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 root-cause-tracing
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 sequential-analysis
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 team-coordinator
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 tree-of-thoughts
+drwxr-xr-x@  3 nick  staff    96 May 23 15:47 visual-inspection
+
+=== /Users/nick/Desktop/shannon-framework/agents/ ===
+total 80
+drwxr-xr-x@ 12 nick  staff   384 May 23 15:46 .
+drwxr-xr-x  63 nick  staff  2016 May 23 16:26 ..
+-rw-r--r--@  1 nick  staff  2236 May 23 13:37 coordinator.md
+-rw-r--r--@  1 nick  staff  1894 May 23 13:47 critic.md
+-rw-r--r--@  1 nick  staff  2161 May 23 13:48 dispatch-judge.md
+-rw-r--r--@  1 nick  staff  2315 May 23 13:37 executor.md
+-rw-r--r--@  1 nick  staff  2221 May 23 13:42 oracle.md
+-rw-r--r--@  1 nick  staff  3018 May 23 13:45 planner.md
+-rw-r--r--@  1 nick  staff  2269 May 23 13:45 red-teamer.md
+-rw-r--r--@  1 nick  staff  1724 May 23 13:45 researcher.md
+-rw-r--r--@  1 nick  staff  2328 May 23 13:42 reviewer.md
+-rw-r--r--@  1 nick  staff  2263 May 23 13:39 validator.md
+
+=== git remote ===
+origin	https://github.com/krzemienski/shannon-framework.git (fetch)
+origin	https://github.com/krzemienski/shannon-framework.git (push)
+477f4ea fix(hooks): UserPromptSubmit hint exit-0 + stdout (was exit-2 blocking)
+a2d9626 feat(opt-in): project-level gate + word-boundary matcher + benchmark suite
+9fdedc2 fix(plugin): remove dir-path fields; CC auto-discovers from convention

@@ -4,6 +4,48 @@ All notable changes to Shannon Framework are documented here.
 
 ---
 
+## [6.0.0] - 2026-05-24
+
+### ✨ Added
+
+**Project-level opt-in gate** — Shannon hooks are now silent by default and only
+fire in projects that explicitly opt in:
+- `/shannon:enable` writes `.shannon/active` (hooks fire in this project)
+- `/shannon:disable` writes `.shannon/disabled` (sticky off)
+- Override matrix: `.shannon/active` present → fire; `.shannon/disabled` present
+  → no-op; neither → no-op (default off); `SHANNON_DISABLE=1` → per-shell off;
+  `SHANNON_GLOBAL=1` → fire everywhere (testing escape)
+- `lib/hook-runner.js` gained `isShannonActive()` + `projectRoot()`; `runHook()`
+  short-circuits to exit 0 when the gate fails. Ends cross-project hook pollution.
+
+**Activation benchmark suite** — `benchmarks/run-activation.js`:
+- 322-row trigger × innocent-corpus matrix (recall + precision per skill)
+- Re-runnable in ~250ms (pure node, no Claude session)
+
+### 🔧 Fixed
+
+**Skill activation precision (F1 0.80 → 1.00 across all 30 skills)**:
+- Word-boundary matcher replaces substring `includes()` (killed "iterate"→"reiterate"
+  style false positives)
+- 4 dangerous single-word triggers removed/specialized:
+  `iterate` (reflect), `done` (evidence-gate), `trace`→`session trace`
+  (observability), `doctor`→`shannon doctor` (observability)
+- Innocent-prompt false positives: 4 → 0
+
+**Plugin manifest** — removed `hooks` dir-path field; Claude Code auto-discovers
+`hooks/hooks.json` from convention (fixed duplicate-load error). Flattened symlinks
+to real files for CC installer cache compatibility.
+
+**Hook protocol** — UserPromptSubmit hint now exit-0 + stdout (was exit-2 blocking).
+
+### 📊 Validation
+
+Real-system benchmark on the merged release HEAD: 322 rows, recall 100% (282/282),
+innocent-clean 100% (40/40), 0 false positives, all skills F1=1.00. Evidence:
+`plans/260524-0000-shannon-v6-stabilize-and-release/`.
+
+---
+
 ## [5.5.0] - TBD
 
 ### ✨ Added

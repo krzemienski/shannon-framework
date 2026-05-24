@@ -13,6 +13,41 @@ Field journal entry: [withagents.dev/posts/post-07-prompt-engineering-stack](htt
 > **🚀 V5.6.0 "Comprehensive Quality & Intelligence"**: 14 new skills, `/shannon:health` dashboard, advanced testing, security automation!
 > See [docs/v5.6/CHANGELOG.md](docs/v5.6/CHANGELOG.md) for complete details.
 
+> **🔒 V6.0.0 "Project-Level Opt-In"**: Shannon hooks are now silent by default. Per-project activation via `.shannon/active` sentinel. Activation benchmark F1=1.00 across all 30 skills. See [`CHANGELOG.md`](CHANGELOG.md#600---2026-05-24) for the full v6 ledger.
+
+---
+
+## Activation (Opt-In)
+
+Shannon v6.0.0+ ships with hooks **disabled by default** in every project. They
+only fire where you explicitly opt in. This ends cross-project pollution from
+prior versions.
+
+| State | How to set it | Behavior |
+|---|---|---|
+| Active in this project | `/shannon:enable` (writes `.shannon/active`) | All hooks fire |
+| Disabled in this project | `/shannon:disable` (writes `.shannon/disabled`) | All hooks no-op (sticky off) |
+| Default (no sentinel) | (nothing) | All hooks no-op |
+| Per-shell escape | `SHANNON_DISABLE=1` env | Hooks no-op for that shell |
+| Global testing escape | `SHANNON_GLOBAL=1` env | Hooks fire everywhere (use sparingly) |
+
+Precedence (highest first): `SHANNON_DISABLE` > `SHANNON_GLOBAL` > `.shannon/disabled` > `.shannon/active` > default-off.
+
+Quick start in a project that should use Shannon:
+
+```bash
+cd /path/to/your/project
+# in Claude Code:
+/shannon:enable
+# Shannon is now active in this project; other projects unaffected.
+```
+
+To turn it off:
+
+```bash
+/shannon:disable
+```
+
 ---
 
 ## Overview

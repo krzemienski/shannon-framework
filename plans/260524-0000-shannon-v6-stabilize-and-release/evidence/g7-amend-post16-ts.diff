@@ -1,0 +1,235 @@
+diff --git a/src/lib/post-bodies/post-16.ts b/src/lib/post-bodies/post-16.ts
+index f402f9e..663a667 100644
+--- a/src/lib/post-bodies/post-16.ts
++++ b/src/lib/post-bodies/post-16.ts
+@@ -41,62 +41,28 @@ export const POST_16_BODY: Block[] = [
+   { type: "p", text: "Here’s what a hook actually does. This is validation-not-compilation.js from the shannon-framework. It fires after every Bash command, watches for build success, and injects a reminder that “it compiled” is not “it works.”" },
+   { type: "p", text: "The problem it solves: agents conflate build success with feature completion. A clean build means the code is syntactically correct and type-safe. It says nothing about whether the feature does what you asked. Without a hook, the agent runs npm run build, sees “compiled successfully,” and marks the task done. The feature is broken. Nobody checked." },
+   { type: "p", text: "The hook source:" },
+-  { type: "code", lang: "javascript", caption: ".claude/hooks/validation-not-compilation.js", text:
+-`// .claude/hooks/validation-not-compilation.js
+-// PostToolUse — fires after every Bash command
+-// Purpose: catch agents declaring victory after a build instead of validating behavior
+-
+-const BUILD_COMMANDS = [
+-  /npm run build/, /pnpm build/, /yarn build/,
+-  /cargo build/, /swift build/, /xcodebuild/,
+-  /go build/, /\\bmake\\b/, /gradle build/,
+-  /mvn (compile|package)/, /\\btsc\\b/, /vite build/,
+-];
+-
+-const SUCCESS_INDICATORS = [
+-  /build succeeded/i, /compiled successfully/i,
+-  /build complete/i, /\\b0 error/i, /✓|✔|success/i,
+-];
+-
+-export default function validationNotCompilation({ tool, input, output }) {
+-  // Only fire on Bash tool calls
+-  if (tool !== "Bash") return;
+-
+-  const command = input?.command ?? "";
+-  const stdout = output?.stdout ?? "";
+-  const exitCode = output?.exit_code ?? 1;
+-
+-  // Check if this was a build command
+-  const isBuildCommand = BUILD_COMMANDS.some((pattern) => pattern.test(command));
+-  if (!isBuildCommand) return;
+-
+-  // Check if the build succeeded
+-  const buildSucceeded =
+-    exitCode === 0 &&
+-    SUCCESS_INDICATORS.some((pattern) => pattern.test(stdout));
+-
+-  if (!buildSucceeded) return;
+-
+-  // Build succeeded — inject the reminder
+-  // Return a message; exit code 2 injects it into the agent's context
+-  process.stderr.write([
+-    "",
+-    "BUILD SUCCESS IS NOT FUNCTIONAL VALIDATION.",
+-    "",
+-    "A passing build proves syntax and types. It does not prove behavior.",
+-    "Before marking this task complete:",
+-    "",
+-    "  1. Run the app (simulator, browser, or CLI — whichever applies)",
+-    "  2. Exercise the specific feature you just built",
+-    "  3. Confirm the user-facing behavior matches the requirement",
+-    "  4. Capture a screenshot or log as evidence",
+-    "",
+-    "If you cannot run the app right now, note that explicitly.",
+-    "Do not mark complete based on build output alone.",
+-    "",
+-  ].join("\\n"));
+-  process.exit(2);
+-}` },
++  { type: "code", lang: "javascript", caption: "hooks/validation-not-compilation.js", text:
++`#!/usr/bin/env node
++// PostToolUse Bash — reminder when build commands succeed.
++const { runHook } = require('../lib/hook-runner');
++
++const BUILD_CMDS = /\\b(npm run build|pnpm build|yarn build|cargo build|go build|make build|xcodebuild|gradle build|mvn package|tsc)\\b/i;
++const SUCCESS = /(build (succeeded|complete|successful)|compiled successfully|0 errors|✓ built|Build SUCCESSFUL)/i;
++
++runHook('validation-not-compilation', (payload) => {
++  const tin = (payload && payload.tool_input) || {};
++  const tres = (payload && (payload.tool_result || payload.tool_response)) || {};
++  const cmd = String(tin.command || '');
++  const out = typeof tres === 'string' ? tres : String((tres.stdout || tres.output || ''));
++  if (!BUILD_CMDS.test(cmd)) return { decision: 'allow', exitCode: 0 };
++  if (!SUCCESS.test(out)) return { decision: 'allow', exitCode: 0 };
++  return {
++    decision: 'allow',
++    exitCode: 2,
++    stderrPayload: '[shannon] validation-not-compilation: build succeeded, but compilation is NOT functional validation. Invoke /shannon:validate to verify through real interfaces.\\n',
++  };
++});` },
++  { type: "p", text: "Shannon v6 factored the hook through a shared runHook() wrapper in lib/hook-runner.js; the regex pair (build commands, success indicators) is now a single line each, and the stderr reminder routes the agent to /shannon:validate instead of repeating an inline checklist." },
+   { type: "p", text: "Integration via settings.json:" },
+   { type: "code", lang: "json", caption: ".claude/settings.json · PostToolUse hook", text:
+ `{
+@@ -165,52 +131,90 @@ export default function validationNotCompilation({ tool, input, output }) {
+ 
+   { type: "h2", text: "The Other Four Hooks" },
+   { type: "p", text: "The Shannon Framework ships five hooks total. validation-not-compilation.js is covered above. Here are the other four." },
+-  { type: "p", text: "block-test-files.js — The Hard Stop. PreToolUse on Write, Edit, and MultiEdit. Checks the file path against 12 test patterns. Allows exceptions for Playwright and E2E files (functional validation is fine; unit test harnesses aren’t). Violation rate went from non-zero to zero." },
+-  { type: "code", lang: "javascript", caption: "block-test-files.js · pattern matcher", text:
+-`const TEST_PATTERNS = [
++  { type: "p", text: "block-fab-files.js — The Hard Stop. PreToolUse on Write, Edit, and MultiEdit. Checks the file path against 12 fabricated-artifact patterns (test files, mocks, stubs, fakes, fixtures). Scoped to src/, lib/, app/ only, with explicit exemptions for scripts/, tools/, evidence trees, and skill/agent markdown. Violation rate went from non-zero to zero." },
++  { type: "code", lang: "javascript", caption: "hooks/block-fab-files.js", text:
++`#!/usr/bin/env node
++// PreToolUse Write|Edit|MultiEdit — block fabricated-artifact filenames.
++// Patterns canonical to spec post-16 §4.2.
++//
++// SCOPE (V6 update — fixes lynx false-positive that dev-domains hit):
++//   - Active scope: src/ lib/ app/ paths
++//   - Exemptions: scripts/ tools/ tests/ modules/*/scripts/ paths containing /scripts/
++//     and any SKILL.md or AGENT.md file
++const { runHook } = require('../lib/hook-runner');
++
++const FAB_PATTERNS = [
++  /\\.test\\.[a-z]+$/i,
++  /\\.spec\\.[a-z]+$/i,
++  /__mocks__\\//,
++  /\\/tests?\\//,
+   /\\/__tests__\\//,
+-  /\\.test\\.[jt]sx?$/,
+-  /\\.spec\\.[jt]sx?$/,
+-  /\\.mock\\.[jt]sx?$/,
+-  /test_.*\\.py$/,
+-  /.*_test\\.py$/,
+-  /.*_test\\.go$/,
+-  /Tests?\\.swift$/,
+-  /mock[_-]/i,
+-  /stub[_-]/i,
+-  /fake[_-]/i,
+-  /fixture[_-]/i,
++  /\\.fixture\\.[a-z]+$/i,
++  /\\/fixtures?\\//,
++  /\\/stubs?\\//,
++  /-stub\\.[a-z]+$/i,
++  /\\.mock\\.[a-z]+$/i,
++  /^mock-/i,
++  /-fake\\.[a-z]+$/i,
+ ];
+ 
+-const ALLOWED_EXCEPTIONS = [/playwright/i, /e2e/i];
++// EXEMPTIONS — paths that may contain "test" / "mock" / "fixture" tokens legitimately.
++// Scripts that BUILD validators, tools, plugin internals, and skill/agent markdown
++// are all exempt from the fab block.
++const EXEMPTIONS = [
++  /\\/e2e-evidence\\//,
++  /\\/evidence\\//,
++  /\\.claude-plugin\\//,
++  /\\/scripts\\//,                     // any scripts/ subtree
++  /\\/tools\\//,                       // tools/ subtree
++  /\\/modules\\/[^/]+\\/scripts\\//,     // per-module scripts
++  /\\bSKILL\\.md$/,                    // skill markdown
++  /\\bAGENT\\.md$/i,                   // agent markdown
++  /\\/skills\\/[^/]+\\//,               // any file under skills/<slug>/
++  /\\/agents\\/[^/]+\\.md$/i,           // agent .md
++  /\\/commands\\/[^/]+\\.md$/i,         // command .md
++  /\\/docs\\//,                        // documentation
++  /\\/research\\//,                    // research artifacts
++  /^tests\\//,                        // top-level tests/ dir (Shannon's own validation surface)
++];
+ 
+-export default function blockTestFiles({ tool, input }) {
+-  if (!["Write", "Edit", "MultiEdit"].includes(tool)) return;
++// Active scope: only enforce against src/ lib/ app/ subtrees. Files outside these
++// scopes are allowed even if they match fab patterns (those are project internals,
++// not application code under validation discipline).
++const ACTIVE_SCOPE = [
++  /\\/src\\//,
++  /\\/lib\\//,
++  /\\/app\\//,
++  /^src\\//,
++  /^lib\\//,
++  /^app\\//,
++];
+ 
+-  const filePath = input.file_path || input.filePath || "";
+-  if (!filePath) return;
++runHook('block-fab-files', (payload) => {
++  const toolInput = (payload && payload.tool_input) || {};
++  const filePath = toolInput.file_path || toolInput.filePath || '';
++  if (!filePath) return { decision: 'allow', exitCode: 0 };
+ 
+-  for (const exception of ALLOWED_EXCEPTIONS) {
+-    if (exception.test(filePath)) return;
++  // Exemption check first (highest priority — never block exempt paths)
++  if (EXEMPTIONS.some(re => re.test(filePath))) {
++    return { decision: 'allow', exitCode: 0 };
+   }
+ 
+-  for (const pattern of TEST_PATTERNS) {
+-    if (pattern.test(filePath)) {
+-      process.stderr.write([
+-        \`BLOCKED: Cannot create test file: \${filePath}\`,
+-        "",
+-        "This project uses functional validation, not unit tests.",
+-        "Instead of writing tests:",
+-        "  1. Build the real system",
+-        "  2. Run it in the simulator/browser/CLI",
+-        "  3. Exercise the feature through the actual UI",
+-        "  4. Capture screenshots/logs as evidence",
+-      ].join("\\n"));
+-      process.exit(2);
+-    }
++  // Only enforce within active scope (src/ lib/ app/)
++  if (!ACTIVE_SCOPE.some(re => re.test(filePath))) {
++    return { decision: 'allow', exitCode: 0 };
+   }
+-}` },
+-  { type: "p", text: "Twelve patterns cover JavaScript, TypeScript, Python, Go, and Swift test conventions. Every block message includes actionable guidance — not just “you can’t do this” but “do this instead.”" },
++
++  const matched = FAB_PATTERNS.find(re => re.test(filePath));
++  if (!matched) return { decision: 'allow', exitCode: 0 };
++
++  return {
++    decision: 'block',
++    exitCode: 2,
++    stderrPayload: \`[shannon] block-fab-files: "\${filePath}" matches fabricated-artifact pattern \${matched} within active scope (src/lib/app).\\nIRON RULE: build and validate the real system; never ship fake-data files.\\n\`,
++  };
++});` },
++  { type: "p", text: "Twelve patterns cover test files, mocks, stubs, fakes, and fixtures across language conventions. Shannon v6 renamed the hook from block-test-files.js to block-fab-files.js (fabricated artifacts) and added scope + exemption tables so the matcher no longer false-positives on legitimate scripts/, tools/, or skill markdown. Every block message includes the path, the matched pattern, and the IRON RULE that explains why." },
+   { type: "p", text: "read-before-edit.js — The Context Guardian. PreToolUse on Edit and MultiEdit. Tracks which files have been Read in the current session. When an Edit targets a file not in that Set, the hook warns. It doesn’t block — sometimes you need a quick edit. But the warning is specific enough to change behavior." },
+   { type: "p", text: "Before this hook, the Read-to-Edit ratio was close to 2:1. After: 4.4:1. The hook didn’t just warn — it changed how agents sequence their work." },
+   { type: "p", text: "evidence-gate-reminder.js — The Completion Checkpoint. PostToolUse on TaskUpdate. Fires when a subagent marks a task complete. Injects a five-question evidence checklist before the orchestrating agent can rubber-stamp the claim." },
+@@ -300,7 +304,7 @@ process.exit(0);` },
+ 4. Capture evidence (screenshots, logs, responses)
+ 5. Apply gate validation (5-question checklist)` },
+   { type: "p", text: "When the agent invokes this skill, it loads these instructions into context. The five execution steps become the agent’s workflow. The checklist makes sure the agent doesn’t skip the evidence phase." },
+-  { type: "p", text: "Skills and hooks reinforce each other. The skill tells the agent how to validate. The block-test-files.js hook prevents shortcuts. The validation-not-compilation.js hook catches build success declared as validation. The evidence-gate-reminder.js hook catches tasks marked complete without evidence. Together, they create an enforcement surface that’s hard to circumvent." },
++  { type: "p", text: "Skills and hooks reinforce each other. The skill tells the agent how to validate. The block-fab-files.js hook prevents shortcuts. The validation-not-compilation.js hook catches build success declared as validation. The evidence-gate-reminder.js hook catches tasks marked complete without evidence. Together, they create an enforcement surface that’s hard to circumvent." },
+ 
+   { type: "h2", text: "Hooks vs. MCP Servers vs. CLAUDE.md" },
+   { type: "p", text: "The decision framework:" },
+@@ -314,7 +318,7 @@ process.exit(0);` },
+   { type: "p", text: "Redundant encoding means saying the same thing four ways, at four enforcement points:" },
+   { type: "list", items: [
+     "The CLAUDE.md rule says “no test files.”",
+-    "The block-test-files.js hook blocks test file creation at the tool boundary.",
++    "The block-fab-files.js hook blocks test file creation at the tool boundary.",
+     "The functional-validation skill provides an alternative workflow.",
+     "The /autopilot command orchestrates the entire flow including validation.",
+   ] },

@@ -1,0 +1,27 @@
+VG-8.1 domains vs core (command 5)
+git log --left-right --oneline wt/shannon-rebuild-domains...wt/shannon-rebuild-core
+"<" = only-in-domains ; ">" = only-in-core
+
+< 477f4ea fix(hooks): UserPromptSubmit hint exit-0 + stdout (was exit-2 blocking)
+< a2d9626 feat(opt-in): project-level gate + word-boundary matcher + benchmark suite
+< 9fdedc2 fix(plugin): remove dir-path fields; CC auto-discovers from convention
+< b0ca463 fix(plugin): flatten symlinks to real files for CC installer cache compatibility
+< 1793b45 chore(evidence): phase-4 hook firetest + install dry-run results
+< 41a6a72 chore(hooks): chmod +x phase-2 hook scripts
+< 81ab1cf feat(scripts): atomic install orchestrator + uninstall + doctor-precheck + dry-run modes
+< cb8971e feat(hooks): plan-before-execute + context-threshold-warn + block-fab V6 scope fix
+< 9c93ad6 feat(evidence): phase-3-domains validation evidence + per-domain inventories
+< 820ac42 feat(scripts): 4 validators for command/skill/agent/overlay frontmatter
+< 39389d0 docs(overlay): seven-layer conceptual mapping (post-07 -> 4 enforcement modules)
+< ea719e3 feat(observability): 3 commands + 1 skill (status dropped per UQ-V2-4)
+< e6ea043 feat(dispatch): 3 commands + 3 skills + 1 agent (sadd folded)
+< bb35849 feat(reflection): 3 commands + 5 skills + 1 agent (reflexion+kaizen folded)
+< 168f917 feat(planning): 6 commands + 6 skills + 3 agents (tournament/converge/deep)
+< 80d177c feat(completion): 3 commands + 6 skills + 2 agents (forge pipeline)
+< ec1915c feat(validation): 3 commands + 5 skills + 1 agent
+< 29d267c feat(orchestration): 4 commands + 3 skills + 2 agents
+< 7736d02 chore(domains): wipe v1 commands/skills/agents (greenfield mode)
+
+(no ">" lines — core has ZERO commits not in domains)
+
+Result: domains is a STRICT SUPERSET of core. core carries no unique commits.

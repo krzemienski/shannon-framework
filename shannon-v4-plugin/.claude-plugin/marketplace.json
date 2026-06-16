@@ -1,0 +1,101 @@
+{
+  "id": "shannon-v4",
+  "name": "Shannon Framework v4",
+  "short_description": "Enterprise-grade specification-driven development with skill-based orchestration",
+  "long_description": "Shannon Framework v4 transforms complex software projects into manageable, validated phases using skill-based architecture, progressive disclosure, and zero-context-loss wave orchestration. Features 8D complexity analysis, 5-phase planning, real testing (NO MOCKS), confidence checking, and meta-programming capabilities.",
+  "version": "4.0.0",
+  "author": "Shannon Framework Team",
+  "license": "MIT",
+  "category": "Development Frameworks",
+  "tags": [
+    "project-management",
+    "specification",
+    "testing",
+    "architecture",
+    "wave-orchestration",
+    "skill-based",
+    "progressive-disclosure",
+    "zero-context-loss"
+  ],
+  "icon": "⚡",
+  "homepage": "https://github.com/krzemienski/shannon-framework",
+  "documentation": "https://github.com/krzemienski/shannon-framework/blob/main/README.md",
+  "repository": "https://github.com/krzemienski/shannon-framework",
+  "min_claude_version": "2.0.0",
+  "screenshots": [],
+  "demo_video": null,
+  "install_instructions": "# Shannon Framework v4 Installation\n\n## Prerequisites\n\n### Required MCP Server (Tier 1)\n```bash\n# Serena MCP - Context preservation and memory\nnpx @modelcontextprotocol/create-server serena\n```\n\n### Recommended MCP Servers (Tier 2)\n```bash\n# Sequential Thinking - Multi-step reasoning\nnpm install -g @modelcontextprotocol/server-sequential\n\n# Puppeteer - Real browser testing\nnpm install -g @modelcontextprotocol/server-puppeteer\n```\n\n## Plugin Installation\n\n```bash\n# Add marketplace (if using local development)\n/plugin marketplace add /path/to/shannon-framework\n\n# Install plugin\n/plugin install shannon-v4@shannon-framework\n\n# Restart Claude Code\n```\n\n## Verification\n\n```bash\n# Check Shannon status\n/sh_status\n\n# Run quick start\n/sh_quickstart\n```\n\n## First Specification\n\n```bash\n/sh_spec \"Build a React dashboard with real-time charts and user authentication\"\n```\n\nShannon will analyze complexity, recommend appropriate skills and MCPs, and create a detailed implementation plan.\n",
+  "changelog": "# Shannon v4.0.0 Changelog\n\n## 🚀 Major Features\n\n### Skill-Based Architecture\n- **Progressive Disclosure**: 60-80% token reduction (50K → 5K base)\n- **25 Domain-Specific Skills**: Auto-generated from spec analysis\n- **Meta-Programming**: Skills that write skills\n- **TDD Validation**: RED/GREEN/REFACTOR methodology\n\n### Enhanced Orchestration\n- **PreWave Hook**: Dependency validation, context injection\n- **PostWave Hook**: Result collection, state updates\n- **QualityGate Hook**: 5-gate validation system\n- **Automated Context Loading**: Reduces manual protocol overhead\n\n### MCP Integration Tiers\n- **Tier 1 (Mandatory)**: Serena - Context preservation\n- **Tier 2 (Recommended)**: Sequential, Context7, Puppeteer\n- **Tier 3 (Project-Specific)**: shadcn-ui, Xcode, AWS, etc.\n\n### System Prompt Hierarchy\n- User CLAUDE.md → Project CLAUDE.md → Plugin prompts → Skills\n- Skills favored over general prompts based on context\n- Seamless integration with existing CLAUDE.md files\n\n## ✨ Improvements from v3\n\n- **Token Efficiency**: 60-80% reduction in context usage\n- **Faster Wave Execution**: Automated context injection\n- **Better Skill Discovery**: Spec-driven skill recommendations\n- **Enhanced Testing**: Framework-specific validation\n- **Cross-Session Learning**: Reflexion pattern for error learning\n\n## 🔧 Breaking Changes\n\n- Plugin name changed from `shannon` to `shannon-v4`\n- Commands now link to skills (progressive activation)\n- Agents use lightweight frontmatter (resources in subdirectories)\n- Hook system enhanced (3 new hooks)\n\n## 📚 Migration from v3\n\nSee MIGRATION_V3_TO_V4.md for detailed migration guide.\n\n## 🐛 Bug Fixes\n\n- Fixed context loss during auto-compaction (PreCompact enhanced)\n- Resolved wave dependency race conditions (PreWave validation)\n- Improved MCP server detection (graceful degradation)\n\n## 🙏 Acknowledgments\n\nInspired by research into:\n- Anthropic's Skills SDK\n- Superpowers Framework (TDD methodology)\n- SuperClaude (confidence checking)\n- Humbl Skills (SITREP protocol)\n",
+  "features": [
+    {
+      "title": "8D Complexity Analysis",
+      "description": "Analyzes projects across 8 dimensions (Structural, Cognitive, Coordination, Temporal, Technical, Scale, Uncertainty, Dependency) to generate accurate effort estimates and risk assessments"
+    },
+    {
+      "title": "Skill-Based Orchestration",
+      "description": "25 domain-specific skills auto-generated from spec analysis. Skills for React, Next.js, Express, PostgreSQL, iOS, Android, Docker, AWS, and more"
+    },
+    {
+      "title": "Progressive Disclosure",
+      "description": "Loads only metadata (~5K tokens) at session start, pulling full content on-demand. Achieves 60-80% token reduction vs v3"
+    },
+    {
+      "title": "Zero-Context-Loss Waves",
+      "description": "PreCompact hook saves state to Serena MCP before auto-compaction. SessionStart restores context automatically. Never lose project state"
+    },
+    {
+      "title": "5-Phase Planning",
+      "description": "Discovery (20%) → Architecture (15%) → Implementation (45%) → Testing (15%) → Deployment (5%). Proven effort distribution"
+    },
+    {
+      "title": "Wave Orchestration",
+      "description": "Parallel execution of independent tasks. ONE message multi-Task invocation achieves true parallelism. Measured 2-4× speedup"
+    },
+    {
+      "title": "NO MOCKS Testing",
+      "description": "Functional testing only - real browsers (Puppeteer), real databases, real HTTP requests. Tests production behavior"
+    },
+    {
+      "title": "Confidence Checking",
+      "description": "Pre-implementation validation (5 checks: no duplicates, architecture compliance, official docs, OSS reference, root cause). Score ≥90% to proceed"
+    },
+    {
+      "title": "Meta-Programming",
+      "description": "shannon-skill-generator creates project-specific skills automatically. Spec-driven template selection and context injection"
+    },
+    {
+      "title": "MCP Integration Tiers",
+      "description": "Tier 1 (Mandatory): Serena. Tier 2 (Recommended): Sequential, Context7, Puppeteer. Tier 3 (Project-Specific): Framework MCPs"
+    },
+    {
+      "title": "Quality Gates",
+      "description": "5-gate validation: Specification, Phase, Wave, Quality, Project. Functional tests only, no user approval burden"
+    },
+    {
+      "title": "Reflexion Learning",
+      "description": "Cross-session error learning. Stores solutions in JSONL. 0-token cache hits for known errors"
+    }
+  ],
+  "use_cases": [
+    "Enterprise web applications (React, Next.js, Vue)",
+    "Mobile app development (iOS, Android, React Native)",
+    "Full-stack projects (Node.js, Python, Go backends)",
+    "Complex integrations (APIs, databases, third-party services)",
+    "Greenfield projects requiring architecture design",
+    "Brownfield refactoring with legacy code",
+    "Multi-platform applications (web + mobile + desktop)",
+    "Real-time systems (WebSocket, SSE, polling)"
+  ],
+  "keywords": [
+    "specification-driven",
+    "complexity-analysis",
+    "wave-orchestration",
+    "skill-based",
+    "progressive-disclosure",
+    "mcp-integration",
+    "no-mocks-testing",
+    "confidence-checking",
+    "meta-programming",
+    "zero-context-loss"
+  ]
+}
